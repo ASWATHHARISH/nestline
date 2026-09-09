@@ -10,4 +10,4 @@ The canonical product, architecture, data, safety, delivery, and evaluation spec
 
 - [Nestline Source of Truth](docs/NESTLINE-SOURCE-OF-TRUTH.md)
 
-All implementation decisions and changes should be reconciled back into that document so contributors work from the same plan.
+The source of truth now covers the weekly home experience, pregnancy-week resolution, reviewable saved plans, specialist-agent contracts, governed RAG, Grok placement, personal records, GraphRAG, video filtering, safety, human review, evaluation, and delivery phases. All implementation decisions and changes should be reconciled back into that document so contributors work from the same plan.
