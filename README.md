@@ -15,4 +15,7 @@ It covers the Streamlit application, one explicit profile for every pregnancy an
 
 ## Development status
 
+Work is published to `ASWATHHARISH/nestline`. Upstream pull requests require an
+explicit request from Aswath. See [repository workflow](docs/DEVELOPMENT-WORKFLOW.md).
+
 Stage 0 implementation has started: typed dataset contracts, all 63 journey shells, candidate source registry and offline integrity checks. No medical content is published yet. See [Stage 0 setup and handoff](docs/STAGE-0-HANDOFF.md).
