@@ -8,7 +8,7 @@
 **Language:** English only<br>
 **Geographic context:** India, with clearly labeled global supplementary guidance
 
-> **Superseded on 9 September 2026.** This file is retained as decision history. The canonical specification is now [Nestline — Updated Product and AI Architecture](<Nestline updated architecture.md>).
+> **Superseded on 9 September 2026.** This file is retained as decision history. The canonical specification is now [Nestline — Updated Product and AI Architecture](<../Nestline updated architecture.md>).
 
 ---
 
