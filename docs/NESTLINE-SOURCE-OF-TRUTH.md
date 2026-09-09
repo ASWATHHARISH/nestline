@@ -8,7 +8,7 @@
 **Language:** English only<br>
 **Geographic context:** India, with clearly labeled global supplementary guidance
 
-This is the canonical source of truth for Nestline. Product, architecture, data, safety, evaluation, and delivery decisions belong here. Contributors should update this document when a decision changes rather than creating competing specifications.
+> **Superseded on 9 September 2026.** This file is retained as decision history. The canonical specification is now [Nestline — Updated Product and AI Architecture](<Nestline updated architecture.md>).
 
 ---
 

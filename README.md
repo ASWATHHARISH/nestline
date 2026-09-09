@@ -8,6 +8,6 @@ Nestline is a safety-focused maternal continuity AI capstone covering pregnancy 
 
 The canonical product, architecture, data, safety, delivery, and evaluation specification is:
 
-- [Nestline Source of Truth](docs/NESTLINE-SOURCE-OF-TRUTH.md)
+- [Nestline Updated Architecture](<docs/Nestline updated architecture.md>)
 
-The source of truth now covers the weekly home experience, pregnancy-week resolution, reviewable saved plans, specialist-agent contracts, governed RAG, Grok placement, personal records, GraphRAG, video filtering, safety, human review, evaluation, and delivery phases. All implementation decisions and changes should be reconciled back into that document so contributors work from the same plan.
+It covers the week-resolution strategy, reusable content bands and exact-week overlays, onboarding, home and chat UX, governed sources, Supabase data architecture, RAG and GraphRAG, specialist-agent contracts, plans, safety, human review, error handling, n8n workflows, evaluation, and the implementation sequence. The earlier source-of-truth document is retained as decision history only.
