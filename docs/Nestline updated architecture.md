@@ -1,929 +1,1044 @@
-# Nestline — Updated Product and AI Architecture
+# Nestline — Complete Product and AI Architecture
 
 **Product:** Nestline<br>
 **Assistant:** Compass<br>
-**Status:** Build-ready capstone specification<br>
-**Last updated:** 9 September 2026<br>
-**Journey scope:** Possible pregnancy and pregnancy through 12 weeks postpartum<br>
-**Language:** English only<br>
-**Primary context:** India; supplementary global sources must retain jurisdiction labels
+**Status:** Architecture decision and build plan<br>
+**Interface:** Streamlit web application<br>
+**Journey:** Possible pregnancy, pregnancy weeks 1–42, and postpartum weeks 1–12<br>
+**Language:** English<br>
+**Updated:** 9 September 2026
 
-> This is the canonical architecture reference for Nestline. The earlier source-of-truth document is retained only as decision history. If the two documents conflict, this document wins.
+> This is the canonical Nestline architecture. It is written in implementation order so a new contributor can understand what we are building, why every component exists, and what must happen next.
 
-> **Safety boundary:** Nestline is an educational and organizational capstone prototype. It is not a doctor, diagnostic system, prescriber, medical device, emergency service, or clinically validated product. The public demo must use synthetic data and must tell visitors not to upload real medical information.
-
----
-
-## 1. The product in one paragraph
-
-Nestline is a week-aware maternal journey companion. A user enters an estimated due date, gestational week and day, approximate pregnancy month, delivery date, or postpartum week. Compass then creates a personalized home view from three clearly separated layers: stage-appropriate public guidance, facts extracted from documents the user intentionally uploads, and information the user confirms in the app. The user can ask questions, understand what a record says, navigate symptoms safely, create an editable weekly nutrition/movement/well-being plan, track appointments, and prepare questions for a professional. Urgent, contradictory, uncertain, or unsupported situations stop the normal AI flow and enter an explicit safety or human-review path.
-
-## 2. The problem we solve
-
-Pregnancy and postpartum information is fragmented across reports, prescriptions, appointments, conversations, websites, and memory. Generic chatbots can answer broad questions, but they often do not know the user's current stage, cannot distinguish a doctor's documented instruction from general internet guidance, and may answer when they should abstain or escalate.
-
-Nestline creates continuity without pretending to practise medicine:
-
-- It resolves where the user is in the journey and keeps every interaction stage-aware.
-- It keeps personal records, user-reported information, and public guidance visibly separate.
-- It coordinates bounded specialist workflows instead of asking one prompt to do everything.
-- It validates evidence, citations, conflicts, and safety before displaying an answer.
-- It turns information into reviewable next steps, saved plans, reminders, and handoff summaries.
-
-## 3. What is locked for the capstone
-
-| Area | Decision |
-|---|---|
-| Interface | Streamlit web app deployed through Streamlit, with a dashboard and persistent chat |
-| Timing shown to user | Exact week when known; approximate stage when only a month is known |
-| Content storage | One explicit weekly profile for every pregnancy and postpartum week, assembled from reusable sourced guidance fragments |
-| Model | OpenAI API behind a provider adapter, if API billing/key is confirmed |
-| Optional model comparison | Fireworks AI; Grok is not required |
-| Orchestration | LangGraph/LangChain state graph with bounded routes |
-| Product data | Supabase Auth, Postgres, Storage, pgvector, and Row Level Security |
-| Retrieval | One governed retrieval service with domain filters, hybrid search, reranking, and citations |
-| GraphRAG | Postgres node/edge tables plus bounded traversal; no Neo4j required for the capstone |
-| Tracing and evaluation | LangSmith plus automated local test reports |
-| Async automation | n8n only for non-urgent email/reminder and reviewer workflows |
-| Voice | ElevenLabs deferred |
-| Video | Excluded from this architecture and capstone |
-| Fine-tuning | Optional only after evaluation proves a repeated narrow failure |
-| MCP | Optional later; typed internal tools are sufficient for the capstone |
-| Public web search at answer time | Disabled for medical answers |
-| Real medical data | Prohibited in the public capstone |
-
-### Important access clarification
-
-ChatGPT Pro and OpenAI API billing are separate. Before implementation, confirm that the team has an API key and active API billing; a ChatGPT Pro subscription alone does not supply API credits. If OpenAI API access is not confirmed, use the same provider interface with one Fireworks-hosted model and rerun the model comparison evals.
-
-“Finecode” is not included because the intended product/tool is unclear. It should not enter the architecture until the team identifies it and a concrete requirement it solves.
-
-### 3.1 Streamlit application and deployment
-
-Streamlit is the committed front end for the capstone. The GitHub repository will contain `streamlit_app.py` as the deployment entry point, with reusable UI components and service modules behind it. Deploy the application from the repository to Streamlit Community Cloud.
-
-Recommended Streamlit views:
-
-1. welcome, privacy boundary, and Personal/Demo Mode selection;
-2. onboarding and journey-time selection;
-3. weekly home dashboard;
-4. persistent Compass chat;
-5. documents and extracted-fact review;
-6. saved plan and appointments;
-7. simulated human-review status;
-8. evaluator-only evidence, graph, and trace view.
-
-`st.session_state` manages only temporary page/chat interaction. Supabase remains the source of truth for journey state, confirmed facts, documents, plans, and appointments so a browser refresh does not lose important state. API keys go in Streamlit deployment secrets/environment variables and never in Git.
+> Nestline is an educational and organizational capstone prototype. It is not a doctor, diagnostic system, prescriber, medical device, emergency service, or clinically validated product. The public demo uses fictional data and tells visitors not to upload real medical information.
 
 ---
 
-## 4. The timing model: weekly in the product and data model
+## 1. What are we building?
 
-Week 10 and week 20 cannot be treated as the same experience. Trimester-only retrieval is too broad, and the earlier two-week-band wording made the architecture harder to understand. Nestline will therefore have a separate addressable profile for every pregnancy week and every postpartum week.
+Nestline is a week-aware maternal journey companion. A user tells Compass where they are in their journey, optionally enters allergies, conditions, symptoms, appointments, and fictional demo documents, and receives a home page tailored to that week. They can ask questions, understand what their uploaded records say, create and save a weekly nutrition/movement/well-being plan, prepare questions for an appointment, and navigate symptoms safely.
 
-This does not mean copying the same paragraph 40 times. Stable, source-backed guidance is stored once as a reusable fragment with an applicability range, and each weekly profile references the fragments that apply to that exact week.
+Nestline combines three types of information without mixing them:
 
-Nestline therefore uses this composition:
+1. **Public guidance:** reviewed, source-backed maternal-health information.
+2. **Personal facts:** information the user confirms or that is extracted from their uploaded documents and then confirmed.
+3. **Journey state:** possible pregnancy, exact pregnancy week, approximate month range, or postpartum week.
+
+The AI organizes and explains this information. It does not diagnose, prescribe, or replace a professional.
+
+## 2. Decisions already made
+
+| Decision | Locked choice | Reason |
+|---|---|---|
+| Front end | Streamlit | Fastest way to build and deploy the complete capstone experience |
+| Deployment | Streamlit Community Cloud from GitHub | Simple team sharing and evaluator access |
+| Permanent data | Supabase | Authentication, database, private files, pgvector, and Row Level Security in one platform |
+| Orchestration | LangGraph with LangChain components | Explicit routes, bounded agent calls, retries, and visible traces |
+| Observability/evals | LangSmith | Trace every route and compare prompt/model/retrieval versions |
+| Primary model | OpenAI API, if API billing and key are confirmed | Known team access and strong structured-output support |
+| Grok | Not used in the baseline | Access is uncertain and it does not solve the data/RAG problem |
+| Alternative model | Fireworks AI behind the same adapter | Useful only if access/cost/evals make it better |
+| Weekly structure | Separate profile for every pregnancy and postpartum week | Week 10 and week 20 must never be treated as the same context |
+| Knowledge system | One governed RAG platform with filtered shelves | Avoids duplicating ingestion and databases for every agent |
+| GraphRAG | Small journey graph inside retrieval | Connects records, symptoms, restrictions, plans, evidence, and follow-ups |
+| Human in loop | Simulated reviewer/clinician workflow | Demonstrates escalation honestly without claiming a real doctor service |
+| Videos | Out of scope | Removed to protect time and evaluation depth |
+| n8n | Stretch: reminders and reviewer notifications only | Must not sit in urgent or synchronous chat paths |
+| Fine-tuning | Only after evals show a repeated narrow failure | RAG/data/orchestration failures should not be hidden with training |
+| MCP | Deferred | Typed Python tools are enough for this capstone |
+| Real medical data | Prohibited in public demo | The prototype is not production-compliant |
+
+### 2.1 Where does Grok fit?
+
+**The baseline does not use Grok.** This is deliberate, not a missing architecture box.
+
+Grok, OpenAI, or a Fireworks-hosted model would all occupy the same **model-provider position**:
 
 ```text
-Displayed weekly experience
-= exact weekly profile
-+ reusable sourced guidance fragments applicable to that week
-+ personal structured facts
-+ relevant record events
-+ current symptoms/check-ins
-+ saved-plan state
+Retrieved evidence + personal facts + current week
+                         ↓
+        Model provider: OpenAI OR Grok OR Fireworks
+                         ↓
+               Structured draft response
+                         ↓
+          Safety, evidence, and citation checks
 ```
 
-The result is genuinely weekly: pregnancy weeks `P01` through `P42` and postpartum weeks `PP01` through `PP12` each have their own profile. Reuse happens at the content-fragment level, not by collapsing two different weeks into one record.
+The model does not:
 
-### 4.1 Supported journey inputs
+- create the authoritative weekly dataset;
+- decide which user owns a document;
+- store records;
+- perform database permissions;
+- replace retrieval;
+- become the source for an uncited medical statement.
 
-The onboarding control is a selector with one input mode at a time:
+If the team later receives Grok API access, implement it as another provider adapter and run the same eval suite. It replaces OpenAI for selected generation/extraction calls; it is not an additional RAG layer. Basic maternal-health questions still require retrieved evidence. Only non-medical product-help questions may be answered without medical RAG.
 
-1. **Estimated due date — recommended.** The system calculates gestational week and day.
-2. **Current gestational week.** User enters week 1–42 and may optionally add day 0–6.
-3. **Approximate pregnancy month.** Used when the user does not know a date or week. Outputs remain explicitly approximate.
-4. **Delivery date.** Used for postpartum users and calculates postpartum day/week.
-5. **Current postpartum week.** Used when the delivery date is not provided.
-6. **I may be pregnant / I am not sure.** Opens the possible-pregnancy path without falsely assigning a pregnancy week.
+---
 
-Do not offer a standalone “day” input. “Day 3” is meaningless unless attached to a gestational week or postpartum state.
+## 3. The complete architecture in implementation order
 
-### 4.2 Journey resolver rules
+This is the one pipeline the team should follow.
 
-| Input | Stored result | UX behavior |
-|---|---|---|
-| Due date | Calculated gestational age, calculation date, confidence=`calculated` | “Week 10, day 3” and exact-week content |
-| Week + optional day | User-confirmed gestational age, effective date, confidence=`reported` | Exact-week content |
-| Month only | Approximate week range and confidence=`approximate` | Guidance supported across the full range; no exact-week fetal claim |
-| Delivery date | Calculated postpartum day/week | Postpartum interval content |
-| Postpartum week | Reported postpartum interval | Exact postpartum-week profile |
-| Possible pregnancy | `possible_pregnancy` | Verification/next-step education, not “you are pregnant” language |
+```mermaid
+flowchart TD
+    S0["0. Define weekly content schema + approved sources"] --> S1["1. Ingest and review public knowledge"]
+    S1 --> S2["2. Store weekly profiles, evidence, vectors, and graph-ready metadata"]
+    U["User opens Streamlit"] --> S3["3. Onboard user and resolve journey week"]
+    S3 --> S4["4. Ingest optional personal/demo documents"]
+    S2 --> S5["5. Build request context"]
+    S3 --> S5
+    S4 --> S5
+    S5 --> S6["6. Run deterministic safety gate"]
+    S6 -->|Urgent| H1["Immediate safety wording + human-oriented route"]
+    S6 -->|Non-urgent| S7["7. Orchestrator selects one agent or plan workflow"]
+    S7 --> S8["8. RAG: SQL + full-text + vector + GraphRAG"]
+    S8 --> S9["9. Agent uses model to create structured draft"]
+    S9 --> S10["10. Validate safety, constraints, evidence, and citations"]
+    S10 -->|Fail| H2["Clarify, abstain, retry once, or human review"]
+    S10 -->|Pass| S11["11. Show answer/plan in Streamlit"]
+    S11 --> S12["12. User confirms what may be saved"]
+    S12 --> S13["13. Update timeline, graph, plan, and optional reminders"]
 
-If the due date and reported week conflict materially, Compass displays both, explains that they do not align, and asks the user to confirm the latest clinician-dated value. It must not silently choose one.
+    E["LangSmith evals and traces"] -.observe.-> S1
+    E -.observe.-> S7
+    E -.observe.-> S8
+    E -.observe.-> S9
+    E -.observe.-> S10
 
-Journey age is recalculated daily. Every answer and saved plan stores the journey-state version used to create it.
+    classDef data fill:#dcfce7,stroke:#16a34a,color:#052e16,stroke-width:2px;
+    classDef user fill:#fef3c7,stroke:#d97706,color:#451a03,stroke-width:2px;
+    classDef safety fill:#fee2e2,stroke:#dc2626,color:#450a0a,stroke-width:2px;
+    classDef agent fill:#dbeafe,stroke:#2563eb,color:#172554,stroke-width:2px;
+    classDef eval fill:#f3e8ff,stroke:#9333ea,color:#3b0764,stroke-width:2px;
+    class S0,S1,S2,S4,S5,S8,S13 data;
+    class U,S3,S11,S12 user;
+    class S6,S10,H1,H2 safety;
+    class S7,S9 agent;
+    class E eval;
+```
 
-### 4.3 Weekly profiles
+### Pipeline responsibility table
 
-| Profile family | Records | Meaning |
-|---|---:|---|
-| Possible pregnancy | `PC00` | Testing, verification, safety, and general preconception education without asserting pregnancy |
-| Pregnancy | `P01`–`P42` | One separate profile for every gestational week |
-| Postpartum | `PP01`–`PP12` | One separate profile for every postpartum week |
-| Early postpartum safety | `PPD0`, `PPD1`–`PPD7` | Day-level safety/follow-up additions during the first week; these supplement `PP01` |
+| Step | What happens | Main technology | Output |
+|---:|---|---|---|
+| 0 | Define what one week record contains and which sources are allowed | JSON/Pydantic schemas | Empty weekly templates and source registry |
+| 1 | Extract candidate evidence, attach week/applicability metadata, review it | Python, PyMuPDF/HTML parser, optional LLM extraction | Approved evidence fragments |
+| 2 | Save structured content, searchable chunks, embeddings, and relationship metadata | Supabase/Postgres/pgvector | Published corpus version |
+| 3 | Collect due date/week/month/delivery date and resolve the current stage | Streamlit + deterministic Python | Versioned journey state |
+| 4 | Parse optional fictional demo documents and ask the user to confirm extracted facts | Supabase Storage, parser/OCR, structured extraction | Confirmed personal facts + document chunks |
+| 5 | Assemble week, facts, symptoms, records, saved plans, and question | Python service layer | Typed request context |
+| 6 | Check urgent patterns before generative reasoning | Deterministic rules | Safe, urgent, or clarify route |
+| 7 | Pick the smallest required specialist workflow | LangGraph | Agent execution plan |
+| 8 | Retrieve exact facts and supporting passages; traverse relevant graph edges | SQL, full text, pgvector, GraphRAG | Evidence packet |
+| 9 | Turn the evidence packet into a structured answer or plan contribution | OpenAI API/provider adapter | Draft schema |
+| 10 | Reject unsafe, conflicting, wrong-week, or unsupported content | Pydantic + rules + evidence verifier | Approved output or failure route |
+| 11 | Render provenance, citations, actions, and limitations | Streamlit | User-visible result |
+| 12 | Ask before saving extracted facts, plans, reminders, or handoff packets | Streamlit | Explicit consent/action |
+| 13 | Persist the confirmed change and mark affected outputs stale | Supabase + graph updates; optional n8n | Updated continuity state |
 
-Each weekly profile can contain different development, body-change, nutrition-focus, movement-focus, well-being, preparation, appointment, do/avoid, and question-for-professional cards. A reviewer can compare `P13` with `P14` directly even if some of their referenced guidance fragments are identical.
+---
 
-For month-only onboarding, use a transparent product mapping rather than pretending the month is precise: month 1 → weeks 1–4, month 2 → 5–8, month 3 → 9–13, month 4 → 14–17, month 5 → 18–22, month 6 → 23–27, month 7 → 28–31, month 8 → 32–35, and month 9 → 36–40+. The UI says “approximately weeks X–Y” and invites the user to add an estimated due date later.
+## 4. Stage 0 — Create a genuinely weekly content system
 
-When the user supplies only a month, the system does **not** secretly pick one week. It retrieves only fragments valid across that full mapped range and presents a range-based home state. The user receives an exact weekly profile only after supplying a due date or week.
+### 4.1 Is the source material actually week-wise?
 
-### 4.4 Content-unit schema
+Partly.
 
-Every published weekly profile is structured rather than stored as one long article:
+- Pregnancy, Birth and Baby has a weeks 1–4 page and individual pages for weeks 5–40.
+- The NHS has individual pregnancy content from week 4 through week 41.
+- MedlinePlus helps explain gestational dating and why weeks 1–2 require careful language.
+- WHO, ICMR-NIN, and many movement/mental-health guidelines are **not weekly**. Their advice applies across a wider period or depends on symptoms, conditions, or professional clearance.
+- Postpartum guidance is often organized around the first 24 hours, day 3, days 7–14, week 6, or general recovery—not a unique article for every week through week 12.
+
+Therefore, Nestline must not claim that every domain changes every week. The product has a separate weekly profile, but stable evidence may appear in consecutive weeks when its real applicability has not changed.
+
+### 4.2 Weekly records we will create
+
+| Record family | IDs | Count | Purpose |
+|---|---|---:|---|
+| Possible pregnancy | `PC00` | 1 | Verification and next-step education without assuming pregnancy |
+| Pregnancy weeks | `P01`–`P42` | 42 | One addressable record for each gestational week |
+| Postpartum weeks | `PP01`–`PP12` | 12 | One addressable record for each postpartum week |
+| Early postpartum days | `PPD0`–`PPD7` | 8 | Day-specific safety/follow-up additions during postpartum week 1 |
+
+`P13` and `P14` are different records. They may reference the same reviewed hydration fragment, but each has its own weekly hero, development/body information, preparation items, and applicable fragment list.
+
+### 4.3 What one weekly profile contains
 
 ```json
 {
   "profile_id": "P10",
-  "content_type": "weekly_profile",
-  "journey_stage": "pregnancy",
+  "stage": "pregnancy",
   "week": 10,
-  "domains": ["development", "nutrition", "movement", "wellbeing", "preparation"],
-  "cards": {
-    "development": [],
+  "status": "draft | reviewed | published",
+  "hero": {
+    "title": "source-backed weekly title",
+    "development_evidence_ids": [],
+    "visual_asset_id": null
+  },
+  "card_slots": {
     "what_may_change": [],
-    "focus": [],
+    "nutrition_focus": [],
+    "movement_focus": [],
+    "wellbeing_focus": [],
+    "symptom_education": [],
+    "preparation": [],
     "consider": [],
     "avoid": [],
-    "ask_professional": []
+    "ask_a_professional": []
   },
   "guidance_fragment_ids": [],
-  "week_specific_evidence_ids": [],
+  "source_evidence_ids": [],
   "jurisdiction": ["GLOBAL", "IN"],
-  "review_status": "draft | content_reviewed | clinical_reviewed",
-  "version": "1.0.0",
-  "effective_from": "date",
-  "retired_at": null
+  "reviewed_by": null,
+  "version": "1.0.0"
 }
 ```
 
-A reusable guidance fragment has its own domain, applicability start/end, exclusions, jurisdiction, evidence spans, and review status. For example, the same reviewed hydration fragment may be referenced by several weekly profiles, while development and preparation cards remain week-specific. This preserves weekly behavior without unnecessary duplication.
+### 4.4 Reusable guidance fragment
 
-### 4.5 Week 1 and possible pregnancy
-
-Gestational dating commonly counts from the first day of the last menstrual period; in weeks 1–2, conception may not yet have occurred. Therefore:
-
-- “I may be pregnant” is its own state.
-- Week 1 content explains dating carefully and does not claim a pregnancy is confirmed.
-- The flow can explain how/when confirmation is normally sought using approved source content.
-- It can suggest general questions and next steps, but does not interpret a test as a diagnosis.
-- Symptoms still pass through the safety gate before educational content.
-- It never advises starting/stopping medication based solely on chat.
-
----
-
-## 5. Complete system architecture
-
-**Legend:** blue = agents; red = safety/control; green = data/retrieval; purple = external platform; amber = human/user step.
-
-```mermaid
-flowchart TB
-    U["Streamlit UI: onboarding, home, chat, records"] --> API["Nestline service layer"]
-
-    API --> SG["Safety Gate"]
-    API --> JR["Journey Resolver"]
-    API --> AUTH["Supabase Auth + RLS"]
-
-    SG -->|urgent| EH["Emergency guidance + human escalation"]
-    SG -->|not urgent| ORCH["Journey Orchestrator Agent"]
-    JR --> STATE["Structured journey state"]
-    STATE --> ORCH
-
-    ORCH --> REC["Record Agent"]
-    ORCH --> MED["Medication Record Agent"]
-    ORCH --> SYM["Symptom Navigation Agent"]
-    ORCH --> NUT["Nutrition Agent"]
-    ORCH --> MOV["Movement Agent"]
-    ORCH --> WELL["Well-being Agent"]
-    ORCH --> FUP["Follow-up Agent"]
-
-    REC --> RG["Governed Retrieval Gateway"]
-    MED --> RG
-    SYM --> RG
-    NUT --> RG
-    MOV --> RG
-    WELL --> RG
-    FUP --> RG
-
-    RG --> SQL["Postgres: exact facts, catalogs, timeline"]
-    RG --> VEC["pgvector: guideline + document chunks"]
-    RG --> FTS["Postgres full-text search"]
-    RG --> GRAPH["Journey graph: nodes + edges"]
-
-    ORCH --> PC["Plan Composer Agent"]
-    PC --> CV["Constraint + Evidence Validator"]
-    ORCH --> EV["Answer Evidence Verifier"]
-    EV --> RESP["Cited response + provenance labels"]
-    CV --> DRAFT["Editable weekly plan draft"]
-
-    RESP --> U
-    DRAFT --> REVIEW["User reviews/edits/saves"]
-    REVIEW --> SQL
-
-    EH --> HUMAN["Simulated clinician/reviewer queue"]
-    ORCH -->|uncertain or conflicting| HUMAN
-    HUMAN --> U
-
-    DOCS["User-uploaded synthetic documents"] --> ING["Secure document ingestion"]
-    PUB["Approved public-source registry"] --> KING["Knowledge ingestion pipeline"]
-    ING --> SQL
-    ING --> VEC
-    ING --> GRAPH
-    KING --> SQL
-    KING --> VEC
-
-    API --> LS["LangSmith traces + eval runs"]
-    ORCH --> LS
-    RG --> LS
-    N8N["n8n async workflows"] --> EMAIL["Opt-in email/reminders"]
-    SQL --> N8N
-
-    LLM["OpenAI API via provider adapter"] --> ORCH
-    LLM --> REC
-    LLM --> MED
-    LLM --> SYM
-    LLM --> NUT
-    LLM --> MOV
-    LLM --> WELL
-    LLM --> FUP
-    LLM --> PC
-
-    classDef agent fill:#dbeafe,stroke:#2563eb,color:#172554,stroke-width:2px;
-    classDef control fill:#fee2e2,stroke:#dc2626,color:#450a0a,stroke-width:2px;
-    classDef data fill:#dcfce7,stroke:#16a34a,color:#052e16,stroke-width:2px;
-    classDef platform fill:#f3e8ff,stroke:#9333ea,color:#3b0764,stroke-width:2px;
-    classDef human fill:#fef3c7,stroke:#d97706,color:#451a03,stroke-width:2px;
-    class ORCH,REC,MED,SYM,NUT,MOV,WELL,FUP,PC agent;
-    class SG,JR,CV,EV control;
-    class STATE,RG,SQL,VEC,FTS,GRAPH,ING,KING data;
-    class LS,N8N,EMAIL,LLM,AUTH platform;
-    class U,EH,HUMAN,REVIEW,DRAFT,RESP human;
-```
-
-### 5.1 Request pipeline in plain English
-
-1. Authenticate the user and establish their isolated workspace.
-2. Resolve possible-pregnancy, pregnancy, or postpartum timing and confidence.
-3. Run deterministic red-flag checks before any generative reasoning.
-4. Classify intent and determine which specialist workflow is needed.
-5. Fetch exact personal facts from SQL and relevant evidence through the retrieval gateway.
-6. Run one primary specialist agent; invoke a second only when the task genuinely crosses domains.
-7. If a plan is requested, combine specialist contributions in the Plan Composer.
-8. Validate stage, allergies, restrictions, record conflicts, evidence, and citations.
-9. Escalate or abstain when evidence is absent, contradictory, urgent, or beyond scope.
-10. Present the answer with provenance: “your record says,” “you reported,” or “public guidance says.”
-11. Save only after explicit user confirmation.
-12. Trace the complete route in LangSmith and record feedback/evaluation signals.
-
----
-
-## 6. Data sources and content governance
-
-The earlier few PDFs were not sufficient for a weekly product. Nestline needs a source portfolio: weekly developmental content, broader clinical guidance, India-specific nutrition/care guidance, postpartum timing, and the user's own records.
-
-### 6.1 Recommended public-source registry
-
-| Need | Source | How it is used | Limitation/control |
-|---|---|---|---|
-| Weekly pregnancy development, including weeks 1–4 | [Pregnancy, Birth and Baby — week-by-week](https://www.pregnancybirthbaby.org.au/pregnancy/pregnancy-stages/pregnancy-week-by-week) | Primary weekly content candidate | Australian jurisdiction; validate reuse/license and label jurisdiction |
-| Weekly pregnancy cross-check | [NHS week-by-week guide](https://www.nhs.uk/best-start-in-life/pregnancy/week-by-week-guide-to-pregnancy/) | Cross-check exact-week changes and accessible wording | UK care pathways must not be presented as Indian schedules |
-| Week 1–2 dating explanation | [MedlinePlus fetal development](https://medlineplus.gov/ency/article/002398.htm) | Dating/early-stage evidence | Educational summary, not personalized advice |
-| Possible pregnancy and testing education | [NHS pregnancy testing](https://www.nhs.uk/pregnancy/trying-for-a-baby/doing-a-pregnancy-test/) | Possible-pregnancy pathway | Jurisdiction labeled; no diagnosis |
-| Global antenatal guidance | [WHO antenatal care recommendations](https://www.who.int/publications/i/item/9789241549912/) | Approved general guidance and retrieval corpus | Usually applies by condition/visit, not exact week |
-| Consolidated maternal guidance | [WHO 2025 maternal health recommendations](https://www.who.int/publications/b/59332) | Guideline reference and safety review | Large corpus; ingest only approved sections with metadata |
-| India nutrition | [ICMR-NIN Dietary Guidelines for Indians 2024](https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI07052024P.pdf) | Nutrition agent evidence | Not inherently weekly; map only where applicability supports it |
-| Pregnancy physical activity | [WHO physical activity and sedentary behaviour](https://iris.who.int/bitstream/handle/10665/336656/9789240015128-eng.pdf) | Movement constraints and general guidance | Never infer individual clearance |
-| India maternal-care context | [NHM pregnancy-care guidance](https://nhm.gov.in/images/pdf/guidelines/nrhm-guidelines/stg/pregnancy-care.pdf) | Candidate care/timeline fields | Older source; requires version/currentness review before release |
-| Postpartum first six weeks | [WHO postnatal-care guideline](https://www.who.int/publications/i/item/9789240045989) | Postpartum weekly profiles and follow-up context | Source-defined applicability must be preserved |
-| Postnatal intervention timing | [WHO maternal intervention timing](https://www.who.int/teams/maternal-newborn-child-adolescent-health-and-ageing/handbooks/programme-manager-s-handbook-mncah/recommendations-on-interventions-along-life-course/maternal) | 24-hour/day 3/day 7–14/week 6 structure | Do not invent weekly changes after week 6 |
-| Perinatal mental health | [WHO perinatal mental-health integration guide](https://www.who.int/publications/i/item/9789240057142) | Well-being and escalation corpus | Screening/education only; no diagnosis |
-| Urgent warning-sign taxonomy | [CDC urgent maternal warning signs](https://www.cdc.gov/hearher/maternal-warning-signs/index.html) | Safety-test design and supplementary reference | US source; clinician review/local adaptation required |
-
-### 6.2 Source rules
-
-- Every source has owner, title, jurisdiction, publication/update date, version, URL, license/reuse note, approved sections, clinical-review status, and retirement status.
-- Exact-week facts must cite a source that actually supports that exact week.
-- General guidance retains its real applicability; the model must not relabel trimester-level guidance as week-specific.
-- Foreign care schedules are not mixed into India-specific appointment advice.
-- Retrieval uses only approved and current source versions.
-- Source updates create a new version, re-index affected chunks, and rerun regression evals.
-- The app never performs uncontrolled live web search for a medical answer.
-
-### 6.3 Personal sources
-
-Personal context comes only from:
-
-- structured onboarding answers the user confirms;
-- synthetic reports, prescriptions, appointment notes, or discharge documents uploaded in the demo;
-- confirmed facts extracted from those documents;
-- symptoms/check-ins the user explicitly reports;
-- plans and reminders the user explicitly saves.
-
-Synthetic personas belong only in isolated Demo Mode and automated tests. A new user's workspace starts empty.
-
----
-
-## 7. Ingestion architecture
-
-### 7.1 Public-knowledge ingestion
-
-```mermaid
-flowchart LR
-    A["Approved source registry"] --> B["Fetch pinned page/PDF version"]
-    B --> C["Parse headings, tables, lists"]
-    C --> D["Normalize without changing meaning"]
-    D --> E["Attach jurisdiction, stage, week range, domain, authority"]
-    E --> F["Human content review"]
-    F --> G["Chunk by semantic section"]
-    G --> H["Embed into pgvector"]
-    G --> I["Index in Postgres full-text search"]
-    F --> J["Create weekly profiles + reusable guidance fragments"]
-    H --> K["Ingestion quality tests"]
-    I --> K
-    J --> K
-    K --> L["Publish corpus version"]
-```
-
-Do not ask an LLM to manufacture week-by-week advice from one broad PDF. The LLM may help extract candidate structure, but each published content unit must retain exact source spans and pass review.
-
-### 7.2 Personal-document ingestion
-
-1. Authenticate and establish the user's workspace ID.
-2. Validate file type, size, malware policy, and encryption/locked-file status.
-3. Store the original in a private Supabase Storage bucket.
-4. Parse locally/server-side; use OCR only when necessary.
-5. Classify document type and reject unsupported types gracefully.
-6. Extract candidate facts into strict schemas: date, clinician, medication mention, instruction, appointment, test, condition, allergy, and uncertainty.
-7. Attach page and text-span provenance to every candidate fact.
-8. Show low-confidence or clinically significant facts for user confirmation.
-9. Save confirmed facts to structured Postgres tables.
-10. Chunk permitted text into the user's isolated vector namespace.
-11. Update timeline and graph edges.
-12. Run post-ingestion validation and surface conflicts instead of overwriting them.
-
-Documents are untrusted input. Embedded instructions such as “ignore previous rules” are treated as document text, never executable instructions.
-
----
-
-## 8. Supabase data architecture
-
-Use Supabase because the intended UX includes accounts, private files, structured timelines, retrieval, plans, and reminders. SQLite/Chroma is acceptable for a laptop demo but creates avoidable migration and isolation work.
-
-### 8.1 Core tables
-
-| Table | Purpose |
-|---|---|
-| `profiles` | Minimal user settings and consent state |
-| `journey_states` | Possible-pregnancy/pregnancy/postpartum state, timing input, resolved age, confidence, version |
-| `health_facts` | User-confirmed conditions, allergies, restrictions, and provenance |
-| `documents` | File metadata, status, owner, hashes, parsing confidence |
-| `document_facts` | Extracted fact, source page/span, confirmation state |
-| `medication_mentions` | What a document records; never a prescribing table |
-| `symptom_events` | User-reported symptom, time, severity answers, disposition |
-| `appointments` | Date, type, status, source, questions |
-| `plans` / `plan_items` | Draft/saved versions and state-version dependency |
-| `weekly_profiles` | Separate home/content configuration for `P01`–`P42` and `PP01`–`PP12` |
-| `guidance_fragments` | Reusable sourced guidance with exact applicability ranges and exclusions |
-| `postpartum_day_overlays` | Day 0–7 safety/follow-up additions to postpartum week 1 |
-| `guideline_chunks` | Public evidence chunks, embeddings, citations, metadata |
-| `personal_chunks` | Per-user permitted document chunks and embeddings |
-| `graph_nodes` / `graph_edges` | Provenance-aware journey relationships |
-| `human_review_cases` | Consent-aware escalation packets and statuses |
-| `notifications` | Opt-in reminder/email job state and idempotency key |
-| `feedback` | User rating, correction, route, and trace ID |
-
-### 8.2 Isolation requirements
-
-- Row Level Security on every user-owned table.
-- Storage paths scoped by authenticated user/workspace.
-- Personal retrieval requires the authenticated workspace filter at the database layer, not only in the prompt.
-- Public and personal embeddings remain different logical collections/tables.
-- Deletion removes file, structured facts, chunks, graph relationships, and cached summaries.
-- Logs and LangSmith traces must redact personal content; public demo uses only synthetic records.
-
----
-
-## 9. RAG architecture
-
-### 9.1 One retrieval platform, not one RAG per agent
-
-Separate RAG stacks for Nutrition, Movement, Symptoms, and Well-being would duplicate ingestion, embeddings, permissions, monitoring, and source updates. Agents need different retrieval **policies**, not different infrastructure.
-
-The governed Retrieval Gateway accepts:
+A fragment is one small, source-backed claim or action that can be safely reused.
 
 ```json
 {
-  "workspace_id": "authenticated-scope",
-  "domain": "nutrition | movement | symptoms | wellbeing | records | followup",
-  "journey_state": "pregnancy | postpartum | possible_pregnancy",
-  "exact_week": 10,
-  "weekly_profile_id": "P10",
-  "jurisdiction": "IN",
-  "source_scope": "public | personal | both",
-  "query": "user question",
-  "top_k": 8
+  "fragment_id": "movement_general_001",
+  "domain": "movement",
+  "applies_to": {
+    "stage": "pregnancy",
+    "week_start": 8,
+    "week_end": 20,
+    "conditions_required": [],
+    "conditions_excluded": []
+  },
+  "text": "reviewed paraphrase",
+  "evidence_span_ids": ["WHO_PA_PAGE_X"],
+  "jurisdiction": "GLOBAL",
+  "review_status": "reviewed"
 }
 ```
 
-### 9.2 Retrieval sequence
+This prevents duplicate storage while keeping the user experience weekly. The source decides the applicability range; the LLM does not invent it.
 
-1. Convert request into a typed retrieval query.
-2. Apply hard filters: user scope, domain, approved status, journey state, applicability, jurisdiction.
-3. Fetch exact personal facts with SQL where possible.
-4. Run Postgres full-text and pgvector searches in parallel.
-5. Fuse rankings and rerank by authority, applicability, recency/version, and semantic relevance.
-6. Traverse only relevant graph edges for dependencies/conflicts.
-7. Return evidence objects with exact source spans—not a free-form answer.
-8. Generate the answer from those evidence objects.
-9. Verify each material claim has adequate evidence and the correct provenance label.
-10. Abstain/escalate when support is insufficient.
+### 4.5 Month-only input
 
-### 9.3 Retrieval collections
+If the user knows only a month, Nestline stores an approximate range:
 
-- `weekly_profiles`: the exact pregnancy or postpartum week requested by the application.
-- `guidance_fragments`: reviewed reusable evidence whose applicability includes the resolved week or entire approximate range.
-- `guideline_chunks`: public clinical/educational guidance.
-- `personal_chunks`: isolated document text.
-- structured SQL catalogs: food components, movement templates, plan constraints, and help content.
+| Month | Approximate week range |
+|---:|---|
+| 1 | 1–4 |
+| 2 | 5–8 |
+| 3 | 9–13 |
+| 4 | 14–17 |
+| 5 | 18–22 |
+| 6 | 23–27 |
+| 7 | 28–31 |
+| 8 | 32–35 |
+| 9 | 36–40+ |
 
-The LLM is not the knowledge base. OpenAI/Fireworks turns retrieved evidence and structured facts into a readable response; it must not supply uncited medical facts from model memory.
+Nestline does not secretly select a week. It displays the range and retrieves only information supported across that range. Exact weekly claims require an estimated due date or user-provided week.
 
-### 9.4 Load and cost controls
+### 4.6 Source coverage plan
 
-- Precompute and cache every published weekly profile by profile and corpus version.
-- Home-page load uses SQL/database views and the Dashboard Composer; it does not call every agent.
-- Recalculate only the timing label at daily rollover unless the user crosses into a new week.
-- Embed a public source once per approved version, not per user or request.
-- Retrieve personal data only for the authenticated workspace and only when the task needs it.
-- Route ordinary questions to one specialist; use multi-agent parallelism only for a full weekly plan.
-- Cache only non-personal public retrieval results by normalized question, exact week/range, domain, jurisdiction, and corpus version.
-- Set maximum agent steps, retrieval results, model calls, tokens, and wall-clock time for each route.
-- Use a smaller evaluated model for routing/extraction and a stronger model only for difficult composition when the evals justify model routing.
+| Content need | Primary source candidate | Weekly behavior |
+|---|---|---|
+| Pregnancy weeks 1–4 | [Pregnancy, Birth and Baby week-by-week index](https://www.pregnancybirthbaby.org.au/pregnancy/pregnancy-stages/pregnancy-week-by-week) + MedlinePlus | Build separate P01–P04 profiles but use careful dating language |
+| Pregnancy weeks 5–40 | [Pregnancy, Birth and Baby week-by-week index](https://www.pregnancybirthbaby.org.au/pregnancy/pregnancy-stages/pregnancy-week-by-week) | Map each individual week page to the matching weekly profile |
+| Pregnancy weeks 4–41 cross-check | [NHS week-by-week guide](https://www.nhs.uk/best-start-in-life/pregnancy/week-by-week-guide-to-pregnancy/) | Cross-check exact-week facts; do not import UK care schedules as Indian schedules |
+| Gestational dating | [MedlinePlus fetal development](https://medlineplus.gov/ency/article/002398.htm) | Supports possible-pregnancy and early-week wording |
+| Week 41 and at/beyond term | [NHS week 41](https://www.nhs.uk/best-start-in-life/pregnancy/week-by-week-guide-to-pregnancy/3rd-trimester/week-41/) + [WHO recommendations at or beyond term](https://www.who.int/publications/i/item/9789240052796) | Professional-follow-up education only; do not turn a guideline for professionals into personalized treatment advice |
+| Antenatal guidance | [WHO antenatal-care recommendations](https://www.who.int/publications/i/item/9789241549912/) | Create fragments with real applicability; do not force into fake weekly changes |
+| India nutrition | [ICMR-NIN Dietary Guidelines for Indians 2024](https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI07052024P.pdf) | Nutrition fragments mapped to weeks only when the evidence supports it |
+| Movement | [WHO physical-activity guidance](https://iris.who.int/bitstream/handle/10665/336656/9789240015128-eng.pdf) | General fragments plus personal restrictions/symptoms; never infer clearance |
+| Perinatal well-being | [WHO perinatal mental-health guide](https://www.who.int/publications/i/item/9789240057142) | Stage-appropriate support and escalation fragments, not weekly diagnosis |
+| Postpartum | [WHO postnatal-care guideline](https://www.who.int/publications/i/item/9789240045989) | Map source-defined timing to PP profiles; repeat stable guidance honestly |
+| Postnatal timing | [WHO maternal intervention timing](https://www.who.int/teams/maternal-newborn-child-adolescent-health-and-ageing/handbooks/programme-manager-s-handbook-mncah/recommendations-on-interventions-along-life-course/maternal) | Supports day 0, day 3, days 7–14, and week 6 additions |
+| Safety taxonomy | [CDC urgent maternal warning signs](https://www.cdc.gov/hearher/maternal-warning-signs/index.html) plus locally reviewed policy | Used to design safety rules/evals, not copied blindly into India deployment |
+
+`P42` exists in the schema so the system can represent the user's reported/calculated state, but it must remain unpublished until its exact content and local care wording are reviewed. The app should prioritize contacting the user's maternity professional rather than generate a generic week-42 wellness page.
+
+### 4.7 Source rules
+
+- Store title, owner, jurisdiction, publication/update date, source version, URL, reuse/license status, approved sections, reviewer, and retirement status.
+- Do not ingest a source merely because it is authoritative; confirm its reuse terms.
+- Every displayed medical/health claim links to an evidence span.
+- Preserve the source's true applicability. “Relevant in pregnancy” does not automatically mean “new in week 10.”
+- Foreign appointment schedules remain jurisdiction-labeled and do not become Indian care instructions.
+- No live medical web search during user answers.
+- Updating a source creates a new corpus version and reruns regression evals.
 
 ---
 
-## 10. Onboarding user flow
+## 5. Stage 1 — Public-knowledge ingestion, in plain language
+
+Ingestion means turning a page/PDF into small, traceable evidence units the system can safely search.
 
 ```mermaid
-flowchart TD
-    A["Welcome + prototype/privacy boundary"] --> B{"Personal workspace or Fictional Demo Mode?"}
-    B -->|Personal| C["Create empty account/workspace"]
-    B -->|Demo| D["Load isolated labeled synthetic persona"]
-    C --> E{"Where are you in the journey?"}
-    D --> E
-    E -->|May be pregnant| P["Possible-pregnancy path"]
-    E -->|Pregnant| T["Choose due date, week/day, or approximate month"]
-    E -->|Postpartum| PP["Choose delivery date or postpartum week"]
-    T --> V["Resolve and confirm timing/confidence"]
-    PP --> V
-    P --> S["Safety check + verification education"]
-    V --> H["Optional health context: allergies, conditions, restrictions"]
-    H --> DOC["Optional synthetic document upload"]
-    DOC --> CONF["Review and confirm extracted facts"]
-    CONF --> PREF["Notification, plan, and consent preferences"]
-    PREF --> HOME["Personalized home"]
-    S --> HOME
+flowchart LR
+    A["1. Register source"] --> B["2. Save approved version"]
+    B --> C["3. Parse headings/tables/text"]
+    C --> D["4. Create candidate evidence units"]
+    D --> E["5. Attach domain, week range, stage, jurisdiction"]
+    E --> F["6. Human review"]
+    F -->|Rejected| D
+    F -->|Approved| G["7. Link evidence to weekly profiles"]
+    G --> H["8. Create search text + embedding"]
+    H --> I["9. Run ingestion tests"]
+    I -->|Pass| J["10. Publish corpus version"]
 ```
 
-### Onboarding rules
+### Exact implementation steps
 
-- Only timing is required for stage-aware educational content.
-- Health context and uploads are optional and skippable.
-- Never prefill a personal workspace with fictional history.
-- Explain why each sensitive field is requested and how it changes the experience.
-- A user can edit or delete a fact later.
-- Low-confidence extraction never becomes confirmed state automatically.
-- Urgent symptom text entered anywhere runs through the safety gate immediately.
+1. Add an approved URL/PDF to `source_registry`.
+2. Save the specific version/date so future website changes do not silently change answers.
+3. Parse HTML by headings or PDF by page/section using Python and PyMuPDF/HTML parsing.
+4. Remove headers/navigation while preserving meaning, page number, heading, and exact source text.
+5. Optionally use the model to propose structured fields; treat them as candidates, not truth.
+6. Validate candidates with Pydantic schemas.
+7. A reviewer confirms domain, stage, exact week/applicability range, wording, jurisdiction, and evidence span.
+8. Link approved evidence/fragments to the applicable weekly profiles.
+9. Store the original text for citation, normalized text for search, and one embedding per approved unit.
+10. Test missing citations, invalid week ranges, duplicate units, unsupported profile links, and license/review status.
+11. Publish only passing records under a version such as `corpus_2026_09_09_v1`.
 
----
-
-## 11. Personalized home/landing page
-
-The home view is generated by a deterministic Dashboard Composer using validated data. An LLM may draft summaries, but it does not choose the page's safety state or invent cards.
-
-### 11.1 Page order
-
-1. **Journey header:** “Week 10, day 3” or “approximately month 3,” with how it was calculated and an edit action.
-2. **Development hero:** reviewed exact-week fact and original/licensed visual or simple in-house illustration. Approximate users see a range, not a false precise claim.
-3. **This stage:** concise “what may be changing” public guidance with sources.
-4. **Your context:** confirmed allergies, restrictions, conditions, or record changes, clearly labeled as personal facts.
-5. **Focus this week:** evidence-backed nutrition, movement, well-being, and preparation themes. These are not prescriptions.
-6. **Consider / avoid / ask first:** separate categories with evidence/source labels. Do not mix doctor's recorded instruction with general guidance.
-7. **Symptoms and safety:** reported symptoms, follow-up state, and persistent emergency access.
-8. **Appointments:** next appointment, pending actions, and saved questions for the professional.
-9. **Weekly plan:** no plan / editable draft / saved / stale status.
-10. **Open issues:** conflicting record, unconfirmed extraction, overdue follow-up, or human-review status.
-11. **Quick actions:** ask Compass, understand a record, create/edit a plan, add a symptom, add an appointment.
-
-### 11.2 Personalization precedence
-
-1. Emergency/safety status.
-2. Confirmed clinician-recorded restriction/instruction.
-3. Confirmed allergy/condition and active relevant symptoms.
-4. Exact journey state and weekly profile.
-5. Saved preferences and plan history.
-6. General public guidance.
-
-If layers conflict, the UI shows the conflict and asks for professional clarification; general guidance never silently overrides a personal record.
-
-### 11.3 Traditional remedies
-
-“Grandmother's remedies” can be relatable, but they cannot appear as a casual recommendation carousel. Include an **Ask about a traditional practice** action. The answer must classify the practice as supported, uncertain, or potentially risky based on approved evidence, state what is unknown, and recommend professional confirmation where appropriate.
+**The model can help format source content, but it cannot decide medical truth or manufacture weekly guidance from a broad PDF.**
 
 ---
 
-## 12. Chat capabilities and conversation behavior
+## 6. Stage 2 — Storage: where every kind of data lives
 
-Compass supports:
+| Data type | Supabase location | Why |
+|---|---|---|
+| Accounts and access | Supabase Auth + Row Level Security | Prevent one user from seeing another user's data |
+| Journey/week | `journey_states` | Exact, deterministic lookup |
+| Weekly cards | `weekly_profiles` | One record per week |
+| Reusable public evidence | `guidance_fragments` and `guideline_chunks` | Search, citations, and reuse |
+| Embeddings | pgvector columns | Semantic retrieval |
+| Uploaded files | Private Supabase Storage bucket | Original document and ownership |
+| Extracted facts | `document_facts`, `health_facts`, `medication_mentions` | Exact SQL queries and confirmation status |
+| Symptoms | `symptom_events` | Safety and timeline |
+| Appointments/questions | `appointments`, `appointment_questions` | Follow-up workflow |
+| Plans | `plans`, `plan_items` | Draft/saved/versioned/stale state |
+| Relationships | `graph_nodes`, `graph_edges` | GraphRAG continuity |
+| Human review | `human_review_cases` | Honest pending/resolved/unavailable status |
+| Notifications | `notifications` | Consent, idempotency, retries, delivery status |
+| Feedback/eval links | `feedback` | Connect UX feedback to a LangSmith trace |
 
-- “What usually changes in week 10?”
-- “What does my uploaded prescription say?”
-- “What should I ask at my next appointment?”
-- “Create an editable nutrition/movement/well-being plan for this week.”
-- “Why is my saved plan marked stale?”
-- “I have this symptom—what should I do next?” through bounded symptom navigation.
-- “Can I follow this traditional practice?” through evidence checking.
-- “Change this plan item and save the new version.”
+### Data security rules
 
-Compass does not:
-
-- diagnose a condition;
-- decide whether the user or baby is healthy;
-- prescribe, change, or stop medication;
-- infer clinician approval for exercise;
-- promise that a symptom is harmless;
-- answer from uncontrolled web search;
-- hide uncertainty or conflicting evidence.
-
-### Standard answer structure
-
-1. Direct, plain-language response.
-2. “Why this is relevant now” using the exact week only when supported.
-3. Personal context used, with provenance labels.
-4. Action options: save, ask professional, track, or escalate.
-5. Citations and last-reviewed date.
-6. Limitation/abstention when needed.
-
-### Confused or ambiguous users
-
-Compass asks at most one or two high-value clarification questions. If the question remains ambiguous, it provides safe general information, states the assumption, and avoids personalization. It must not create an endless agent loop.
+- A personal workspace starts empty.
+- Demo data lives under a separate, visibly fictional workspace.
+- Every user-owned table has Row Level Security.
+- Every personal vector query includes the authenticated workspace filter at database level.
+- Deleting a document also deletes derived facts, chunks, graph edges, and cached summaries.
+- LangSmith traces contain synthetic or redacted data only.
+- Cross-user leakage blocks release.
 
 ---
 
-## 13. Agent and control contracts
+## 7. Stage 3 — Onboarding and journey resolution
 
-An agent is a bounded decision-making workflow: it receives typed state, uses allowed tools, produces a schema, and has explicit stop conditions. It does **not** mean “a chatbot with its own database.”
+### Streamlit onboarding flow
 
-| Component | Type | Trigger and responsibility | Allowed evidence/tools | Required output | Must stop/escalate when |
-|---|---|---|---|---|---|
-| Safety Gate | Deterministic control | Runs on onboarding text, chat, symptoms, and document facts before agents | Reviewed red-flag taxonomy, rules | `safe_route`, `urgent_route`, or `needs_clarification` | Any urgent match or insufficient safety detail |
-| Journey Resolver | Deterministic control | Converts input to stage/week/day/profile/confidence | Date functions, timing rules | Versioned journey state | Conflicting/invalid dates |
-| Journey Orchestrator | Agent | Classifies intent, selects minimal specialist set, manages state | Typed agent tools, policy | Execution plan and final route | Budget exceeded, unsupported intent, agent conflict |
-| Record Agent | Agent | Explains what uploaded records document | SQL facts + personal chunks | Cited record summary with uncertainty | Poor OCR, missing span, contradictory documents |
-| Medication Record Agent | Agent | Compares recorded medication mentions/instructions over time | Medication tables + source spans | “Documented as…” timeline; clarification questions | User asks to start/stop/change, conflict, unclear dose |
-| Symptom Navigation Agent | Agent | Collects bounded context and routes next step | Safety rules + approved symptom guidance | Urgency category and action wording | Red flag, ambiguity, repeated/worsening concern |
-| Nutrition Agent | Agent | Creates stage-aware meal framework and answers nutrition questions | Band/week content, ICMR-NIN chunks, allergies, restrictions | Cited options and constraints | Allergy conflict, condition requiring individualized clinical diet |
-| Movement Agent | Agent | Creates conservative activity framework | Approved movement guidance, stage, symptoms/restrictions | Activity type/time/intensity framework; no video | No clearance where needed, contraindication, concerning symptom |
-| Well-being Agent | Agent | Provides check-ins, supportive exercises, and escalation | Approved mental-health guidance, user check-ins | Supportive next step and follow-up | Self-harm/acute safety concern or need for diagnosis |
-| Follow-up Agent | Agent | Builds appointment questions, tasks, and reminder candidates | Timeline, appointments, record changes | Prioritized follow-up list | Missing/contradictory care information |
-| Plan Composer | Agent | Combines specialist outputs into one non-conflicting weekly draft | Validated specialist schemas | Versioned editable plan draft | Any unresolved specialist conflict |
-| Constraint Validator | Deterministic control | Tests plan/answer against state and policy | Allergies, restrictions, safety rules, schema | pass/fail with reasons | Any failed hard constraint |
-| Evidence Verifier | LLM + rules control | Checks material claims against evidence objects | Citations, spans, applicability metadata | supported/unsupported claim map | Unsupported medical claim or wrong-week citation |
-| Dashboard Composer | Deterministic service | Builds cards and states for home page | Validated database views | Ordered page schema | Missing required card data; show empty/error state |
-| Human Review Workflow | Human-in-loop | Creates consent-aware packet for conflicts/uncertainty | Minimum necessary context | pending/resolved/unavailable state | Human unavailable; show fallback, never imply review occurred |
+1. Show what Nestline can/cannot do and the public-demo privacy warning.
+2. Ask the user to choose Personal Empty Workspace or Fictional Demo Mode.
+3. Ask where they are: may be pregnant, pregnant, or postpartum.
+4. Present one timing dropdown:
+   - estimated due date — recommended;
+   - current gestational week and optional day;
+   - approximate pregnancy month;
+   - delivery date;
+   - current postpartum week.
+5. Resolve timing with deterministic Python—not an LLM.
+6. Display the calculated week/range and ask the user to confirm it.
+7. Optionally collect allergies, medical history/conditions, restrictions, current symptoms, and appointments.
+8. Optionally upload fictional demo documents.
+9. Ask the user to confirm extracted information before it becomes active context.
+10. Open the weekly home page.
 
-### Agent communication
+### Timing rules
 
-Agents share a typed `JourneyState`, not free-form chat transcripts. Each output includes:
-
-- `trace_id`, `user/workspace_id`, and `journey_state_version`;
-- intent and requested deliverable;
-- personal facts used with provenance;
-- evidence objects and citations;
-- assumptions and unanswered questions;
-- safety status and escalation status;
-- structured recommendation/plan candidates;
-- confidence is not a medical-confidence score—it is evidence/completeness metadata.
-
-The orchestrator normally calls one specialist. For “create my full week,” Nutrition, Movement, Well-being, and Follow-up can run in parallel; Plan Composer then reconciles them. Specialists do not call each other directly, which keeps the graph observable and prevents loops.
+- Estimated due date calculates gestational week/day and stores calculation date.
+- Week/day stores a user-reported value and effective date.
+- Month stores only an approximate range.
+- Delivery date calculates postpartum day/week.
+- Conflicting due date and week are displayed together and require confirmation; the system never silently chooses.
+- The week rolls forward deterministically with time.
+- Weeks 1–2 and “may be pregnant” use careful dating/verification language and do not assert a confirmed pregnancy.
 
 ---
 
-## 14. Weekly plan flow
+## 8. Stage 4 — Personal documents and the synthetic demo profile
+
+### 8.1 Do we need a synthetic profile?
+
+Yes—for repeatable demonstration and evaluation—but it must be isolated.
+
+- **Personal Mode:** always empty for a first-time user.
+- **Demo Mode:** one clearly labeled fictional persona with fictional documents.
+- **Tests:** additional synthetic fixtures that never appear in the user's workspace.
+
+The synthetic profile is not medical knowledge and is not placed in public RAG. It exists only to prove personalization, extraction, conflict handling, GraphRAG, saved plans, and human review.
+
+### 8.2 Recommended fictional demo package
+
+Create a coherent fictional case containing:
+
+- journey state and estimated due date;
+- one confirmed food allergy;
+- one clinician-recorded movement restriction;
+- one appointment date;
+- one short fictional prescription/visit note;
+- one fictional report with a follow-up item;
+- one deliberately contradictory or low-confidence document field;
+- one existing saved plan that becomes stale after the new record is confirmed.
+
+Use invented names and values. Add a visible `FICTIONAL DEMO DATA` watermark. Do not imitate or modify a real person's documents.
+
+### 8.3 Personal-document ingestion
+
+1. Authenticate and assign the file to the workspace.
+2. Validate file format, size, password/lock status, and malware policy.
+3. Save the original in a private bucket.
+4. Parse text; use OCR only if the PDF is image-based.
+5. Classify document type using a small structured model call.
+6. Extract candidate facts: dates, clinician, medication mention, instruction, allergy, condition, appointment, test, and follow-up.
+7. Preserve page and exact text span for every extracted fact.
+8. Assign extraction confidence/completeness metadata.
+9. Show significant or uncertain fields to the user for confirmation.
+10. Save confirmed facts in SQL; save permitted text chunks in the personal vector collection.
+11. Create graph nodes/edges and detect conflicts without overwriting older facts.
+12. Mark affected dashboard cards/plans stale and show what changed.
+
+Text inside a document is untrusted content. “Ignore previous instructions” in a PDF is stored as text and never changes system policy.
+
+---
+
+## 9. Stage 5 — RAG explained simply
+
+### 9.1 What RAG means here
+
+Think of RAG as a librarian:
+
+1. The user asks a question.
+2. Nestline first identifies the exact week, domain, and personal context.
+3. The librarian retrieves only the most relevant approved public passages and permitted personal facts.
+4. The model writes an answer using that evidence.
+5. A verifier checks whether the answer is actually supported.
+
+The model is the writer, not the library.
+
+### 9.2 Why we are not building one database per agent
+
+All agents use one Retrieval Gateway, but each sends a different filter:
+
+| Agent | Public shelf | Personal context |
+|---|---|---|
+| Record | None unless explanation needs public context | Uploaded document chunks and confirmed facts |
+| Medication Record | Medication-related document spans | Medication mentions, dates, instructions, conflicts |
+| Symptom Navigation | Approved symptom/safety guidance | Current week, symptoms, restrictions, recent events |
+| Nutrition | Nutrition evidence valid for the current week/range | Allergies, conditions, symptoms, saved preferences |
+| Movement | Movement evidence valid for the current stage | Restrictions, symptoms, recorded clearance/status |
+| Well-being | Approved perinatal well-being guidance | Check-ins, stage, prior follow-up state |
+| Follow-up | Care-preparation/follow-up guidance | Appointments, open questions, record changes |
+
+Separate infrastructure for every agent would duplicate documents, embeddings, permissions, updates, and evals. Logical shelves and hard filters give specialization without seven disconnected RAG systems.
+
+### 9.3 Exact retrieval pipeline
 
 ```mermaid
-flowchart TD
-    A["User requests weekly plan"] --> B["Resolve weekly profile + state version"]
-    B --> C["Safety and restriction checks"]
-    C --> D1["Nutrition Agent"]
-    C --> D2["Movement Agent"]
-    C --> D3["Well-being Agent"]
-    C --> D4["Follow-up Agent"]
-    D1 --> E["Plan Composer"]
-    D2 --> E
-    D3 --> E
-    D4 --> E
-    E --> F["Constraint + citation validation"]
-    F -->|fail| G["Revise once or abstain/escalate"]
-    F -->|pass| H["Editable draft"]
-    H --> I{"User approves?"}
-    I -->|Edit| E
-    I -->|Save| J["Versioned saved plan"]
-    I -->|Discard| K["No state change"]
-    J --> L["Dashboard + optional reminders"]
-    M["Relevant record/week/state changes"] --> N["Mark plan stale"]
-    N --> L
+flowchart LR
+    Q["Question + exact week + intent"] --> F["Hard filters"]
+    F --> SQL["SQL exact personal facts"]
+    F --> TXT["Full-text keyword search"]
+    F --> VEC["Vector meaning search"]
+    SQL --> GR["GraphRAG relationship expansion"]
+    TXT --> R["Merge and rerank evidence"]
+    VEC --> R
+    GR --> R
+    R --> PKT["Evidence packet with source spans"]
+    PKT --> LLM["OpenAI/Grok/Fireworks provider"]
+    LLM --> VER["Claim and citation verifier"]
+    VER --> OUT["Answer or abstention"]
 ```
 
-A plan is a supportive framework, not a treatment plan. Every saved plan stores its sources, state version, creation date, and expiry/review date. When timing, allergy, restriction, medication record, concerning symptom, or relevant clinician instruction changes, the plan becomes stale and must not continue appearing as current without review.
+Step by step:
 
----
+1. Convert the question to a typed request: domain, exact week/range, stage, jurisdiction, and allowed source scope.
+2. Apply hard filters before semantic search. A pregnancy-week-10 nutrition request cannot retrieve postpartum or week-30-only evidence.
+3. Query SQL for exact personal facts; do not use vector search to guess an appointment date or allergy.
+4. Run Postgres full-text search for matching terms.
+5. Run pgvector search for semantically similar approved passages.
+6. Run bounded GraphRAG traversal for connected restrictions, conflicts, superseded facts, plans, appointments, and evidence.
+7. Merge and rerank by authority, applicability, source version, exact-week fit, and relevance.
+8. Return an evidence packet with IDs, source spans, and provenance labels.
+9. Give only that packet plus necessary state to the model.
+10. Verify each material claim and citation. Retry retrieval once if the wrong evidence was found; otherwise abstain or escalate.
 
-## 15. GraphRAG design
+### 9.4 When GraphRAG enters the pipeline
 
-GraphRAG is valuable when it proves continuity, not when added as decoration. Store nodes and edges in Postgres; use bounded graph traversal in application code. A visual NetworkX projection can be generated for the capstone demo.
+GraphRAG is part of **Step 6 inside retrieval**. It is not a separate final feature.
 
-### Nodes
+Vector search answers: “Which passages discuss this question?”
 
-`Person`, `JourneyState`, `WeeklyProfile`, `GuidanceFragment`, `Document`, `DocumentFact`, `MedicationMention`, `Allergy`, `Condition`, `SymptomEvent`, `Appointment`, `Plan`, `PlanItem`, `GuidelineChunk`, `Question`, `HumanReviewCase`.
+GraphRAG answers: “Which known facts and actions are connected for this user?”
 
-### Edges
-
-`IN_STAGE`, `EXTRACTED_FROM`, `MENTIONED_IN`, `CONFLICTS_WITH`, `SUPERSEDES`, `RELEVANT_TO`, `CONSTRAINS`, `SUPPORTED_BY`, `TRIGGERED`, `SCHEDULED_FOR`, `NEEDS_CLARIFICATION`, `REVIEWED_BY`.
-
-### Example
+Example:
 
 ```text
-Week 10 state
-  -> selects weekly profile P10
-  -> references only guidance fragments applicable to week 10
-  -> makes nausea symptom relevant
-  -> allergy constrains meal candidate
-  -> clinician restriction constrains movement candidate
-  -> changed record marks saved plan stale
-  -> pending appointment receives clarification question
+Week P24
+  -> current symptom event
+  -> clinician-recorded movement restriction
+  -> restriction constrains movement plan item
+  -> new document supersedes an older instruction
+  -> change marks saved weekly plan stale
+  -> unresolved conflict creates a question for next appointment
 ```
 
-Use graph traversal only for known relationship questions and constraint propagation. Use SQL for exact facts and vector/full-text retrieval for relevant passages.
+Use these node types: `Person`, `JourneyState`, `WeeklyProfile`, `Document`, `DocumentFact`, `MedicationMention`, `Allergy`, `Condition`, `SymptomEvent`, `Appointment`, `Plan`, `PlanItem`, `GuidelineEvidence`, `Question`, and `HumanReviewCase`.
+
+Use these edge types: `IN_WEEK`, `EXTRACTED_FROM`, `CONFLICTS_WITH`, `SUPERSEDES`, `CONSTRAINS`, `SUPPORTED_BY`, `TRIGGERED`, `SCHEDULED_FOR`, `NEEDS_CLARIFICATION`, and `REVIEWED_BY`.
+
+For the capstone, store graph nodes/edges in Postgres and traverse them with bounded Python queries. Do not add Neo4j. A NetworkX visualization may show the graph to evaluators, but it is not the source of truth.
+
+### 9.5 Load and cost control
+
+- Precompute and cache published weekly home profiles.
+- Do not run RAG or agents merely to open the dashboard.
+- Embed approved public evidence once per corpus version.
+- Use SQL for exact facts and vectors only for passage discovery.
+- Ordinary questions invoke one specialist agent.
+- Only full-plan generation runs several specialists in parallel.
+- Limit retrieval count, graph depth, agent steps, model calls, tokens, and total latency.
+- Cache only non-personal public retrieval results by question, week/range, domain, jurisdiction, and corpus version.
 
 ---
 
-## 16. Human-in-the-loop and professional contact
+## 10. Stage 6 — Safety before agents
 
-The capstone cannot claim a real on-call doctor. It demonstrates a transparent review queue:
+The Safety Gate is a deterministic control, not an LLM agent.
 
-1. A safety rule, conflict, unsupported question, or explicit request triggers review eligibility.
-2. Compass tells the user what it can and cannot do now.
-3. The user explicitly consents to share a minimum-necessary summary.
-4. The system creates a structured packet: question, journey stage, relevant confirmed facts, cited record spans, conflict, urgency, and requested action.
-5. A simulated reviewer interface accepts, requests clarification, resolves, or marks unavailable.
-6. The user sees the true state: pending, responded, or unavailable. Never “doctor reviewed” unless a real authorized reviewer did.
-7. Urgent situations receive immediate emergency-oriented instructions and are never placed into a delayed email queue as the only action.
+It runs on:
 
-Future production integration would require credential verification, response-time commitments, consent/audit design, jurisdictional review, clinical governance, privacy/security review, and operational ownership.
+- onboarding symptom text;
+- every chat message;
+- symptom check-ins;
+- extracted document facts;
+- plan-generation inputs.
+
+Possible results:
+
+1. `urgent`: stop the normal agent flow and show reviewed emergency-oriented wording.
+2. `needs_clarification`: ask the minimum safety question; if safety remains unclear, escalate.
+3. `non_urgent`: continue to the orchestrator.
+
+The model may help understand phrasing, but it cannot downgrade a deterministic urgent match. The capstone uses a locally reviewed synthetic red-flag test set and does not claim clinical validation.
 
 ---
 
-## 17. Errors, weird interactions, and failure behavior
+## 11. Stage 7 — Orchestration and every agent's workflow
 
-| Situation | Required behavior |
+An agent is a bounded workflow with a trigger, tools, structured output, and stop rule. Agents do not own separate databases and do not call one another directly. The orchestrator coordinates them through shared typed state.
+
+### 11.1 Journey Orchestrator Agent
+
+**Purpose:** decide what workflow is needed and keep it bounded.
+
+1. Receive safe request context from the Safety Gate.
+2. Classify intent: record, medication record, symptom, nutrition, movement, well-being, follow-up, full plan, or out of scope.
+3. Decide whether one specialist is enough.
+4. Create a typed execution plan with maximum steps/tool calls.
+5. Send only necessary context to the specialist.
+6. Collect structured output.
+7. Route it to validators and response composition.
+8. Stop on unsupported intent, tool budget, conflicting agents, or validation failure.
+
+### 11.2 Record Agent
+
+**Purpose:** explain what an uploaded record actually documents.
+
+1. Identify the record/question and authenticated workspace.
+2. Retrieve document facts and exact page/span evidence.
+3. Distinguish confirmed, unconfirmed, and conflicting fields.
+4. Create a plain-language summary using “this document says.”
+5. Show source page/span and uncertainty.
+6. Offer actions: confirm fact, correct extraction, add appointment question, or request human clarification.
+7. Never infer a diagnosis or treatment beyond the document.
+8. Stop when OCR is poor, the record is missing, or documents conflict.
+
+### 11.3 Medication Record Agent
+
+**Purpose:** organize medication information without giving medication advice.
+
+1. Retrieve medication mentions, dates, document spans, and confirmation state.
+2. Build a chronological “recorded as” timeline.
+3. Compare current and older instructions.
+4. Detect missing dose/frequency or contradictory records.
+5. Explain only what is documented.
+6. Create a clarification question for the professional when necessary.
+7. Refuse requests to start, stop, substitute, or change medication.
+8. Escalate conflicts, unclear instructions, or safety concerns.
+
+### 11.4 Symptom Navigation Agent
+
+**Purpose:** help the user choose a safe next step, not diagnose.
+
+1. Receive only after the first Safety Gate pass.
+2. Ask minimal structured questions: symptom, onset, severity, duration, change, and relevant context.
+3. Rerun the Safety Gate with the new details.
+4. Retrieve approved evidence for the exact stage/week.
+5. Classify the route as urgent, professional follow-up, monitor/track, or insufficient information.
+6. Explain the route without naming an unconfirmed condition.
+7. Offer tracking or a handoff summary.
+8. Never provide unsafe reassurance; escalate if uncertainty prevents a safe route.
+
+### 11.5 Nutrition Agent
+
+**Purpose:** answer food/nutrition questions and create a weekly meal framework.
+
+1. Read exact week/range and requested goal.
+2. Fetch confirmed allergies, conditions, restrictions, symptoms, and preferences.
+3. Retrieve approved nutrition evidence applicable to that state.
+4. Generate options/components, not a therapeutic diet.
+5. Remove candidates that violate a hard constraint.
+6. Cite why each material suggestion is included or excluded.
+7. Return a structured contribution for chat or Plan Composer.
+8. Stop when the request requires an individualized clinical diet or evidence is missing.
+
+### 11.6 Movement Agent
+
+**Purpose:** answer movement questions and create a conservative weekly activity framework.
+
+1. Read exact week, symptoms, restrictions, and recorded clearance/status.
+2. Run movement-specific hard constraints.
+3. Retrieve approved stage-applicable movement evidence.
+4. Generate activity type, duration range, intensity language, and stop conditions.
+5. Validate every item against restrictions and symptoms.
+6. Cite the evidence and state whether professional confirmation is needed.
+7. Return structured chat or plan output.
+8. Stop when clearance is unknown but required, a concerning symptom exists, or a contraindication/conflict appears.
+
+### 11.7 Well-being Agent
+
+**Purpose:** provide supportive check-ins and appropriate escalation.
+
+1. Receive the user's question or check-in and journey stage.
+2. Run acute-safety/self-harm escalation rules before supportive generation.
+3. Retrieve approved perinatal well-being evidence.
+4. Offer bounded exercises such as reflection, grounding, support planning, or appointment preparation.
+5. Ask whether the user wants to track or discuss the concern with a professional.
+6. Create a follow-up item when appropriate and consented.
+7. Never diagnose a mental-health condition.
+8. Stop and escalate acute safety, persistent/worsening concern, or need for clinical assessment.
+
+### 11.8 Follow-up Agent
+
+**Purpose:** turn records and conversations into organized next steps.
+
+1. Retrieve upcoming appointments, open questions, new record facts, unresolved conflicts, and plan status.
+2. Group items into before appointment, ask during appointment, and after appointment.
+3. Remove duplicates and preserve provenance.
+4. Prioritize safety/conflict-related questions without claiming medical priority.
+5. Propose reminders but do not schedule without consent.
+6. Produce a concise appointment brief.
+7. Update items only after user confirmation.
+8. Escalate missing or contradictory instructions instead of resolving them.
+
+### 11.9 Plan Composer Agent
+
+**Purpose:** combine specialist contributions into one coherent weekly draft.
+
+1. Receive independently structured Nutrition, Movement, Well-being, and Follow-up contributions.
+2. Check each contribution has evidence and the same journey-state version.
+3. Detect contradictions or an unrealistic combined workload.
+4. Arrange items into a simple daily/weekly structure.
+5. Pass the draft to deterministic allergy, restriction, safety, and source validators.
+6. Revise once if a validator provides a safe mechanical correction.
+7. Otherwise abstain or route the conflict for clarification.
+8. Show an editable draft.
+9. Ask: “Would you like to change, save, or discard this plan?”
+10. Save a version only after explicit approval.
+
+### 11.10 Human Review Workflow
+
+**Purpose:** make uncertainty visible and prepare a safe handoff.
+
+1. Receive an urgent, conflicting, unsupported, or explicitly requested review case.
+2. Tell the user what the AI cannot resolve.
+3. Ask consent to share the minimum necessary context.
+4. Create a packet containing the question, journey state, relevant confirmed facts, evidence spans, conflict, and requested action.
+5. Put it in a **simulated** reviewer queue.
+6. Let the demo reviewer respond, request clarification, or mark unavailable.
+7. Show the true status: pending, responded, or unavailable.
+8. Never say “doctor reviewed” unless a real credentialed, authorized reviewer did.
+9. Never delay an urgent route while waiting for email or a queue.
+
+---
+
+## 12. Stage 8 — Validation and answer composition
+
+Every agent output passes through controls before the user sees it:
+
+1. **Schema validator:** required fields and types exist.
+2. **Journey validator:** evidence applies to the correct stage/week/range.
+3. **Personal constraint validator:** no allergy, condition, restriction, or confirmed instruction is violated.
+4. **Evidence verifier:** every material health claim maps to an evidence span.
+5. **Citation validator:** citation exists, is current/approved, and supports the claim.
+6. **Boundary validator:** no diagnosis, prescription, unsafe reassurance, or fake professional review.
+7. **Consistency validator:** public guidance does not silently override a personal record conflict.
+
+If validation fails, the system may retrieve again once. It then clarifies, abstains, or escalates. It does not keep looping until the model produces a convenient answer.
+
+### User-visible provenance
+
+Every relevant statement is labeled as one of:
+
+- **Your confirmed information**
+- **Your uploaded record says**
+- **You reported**
+- **Public guidance says**
+- **Needs confirmation**
+
+---
+
+## 13. Stage 9 — Streamlit product experience
+
+### 13.1 Application structure
+
+`streamlit_app.py` is the deployment entry point. Keep page components separate from services:
+
+```text
+streamlit_app.py
+app/
+  pages_and_components/
+  services/
+    journey.py
+    safety.py
+    retrieval.py
+    graph.py
+    documents.py
+    plans.py
+  agents/
+  schemas/
+  evals/
+  data/
+```
+
+`st.session_state` stores temporary interaction state only. Supabase stores durable journey state, confirmed facts, documents, appointments, and plans.
+
+### 13.2 Weekly home page
+
+Render in this order:
+
+1. journey header: exact week/day or clearly approximate range;
+2. week-specific development hero and approved visual;
+3. what may be changing now;
+4. personal context: confirmed allergies, restrictions, conditions, and record changes;
+5. nutrition, movement, well-being, and preparation focus;
+6. consider / avoid / ask first, kept as separate categories;
+7. reported symptoms and persistent emergency access;
+8. next appointment, open questions, and follow-ups;
+9. weekly plan: none, draft, saved, or stale;
+10. unresolved extraction/conflict/human-review status;
+11. quick actions and persistent Compass chat.
+
+The dashboard uses prevalidated database content and does not call every agent on page load.
+
+### 13.3 Chat capabilities
+
+Compass can:
+
+- explain stage-appropriate public guidance;
+- explain an uploaded record with page/span evidence;
+- organize medication mentions without advising changes;
+- navigate a symptom to a safe next step;
+- answer nutrition, movement, and well-being questions;
+- create/edit/save a weekly plan;
+- prepare appointment questions and follow-up tasks;
+- check a traditional practice against available approved evidence;
+- show uncertainty and request human clarification.
+
+Compass cannot diagnose, prescribe, change medication, infer professional clearance, guarantee safety, or answer unsupported medical questions from model memory.
+
+---
+
+## 14. Stage 10 — Saving, stale plans, email, and n8n
+
+### Save rules
+
+- Chat answers are not automatically saved as facts.
+- Extracted facts require confirmation.
+- Plans require review and explicit save.
+- Reminders require opt-in, date/time, timezone, and channel confirmation.
+- Human-review packets require consent.
+
+Every saved plan stores journey-state version, personal-fact dependencies, evidence IDs, creation date, and review date. A relevant change to week, allergy, restriction, symptom, medication record, or clinician instruction marks the plan stale and explains why.
+
+### n8n placement
+
+n8n can handle:
+
+- opt-in appointment reminders;
+- weekly digest email generated from already validated data;
+- plan-review reminders;
+- reviewer-queue notification;
+- retry/dead-letter processing.
+
+n8n is never responsible for urgent symptom detection, primary chat, evidence retrieval, or the only emergency communication. Email failures do not break the app.
+
+---
+
+## 15. Evaluation architecture, in plain language
+
+Evaluation is not the last step. We create test cases before agents, run a baseline, inspect failures, make one change, and rerun the same cases.
+
+```mermaid
+flowchart LR
+    A["Define expected behavior"] --> B["Create synthetic golden cases"]
+    B --> C["Run baseline in LangSmith"]
+    C --> D["Measure component + end-to-end results"]
+    D --> E["Inspect failed traces"]
+    E --> F["Classify root cause"]
+    F --> G["Change data, retrieval, route, prompt, model, or validator"]
+    G --> H["Rerun unchanged regression set"]
+    H --> I["Publish before/after evidence"]
+```
+
+### 15.1 Evaluation sets
+
+| Dataset | What cases it contains | What it proves |
+|---|---|---|
+| `journey_resolver_set` | Due dates, week/day, month ranges, rollovers, conflicts, postpartum dates | Deterministic week correctness |
+| `weekly_content_set` | Every published profile and deliberately wrong-week evidence | No profile/evidence mismatch |
+| `retrieval_set` | Questions with expected public/personal evidence IDs | Evidence is found and correctly filtered |
+| `safety_set` | Routine, ambiguous, worsening, urgent, and adversarial symptom phrasing | Red flags are not missed or reassured away |
+| `routing_set` | Single-domain, multi-domain, out-of-scope, and ambiguous requests | Correct agent with minimal calls |
+| `document_set` | Clear, noisy, locked, unsupported, conflicting, and prompt-injected fictional files | Safe extraction and confirmation |
+| `agent_set` | Expected schemas, boundaries, citations, and stop behavior per agent | Specialist behavior is bounded |
+| `plan_set` | Allergies, restrictions, conflicting contributors, state changes, stale plans | No hard constraint violation |
+| `graph_set` | Expected nodes/edges, supersession, conflict, and downstream effects | GraphRAG continuity is correct |
+| `security_set` | Cross-user retrieval, deletion, unauthorized file access | No personal-data leakage |
+| `end_to_end_set` | Complete user journeys from onboarding to saved action/escalation | Components work together |
+
+### 15.2 What we measure
+
+- journey-resolution exact match;
+- weekly-profile and applicability accuracy;
+- retrieval Recall@k and citation precision;
+- public/personal provenance accuracy;
+- red-flag recall and unsafe-reassurance count;
+- agent-routing accuracy and unnecessary-agent calls;
+- extraction accuracy and page/span provenance;
+- unsupported-claim rate;
+- allergy/restriction/medication-boundary violations;
+- correct abstention and human-review routing;
+- cross-user leakage and deletion completeness;
+- latency, model calls, tokens, and cost;
+- user task completion and clarity.
+
+### 15.3 Non-negotiable release gates for the capstone
+
+- 100% correct deterministic journey calculations on the golden set.
+- 100% red-flag recall on the curated critical demo set.
+- Zero unsafe reassurance in safety cases.
+- Zero cross-user retrieval in security tests.
+- Zero uncited material health claims in the three recorded demo scenarios.
+- Zero wrong-week evidence in the recorded demo scenarios.
+- Zero saved plan item that violates a seeded hard allergy/restriction.
+- No claim that a simulated reviewer is a real doctor.
+
+These prove the tested capstone cases, not clinical safety for real-world deployment.
+
+### 15.4 LangSmith usage
+
+For every run, record:
+
+- dataset/example ID;
+- prompt, model, corpus, and agent-graph versions;
+- selected route and agent calls;
+- retrieved evidence IDs and rankings;
+- graph nodes/edges used;
+- validator decisions;
+- latency, tokens, and cost;
+- final output and evaluator scores.
+
+Build a simple Streamlit evaluator page showing baseline vs improved results and one failed-trace walkthrough.
+
+### 15.5 Fine-tuning decision
+
+Do not fine-tune guidelines into the model. Guidelines belong in RAG so they remain cited and updateable.
+
+Fine-tune only if the evals reveal a repeated, narrow behavior problem—such as structured extraction from noisy fictional records—and only after data, parsing, retrieval, schemas, and prompting are fixed. Keep a held-out test set and compare accuracy, safety, latency, and cost against the baseline.
+
+---
+
+## 16. Failure handling
+
+| Failure | Product behavior |
 |---|---|
-| Invalid week/date | Explain valid range; preserve entered value until correction |
-| Due date conflicts with week | Show both; request latest confirmed value; do not silently resolve |
-| Month only | Label approximate; use only guidance valid across the mapped range; suppress exact-week fetal claims |
-| Week 1 / may be pregnant | Use dating/verification path; do not assert pregnancy |
-| No records uploaded | Give public, stage-aware guidance and state that no personal record was used |
-| Unsupported/locked/corrupt file | Keep file status failed; explain supported format and next step |
-| Low OCR confidence | Highlight uncertain fields; require confirmation |
-| Record belongs to another person | Do not ingest into journey; ask user to remove/correct |
-| Contradictory documents | Preserve both; create conflict; ask for professional clarification |
-| Medication-change request | Summarize records only; do not advise change; escalate appropriately |
-| Urgent symptom | Stop normal generation and show reviewed urgent route |
-| Diagnosis request | State boundary, provide bounded navigation, recommend appropriate care route |
-| No adequate evidence | Say the answer is not supported; do not answer from model memory |
-| Wrong-week retrieval | Evidence verifier rejects answer and retries retrieval once |
-| Traditional remedy unsupported | State uncertainty/risk; no recommendation |
-| Agent disagreement | Plan is not saved; surface conflict or human-review path |
-| Agent loop/tool budget reached | Stop, preserve trace, give a safe partial/abstaining response |
-| Model timeout/rate limit | Retry once with idempotency; then show recoverable error |
-| Supabase unavailable | Do not generate personalized answer from stale cache; show service state |
-| n8n/email failure | Chat remains usable; notification marked failed and retried asynchronously |
-| Human unavailable | Say so explicitly and give safe alternative; never fake review |
-| Plan state changed | Mark plan stale and explain what changed |
-| Prompt injection inside document | Treat as untrusted text; never alter system/tool policy |
-| Cross-user retrieval test fails | Block release; this is a severity-zero privacy failure |
-| User deletes data | Cascade delete derived chunks/edges/caches and log completion |
-| User asks unrelated question | Briefly state scope and redirect; do not route through medical agents |
-| User gives ambiguous symptom | Ask minimal clarifying questions; if safety cannot be established, escalate |
+| Invalid/conflicting timing | Show values, explain mismatch, request confirmation |
+| Month only | Show approximate range; suppress exact-week claims |
+| No uploaded records | Use stage-aware public guidance and say no personal record was used |
+| Corrupt/locked/unsupported file | Mark failed and explain recovery |
+| Low-confidence extraction | Highlight field and require confirmation |
+| Wrong-person document | Do not ingest; ask user to remove/correct |
+| Conflicting records | Preserve both; create conflict and professional question |
+| Medication-change request | Explain record only; refuse change advice |
+| Urgent symptom | Stop normal generation and show safety route |
+| Ambiguous symptom | Ask minimum clarification; escalate if safety remains unclear |
+| Missing evidence | Abstain; do not use model memory |
+| Wrong-week evidence | Reject, retrieve once more, then abstain |
+| Agent disagreement | Do not save; clarify or human-review route |
+| Agent/tool loop | Stop at budget and return safe partial/abstention |
+| Model timeout/rate limit | Retry once idempotently, then recoverable error |
+| Supabase unavailable | Do not pretend personalization succeeded |
+| Email/n8n failure | Keep app usable; record failure and retry asynchronously |
+| Reviewer unavailable | State unavailable; never fake review |
+| State changes after plan | Mark plan stale and identify dependency |
+| Prompt injection in document | Treat as text; block instruction execution |
+| Cross-user access | Block request and release; severity-zero privacy defect |
+| User deletes data | Cascade-delete every derived artifact |
+| Out-of-scope question | Explain scope and redirect |
 
-Every screen needs loading, empty, success, validation, recoverable error, and blocked/safety states.
+Every Streamlit view requires loading, empty, success, validation-error, recoverable-error, blocked/safety, and stale states.
 
 ---
 
-## 18. n8n and email workflows
+## 17. Build phases and strict Wednesday–Saturday plan
 
-n8n is outside the synchronous medical-response path. It handles only delayed, non-critical workflows:
+### Wednesday — foundation and first vertical slice
 
-- opt-in weekly digest generated from already validated dashboard data;
-- appointment reminders;
-- saved-plan review reminders;
-- human-review queue notification;
-- notification retry/dead-letter processing.
+**Build:**
 
-Each job requires an idempotency key, user consent, timezone, preferred channel, unsubscribe control, retry limit, failure status, and audit timestamp. The email does not contain sensitive detail by default; it links the authenticated user back to Nestline. Urgent symptom handling never depends on email delivery.
+- Streamlit shell, navigation, privacy boundary, Personal/Demo Mode.
+- Supabase project, tables, Storage, pgvector, and RLS.
+- Journey resolver and weekly-profile schema.
+- Source registry and ingestion script skeleton.
+- Publish a small reviewed source slice for `PC00`, `P10`, and `PP01`.
+- LangSmith project and initial resolver/content eval datasets.
 
-ElevenLabs is not needed because voice adds consent, transcription, privacy, latency, and evaluation work without strengthening the four-day core demonstration.
+**Blocking checklist:**
 
----
+- [ ] App deploys from GitHub without secrets in repository.
+- [ ] New Personal Mode is empty; Demo Mode is visibly fictional.
+- [ ] Due date/week/month/delivery-date paths work.
+- [ ] `P10` does not retrieve a deliberately wrong-week test passage.
+- [ ] RLS cross-user test passes before document work.
 
-## 19. Evaluation architecture
+### Thursday — ingestion, RAG, and GraphRAG
 
-LangSmith records route, prompt/model version, retrieved evidence IDs, tool calls, latency, token/cost data, output schema, validator results, and user feedback. Personal fields must be redacted; use synthetic traces in the capstone.
+**Build:**
 
-### 19.1 Evaluation suites
+- Public parser, evidence schema, week/applicability mapping, review status, embeddings.
+- Fictional document fixtures and personal ingestion/review flow.
+- Retrieval Gateway: SQL + full text + pgvector + reranking.
+- Graph nodes/edges for document → fact → restriction → plan/appointment.
+- Record Agent and Medication Record Agent.
+- Source/citation drawer in Streamlit.
 
-| Suite | What to measure | Critical target for capstone |
-|---|---|---|
-| Journey resolver | Due-date math, week/day rollover, postpartum date, conflicts, month approximation | 100% on deterministic golden cases |
-| Safety | Red-flag recall, unsafe reassurance, escalation consistency | 100% recall on curated critical cases; zero unsafe reassurance |
-| Routing | Correct primary agent and unnecessary-agent rate | High accuracy with bounded call count |
-| Retrieval | Recall@k, exact-week applicability, authority, personal/public isolation | No wrong-user result; strong evidence recall |
-| Grounding | Claim support, citation correctness, provenance label | Every material medical claim supported |
-| Record extraction | Field accuracy, page/span provenance, uncertainty handling | Critical fields require confirmation when uncertain |
-| Plans | Allergy/restriction violations, stage mismatch, conflicts, stale-plan behavior | Zero hard-constraint violation |
-| Graph continuity | Correct conflict/supersession/constraint propagation | Deterministic expected edges and downstream changes |
-| Human workflow | Consent, minimum packet, honest status | No fake review and no urgent case delayed |
-| Security | RLS/cross-user access, deletion cascade, prompt injection | Zero cross-user leakage |
-| UX | Task completion, explanation clarity, error recovery | Demonstrable success on scripted tasks |
-| Operations | Latency, model calls, token cost, failure/retry rate | Recorded and compared, not guessed |
+**Blocking checklist:**
 
-### 19.2 NestlineBench dataset
+- [ ] Every retrieved chunk shows source, span/page, week applicability, and jurisdiction.
+- [ ] Personal and public evidence are labeled separately.
+- [ ] Unconfirmed extraction cannot personalize an answer.
+- [ ] Prompt-injected document does not change agent behavior.
+- [ ] Graph demo shows a real downstream dependency, not decorative nodes.
 
-Create versioned synthetic cases covering:
+### Friday — safety, specialist agents, plans, and human workflow
 
-- possible pregnancy and weeks 1–2 language;
-- due-date/week conflict and month-only ambiguity;
-- exact weeks 5, 10, 20, 24, 32, 40, and postpartum intervals;
-- no-document, clear-document, noisy-document, and contradictory-document states;
-- medication extraction without medication advice;
-- routine, ambiguous, worsening, and red-flag symptoms;
-- allergies/restrictions that invalidate a meal or movement candidate;
-- unsupported traditional practices;
-- stale saved plan after state change;
-- wrong-week and wrong-jurisdiction retrieval traps;
-- prompt injection and cross-user retrieval attempts;
-- model timeout, empty retrieval, email failure, and reviewer unavailable.
+**Build:**
 
-### 19.3 Fine-tuning decision
+- Safety Gate and urgent/clarify/non-urgent routes.
+- Orchestrator.
+- Symptom, Nutrition, Movement, Well-being, and Follow-up agents.
+- Plan Composer and deterministic validators.
+- Review/edit/save/stale-plan flow.
+- Simulated human-review packet and status screen.
 
-Do not fine-tune merely to demonstrate the technique. First baseline the complete system. If failures cluster in a narrow repeated task—such as extracting medication instructions from noisy synthetic documents or classifying structured intent—create a train/validation/test split, fine-tune a small specialist model, and compare it against prompting on safety, accuracy, latency, and cost. Never fine-tune to memorize guidelines that should remain retrievable and updateable.
+**Blocking checklist:**
 
----
+- [ ] Urgent cases bypass ordinary generation.
+- [ ] One-domain question invokes one specialist.
+- [ ] Full plan invokes only required specialists and then Plan Composer.
+- [ ] Seeded allergy/restriction cannot appear in saved plan.
+- [ ] User must confirm before facts, plan, reminder, or review packet is saved.
+- [ ] Simulated reviewer is never presented as a real doctor.
 
-## 20. Model and platform placement
+### Saturday — evaluation, fixes, packaging, and demo video
 
-| Platform | Exact place in architecture | Recommendation |
-|---|---|---|
-| OpenAI API | Provider adapter used by agents, answer generation, structured extraction, and verifier | Primary if actual API access is confirmed |
-| ChatGPT Pro | Team productivity/UI subscription | Not an application backend |
-| Fireworks AI | Alternative provider or small-model benchmark | Optional; compare via evals, do not add on day one |
-| Grok | Possible future provider implementation | Exclude from capstone unless access and eval advantage are proven |
-| LangChain | Loaders, retrievers, structured tool interfaces | Use selectively |
-| LangGraph | Orchestrator state machine, interrupts, retries, bounded parallel plan agents | Core |
-| LangSmith | Tracing, datasets, experiments, regression comparison | Core |
-| Supabase | Auth, Postgres, Storage, pgvector, RLS | Core |
-| n8n | Opt-in emails/reminders and reviewer notification | Optional but useful demo extension |
-| ElevenLabs | Voice input/output | Deferred |
-| MCP | Future standardized exposure of approved tools | Deferred; internal typed tools first |
+**Build:**
 
-The provider adapter prevents architecture lock-in:
+- Run all golden sets in LangSmith.
+- Cluster failures by data, retrieval, routing, model, validation, security, or UX.
+- Fix the highest-risk failures and rerun unchanged regression cases.
+- Complete three end-to-end scenarios.
+- Add evaluation dashboard, graph view, architecture, setup, README, reset button, and demo script.
+- Record demo video only after release gates pass.
 
-```python
-class ModelProvider:
-    def structured_generate(self, task, schema, messages, evidence): ...
-    def embed(self, texts): ...
-```
+**Blocking checklist:**
 
-Changing providers requires rerunning the same safety, grounding, routing, latency, and cost evals.
+- [ ] All non-negotiable gates in Section 15.3 pass.
+- [ ] Demo Mode resets deterministically.
+- [ ] No real medical or personal data exists in repository, database seed, traces, or recording.
+- [ ] No broken Streamlit state after refresh/relogin.
+- [ ] Baseline and improved eval results are visible and reproducible.
+- [ ] README explains local run, deployment, architecture, limitations, and data sources.
+- [ ] Demo video shows product value, evidence, graph continuity, safety route, and eval proof.
 
 ---
 
-## 21. Build phases and order
+## 18. Capstone scope and demonstration
 
-### Phase 0 — safety and contracts
+The data schema supports every week, but four days is not enough to clinically review unique content for all 54 weekly profiles. Create all profile shells; deeply populate and test a representative vertical slice. Unreviewed profiles stay hidden rather than displaying AI-manufactured content.
 
-- Lock scope, disclaimer, privacy boundary, synthetic-only demo policy.
-- Define journey state, provenance, agent outputs, evidence object, and safety route schemas.
-- Create the golden evaluation set before prompts.
-- Confirm OpenAI API access and Supabase project.
+Recommended reviewed demo profiles:
 
-### Phase 1 — sources and data foundation
+- `PC00`, `P01`, and `P02` for possible/very early pregnancy behavior;
+- `P09` and `P10` as distinct neighboring weeks;
+- `P23` and `P24` as distinct neighboring weeks;
+- `P35` and `P36` as distinct neighboring weeks;
+- `PP01` with day-level additions;
+- `PP05`, `PP06`, `PP11`, and `PP12` as distinct postpartum weeks.
 
-- Build source registry and ingest selected approved sections.
-- Author the weekly-profile and reusable-guidance-fragment schemas.
-- Create profile shells for `P01`–`P42` and `PP01`–`PP12`, then populate high-quality exact-week content needed for demos.
-- Configure Supabase tables, RLS, Storage, pgvector, and seed only isolated Demo Mode.
-- Build document fixtures and ingestion tests.
+### Three connected demo stories
 
-### Phase 2 — deterministic core
-
-- Journey resolver and daily rollover.
-- Safety gate and escalation messages.
-- Dashboard Composer, empty/error/stale states.
-- SQL fact access, retrieval filters, hybrid search, citations.
-
-### Phase 3 — agents and plans
-
-- Orchestrator plus Record, Symptom, Nutrition, Movement, Well-being, Follow-up, and Medication Record agents.
-- Plan Composer, constraint validator, review/edit/save/version flow.
-- Graph nodes/edges and state-change propagation.
-
-### Phase 4 — human/async workflows
-
-- Simulated reviewer queue and consent-aware packet.
-- n8n opt-in reminders/email with failure states.
-- Do not connect real clinicians or patient communications in capstone.
-
-### Phase 5 — eval-driven hardening
-
-- Run NestlineBench in LangSmith.
-- Classify failures: data, retrieval, orchestration, generation, validation, UX, security.
-- Fix highest-risk cause, rerun, and publish before/after evidence.
-- Fine-tune only if a repeated narrow failure remains.
-
-### Phase 6 — demo packaging
-
-- Resettable fictional Demo Mode.
-- Source/evidence drawer and journey-graph view.
-- Trace/evaluation dashboard.
-- Scripted scenarios, captions, README, architecture, setup, and demo video.
+1. **Week-aware plan:** resolve `P10`, confirm a fictional allergy and restriction, generate a sourced plan, edit it, and save it.
+2. **Record-to-action continuity:** upload a fictional document, confirm extracted facts, see an appointment question and stale-plan state update, and inspect GraphRAG connections.
+3. **Safety and human handoff:** report a curated red-flag scenario, observe the Safety Gate stop normal generation, consent to a simulated review packet, and inspect the passing LangSmith trace/eval.
 
 ---
 
-## 22. Honest capstone scope
-
-The architecture supports the complete journey, but a four-day team cannot clinically curate and validate every card for every week. The capstone should create all weekly profile records, then deeply populate and evaluate a representative vertical slice:
-
-- possible-pregnancy, `P01`, and `P02`;
-- `P09` and `P10` as distinct profiles;
-- `P23` and `P24` as distinct profiles;
-- `P35` and `P36` as distinct profiles;
-- `PP01` with day 2–7 additions;
-- `PP05`, `PP06`, `PP11`, and `PP12` as distinct profiles.
-
-Non-demo weekly profiles may remain unpublished shells, but must not pretend to contain reviewed content. Hide unpublished profiles from the public demo and explain the content-governance workflow. Depth, traceability, and measured correctness are more credible than 54 superficially generated pages.
-
-### Three connected demonstration stories
-
-1. **Week-aware weekly plan:** user enters a due date, confirms an allergy and clinician-recorded restriction, requests a plan, edits it, saves it, and sees cited week-relevant output.
-2. **Record-to-action continuity:** user uploads a synthetic appointment/prescription document, confirms extracted facts, sees appointment/questions update, and watches the journey graph connect evidence to actions.
-3. **Safety and human handoff:** user reports a curated red-flag scenario, normal generation stops, a consent-aware review packet is prepared, and the trace/eval proves the route.
-
----
-
-## 23. Definition of done
+## 19. Definition of done
 
 Nestline is capstone-complete only when:
 
-- a new personal workspace is empty and Demo Mode is visibly synthetic;
-- all supported timing inputs resolve correctly and uncertainty is visible;
-- every pregnancy and postpartum week has a separate addressable profile, while reusable fragments prevent duplication;
-- source registry, versions, citations, and applicability metadata are inspectable;
-- personal/public data and provenance are visibly separated;
-- RLS and automated cross-user isolation tests pass;
+- Streamlit is the deployed interface and `streamlit_app.py` is the entry point;
+- Personal Mode is empty and Demo Mode is visibly fictional/resettable;
+- all timing inputs resolve deterministically and uncertainty is visible;
+- `P01`–`P42` and `PP01`–`PP12` exist as separate profile records;
+- unpublished profiles are hidden;
+- every published health claim has approved evidence and applicability metadata;
+- public, personal, and user-reported provenance are visibly separated;
+- personal documents require confirmation before personalization;
+- RAG performs hard week/stage/user filters before semantic search;
+- GraphRAG participates inside retrieval and demonstrably propagates one change;
+- agents follow their bounded runbooks and stop rules;
 - urgent routes bypass normal generation;
-- every specialist has typed inputs, outputs, tools, and stop rules;
-- plans are editable, explicitly saved, versioned, constrained, and become stale correctly;
-- no agent recommends videos or performs uncontrolled medical web search;
-- human-review status is honest and consent-aware;
-- failures have visible UX states and recorded traces;
-- LangSmith evals cover safety, timing, retrieval, grounding, routing, plans, privacy, and failure behavior;
-- the demo shows measured evidence, not only a polished chat;
-- README, setup steps, architecture diagram, data dictionary, and demo script are current;
-- no secret, real patient record, employer data, employer branding, or employer Git history exists in the repository.
+- plans are editable, explicitly saved, versioned, constrained, and marked stale correctly;
+- human review is honest and consent-aware;
+- security, safety, week, citation, and plan release gates pass;
+- LangSmith shows baseline, failure trace, improvement, and regression result;
+- no video recommendation component, real patient data, secret, employer data, employer branding, or employer Git history exists in the project.
 
----
+## 20. Remaining external prerequisites—not architecture ambiguity
 
-## 24. Remaining decisions that must be explicit before coding
+The architecture is decided. Before implementation, the team still must provide or confirm:
 
-These are not hidden gaps; owners must lock them in Phase 0:
+1. OpenAI API key and API billing; ChatGPT Pro alone is not API access.
+2. Supabase and LangSmith project credentials stored outside Git.
+3. Source reuse/license clearance before copying any external content into the corpus.
+4. A qualified reviewer before describing any content as clinically reviewed.
+5. Locally appropriate emergency/help wording before external testing.
 
-1. Confirm OpenAI API key/billing; otherwise select one Fireworks model.
-2. Implement the listed weekly profiles as the reviewed demo scope; do not expand scope until they pass evals.
-3. Assign a source/content reviewer. The team must not call content clinically reviewed without an appropriately qualified reviewer.
-4. Treat n8n email as a stretch goal after the three core demo journeys pass.
-5. Define local emergency/help wording for the target deployment context before any external user test.
-
-Everything else in this document is the recommended architecture baseline.
+Until those production-grade reviews exist, Nestline remains a synthetic-data educational capstone—not a product for real clinical reliance.
