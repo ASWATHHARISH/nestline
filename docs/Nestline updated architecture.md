@@ -12,6 +12,48 @@
 
 > Nestline is an educational and organizational capstone prototype. It is not a doctor, diagnostic system, prescriber, medical device, emergency service, or clinically validated product. The public demo uses fictional data and tells visitors not to upload real medical information.
 
+## Available tools and where each one fits
+
+Having credits does not mean every tool should be added. Nestline should use one clear tool for each responsibility so the four-day build remains understandable, testable, and safe. The access status below comes from the team-provided credit list; every API key, quota, model, and deployment entitlement must still be verified before implementation.
+
+| Provider/tool | Access shown | What it can do, in simple language | Nestline decision |
+|---|---|---|---|
+| [xAI / Grok](https://docs.x.ai/developers/model-capabilities/text/structured-outputs) | Not confirmed in the supplied list | Generates the specialist agents' structured draft after RAG gives it trusted evidence | **Candidate model:** verify API access and benchmark it against one available fallback; it was not removed |
+| OpenAI | ChatGPT Pro given | Helps team members research, reason, and code in ChatGPT | **Team-use only unless a separate API key/billing is confirmed:** ChatGPT Pro is not treated as backend API access |
+| [Replit](https://docs.replit.com/build/troubleshooting) | Replit Core given | Provides a browser-based coding workspace and can deploy a Streamlit application | **Hosting/coding candidate:** evaluate separately; it does not replace Streamlit, RAG, LangGraph, or Supabase |
+| [Fireworks AI](https://docs.fireworks.ai/) | Credits given | Runs open models and can provide structured generation, embeddings, and reranking | **Useful candidate:** one fallback model in the provider benchmark; optionally benchmark one embedding/reranker, but do not add several models merely to consume credits |
+| [LlamaIndex / LlamaCloud](https://docs.llamaindex.ai/en/stable/module_guides/loading/ingestion_pipeline/) | 40,000 credits shown | Parses and prepares documents for RAG and can manage ingestion/retrieval workflows | **Conditional ingestion tool:** confirm what the credits cover; use only if it improves the controlled PDF/noisy-document pipeline over the simpler parser |
+| [Lyzr](https://docs.lyzr.ai/introduction) | $100 credits shown | Provides another platform for building and orchestrating agents | **Do not combine with the baseline:** LangGraph already owns orchestration; use Lyzr only for a separate experiment if the core build is complete |
+| [ElevenLabs](https://elevenlabs.io/docs/overview/capabilities/text-to-speech) | Free access shown | Converts approved text into spoken audio | **Deferred:** possible accessibility/read-aloud feature later; text-only English is the current capstone scope |
+| [Nebius Token Factory](https://docs.tokenfactory.nebius.com/ai-models-inference/overview) | $50 credits shown | Runs open text, embedding, vision, and safety models through APIs | **Reserve fallback:** use only if the chosen Grok/Fireworks route is unavailable or a later benchmark needs one replacement candidate |
+| [Pinecone](https://docs.pinecone.io/guides/search/hybrid-search) | Two months of credits shown | Stores vectors and supports semantic or hybrid document search | **Alternative, not additional:** Supabase pgvector/full-text is the baseline; use Pinecone only if the team intentionally replaces that retrieval store |
+| [Mem0](https://docs.mem0.ai/open-source/overview) | Three months shown | Automatically remembers useful facts across conversations | **Do not use in the baseline:** maternal context must be explicit, confirmed, versioned, and auditable in Supabase and the journey graph |
+| Composio | Not given | Connects agents to external apps and actions | **Unavailable/not required:** future calendar or messaging integration only after explicit permissions and consent design |
+| Braintrust | Not given | Traces and evaluates AI systems | **Unavailable/not required:** LangSmith is already the evaluation and tracing platform |
+| You.com | No credit needed | Searches the live web and can help discover source candidates | **Offline research only:** never use live web search to answer medical questions; every discovered source must pass the source registry and review gate |
+| [LangChain + LangGraph](https://docs.langchain.com/oss/python/langgraph/overview) | Free access | Connects models and tools and runs the controlled multi-agent workflow | **Core:** LangGraph owns orchestration; LangChain supplies integrations and reusable components |
+| [LangSmith](https://docs.langchain.com/langsmith/evaluation) | 5,000 base traces/month shown | Records every agent/RAG step and runs evaluation experiments | **Core:** use for traces, datasets, baseline-versus-improved experiments, failures, latency, and cost |
+| NVIDIA / Brev | Credits not given | Provides hosted development/GPU environments | **Unavailable/not required:** no GPU environment is needed for the baseline |
+| Streamlit | Open-source framework | Provides the complete chat-first web interface | **Core front end:** deployment host remains a separate decision |
+| Supabase | Existing team access to confirm | Stores accounts, documents, structured facts, vectors, plans, and graph edges with permission controls | **Core data platform:** verify project credentials and RLS before document work |
+
+### Recommended minimal stack
+
+```text
+Streamlit                         -> product interface
+Supabase                         -> structured data, files, permissions, vectors, graph tables
+LangChain + LangGraph            -> tools, agent contracts, and orchestration
+Grok or one evaluated fallback   -> structured reasoning/generation after retrieval
+LangSmith                        -> tracing, datasets, evaluation, and comparison
+Python/PyMuPDF or proven parser  -> controlled document ingestion
+```
+
+Replit may host or help build the Streamlit app. Fireworks may supply the fallback model or a tested embedding/reranking model. LlamaIndex/LlamaCloud may replace only the parsing/ingestion portion if a small fixture benchmark proves a benefit. All other listed tools are deferred or alternatives, not missing architecture components.
+
+### Access-verification checklist
+
+Before assigning implementation work, record `available`, `unavailable`, or `unverified` for each candidate. For every API product marked available, confirm the exact API key, model/feature entitlement, remaining credit or expiry, rate limit, data-handling setting, and one successful non-sensitive test call. Keep every secret outside Git. A web subscription, playground login, or promotional-credit screenshot alone is not proof that the required server-side API is ready.
+
 ### How to use this document
 
 - Sections 1–4: product, locked decisions, complete architecture, and weekly data.
@@ -56,7 +98,7 @@ Nestline provides a continuity layer: a confirmed change can update the user's t
 | Decision | Locked choice | Reason |
 |---|---|---|
 | Front end | Streamlit | Fastest way to build and deploy the complete capstone experience |
-| Deployment | Streamlit Community Cloud from GitHub | Simple team sharing and evaluator access |
+| Deployment host | Not locked: compare Streamlit Community Cloud and Replit Deployment | Hosting/coding platform is a separate implementation decision; the front end remains Streamlit |
 | Permanent data | Supabase | Authentication, database, private files, pgvector, and Row Level Security in one platform |
 | Orchestration | LangGraph with LangChain components | Explicit routes, bounded agent calls, retries, and visible traces |
 | Observability/evals | LangSmith | Trace every route and compare prompt/model/retrieval versions |
@@ -130,7 +172,7 @@ This is a small provider benchmark, not a multi-provider production router. The 
 
 ### 2.3 Platform-fit verification
 
-- [Streamlit Community Cloud](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/deploy) deploys from a repository, branch, and entrypoint and provides deployment secret settings; this matches `streamlit_app.py` and non-committed credentials.
+- [Streamlit Community Cloud](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/deploy) and [Replit Deployment](https://docs.replit.com/build/troubleshooting) can both host the Streamlit entrypoint. The team must test secrets, startup, logs, reset behavior, and public access before selecting one; hosting is not yet locked.
 - [Supabase](https://supabase.com/docs/guides/database/overview) provides Postgres, Row Level Security, Storage integration, and pgvector support. Its [hybrid-search guidance](https://supabase.com/docs/guides/ai/hybrid-search) uses Postgres full-text search plus pgvector, matching the Retrieval Gateway.
 - [LangGraph](https://docs.langchain.com/oss/python/langgraph/overview) is designed for stateful workflows, durable execution, and human-in-the-loop control; we use a mostly predetermined workflow with bounded agent nodes, not an unrestricted autonomous loop.
 - [LangSmith evaluation](https://docs.langchain.com/langsmith/evaluation-quickstart) separates dataset, target function, and evaluators; Nestline's eval plan follows that structure and evaluates both individual nodes and complete graph runs.
@@ -1589,10 +1631,12 @@ The architecture is decided. Before implementation, the team still must provide 
 
 1. xAI API access for the Grok candidate and at least one genuinely available fallback provider for the controlled benchmark. A consumer chat subscription is not assumed to include server-side API access or billing.
 2. The selected provider/model IDs, benchmark record, primary-provider decision, and fallback behavior.
-3. Supabase and LangSmith project credentials stored outside Git.
-4. Source reuse/license clearance before copying any external content into the corpus.
-5. A qualified reviewer before describing any content as clinically reviewed.
-6. Locally appropriate emergency/help wording before external testing.
+3. A completed access matrix for the supplied credits, including one successful non-sensitive API check for every tool the build will actually use.
+4. Deployment-host decision between Streamlit Community Cloud and Replit after a minimal deployment smoke test.
+5. Supabase and LangSmith project credentials stored outside Git.
+6. Source reuse/license clearance before copying any external content into the corpus.
+7. A qualified reviewer before describing any content as clinically reviewed.
+8. Locally appropriate emergency/help wording before external testing.
 
 Until those production-grade reviews exist, Nestline remains a synthetic-data educational capstone—not a product for real clinical reliance.
 
@@ -1642,6 +1686,8 @@ The earlier file remains decision history. This table prevents contributors from
 | 9 Sep 2026 | WHO plus approved weekly sources form a layered corpus; neither WHO alone nor one large PDF is sufficient | Weekly experience and authoritative rule guidance serve different purposes |
 | 9 Sep 2026 | All journey weeks have schema/coverage records, while only representative profiles are deeply reviewed and published for the capstone | Avoid 54 superficial or model-invented care guides |
 | 9 Sep 2026 | n8n is optional future automation, not part of the committed core architecture | The coding/deployment decision is separate; core chat and safety must not depend on n8n |
+| 9 Sep 2026 | Tool credits are documented at the top, but only the minimal stack is committed | Avoid duplicate frameworks, stores, memory systems, and model providers that add risk without improving the demo |
+| 9 Sep 2026 | Streamlit remains the front end; hosting is evaluated separately between Streamlit Community Cloud and Replit | Replit access creates a hosting option, not a new product architecture |
 | 9 Sep 2026 | Videos, ElevenLabs, and MCP are outside the core build | Protect four-day depth and safety |
 | 9 Sep 2026 | Human review is simulated and cannot delay urgent action | Avoid false clinical-service claims |
 | 9 Sep 2026 | Fine-tuning requires a measured repeated failure | Prevent decorative or unsafe training |
