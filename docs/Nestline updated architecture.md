@@ -34,9 +34,9 @@ Nestline creates continuity without pretending to practise medicine:
 
 | Area | Decision |
 |---|---|
-| Interface | Mobile-first Next.js web app with a chat-supported dashboard |
+| Interface | Streamlit web app deployed through Streamlit, with a dashboard and persistent chat |
 | Timing shown to user | Exact week when known; approximate stage when only a month is known |
-| Content storage | Reusable journey bands plus exact-week overlays; never 40 separate RAG pipelines |
+| Content storage | One explicit weekly profile for every pregnancy and postpartum week, assembled from reusable sourced guidance fragments |
 | Model | OpenAI API behind a provider adapter, if API billing/key is confirmed |
 | Optional model comparison | Fireworks AI; Grok is not required |
 | Orchestration | LangGraph/LangChain state graph with bounded routes |
@@ -58,25 +58,44 @@ ChatGPT Pro and OpenAI API billing are separate. Before implementation, confirm 
 
 “Finecode” is not included because the intended product/tool is unclear. It should not enter the architecture until the team identifies it and a concrete requirement it solves.
 
+### 3.1 Streamlit application and deployment
+
+Streamlit is the committed front end for the capstone. The GitHub repository will contain `streamlit_app.py` as the deployment entry point, with reusable UI components and service modules behind it. Deploy the application from the repository to Streamlit Community Cloud.
+
+Recommended Streamlit views:
+
+1. welcome, privacy boundary, and Personal/Demo Mode selection;
+2. onboarding and journey-time selection;
+3. weekly home dashboard;
+4. persistent Compass chat;
+5. documents and extracted-fact review;
+6. saved plan and appointments;
+7. simulated human-review status;
+8. evaluator-only evidence, graph, and trace view.
+
+`st.session_state` manages only temporary page/chat interaction. Supabase remains the source of truth for journey state, confirmed facts, documents, plans, and appointments so a browser refresh does not lose important state. API keys go in Streamlit deployment secrets/environment variables and never in Git.
+
 ---
 
-## 4. The timing model: weekly outside, efficient inside
+## 4. The timing model: weekly in the product and data model
 
-The user's concern is correct: week 10 and week 20 cannot be treated as the same experience. Trimester-only retrieval is too broad. But separately authoring and embedding near-identical nutrition or well-being advice for all 40 weeks would increase workload, retrieval noise, and review burden.
+Week 10 and week 20 cannot be treated as the same experience. Trimester-only retrieval is too broad, and the earlier two-week-band wording made the architecture harder to understand. Nestline will therefore have a separate addressable profile for every pregnancy week and every postpartum week.
+
+This does not mean copying the same paragraph 40 times. Stable, source-backed guidance is stored once as a reusable fragment with an applicability range, and each weekly profile references the fragments that apply to that exact week.
 
 Nestline therefore uses this composition:
 
 ```text
 Displayed weekly experience
-= reusable journey-band guidance
-+ exact-week development delta
+= exact weekly profile
++ reusable sourced guidance fragments applicable to that week
 + personal structured facts
 + relevant record events
 + current symptoms/check-ins
 + saved-plan state
 ```
 
-The UI always speaks in the user's resolved week when confidence permits. Internally, stable guidance is stored once for a short band, while genuinely week-specific changes are stored in the exact-week overlay.
+The result is genuinely weekly: pregnancy weeks `P01` through `P42` and postpartum weeks `PP01` through `PP12` each have their own profile. Reuse happens at the content-fragment level, not by collapsing two different weeks into one record.
 
 ### 4.1 Supported journey inputs
 
@@ -97,56 +116,40 @@ Do not offer a standalone “day” input. “Day 3” is meaningless unless att
 |---|---|---|
 | Due date | Calculated gestational age, calculation date, confidence=`calculated` | “Week 10, day 3” and exact-week content |
 | Week + optional day | User-confirmed gestational age, effective date, confidence=`reported` | Exact-week content |
-| Month only | Approximate week range and confidence=`approximate` | Band-level guidance; no exact fetal-size claim |
+| Month only | Approximate week range and confidence=`approximate` | Guidance supported across the full range; no exact-week fetal claim |
 | Delivery date | Calculated postpartum day/week | Postpartum interval content |
-| Postpartum week | Reported postpartum interval | Postpartum band content |
+| Postpartum week | Reported postpartum interval | Exact postpartum-week profile |
 | Possible pregnancy | `possible_pregnancy` | Verification/next-step education, not “you are pregnant” language |
 
 If the due date and reported week conflict materially, Compass displays both, explains that they do not align, and asks the user to confirm the latest clinician-dated value. It must not silently choose one.
 
 Journey age is recalculated daily. Every answer and saved plan stores the journey-state version used to create it.
 
-### 4.3 Content bands
+### 4.3 Weekly profiles
 
-Three-week groups are tempting, but they can hide meaningful milestone changes. The recommended compromise is mostly two-week bands with exact-week overlays:
+| Profile family | Records | Meaning |
+|---|---:|---|
+| Possible pregnancy | `PC00` | Testing, verification, safety, and general preconception education without asserting pregnancy |
+| Pregnancy | `P01`–`P42` | One separate profile for every gestational week |
+| Postpartum | `PP01`–`PP12` | One separate profile for every postpartum week |
+| Early postpartum safety | `PPD0`, `PPD1`–`PPD7` | Day-level safety/follow-up additions during the first week; these supplement `PP01` |
 
-| Journey band | Exact overlays | Primary purpose |
-|---|---|---|
-| Possible pregnancy | None | Testing, verification, safety, general preconception education |
-| Weeks 1–4 | 1, 2, 3, 4 | Dating and early-pregnancy context; weeks 1–2 require special language |
-| Weeks 5–6 | 5, 6 | Shared early-stage guidance + individual development delta |
-| Weeks 7–8 | 7, 8 | Same pattern |
-| Weeks 9–10 | 9, 10 | Same pattern |
-| Weeks 11–12 | 11, 12 | Same pattern |
-| Weeks 13–14 through 39–40 | Two-week bands | Shared guidance + exact-week overlay |
-| Week 41+ | 41, 42 | Separate overdue-date content and care-plan prompts |
-| Postpartum 0–24 hours | Day-level interval | Immediate post-birth context |
-| Postpartum days 2–3 | Day-level interval | Early follow-up context |
-| Postpartum days 4–7 | Day-level interval | First-week context |
-| Postpartum week 2 | Week interval | Recovery/check-in content |
-| Postpartum weeks 3–4 | Two-week band | Shared recovery/well-being content |
-| Postpartum weeks 5–6 | Two-week band | Six-week follow-up context |
-| Postpartum weeks 7–8 | Two-week band | Shared content |
-| Postpartum weeks 9–10 | Two-week band | Shared content |
-| Postpartum weeks 11–12 | Two-week band | Transition/end-of-scope content |
-
-This produces about 20 pregnancy band records plus weekly overlays, not 40 duplicated full records. The exact number is less important than the rule: create a new band only when evidence or user action meaningfully changes.
-
-The complete pregnancy band key is: `01_04`, `05_06`, `07_08`, `09_10`, `11_12`, `13_14`, `15_16`, `17_18`, `19_20`, `21_22`, `23_24`, `25_26`, `27_28`, `29_30`, `31_32`, `33_34`, `35_36`, `37_38`, `39_40`, and `41_42`. Weeks 1, 2, 3, and 4 still have separate overlays inside the first band.
+Each weekly profile can contain different development, body-change, nutrition-focus, movement-focus, well-being, preparation, appointment, do/avoid, and question-for-professional cards. A reviewer can compare `P13` with `P14` directly even if some of their referenced guidance fragments are identical.
 
 For month-only onboarding, use a transparent product mapping rather than pretending the month is precise: month 1 → weeks 1–4, month 2 → 5–8, month 3 → 9–13, month 4 → 14–17, month 5 → 18–22, month 6 → 23–27, month 7 → 28–31, month 8 → 32–35, and month 9 → 36–40+. The UI says “approximately weeks X–Y” and invites the user to add an estimated due date later.
 
+When the user supplies only a month, the system does **not** secretly pick one week. It retrieves only fragments valid across that full mapped range and presents a range-based home state. The user receives an exact weekly profile only after supplying a due date or week.
+
 ### 4.4 Content-unit schema
 
-Every published band or overlay is structured rather than stored as one long article:
+Every published weekly profile is structured rather than stored as one long article:
 
 ```json
 {
-  "content_id": "pregnancy_09_10",
-  "content_type": "band_base",
+  "profile_id": "P10",
+  "content_type": "weekly_profile",
   "journey_stage": "pregnancy",
-  "week_start": 9,
-  "week_end": 10,
+  "week": 10,
   "domains": ["development", "nutrition", "movement", "wellbeing", "preparation"],
   "cards": {
     "development": [],
@@ -156,7 +159,8 @@ Every published band or overlay is structured rather than stored as one long art
     "avoid": [],
     "ask_professional": []
   },
-  "source_evidence_ids": [],
+  "guidance_fragment_ids": [],
+  "week_specific_evidence_ids": [],
   "jurisdiction": ["GLOBAL", "IN"],
   "review_status": "draft | content_reviewed | clinical_reviewed",
   "version": "1.0.0",
@@ -165,7 +169,7 @@ Every published band or overlay is structured rather than stored as one long art
 }
 ```
 
-An exact-week overlay contains only what differs for that week—such as hero/development facts and truly time-specific preparation—not a second copy of the band's nutrition and movement guidance.
+A reusable guidance fragment has its own domain, applicability start/end, exclusions, jurisdiction, evidence spans, and review status. For example, the same reviewed hydration fragment may be referenced by several weekly profiles, while development and preparation cards remain week-specific. This preserves weekly behavior without unnecessary duplication.
 
 ### 4.5 Week 1 and possible pregnancy
 
@@ -186,7 +190,7 @@ Gestational dating commonly counts from the first day of the last menstrual peri
 
 ```mermaid
 flowchart TB
-    U["User: onboarding, home, chat, records"] --> API["Application API"]
+    U["Streamlit UI: onboarding, home, chat, records"] --> API["Nestline service layer"]
 
     API --> SG["Safety Gate"]
     API --> JR["Journey Resolver"]
@@ -302,7 +306,7 @@ The earlier few PDFs were not sufficient for a weekly product. Nestline needs a 
 | India nutrition | [ICMR-NIN Dietary Guidelines for Indians 2024](https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI07052024P.pdf) | Nutrition agent evidence | Not inherently weekly; map only where applicability supports it |
 | Pregnancy physical activity | [WHO physical activity and sedentary behaviour](https://iris.who.int/bitstream/handle/10665/336656/9789240015128-eng.pdf) | Movement constraints and general guidance | Never infer individual clearance |
 | India maternal-care context | [NHM pregnancy-care guidance](https://nhm.gov.in/images/pdf/guidelines/nrhm-guidelines/stg/pregnancy-care.pdf) | Candidate care/timeline fields | Older source; requires version/currentness review before release |
-| Postpartum first six weeks | [WHO postnatal-care guideline](https://www.who.int/publications/i/item/9789240045989) | Postpartum bands and follow-up context | Source-defined applicability must be preserved |
+| Postpartum first six weeks | [WHO postnatal-care guideline](https://www.who.int/publications/i/item/9789240045989) | Postpartum weekly profiles and follow-up context | Source-defined applicability must be preserved |
 | Postnatal intervention timing | [WHO maternal intervention timing](https://www.who.int/teams/maternal-newborn-child-adolescent-health-and-ageing/handbooks/programme-manager-s-handbook-mncah/recommendations-on-interventions-along-life-course/maternal) | 24-hour/day 3/day 7–14/week 6 structure | Do not invent weekly changes after week 6 |
 | Perinatal mental health | [WHO perinatal mental-health integration guide](https://www.who.int/publications/i/item/9789240057142) | Well-being and escalation corpus | Screening/education only; no diagnosis |
 | Urgent warning-sign taxonomy | [CDC urgent maternal warning signs](https://www.cdc.gov/hearher/maternal-warning-signs/index.html) | Safety-test design and supplementary reference | US source; clinician review/local adaptation required |
@@ -345,7 +349,7 @@ flowchart LR
     F --> G["Chunk by semantic section"]
     G --> H["Embed into pgvector"]
     G --> I["Index in Postgres full-text search"]
-    F --> J["Create structured band/week records"]
+    F --> J["Create weekly profiles + reusable guidance fragments"]
     H --> K["Ingestion quality tests"]
     I --> K
     J --> K
@@ -390,8 +394,9 @@ Use Supabase because the intended UX includes accounts, private files, structure
 | `symptom_events` | User-reported symptom, time, severity answers, disposition |
 | `appointments` | Date, type, status, source, questions |
 | `plans` / `plan_items` | Draft/saved versions and state-version dependency |
-| `content_bands` | Shared band-level public content |
-| `week_overlays` | Exact-week deltas and hero metadata |
+| `weekly_profiles` | Separate home/content configuration for `P01`–`P42` and `PP01`–`PP12` |
+| `guidance_fragments` | Reusable sourced guidance with exact applicability ranges and exclusions |
+| `postpartum_day_overlays` | Day 0–7 safety/follow-up additions to postpartum week 1 |
 | `guideline_chunks` | Public evidence chunks, embeddings, citations, metadata |
 | `personal_chunks` | Per-user permitted document chunks and embeddings |
 | `graph_nodes` / `graph_edges` | Provenance-aware journey relationships |
@@ -424,7 +429,7 @@ The governed Retrieval Gateway accepts:
   "domain": "nutrition | movement | symptoms | wellbeing | records | followup",
   "journey_state": "pregnancy | postpartum | possible_pregnancy",
   "exact_week": 10,
-  "content_band": "pregnancy_09_10",
+  "weekly_profile_id": "P10",
   "jurisdiction": "IN",
   "source_scope": "public | personal | both",
   "query": "user question",
@@ -447,7 +452,8 @@ The governed Retrieval Gateway accepts:
 
 ### 9.3 Retrieval collections
 
-- `weekly_content`: reviewed band records and exact-week overlays.
+- `weekly_profiles`: the exact pregnancy or postpartum week requested by the application.
+- `guidance_fragments`: reviewed reusable evidence whose applicability includes the resolved week or entire approximate range.
 - `guideline_chunks`: public clinical/educational guidance.
 - `personal_chunks`: isolated document text.
 - structured SQL catalogs: food components, movement templates, plan constraints, and help content.
@@ -456,13 +462,13 @@ The LLM is not the knowledge base. OpenAI/Fireworks turns retrieved evidence and
 
 ### 9.4 Load and cost controls
 
-- Precompute and cache published public band cards and exact-week overlays by corpus version.
+- Precompute and cache every published weekly profile by profile and corpus version.
 - Home-page load uses SQL/database views and the Dashboard Composer; it does not call every agent.
-- Recalculate only the timing label at daily rollover unless the user crosses into a new week/band.
+- Recalculate only the timing label at daily rollover unless the user crosses into a new week.
 - Embed a public source once per approved version, not per user or request.
 - Retrieve personal data only for the authenticated workspace and only when the task needs it.
 - Route ordinary questions to one specialist; use multi-agent parallelism only for a full weekly plan.
-- Cache only non-personal public retrieval results by normalized question, band, domain, jurisdiction, and corpus version.
+- Cache only non-personal public retrieval results by normalized question, exact week/range, domain, jurisdiction, and corpus version.
 - Set maximum agent steps, retrieval results, model calls, tokens, and wall-clock time for each route.
 - Use a smaller evaluated model for routing/extraction and a stronger model only for difficult composition when the evals justify model routing.
 
@@ -526,7 +532,7 @@ The home view is generated by a deterministic Dashboard Composer using validated
 1. Emergency/safety status.
 2. Confirmed clinician-recorded restriction/instruction.
 3. Confirmed allergy/condition and active relevant symptoms.
-4. Exact journey state and week/band.
+4. Exact journey state and weekly profile.
 5. Saved preferences and plan history.
 6. General public guidance.
 
@@ -564,7 +570,7 @@ Compass does not:
 ### Standard answer structure
 
 1. Direct, plain-language response.
-2. “Why this is relevant now” using exact week/band only when supported.
+2. “Why this is relevant now” using the exact week only when supported.
 3. Personal context used, with provenance labels.
 4. Action options: save, ask professional, track, or escalate.
 5. Citations and last-reviewed date.
@@ -583,7 +589,7 @@ An agent is a bounded decision-making workflow: it receives typed state, uses al
 | Component | Type | Trigger and responsibility | Allowed evidence/tools | Required output | Must stop/escalate when |
 |---|---|---|---|---|---|
 | Safety Gate | Deterministic control | Runs on onboarding text, chat, symptoms, and document facts before agents | Reviewed red-flag taxonomy, rules | `safe_route`, `urgent_route`, or `needs_clarification` | Any urgent match or insufficient safety detail |
-| Journey Resolver | Deterministic control | Converts input to stage/week/day/band/confidence | Date functions, timing rules | Versioned journey state | Conflicting/invalid dates |
+| Journey Resolver | Deterministic control | Converts input to stage/week/day/profile/confidence | Date functions, timing rules | Versioned journey state | Conflicting/invalid dates |
 | Journey Orchestrator | Agent | Classifies intent, selects minimal specialist set, manages state | Typed agent tools, policy | Execution plan and final route | Budget exceeded, unsupported intent, agent conflict |
 | Record Agent | Agent | Explains what uploaded records document | SQL facts + personal chunks | Cited record summary with uncertainty | Poor OCR, missing span, contradictory documents |
 | Medication Record Agent | Agent | Compares recorded medication mentions/instructions over time | Medication tables + source spans | “Documented as…” timeline; clarification questions | User asks to start/stop/change, conflict, unclear dose |
@@ -619,7 +625,7 @@ The orchestrator normally calls one specialist. For “create my full week,” N
 
 ```mermaid
 flowchart TD
-    A["User requests weekly plan"] --> B["Resolve week/band + state version"]
+    A["User requests weekly plan"] --> B["Resolve weekly profile + state version"]
     B --> C["Safety and restriction checks"]
     C --> D1["Nutrition Agent"]
     C --> D2["Movement Agent"]
@@ -651,7 +657,7 @@ GraphRAG is valuable when it proves continuity, not when added as decoration. St
 
 ### Nodes
 
-`Person`, `JourneyState`, `WeekBand`, `Document`, `DocumentFact`, `MedicationMention`, `Allergy`, `Condition`, `SymptomEvent`, `Appointment`, `Plan`, `PlanItem`, `GuidelineChunk`, `Question`, `HumanReviewCase`.
+`Person`, `JourneyState`, `WeeklyProfile`, `GuidanceFragment`, `Document`, `DocumentFact`, `MedicationMention`, `Allergy`, `Condition`, `SymptomEvent`, `Appointment`, `Plan`, `PlanItem`, `GuidelineChunk`, `Question`, `HumanReviewCase`.
 
 ### Edges
 
@@ -661,8 +667,8 @@ GraphRAG is valuable when it proves continuity, not when added as decoration. St
 
 ```text
 Week 10 state
-  -> selects band 9–10
-  -> selects exact-week overlay 10
+  -> selects weekly profile P10
+  -> references only guidance fragments applicable to week 10
   -> makes nausea symptom relevant
   -> allergy constrains meal candidate
   -> clinician restriction constrains movement candidate
@@ -696,7 +702,7 @@ Future production integration would require credential verification, response-ti
 |---|---|
 | Invalid week/date | Explain valid range; preserve entered value until correction |
 | Due date conflicts with week | Show both; request latest confirmed value; do not silently resolve |
-| Month only | Label approximate; use band/range; suppress exact fetal claims |
+| Month only | Label approximate; use only guidance valid across the mapped range; suppress exact-week fetal claims |
 | Week 1 / may be pregnant | Use dating/verification path; do not assert pregnancy |
 | No records uploaded | Give public, stage-aware guidance and state that no personal record was used |
 | Unsupported/locked/corrupt file | Keep file status failed; explain supported format and next step |
@@ -826,8 +832,8 @@ Changing providers requires rerunning the same safety, grounding, routing, laten
 ### Phase 1 — sources and data foundation
 
 - Build source registry and ingest selected approved sections.
-- Author content-band and week-overlay schemas.
-- Populate high-quality exact-week content needed for demos.
+- Author the weekly-profile and reusable-guidance-fragment schemas.
+- Create profile shells for `P01`–`P42` and `PP01`–`PP12`, then populate high-quality exact-week content needed for demos.
 - Configure Supabase tables, RLS, Storage, pgvector, and seed only isolated Demo Mode.
 - Build document fixtures and ingestion tests.
 
@@ -868,16 +874,16 @@ Changing providers requires rerunning the same safety, grounding, routing, laten
 
 ## 22. Honest capstone scope
 
-The architecture supports the complete journey, but a four-day team cannot clinically curate and validate every card for every week. The capstone should implement the schema for all bands, then deeply populate and evaluate a representative vertical slice:
+The architecture supports the complete journey, but a four-day team cannot clinically curate and validate every card for every week. The capstone should create all weekly profile records, then deeply populate and evaluate a representative vertical slice:
 
-- possible-pregnancy/weeks 1–2;
-- weeks 9–10;
-- weeks 23–24;
-- weeks 35–36;
-- postpartum days 2–7;
-- postpartum weeks 5–6 and 11–12.
+- possible-pregnancy, `P01`, and `P02`;
+- `P09` and `P10` as distinct profiles;
+- `P23` and `P24` as distinct profiles;
+- `P35` and `P36` as distinct profiles;
+- `PP01` with day 2–7 additions;
+- `PP05`, `PP06`, `PP11`, and `PP12` as distinct profiles.
 
-Non-demo bands may contain source-linked, clearly marked draft content, but must not pretend to be reviewed. A safer alternative is to hide unpublished bands and explain the content-governance workflow. Depth, traceability, and measured correctness are more credible than 52 superficially generated pages.
+Non-demo weekly profiles may remain unpublished shells, but must not pretend to contain reviewed content. Hide unpublished profiles from the public demo and explain the content-governance workflow. Depth, traceability, and measured correctness are more credible than 54 superficially generated pages.
 
 ### Three connected demonstration stories
 
@@ -893,7 +899,7 @@ Nestline is capstone-complete only when:
 
 - a new personal workspace is empty and Demo Mode is visibly synthetic;
 - all supported timing inputs resolve correctly and uncertainty is visible;
-- week-level UX uses band content plus exact-week overlays without false precision;
+- every pregnancy and postpartum week has a separate addressable profile, while reusable fragments prevent duplication;
 - source registry, versions, citations, and applicability metadata are inspectable;
 - personal/public data and provenance are visibly separated;
 - RLS and automated cross-user isolation tests pass;
@@ -915,7 +921,7 @@ Nestline is capstone-complete only when:
 These are not hidden gaps; owners must lock them in Phase 0:
 
 1. Confirm OpenAI API key/billing; otherwise select one Fireworks model.
-2. Implement the listed vertical-slice bands as the reviewed demo scope; do not expand scope until they pass evals.
+2. Implement the listed weekly profiles as the reviewed demo scope; do not expand scope until they pass evals.
 3. Assign a source/content reviewer. The team must not call content clinically reviewed without an appropriately qualified reviewer.
 4. Treat n8n email as a stretch goal after the three core demo journeys pass.
 5. Define local emergency/help wording for the target deployment context before any external user test.
