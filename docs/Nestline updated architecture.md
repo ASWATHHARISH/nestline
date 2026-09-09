@@ -17,7 +17,7 @@
 - Sections 1–4: product, locked decisions, complete architecture, and weekly data.
 - Sections 5–9: ingestion, storage, onboarding, synthetic documents, RAG, and GraphRAG.
 - Sections 10–12: safety, agent runbooks, deterministic controls, and output validation.
-- Sections 13–14: Streamlit experience, saving, plans, human review, and n8n.
+- Sections 13–14: Streamlit experience, saving, plans, human review, and optional future automation.
 - Sections 15–17: evaluation, failures, and pre-mortem risks.
 - Sections 18–22: build order, daily checklist, demo, completion gate, and old/new decision reconciliation.
 
@@ -60,15 +60,15 @@ Nestline provides a continuity layer: a confirmed change can update the user's t
 | Permanent data | Supabase | Authentication, database, private files, pgvector, and Row Level Security in one platform |
 | Orchestration | LangGraph with LangChain components | Explicit routes, bounded agent calls, retries, and visible traces |
 | Observability/evals | LangSmith | Trace every route and compare prompt/model/retrieval versions |
-| Primary model | OpenAI API, if API billing and key are confirmed | Known team access and strong structured-output support |
-| Grok | Not used in the baseline | Access is uncertain and it does not solve the data/RAG problem |
-| Alternative model | Fireworks AI behind the same adapter | Useful only if access/cost/evals make it better |
+| Model-provider status | Undecided until access and benchmark gates pass | The team never decided to remove Grok or lock OpenAI |
+| Candidate provider | Grok, if xAI API access is confirmed | It fits the structured generation/tool-calling position, but must pass the same safety, quality, latency, and cost evals |
+| Evaluated fallbacks | An available OpenAI API model or Fireworks-hosted model behind the same adapter | Provider choice must not require a RAG or orchestration rewrite |
 | Weekly structure | Separate profile for every pregnancy and postpartum week | Week 10 and week 20 must never be treated as the same context |
 | Knowledge system | One governed RAG platform with filtered shelves | Avoids duplicating ingestion and databases for every agent |
 | GraphRAG | Small journey graph inside retrieval | Connects records, symptoms, restrictions, plans, evidence, and follow-ups |
 | Human in loop | Simulated reviewer/clinician workflow | Demonstrates escalation honestly without claiming a real doctor service |
 | Videos | Out of scope | Removed to protect time and evaluation depth |
-| n8n | Stretch: reminders and reviewer notifications only | Must not sit in urgent or synchronous chat paths |
+| n8n | Optional future integration; not committed to the core capstone | It may later handle asynchronous reminders, but is unnecessary for chat, RAG, agents, safety, Streamlit, or evals |
 | Fine-tuning | Only after evals show a repeated narrow failure | RAG/data/orchestration failures should not be hidden with training |
 | MCP | Deferred | Typed Python tools are enough for this capstone |
 | Real medical data | Prohibited in public demo | The prototype is not production-compliant |
@@ -89,14 +89,14 @@ The color indicates responsibility, not execution order. The numbered arrows def
 
 ### 2.2 Where does Grok fit?
 
-**The baseline does not use Grok.** This is deliberate, not a missing architecture box.
+**Grok was never removed by a team decision.** An earlier revision incorrectly converted uncertain xAI API access into a decision to exclude Grok. The correct status is: Grok remains a candidate provider if access is confirmed, while the final provider is selected by a small controlled benchmark. This corrects the architecture; it does not introduce a second RAG system.
 
 Grok, OpenAI, or a Fireworks-hosted model would all occupy the same **model-provider position**:
 
 ```text
 Retrieved evidence + personal facts + current week
                          ↓
-        Model provider: OpenAI OR Grok OR Fireworks
+     Provider adapter: Grok candidate OR evaluated fallback
                          ↓
                Structured draft response
                          ↓
@@ -112,7 +112,21 @@ The model does not:
 - replace retrieval;
 - become the source for an uncited medical statement.
 
-If the team later receives Grok API access, implement it as another provider adapter and run the same eval suite. It replaces OpenAI for selected generation/extraction calls; it is not an additional RAG layer. Basic maternal-health questions still require retrieved evidence. Only non-medical product-help questions may be answered without medical RAG.
+Grok sits **after** safety classification and evidence retrieval, inside a bounded specialist-agent call. It receives the current journey state, authorized personal context, and retrieved source passages, then returns a typed draft. It may also be benchmarked for offline structured extraction from fictional documents. It is not the source of medical knowledge, the retriever, the Safety Gate, GraphRAG, the database, or a direct state writer.
+
+Basic maternal-health questions still require governed retrieval; Grok must not answer them from model memory. Only deterministic product-help questions may bypass medical RAG. If xAI access is unavailable or Grok fails a release gate, the same provider adapter uses the best evaluated available OpenAI or Fireworks model without changing the rest of the pipeline.
+
+#### Provider-selection gate
+
+Before implementation is tied to one provider:
+
+1. confirm a usable server-side API key, model ID, rate limits, and billing for every candidate actually tested;
+2. run the same frozen development cases through each candidate with identical evidence packets and output schemas;
+3. compare schema-validity rate, unsupported-claim rate, citation faithfulness, boundary compliance, latency, and measured cost;
+4. choose one primary provider and one fallback only after recording the result;
+5. never send real medical data during the capstone benchmark.
+
+This is a small provider benchmark, not a multi-provider production router. The capstone uses one selected provider at runtime.
 
 ### 2.3 Platform-fit verification
 
@@ -120,7 +134,7 @@ If the team later receives Grok API access, implement it as another provider ada
 - [Supabase](https://supabase.com/docs/guides/database/overview) provides Postgres, Row Level Security, Storage integration, and pgvector support. Its [hybrid-search guidance](https://supabase.com/docs/guides/ai/hybrid-search) uses Postgres full-text search plus pgvector, matching the Retrieval Gateway.
 - [LangGraph](https://docs.langchain.com/oss/python/langgraph/overview) is designed for stateful workflows, durable execution, and human-in-the-loop control; we use a mostly predetermined workflow with bounded agent nodes, not an unrestricted autonomous loop.
 - [LangSmith evaluation](https://docs.langchain.com/langsmith/evaluation-quickstart) separates dataset, target function, and evaluators; Nestline's eval plan follows that structure and evaluates both individual nodes and complete graph runs.
-- [Grok structured outputs](https://docs.x.ai/developers/model-capabilities/text/structured-outputs) can support typed extraction/generation if xAI access is later confirmed, but capability availability alone is not a reason to add a second provider now.
+- [Grok structured outputs](https://docs.x.ai/developers/model-capabilities/text/structured-outputs) support schema-constrained responses and tool-call arguments on supported models, which fits Nestline's typed agent contracts. Access and capability still do not prove safety or quality; the provider benchmark remains mandatory.
 
 ---
 
@@ -179,11 +193,11 @@ flowchart TD
 | 6 | Check urgent patterns before generative reasoning | Deterministic rules | Safe, urgent, or clarify route |
 | 7 | Pick the smallest required specialist workflow | LangGraph | Agent execution plan |
 | 8 | Retrieve exact facts and supporting passages; traverse relevant graph edges | SQL, full text, pgvector, GraphRAG | Evidence packet |
-| 9 | Turn the evidence packet into a structured answer or plan contribution | OpenAI API/provider adapter | Draft schema |
+| 9 | Turn the evidence packet into a structured answer or plan contribution | Selected model through provider adapter; Grok remains a candidate pending access and benchmark | Draft schema |
 | 10 | Reject unsafe, conflicting, wrong-week, or unsupported content | Pydantic + rules + evidence verifier | Approved output or failure route |
 | 11 | Render provenance, citations, actions, and limitations | Streamlit | User-visible result |
 | 12 | Ask before saving extracted facts, plans, reminders, or handoff packets | Streamlit | Explicit consent/action |
-| 13 | Persist the confirmed change and mark affected outputs stale | Supabase + graph updates; optional n8n | Updated continuity state |
+| 13 | Persist the confirmed change and mark affected outputs stale | Supabase + graph updates | Updated continuity state |
 
 ### 3.1 Layered component architecture
 
@@ -236,7 +250,7 @@ flowchart TB
     end
 
     subgraph L6["Layer 6 — Model, verification, and outcomes"]
-        MODEL["Model provider adapter: OpenAI baseline"]:::platform
+        MODEL["Model provider adapter: Grok candidate / evaluated fallback"]:::platform
         VERIFY["Schema + constraint + evidence validation"]:::control
         COMMIT["State Committer"]:::control
         UI["Cited answer / editable plan / abstention"]:::human
@@ -246,7 +260,7 @@ flowchart TB
     subgraph L7["Layer 7 — Evaluation and operations"]
         TRACE["LangSmith + local redacted traces"]:::platform
         EVAL["Versioned datasets + evaluators"]:::platform
-        N8N["Optional n8n reminders/notifications"]:::platform
+        N8N["Future optional n8n integration"]:::platform
     end
 
     PUB --> SREG --> PARSE --> MAP --> CREVIEW
@@ -299,7 +313,7 @@ flowchart TB
     MODEL -.-> TRACE
     VERIFY -.-> TRACE
     TRACE --> EVAL
-    SQL --> N8N
+    SQL -.future opt-in automation.-> N8N
 
     classDef agent fill:#DBEAFE,stroke:#2563EB,color:#1E3A8A,stroke-width:2px;
     classDef human fill:#FEF3C7,stroke:#D97706,color:#78350F,stroke-width:2px;
@@ -308,7 +322,7 @@ flowchart TB
     classDef platform fill:#F3E8FF,stroke:#9333EA,color:#581C87,stroke-width:2px;
 ```
 
-The model is deliberately late in the diagram. Permission, journey resolution, safety, routing, and retrieval happen before it; validation happens after it. Neither OpenAI nor Grok may write state directly.
+The model is deliberately late in the diagram. Permission, journey resolution, safety, routing, and retrieval happen before it; validation happens after it. No provider may write state directly.
 
 ---
 
@@ -326,7 +340,46 @@ Partly.
 
 Therefore, Nestline must not claim that every domain changes every week. The product has a separate weekly profile, but stable evidence may appear in consecutive weeks when its real applicability has not changed.
 
-### 4.2 Weekly records we will create
+### 4.2 Final dataset strategy: layered, not one giant PDF
+
+Nestline must not choose between “WHO rules” and “a week-wise PDF.” They solve different problems and are required together. WHO is a strong authority for care principles, recommendations, timing, and boundaries, but it is not a complete source for 42 unique pregnancy pages and 12 unique postpartum pages. A week-by-week source can support the weekly experience, but it must not replace authoritative clinical guidance or become personalized medical advice.
+
+The approved design uses four clearly separated layers:
+
+| Dataset layer | What it contains | Best source type | Runtime use |
+|---|---|---|---|
+| Weekly journey layer | Week-specific development, possible body changes, neutral preparation, and hero-card evidence | Official/public-health week-by-week pages with recorded reuse terms | Builds the exact-week home experience |
+| Guideline layer | Nutrition, movement, antenatal/postnatal care, mental well-being, and source-defined timing or eligibility | WHO, ICMR-NIN, NHM, and other approved authorities | Supplies cited reusable evidence fragments |
+| Personal-context layer | User-entered facts plus confirmed facts extracted from fictional demo documents | The current isolated workspace only | Filters and personalizes without becoming public knowledge |
+| Safety-rule layer | Reviewed red-flag patterns, fixed urgent wording, and escalation behavior | Separately reviewed safety specification | Runs before any generative model |
+
+The weekly page is an assembly, not a newly generated medical dataset:
+
+```text
+exact weekly profile
+  + applicable guideline fragments
+  + confirmed personal context
+  + current symptoms and restrictions
+  + appointment and saved-plan state
+= the user's current evidence packet and dashboard
+```
+
+#### What “complete dataset” means for this capstone
+
+- Create addressable schema shells and a coverage row for every `P01`–`P42` and `PP01`–`PP12` profile.
+- Deeply source, review, publish, and evaluate only the representative profiles listed in Section 19.
+- Keep every unreviewed profile unpublished; never fill a gap with model memory or invented weekly variation.
+- Allow the same reviewed nutrition, movement, or well-being fragment to apply across adjacent weeks when its source says the guidance is stable.
+- Keep early-postpartum day overlays because authoritative postnatal timing is often day-based rather than uniquely weekly.
+- Treat `P42` as representable state but do not publish a generic wellness card without reviewed local wording.
+
+This scope is technically strong because it proves schema coverage, retrieval filters, provenance, safety, orchestration, and evaluation without pretending the team clinically curated 54 complete care guides in four days.
+
+#### PDF and webpage rule
+
+Do not search for or depend on one “complete pregnancy PDF.” Official information is legitimately fragmented across PDFs and HTML pages. Ingest only the exact sections needed, preserve their canonical URL/page/anchor, record jurisdiction and reuse terms, and map each evidence unit to its real applicability. A PDF is not automatically more authoritative than an official maintained webpage.
+
+### 4.3 Weekly records we will create
 
 | Record family | IDs | Count | Purpose |
 |---|---|---:|---|
@@ -337,7 +390,7 @@ Therefore, Nestline must not claim that every domain changes every week. The pro
 
 `P13` and `P14` are different records. They may reference the same reviewed hydration fragment, but each has its own weekly hero, development/body information, preparation items, and applicable fragment list.
 
-### 4.3 What one weekly profile contains
+### 4.4 What one weekly profile contains
 
 ```json
 {
@@ -369,7 +422,7 @@ Therefore, Nestline must not claim that every domain changes every week. The pro
 }
 ```
 
-### 4.4 Reusable guidance fragment
+### 4.5 Reusable guidance fragment
 
 A fragment is one small, source-backed claim or action that can be safely reused.
 
@@ -393,7 +446,7 @@ A fragment is one small, source-backed claim or action that can be safely reused
 
 This prevents duplicate storage while keeping the user experience weekly. The source decides the applicability range; the LLM does not invent it.
 
-### 4.5 Month-only input
+### 4.6 Month-only input
 
 If the user knows only a month, Nestline stores an approximate range:
 
@@ -411,13 +464,13 @@ If the user knows only a month, Nestline stores an approximate range:
 
 Nestline does not secretly select a week. It displays the range and retrieves only information supported across that range. Exact weekly claims require an estimated due date or user-provided week.
 
-### 4.6 Source coverage plan
+### 4.7 Source coverage plan
 
 | Content need | Primary source candidate | Weekly behavior |
 |---|---|---|
-| Pregnancy weeks 1–4 | [Pregnancy, Birth and Baby week-by-week index](https://www.pregnancybirthbaby.org.au/pregnancy/pregnancy-stages/pregnancy-week-by-week) + MedlinePlus | Build separate P01–P04 profiles but use careful dating language |
-| Pregnancy weeks 5–40 | [Pregnancy, Birth and Baby week-by-week index](https://www.pregnancybirthbaby.org.au/pregnancy/pregnancy-stages/pregnancy-week-by-week) | Map each individual week page to the matching weekly profile |
-| Pregnancy weeks 4–41 cross-check | [NHS week-by-week guide](https://www.nhs.uk/best-start-in-life/pregnancy/week-by-week-guide-to-pregnancy/) | Cross-check exact-week facts; do not import UK care schedules as Indian schedules |
+| Possible pregnancy and pregnancy weeks 1–3 | [MedlinePlus fetal development](https://medlineplus.gov/ency/article/002398.htm) plus approved testing/verification guidance | Explain gestational dating and safe next steps; do not imply conception, implantation, or confirmed pregnancy for an individual |
+| Pregnancy weeks 4–41 | [NHS week-by-week guide](https://www.nhs.uk/best-start-in-life/pregnancy/week-by-week-guide-to-pregnancy/) | Candidate backbone for exact-week development/body-change evidence; record reuse terms and do not import UK care schedules as Indian schedules |
+| Pregnancy weeks 1–40 coverage cross-check | [Pregnancy, Birth and Baby week-by-week index](https://www.pregnancybirthbaby.org.au/pregnancy/pregnancy-stages/pregnancy-week-by-week) | Reference/coverage candidate only unless reuse permission or a compatible licensed route is confirmed; do not copy into embeddings by default |
 | Gestational dating | [MedlinePlus fetal development](https://medlineplus.gov/ency/article/002398.htm) | Supports possible-pregnancy and early-week wording |
 | Week 41 and at/beyond term | [NHS week 41](https://www.nhs.uk/best-start-in-life/pregnancy/week-by-week-guide-to-pregnancy/3rd-trimester/week-41/) + [WHO recommendations at or beyond term](https://www.who.int/publications/i/item/9789240052796) | Professional-follow-up education only; do not turn a guideline for professionals into personalized treatment advice |
 | Consolidated maternal recommendations | [WHO maternal-health recommendations, edition 2](https://www.who.int/publications/b/59332) | Current recommendation/version cross-check rather than weekly hero content |
@@ -434,9 +487,9 @@ Nestline does not secretly select a week. It displays the range and retrieves on
 
 `P42` exists in the schema so the system can represent the user's reported/calculated state, but it must remain unpublished until its exact content and local care wording are reviewed. The app should prioritize contacting the user's maternity professional rather than generate a generic week-42 wellness page.
 
-The Pregnancy, Birth and Baby guide proves that exact-week source coverage exists, but its current terms restrict reproduction. Treat it as a coverage/reference candidate unless written reuse permission or a compatible licensed route is confirmed; do not copy its pages into embeddings by default. Record and follow the NHS and every other publisher's reuse/attribution terms separately.
+The Pregnancy, Birth and Baby guide demonstrates that exact-week coverage exists, but its current terms restrict reproduction. Treat it as a coverage/reference candidate unless written reuse permission or a compatible licensed route is confirmed; do not copy its pages into embeddings by default. Record and follow the NHS and every other publisher's reuse/attribution terms separately. If the NHS reuse check fails, replace it with another approved weekly source rather than using Grok to manufacture the missing week.
 
-### 4.7 Source rules
+### 4.8 Source rules
 
 - Store title, owner, jurisdiction, publication/update date, source version, URL, reuse/license status, approved sections, reviewer, and retirement status.
 - Do not ingest a source merely because it is authoritative; confirm its reuse terms.
@@ -449,7 +502,7 @@ The Pregnancy, Birth and Baby guide proves that exact-week source coverage exist
 
 Exclude search snippets, influencer posts, forums, generic wellness blogs, unrestricted web/X search, random transcripts, commercial product pages, autonomous medication-dose sources, real patient records, and any source whose publisher/version/jurisdiction cannot be verified.
 
-### 4.8 Evidence lanes
+### 4.9 Evidence lanes
 
 These lanes prevent the system from treating every piece of text as the same kind of truth.
 
@@ -462,7 +515,7 @@ These lanes prevent the system from treating every piece of text as the same kin
 | Safety | Reviewed deterministic rule specification | Pre-generation urgent routing | Autonomous clinical triage/diagnosis |
 | Product help | Nestline usage instructions | How to upload, edit, save, reset, or delete | Medical guidance |
 
-### 4.9 Source-registry record
+### 4.10 Source-registry record
 
 Every external source must have:
 
@@ -1124,7 +1177,7 @@ A traditional-practice question must return one of three explicit evidence state
 
 ---
 
-## 14. Stage 10 — Saving, stale plans, email, and n8n
+## 14. Stage 10 — Saving, stale plans, and optional future automation
 
 ### Save rules
 
@@ -1154,9 +1207,9 @@ status: draft | user_reviewed | saved | active | stale | replaced | archived
 stale_reason
 ```
 
-### n8n placement
+### Optional n8n placement—not part of the committed core
 
-n8n can handle:
+Nestline does not require n8n for the capstone. Streamlit, LangGraph/Python, Supabase, the provider adapter, and LangSmith cover the core product. If the team later chooses n8n, it may handle only asynchronous conveniences such as:
 
 - opt-in appointment reminders;
 - weekly digest email generated from already validated data;
@@ -1164,7 +1217,7 @@ n8n can handle:
 - reviewer-queue notification;
 - retry/dead-letter processing.
 
-n8n is never responsible for urgent symptom detection, primary chat, evidence retrieval, or the only emergency communication. Email failures do not break the app.
+n8n is never responsible for urgent symptom detection, primary chat, evidence retrieval, agent orchestration, state correctness, or the only emergency communication. Its absence or an email failure must not break the app. The coding/deployment-platform decision is separate from this optional workflow choice.
 
 ---
 
@@ -1202,6 +1255,7 @@ Minimum capstone case policy: at least **45 development scenarios plus 15 sealed
 | `routing_set` | Single-domain, multi-domain, out-of-scope, and ambiguous requests | Correct agent with minimal calls |
 | `document_set` | Clear, noisy, locked, unsupported, conflicting, and prompt-injected fictional files | Safe extraction and confirmation |
 | `agent_set` | Expected schemas, boundaries, citations, and stop behavior per agent | Specialist behavior is bounded |
+| `provider_benchmark_set` | Same frozen evidence packets and schemas run against Grok and only the fallbacks with confirmed API access | Primary provider is selected from measured behavior rather than assumption |
 | `plan_set` | Allergies, restrictions, conflicting contributors, state changes, stale plans | No hard constraint violation |
 | `graph_set` | Expected nodes/edges, supersession, conflict, and downstream effects | GraphRAG continuity is correct |
 | `security_set` | Cross-user retrieval, deletion, unauthorized file access | No personal-data leakage |
@@ -1222,6 +1276,8 @@ Minimum capstone case policy: at least **45 development scenarios plus 15 sealed
 - cross-user leakage and deletion completeness;
 - latency, model calls, tokens, and cost;
 - user task completion and clarity.
+
+Provider benchmarking is reported separately from product-quality improvement. Switching models is not credited as an architecture improvement unless the unchanged benchmark shows a meaningful gain without a critical safety, citation, schema, latency, or cost regression.
 
 ### 15.3 Non-negotiable release gates for the capstone
 
@@ -1282,7 +1338,7 @@ Fine-tune only if the evals reveal a repeated, narrow behavior problem—such as
 | Model credential unavailable | Use deterministic fixture/mock mode for the demo; do not pretend a live answer ran |
 | Model timeout/rate limit | Retry once idempotently, then recoverable error |
 | Supabase unavailable | Do not pretend personalization succeeded |
-| Email/n8n failure | Keep app usable; record failure and retry asynchronously |
+| Optional email/n8n failure | Keep app usable; record failure and retry asynchronously only if this future integration is enabled |
 | LangSmith unavailable | Continue redacted local JSON traces and upload/compare later |
 | Reviewer unavailable | State unavailable; never fake review |
 | State changes after plan | Mark plan stale and identify dependency |
@@ -1323,7 +1379,7 @@ Assume Nestline failed after the capstone. These are the most likely reasons and
 |---|---|
 | Some guidance repeats in adjacent weeks | Correct when the source applicability is unchanged; unsupported artificial variation would be worse |
 | Agents do not each own a separate RAG database | Shared governed retrieval with scoped filters is simpler and safer |
-| Grok is not in the baseline | Model brand does not create weekly evidence, permissions, or safety; it can be benchmarked later |
+| Grok must be either mandatory or removed immediately | Grok remains a candidate pending access and a small benchmark; the provider adapter prevents this from blocking RAG, safety, or UI work |
 | GraphRAG does not use Neo4j | Postgres nodes/edges are enough to prove the required relationship behavior |
 | n8n and ElevenLabs are not central | They do not strengthen the three core safety/evidence scenarios within four days |
 
@@ -1377,7 +1433,7 @@ Assume Nestline failed after the capstone. These are the most likely reasons and
 
 At each daily merge point, run resolver, RLS, safety, retrieval, schema, and three smoke tests before another workstream builds on the change. If the team is smaller, combine roles—not responsibilities.
 
-If the team falls behind, cut scope in this order: n8n email, multi-provider comparison, decorative graph visualization, extra reviewed weekly profiles beyond the demo set, then fine-tuning experiment. Never cut the Safety Gate, permission/RLS tests, citations, user confirmation, failure states, or core evaluation harness.
+If the team falls behind, cut scope in this order: n8n/email automation, decorative graph visualization, extra reviewed weekly profiles beyond the demo set, then fine-tuning experiment. Reduce the provider benchmark to Grok plus one available fallback, but do not silently select a provider without at least a smoke benchmark. Never cut the Safety Gate, permission/RLS tests, citations, user confirmation, failure states, or core evaluation harness.
 
 ### 18.3 Wednesday — foundation and first vertical slice
 
@@ -1531,11 +1587,12 @@ Nestline is capstone-complete only when:
 
 The architecture is decided. Before implementation, the team still must provide or confirm:
 
-1. OpenAI API key and API billing; ChatGPT Pro alone is not API access.
-2. Supabase and LangSmith project credentials stored outside Git.
-3. Source reuse/license clearance before copying any external content into the corpus.
-4. A qualified reviewer before describing any content as clinically reviewed.
-5. Locally appropriate emergency/help wording before external testing.
+1. xAI API access for the Grok candidate and at least one genuinely available fallback provider for the controlled benchmark. A consumer chat subscription is not assumed to include server-side API access or billing.
+2. The selected provider/model IDs, benchmark record, primary-provider decision, and fallback behavior.
+3. Supabase and LangSmith project credentials stored outside Git.
+4. Source reuse/license clearance before copying any external content into the corpus.
+5. A qualified reviewer before describing any content as clinically reviewed.
+6. Locally appropriate emergency/help wording before external testing.
 
 Until those production-grade reviews exist, Nestline remains a synthetic-data educational capstone—not a product for real clinical reliance.
 
@@ -1551,7 +1608,7 @@ The earlier file remains decision history. This table prevents contributors from
 | Empty Personal Mode + fictional resettable Demo Mode | Retained with exact fixture inventory and watermarks | Retained/expanded |
 | Gestational week as canonical; month derived | Improved to allow a user-selected approximate month range without falsely selecting a week | Improved by later product decision |
 | Weekly cards + broader applicability ranges | Retained as `P01`–`P42`, `PP01`–`PP12`, and reusable guidance fragments | Retained/expanded |
-| Grok as primary model | Replaced by OpenAI baseline because access is known; Grok remains a provider-adapter option | Intentionally changed |
+| Grok as primary model | Restored as a candidate provider pending xAI access and a controlled benchmark; no provider is silently locked | Corrected after an unauthorized assumption was identified |
 | SQLite + SQLAlchemy | Replaced by Supabase Postgres/Auth/Storage/RLS for deployed multi-workspace behavior | Intentionally changed |
 | Chroma + standalone BM25 | Replaced by Supabase pgvector + Postgres full-text hybrid search | Intentionally changed |
 | NetworkX JSON as graph source | Replaced by Postgres node/edge source of truth; NetworkX allowed for evaluator visualization | Intentionally changed |
@@ -1581,7 +1638,10 @@ The earlier file remains decision history. This table prevents contributors from
 | 9 Sep 2026 | Shared Retrieval Gateway with hard agent-scoped filters | Avoid duplicated RAG systems and inconsistent sources |
 | 9 Sep 2026 | GraphRAG runs inside retrieval for relationships/temporal change | Make graph functionally necessary and bounded |
 | 9 Sep 2026 | Supabase replaces local-only SQLite/Chroma stores | Support deployment, authentication, isolation, files, and hybrid search |
-| 9 Sep 2026 | OpenAI is baseline; Grok/Fireworks are replaceable alternatives | Known access, simpler execution, eval-based provider choice |
+| 9 Sep 2026 | Grok remains a provider candidate; final selection requires confirmed API access and a frozen benchmark against one available fallback | The team never decided to remove Grok; provider choice must be measurable and replaceable |
+| 9 Sep 2026 | WHO plus approved weekly sources form a layered corpus; neither WHO alone nor one large PDF is sufficient | Weekly experience and authoritative rule guidance serve different purposes |
+| 9 Sep 2026 | All journey weeks have schema/coverage records, while only representative profiles are deeply reviewed and published for the capstone | Avoid 54 superficial or model-invented care guides |
+| 9 Sep 2026 | n8n is optional future automation, not part of the committed core architecture | The coding/deployment decision is separate; core chat and safety must not depend on n8n |
 | 9 Sep 2026 | Videos, ElevenLabs, and MCP are outside the core build | Protect four-day depth and safety |
 | 9 Sep 2026 | Human review is simulated and cannot delay urgent action | Avoid false clinical-service claims |
 | 9 Sep 2026 | Fine-tuning requires a measured repeated failure | Prevent decorative or unsafe training |
