@@ -12,3 +12,7 @@ The canonical product, architecture, data, safety, delivery, and evaluation spec
 - [Execution plan, stage estimates, and release gates](docs/NESTLINE-EXECUTION-PLAN.md)
 
 It covers the Streamlit application, one explicit profile for every pregnancy and postpartum week, reusable sourced guidance fragments, onboarding, home and chat UX, governed sources, Supabase data architecture, RAG and GraphRAG, specialist-agent contracts, plans, safety, human review, error handling, n8n workflows, evaluation, implementation sequence, pre-mortem, and old-versus-current decision reconciliation. The earlier source-of-truth document is retained as decision history only.
+
+## Development status
+
+Stage 0 implementation has started: typed dataset contracts, all 63 journey shells, candidate source registry and offline integrity checks. No medical content is published yet. See [Stage 0 setup and handoff](docs/STAGE-0-HANDOFF.md).

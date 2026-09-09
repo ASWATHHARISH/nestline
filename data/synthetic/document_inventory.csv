@@ -1,0 +1,9 @@
+document_id,title,purpose,status,source_text,watermarked_pdf,expected_extraction_json,expected_graph_changes
+DOC-001,Pregnancy intake summary,Baseline timing and confirmed context,planned,,,,
+DOC-002,Baseline laboratory report,Extraction without diagnosis,planned,,,,
+DOC-003,Prescription or instruction note,Documented instruction with provenance,planned,,,,
+DOC-004,Routine visit summary,Timing update without history loss,planned,,,,
+DOC-005,Movement guidance note,Baseline plan dependency,planned,,,,
+DOC-006,Later visit summary,New restriction and explicit conflict,planned,,,,
+DOC-007,Follow-up instruction,Idempotent appointment question or task,planned,,,,
+DOC-008,Postpartum discharge summary,Confirmed transition to postpartum,planned,,,,

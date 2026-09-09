@@ -1,0 +1,24 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Nestline: test data contracts",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "windows": {"command": "${workspaceFolder}/.venv/Scripts/python.exe"},
+      "args": ["-m", "unittest", "discover", "-s", "tests", "-v"],
+      "options": {"cwd": "${workspaceFolder}"},
+      "group": {"kind": "test", "isDefault": true},
+      "problemMatcher": []
+    },
+    {
+      "label": "Nestline: validate draft dataset",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "windows": {"command": "${workspaceFolder}/.venv/Scripts/python.exe"},
+      "args": ["-m", "scripts.validate_content"],
+      "options": {"cwd": "${workspaceFolder}"},
+      "problemMatcher": []
+    }
+  ]
+}

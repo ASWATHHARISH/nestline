@@ -4,13 +4,13 @@
 
 **Target:** submission-ready V1 by Saturday 12 September; selected-team demo on 16 September
 
-**Status:** owner split confirmed; daily availability and Saturday scope subset awaiting confirmation
+**Status:** full canonical scope confirmed; daily availability and elapsed delivery forecast remain to be measured
 
 **Architecture authority:** [Nestline updated architecture](<Nestline updated architecture.md>), 9 September 2026
 
 **Repository:** https://github.com/kajalchourasia-cmd/nestline
 
-**Current repository evidence:** canonical architecture and README at `039b1a6`; no application implementation or passing tests supplied. Local reference diagrams and findings are supporting context.
+**Implementation status:** Stage 0 data contracts and validation have started. See [Stage 0 handoff](STAGE-0-HANDOFF.md). Other stages remain open until their acceptance evidence is recorded.
 
 ## 1. The outcome we are building toward
 
@@ -62,31 +62,19 @@ The stage estimates include local component checks; the evaluation workstream se
 
 Reserve approximately **24 additional person-hours** against the likely estimate for integration uncertainty: a planning envelope of **145 person-hours**. Do not add the contingency a second time when using the high estimate. With two people at six hours/day, that is approximately **12 working days**, excluding external waits; with three people, approximately eight; with four, approximately seven. Dependencies and reviewer availability can make elapsed delivery longer. Adding contributors creates workstreams; it does not make sequential gates disappear.
 
-The full canonical architecture exceeds the illustrative 42-hour human-only capacity. Codex implementation can change elapsed time materially, so measure the first slice before committing to a completion forecast. A four-day production-readiness promise would still hide external review and integration risk. The narrower release below is a proposal under the canonical change-control rule; it does not silently redefine canonical completion.
+The full canonical architecture is the user-confirmed target. The earlier smaller
+Saturday subset is withdrawn; see [ADR 0001](decisions/0001-full-canonical-scope.md).
+Saturday remains the delivery target, with measured progress and transparent unfinished
+scope rather than silent feature removal. All canonical stages, workers, eight fictional
+documents, representative profiles and evaluation gates remain in the backlog.
 
-### Saturday release proposal
+### Incremental build order, full final scope
 
-Preserve all 54 weekly schema shells, plus `PC00` and the eight postpartum day overlays. Publish only reviewed `PC00`, `P10`, and `PP01` content initially. Show unpublished-profile behavior explicitly. Complete the remaining representative profiles and eight-document inventory in the next milestone.
-
-Build three connected fictional demo flows using a small intake/later-restriction/follow-up document set, with expected extraction and graph changes. Use bounded Record, Nutrition, Movement, and Plan Composer paths plus deterministic follow-up and simulated review. Keep remaining agent routes visibly unavailable until implemented and evaluated. This is a staged subset, not evidence that all canonical agent contracts are complete.
-
-Preserve permission/RLS tests, confirmation, urgent bypass, citations, wrong-week blocking, stale plans, consent-aware simulated review, and the minimum **45 development + 15 sealed holdout scenarios**. Those scenarios may cross-score several evaluators; deterministic unit cases are additional. Do not claim comprehensive medical coverage from 60 scenarios.
-
-| Saturday work package | Budget, person-hours | Concrete limit |
-|---|---:|---|
-| Foundation, deploy skeleton, credentials, contracts | 3 | One host smoke test; one schema contract |
-| Source slice, profile shells, three fictional documents | 5 | Only selected spans and reviewed demo profiles |
-| Supabase isolation, resolver, empty/demo onboarding | 5 | One resettable session-specific persona |
-| Ingestion, hybrid retrieval, confirmation, graph path | 7 | One demonstrable causal dependency path |
-| Safety, bounded agents, validators | 5 | Only published demo capabilities |
-| UI, editable plan, stale state, simulated review | 4 | Complete states for the three flows |
-| Dataset, benchmark, improvement and release verification | 4 | Eval design starts immediately, not Saturday |
-| Recording and release instructions | 1 | Script and setup notes drafted during build |
-| **Planned effort** | **34** | |
-| **Integration/failure reserve** | **7** | Do not pre-spend on features |
-| **Total target** | **41** | Human-equivalent comparison only; reforecast after first slice |
-
-This is an aggressive target conditional on working credentials, reusable tooling, rapid source approval, and daily integration. If foundation/source gates slip, reduce published coverage further only through a recorded decision or declare the release incomplete. Never manufacture evidence, silently reduce safety tests, or label replay output as live. The budget is a scheduling constraint; recalibrate after the first completed vertical slice.
+First prove the data and safety contracts with PC00/P10/PP01, then complete all nine
+representative profiles. Build all 63 journey records now, keeping unpublished content
+hidden. Start the document pipeline with one file, then complete all eight fixtures.
+Start orchestration with one worker, then complete every canonical worker. None of
+these intermediate slices is described as the finished product.
 
 ### Deadline checkpoints in IST
 
@@ -95,11 +83,11 @@ These are outcome targets for the Codex-assisted workflow. The effort column is 
 | Day | Available effort assumed | Work and exit evidence |
 |---|---:|---|
 | Wed 9 Sep, remaining evening | 6 person-hours | Repo/CI/deployment skeleton; access matrix; frozen demo script; source and schema contract; safety/eval outline; RLS test skeleton. A first deterministic request runs with an explicit fixture label. |
-| Thu 10 Sep | 12 person-hours | Real Supabase isolation passes; three published profile slices; query → filtered evidence → cited answer; one extracted field is confirmed and persisted with provenance. Run the initial baseline. |
+| Thu 10 Sep | 12 person-hours | Real Supabase isolation passes; first reviewed profile slices; query → filtered evidence → cited answer; one extracted field is confirmed and persisted with provenance. Run the initial baseline. |
 | Fri 11 Sep | 12 person-hours | Three connected flows integrated; graph dependency changes saved-plan status; simulated review and urgent bypass work. Freeze features by Friday EOD. |
 | Sat 12 Sep | 12 person-hours | Use first half for measured fixes and regression; target release decision by 15:00, recording by 18:00, submission by 20:00. Keep remaining time before EOD for upload/recovery. Verify the organizer's actual cutoff/timezone. |
 
-If Friday exits without an end-to-end continuity flow, Saturday is for stabilizing the disclosed subset, not adding databases or agents. If a critical gate fails at release time, do not present that build as passing.
+If a checkpoint slips, report remaining scope and revise elapsed estimates. Do not silently drop canonical capabilities or present failing release gates as passing.
 
 ## 4. One delivery order across both numbering systems
 
@@ -297,7 +285,7 @@ Use one small branch/PR per coherent vertical change. The PR states the problem,
 
 At daily integration: run resolver, RLS, safety, evidence/schema and the three smoke journeys; inspect one real trace; update actual vs estimated hours and the top blocker. Every change records owner, status, dependency and acceptance evidence. Migration changes require clean-schema and existing-schema verification. No model, prompt or tool gets unrestricted database write authority.
 
-Any architectural deviation uses canonical Section 22.2: problem, supporting evidence, affected components/risks/demos, implementation cost and displaced scope, accepted/rejected/deferred status, decision-log update. The Saturday subset is **proposed** until the team records its decision; the full canonical definition of done remains intact.
+Any architectural deviation uses canonical Section 22.2: problem, supporting evidence, affected components/risks/demos, implementation cost and displaced scope, accepted/rejected/deferred status, decision-log update. The reduced Saturday subset has been withdrawn by ADR 0001; the full canonical definition of done is the accepted target.
 
 ## 8. Release packet and readiness decision
 
@@ -311,7 +299,7 @@ Any architectural deviation uses canonical Section 22.2: problem, supporting evi
 - [ ] Short demo script: problem → useful plan → confirmed record change → stale plan and evidence → urgent bypass → measured results → limits.
 - [ ] No secrets, real records, misleading reviewer claims or fabricated benchmark numbers.
 
-Release fails on any unresolved cross-user access, missed critical test route, unsafe reassurance, silent unconfirmed write, hard-constraint violation, or false clinical-service claim. A limited stable subset may be disclosed as such; incomplete canonical scope may not be reported as complete.
+Release fails on any unresolved cross-user access, missed critical test route, unsafe reassurance, silent unconfirmed write, hard-constraint violation, or false clinical-service claim. Incomplete canonical scope is reported as unfinished; it does not redefine the agreed full delivery target.
 
 ## 9. Work between submission and the 16 September demo
 
@@ -349,7 +337,7 @@ Do not interpret this table as legal or clinical clearance. Requirements must be
 | Supabase isolation test fails | Stop personal-data integration and fix policies | No shared or service-role bypass workaround |
 | Retrieval returns wrong-week evidence | Fix hard filters before prompts/reranking | Evidence applicability is mandatory |
 | Graph adds complexity without benefit | Keep tested causal state dependencies; defer decorative graph UI | Canonical graph path remains measured and scoped |
-| Friday integration is incomplete | Freeze breadth; stabilize and disclose subset | Do not cut critical checks to claim completion |
+| Friday integration is incomplete | Fix integration and report remaining full-scope work with a revised forecast | Do not cut scope or critical checks to claim completion |
 | Model timeout / budget exceeded | One bounded retry, then explicit recoverable failure | No unsupported answer fallback |
 | Reviewer unavailable | Show unavailable/simulated status; retain external-care route | No fake review or promised response time |
 | New state races plan save | Reject old version; reload and revalidate | No stale plan activation |
@@ -374,7 +362,7 @@ Lyzr would be a separate orchestration comparison, not a second runtime supervis
 ## 13. Next executable actions
 
 1. Confirm GitHub destination and publish this plan as a reviewable repository change.
-2. Confirm daily review/decision availability and record accept/revise status for the Saturday subset; the Kajal/Codex/Aswath ownership split is already confirmed.
+2. Confirm daily review/decision availability; full canonical scope and the Kajal/Codex/Aswath ownership split are already confirmed.
 3. Begin F: runnable Streamlit skeleton, contract schemas, CI and access matrix.
 4. In parallel human workstreams, establish S0 source slice and S2 isolation foundation; build initial safety/eval contracts before live generation.
 5. Re-estimate after the first clean deployed vertical slice and update actual effort daily.

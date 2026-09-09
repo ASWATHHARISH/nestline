@@ -1,0 +1,729 @@
+{
+  "$defs": {
+    "Applicability": {
+      "additionalProperties": false,
+      "properties": {
+        "stage": {
+          "enum": [
+            "possible_pregnancy",
+            "pregnancy",
+            "postpartum"
+          ],
+          "title": "Stage",
+          "type": "string"
+        },
+        "unit": {
+          "enum": [
+            "week",
+            "day",
+            "none"
+          ],
+          "title": "Unit",
+          "type": "string"
+        },
+        "start": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start"
+        },
+        "end": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "End"
+        }
+      },
+      "required": [
+        "stage",
+        "unit"
+      ],
+      "title": "Applicability",
+      "type": "object"
+    },
+    "CardSlots": {
+      "additionalProperties": false,
+      "description": "Values are fragment IDs, never uncited free-form generated prose.",
+      "properties": {
+        "what_may_change": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "title": "What May Change",
+          "type": "array"
+        },
+        "nutrition_focus": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "title": "Nutrition Focus",
+          "type": "array"
+        },
+        "movement_focus": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "title": "Movement Focus",
+          "type": "array"
+        },
+        "wellbeing_focus": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "title": "Wellbeing Focus",
+          "type": "array"
+        },
+        "symptom_education": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "title": "Symptom Education",
+          "type": "array"
+        },
+        "preparation": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "title": "Preparation",
+          "type": "array"
+        },
+        "consider": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "title": "Consider",
+          "type": "array"
+        },
+        "avoid": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "title": "Avoid",
+          "type": "array"
+        },
+        "ask_a_professional": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "title": "Ask A Professional",
+          "type": "array"
+        }
+      },
+      "title": "CardSlots",
+      "type": "object"
+    },
+    "EvidenceSpan": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "source_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_version": {
+          "minLength": 1,
+          "title": "Source Version",
+          "type": "string"
+        },
+        "source_checksum": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Checksum",
+          "type": "string"
+        },
+        "locator": {
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "page": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Page"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "text_checksum": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Text Checksum",
+          "type": "string"
+        },
+        "applies_to": {
+          "$ref": "#/$defs/Applicability"
+        },
+        "jurisdiction": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Jurisdiction",
+          "type": "array"
+        },
+        "status": {
+          "default": "draft",
+          "enum": [
+            "draft",
+            "reviewed",
+            "published",
+            "superseded"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "review": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Review"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "evidence_id",
+        "source_id",
+        "source_version",
+        "source_checksum",
+        "locator",
+        "text",
+        "text_checksum",
+        "applies_to",
+        "jurisdiction"
+      ],
+      "title": "EvidenceSpan",
+      "type": "object"
+    },
+    "GuidanceFragment": {
+      "additionalProperties": false,
+      "properties": {
+        "fragment_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Fragment Id",
+          "type": "string"
+        },
+        "domain": {
+          "enum": [
+            "journey",
+            "nutrition",
+            "movement",
+            "wellbeing",
+            "symptoms",
+            "preparation",
+            "followup"
+          ],
+          "title": "Domain",
+          "type": "string"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "applies_to": {
+          "$ref": "#/$defs/Applicability"
+        },
+        "jurisdiction": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Jurisdiction",
+          "type": "array"
+        },
+        "evidence_span_ids": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Span Ids",
+          "type": "array"
+        },
+        "status": {
+          "default": "draft",
+          "enum": [
+            "draft",
+            "reviewed",
+            "published",
+            "superseded"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "review": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Review"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "conditions_required": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Conditions Required",
+          "type": "array"
+        },
+        "conditions_excluded": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Conditions Excluded",
+          "type": "array"
+        }
+      },
+      "required": [
+        "fragment_id",
+        "domain",
+        "text",
+        "applies_to",
+        "jurisdiction",
+        "evidence_span_ids"
+      ],
+      "title": "GuidanceFragment",
+      "type": "object"
+    },
+    "Hero": {
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "default": "",
+          "title": "Title",
+          "type": "string"
+        },
+        "development_evidence_ids": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "title": "Development Evidence Ids",
+          "type": "array"
+        },
+        "visual_asset_id": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Visual Asset Id"
+        }
+      },
+      "title": "Hero",
+      "type": "object"
+    },
+    "Review": {
+      "additionalProperties": false,
+      "properties": {
+        "reviewer": {
+          "minLength": 1,
+          "title": "Reviewer",
+          "type": "string"
+        },
+        "reviewed_at": {
+          "format": "date",
+          "title": "Reviewed At",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "content_reviewed",
+            "clinician_reviewed"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "notes": {
+          "minLength": 1,
+          "title": "Notes",
+          "type": "string"
+        }
+      },
+      "required": [
+        "reviewer",
+        "reviewed_at",
+        "kind",
+        "notes"
+      ],
+      "title": "Review",
+      "type": "object"
+    },
+    "SourceRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "title": {
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "publisher": {
+          "minLength": 1,
+          "title": "Publisher",
+          "type": "string"
+        },
+        "canonical_url": {
+          "pattern": "^https://[^\\s]+$",
+          "title": "Canonical Url",
+          "type": "string"
+        },
+        "jurisdiction": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Jurisdiction",
+          "type": "array"
+        },
+        "document_type": {
+          "enum": [
+            "html",
+            "pdf",
+            "index"
+          ],
+          "title": "Document Type",
+          "type": "string"
+        },
+        "topics": {
+          "items": {
+            "enum": [
+              "journey",
+              "nutrition",
+              "movement",
+              "wellbeing",
+              "symptoms",
+              "preparation",
+              "followup"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Topics",
+          "type": "array"
+        },
+        "evidence_lane": {
+          "enum": [
+            "guideline",
+            "weekly_profile",
+            "safety"
+          ],
+          "title": "Evidence Lane",
+          "type": "string"
+        },
+        "status": {
+          "default": "candidate",
+          "enum": [
+            "candidate",
+            "approved_for_capstone",
+            "excluded",
+            "superseded"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "publication_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Publication Date"
+        },
+        "version_or_last_update": {
+          "default": "",
+          "title": "Version Or Last Update",
+          "type": "string"
+        },
+        "last_checked_at": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Checked At"
+        },
+        "reuse_status": {
+          "default": "unverified",
+          "enum": [
+            "unverified",
+            "permitted",
+            "restricted"
+          ],
+          "title": "Reuse Status",
+          "type": "string"
+        },
+        "allowed_use": {
+          "items": {
+            "enum": [
+              "store",
+              "embed",
+              "display"
+            ],
+            "type": "string"
+          },
+          "title": "Allowed Use",
+          "type": "array"
+        },
+        "license_or_reuse_note": {
+          "default": "",
+          "title": "License Or Reuse Note",
+          "type": "string"
+        },
+        "prohibited_inferences": {
+          "minLength": 1,
+          "title": "Prohibited Inferences",
+          "type": "string"
+        },
+        "review": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Review"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "content_checksum": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content Checksum"
+        },
+        "supersedes_source_id": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supersedes Source Id"
+        }
+      },
+      "required": [
+        "source_id",
+        "title",
+        "publisher",
+        "canonical_url",
+        "jurisdiction",
+        "document_type",
+        "topics",
+        "evidence_lane",
+        "prohibited_inferences"
+      ],
+      "title": "SourceRecord",
+      "type": "object"
+    },
+    "WeeklyProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "profile_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Profile Id",
+          "type": "string"
+        },
+        "applies_to": {
+          "$ref": "#/$defs/Applicability"
+        },
+        "status": {
+          "default": "draft",
+          "enum": [
+            "draft",
+            "reviewed",
+            "published",
+            "superseded"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "hero": {
+          "$ref": "#/$defs/Hero"
+        },
+        "card_slots": {
+          "$ref": "#/$defs/CardSlots"
+        },
+        "guidance_fragment_ids": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "title": "Guidance Fragment Ids",
+          "type": "array"
+        },
+        "source_evidence_ids": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "title": "Source Evidence Ids",
+          "type": "array"
+        },
+        "jurisdiction": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Jurisdiction",
+          "type": "array"
+        },
+        "review": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Review"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "version": {
+          "default": "1.0.0",
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        },
+        "content_priority": {
+          "enum": [
+            "representative",
+            "coverage_shell",
+            "day_overlay"
+          ],
+          "title": "Content Priority",
+          "type": "string"
+        }
+      },
+      "required": [
+        "profile_id",
+        "applies_to",
+        "content_priority"
+      ],
+      "title": "WeeklyProfile",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "sources": {
+      "items": {
+        "$ref": "#/$defs/SourceRecord"
+      },
+      "title": "Sources",
+      "type": "array"
+    },
+    "evidence": {
+      "items": {
+        "$ref": "#/$defs/EvidenceSpan"
+      },
+      "title": "Evidence",
+      "type": "array"
+    },
+    "fragments": {
+      "items": {
+        "$ref": "#/$defs/GuidanceFragment"
+      },
+      "title": "Fragments",
+      "type": "array"
+    },
+    "profiles": {
+      "items": {
+        "$ref": "#/$defs/WeeklyProfile"
+      },
+      "title": "Profiles",
+      "type": "array"
+    }
+  },
+  "required": [
+    "sources",
+    "evidence",
+    "fragments",
+    "profiles"
+  ],
+  "title": "ContentBundle",
+  "type": "object"
+}
