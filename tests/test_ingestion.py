@@ -21,7 +21,7 @@ from app.services.embeddings import DeterministicTestEmbeddingProvider
 from app.services.ingestion_store import (latest_staging_run, publish_corpus,
                                           write_source_artifact, write_staging_run)
 from app.services.public_ingestion import (admission_for, development_measurements_for,
-                                           run_ingestion)
+                                           apply_review_decisions, run_ingestion)
 from app.services.public_parsers import normalize_text, parse_html, parse_pdf
 from app.services.source_capture import fetch_registered_source
 
@@ -386,6 +386,22 @@ class IngestionTests(unittest.TestCase):
             run_ingestion(review_bundle(), "TEST-SOURCE", HTML,
                           retrieved_at=date(2026, 9, 10),
                           review_decisions=[stale])
+
+    def test_post_parse_review_attachment_keeps_checksum_gate(self):
+        run = run_ingestion(review_bundle(), "TEST-SOURCE", HTML,
+                            retrieved_at=date(2026, 9, 10))
+        task = run.review_tasks[0]
+        decision = EvidenceReviewDecision(
+            task_id=task.task_id, candidate_id=task.candidate_id,
+            evidence_id=task.evidence_id, source_id=task.source_id,
+            role="product", decision="accepted", reviewer_name="Test reviewer",
+            reviewer_capacity="TEST ONLY product fixture", reviewed_at=date(2026, 9, 10),
+            reason="Placement is suitable for this synthetic test.",
+            candidate_checksum=task.candidate_checksum)
+        decided = apply_review_decisions(run, [decision])
+        self.assertEqual(decided.review_tasks[0].decisions, [decision])
+        with self.assertRaisesRegex(ValueError, "absent or stale"):
+            apply_review_decisions(run, [decision.model_copy(update={"task_id": "REV-STALE"})])
 
     def test_general_measurements_reject_incomplete_or_inverted_ranges(self):
         with self.assertRaises(ValueError):

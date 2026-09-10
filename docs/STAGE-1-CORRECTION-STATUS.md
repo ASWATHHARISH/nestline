@@ -30,7 +30,8 @@ Current canonical audit:
 - 0 production embeddings;
 - 0 published corpus records.
 
-The engineering machinery is corrected. The medical content release remains
-blocked by the separate human-review work in
-`docs/KAJAL-HUMAN-REVIEW-HANDOUT.md`. This status does not claim clinical,
-licence, India-localisation, content or product approval.
+The engineering machinery is corrected. Kajal's content/product decisions for
+the 27 tasks behind `PC00`, `P10` and `PP01` are now recorded. The medical content
+release remains blocked by clinical, licence and India-localisation review for
+that slice, applicable review for the rest of the release, and final visual review.
+See `docs/STAGE-1-PC00-P10-PP01-REVIEW-HANDOFF.md`.

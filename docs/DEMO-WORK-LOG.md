@@ -491,3 +491,28 @@ while the original files used LF. Recovery: Stage 2 now hashes canonical UTF-8
 text after normalising CRLF to LF, matching the platform-independent Stage 0
 fingerprint approach. The repeated clean clone passed both Stage 1 and Stage 2
 checkers. No SQL or deployed schema was changed for this fix.
+
+## Kajal product/content review and three-profile preview
+
+Kajal returned an explicit product/content decision for `PC00`, `P10` and `PP01`,
+plus a corrected 42-row comparison catalogue. We applied the 13 changed week rows
+and regenerated the Stage 0 fingerprint and reviewer artifacts. All comparison
+rows remain draft; measurement values and object dimensions remain blank, so the
+comparison gate keeps all 42 hidden.
+
+The initial review ledger was empty even though the ingestion schema supported
+role decisions. Recovery: recorded two real roles for each of the 27 exact tasks,
+producing 54 decisions bound to task, candidate, evidence, source and checksum.
+The Stage 1 checker now validates this ledger against the tracked source audit,
+and the main review queue displays recorded and pending roles separately.
+
+We added a deterministic specialist handoff for the clinical, India-localisation
+and licence reviewers. It contains the exact source text, proposed wording,
+conditions, source/reuse state and copyable decision form for each task. No
+specialist identity or approval was invented.
+
+The Streamlit reviewer app reads the same draft records and ledger. It renders
+the three profiles with fictional condition scenarios, makes unknown facts visible
+as “needs information”, and labels the entire app as unavailable to public users,
+embeddings and live RAG. It is a visual-review artifact, not the Stage 9 patient
+application or a content release.

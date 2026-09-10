@@ -8,7 +8,7 @@ import re
 import subprocess
 import sys
 
-from app.schemas.ingestion import Stage1Audit
+from app.schemas.ingestion import Stage1Audit, Stage1ReviewLedger
 from app.services.foundation import read_catalogues, validate_foundation
 from app.services.ingestion_audit import validate_stage1_audit
 from scripts.validate_content import load_bundle
@@ -47,10 +47,56 @@ def inspect_canonical_audit(bundle) -> tuple[dict, list[str]]:
     }, errors
 
 
+def inspect_review_ledger() -> tuple[dict, list[str]]:
+    """Prove that every recorded role decision still names a current task."""
+    ledger_path = ROOT / "data/reviews/ingestion_decisions.json"
+    audit_path = ROOT / "data/ingestion/audit/stage1-source-audit.json"
+    if not ledger_path.exists():
+        return {"present": False}, ["Stage 1 review ledger is missing"]
+    try:
+        ledger = Stage1ReviewLedger.model_validate_json(
+            ledger_path.read_text(encoding="utf-8"))
+        audit = Stage1Audit.model_validate_json(audit_path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        return {"present": True, "malformed": type(exc).__name__}, [
+            f"Stage 1 review ledger or audit is malformed: {type(exc).__name__}"]
+
+    sources = {source.source_id: source for source in audit.sources}
+    errors = []
+    for decision in ledger.decisions:
+        source = sources.get(decision.source_id)
+        if source is None:
+            errors.append(f"{decision.task_id}: decision source is absent from the canonical audit")
+            continue
+        if decision.task_id not in source.review_task_ids:
+            errors.append(f"{decision.task_id}: review task is absent or stale")
+        if decision.candidate_id not in source.candidate_ids:
+            errors.append(f"{decision.task_id}: candidate is absent or stale")
+        if decision.evidence_id not in source.evidence_ids:
+            errors.append(f"{decision.task_id}: evidence is absent or stale")
+        if decision.candidate_checksum not in source.candidate_checksums:
+            errors.append(f"{decision.task_id}: candidate checksum is absent or stale")
+        if decision.task_id != f"REV-{decision.candidate_checksum[:20]}":
+            errors.append(f"{decision.task_id}: task ID does not match its candidate checksum")
+        if decision.candidate_id != f"C-{decision.evidence_id}":
+            errors.append(f"{decision.task_id}: candidate ID does not match its evidence ID")
+    role_counts = {role: sum(decision.role == role for decision in ledger.decisions)
+                   for role in ("licence", "content", "clinical", "india_localisation", "product")}
+    return {
+        "present": True,
+        "decision_count": len(ledger.decisions),
+        "task_count": len({decision.task_id for decision in ledger.decisions}),
+        "reviewer_names": sorted({decision.reviewer_name for decision in ledger.decisions}),
+        "role_counts": role_counts,
+    }, errors
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--write-report", action="store_true",
                         help="refresh docs/STAGE-1-CHECK-RESULTS.json after verification")
+    parser.add_argument("--report-path", type=Path,
+                        default=ROOT / "docs/STAGE-1-CHECK-RESULTS.json")
     args = parser.parse_args(argv)
     tests = command(["-m", "unittest", "discover", "-s", "tests", "-q"])
     dependencies = command(["-m", "pip", "check"])
@@ -63,6 +109,7 @@ def main(argv=None) -> int:
         "corpus_manifest", "stage1_audit"
     }
     saved, audit_errors = inspect_canonical_audit(bundle)
+    review_ledger, review_ledger_errors = inspect_review_ledger()
     match = re.search(r"Ran (\d+) tests?", tests["stderr"])
     report = {
         "checked_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -72,10 +119,12 @@ def main(argv=None) -> int:
                    "foundation_errors": foundation_errors,
                    "ingestion_schema_present": schema_ok,
                    "canonical_source_audit": saved,
-                   "canonical_source_audit_errors": audit_errors},
+                   "canonical_source_audit_errors": audit_errors,
+                   "governed_review_ledger": review_ledger,
+                   "governed_review_ledger_errors": review_ledger_errors},
         "release_state": {
             "public_corpus_published": False,
-            "reason": "All current public evidence still requires actual source/content/local/clinical/product review.",
+            "reason": "The PC00/P10/PP01 slice has product/content decisions; licence, clinical and India-localisation reviews remain open, as do reviews outside that slice.",
             "production_embedding_provider_selected": False,
         },
         "limitations": [
@@ -86,7 +135,8 @@ def main(argv=None) -> int:
         ],
     }
     if args.write_report:
-        (ROOT / "docs/STAGE-1-CHECK-RESULTS.json").write_bytes(
+        args.report_path.parent.mkdir(parents=True, exist_ok=True)
+        args.report_path.write_bytes(
             (json.dumps(report, indent=2) + "\n").encode("utf-8"))
     print(json.dumps({"tests_run": report["tests_run"],
                       "tests_exit": tests["exit_code"],
@@ -97,9 +147,12 @@ def main(argv=None) -> int:
                       "anchors": saved.get("verified_anchor_count", 0),
                       "governed_blocks": saved.get("governed_block_count", 0),
                       "audit_errors": audit_errors,
+                      "review_decisions": review_ledger.get("decision_count", 0),
+                      "review_ledger_errors": review_ledger_errors,
                       "source_errors": saved.get("error_count", 0)}, indent=2))
     return int(any((tests["exit_code"], dependencies["exit_code"], foundation_errors,
-                    not schema_ok, audit_errors, saved.get("error_count", 0),
+                    not schema_ok, audit_errors, review_ledger_errors,
+                    saved.get("error_count", 0),
                     saved.get("candidate_count") != saved.get("verified_anchor_count"))))
 
 

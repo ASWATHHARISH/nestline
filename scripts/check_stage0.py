@@ -1,5 +1,6 @@
 """Record reproducible local Stage 0 checks without changing publication state."""
 
+import argparse
 from datetime import datetime, timezone
 import json
 from pathlib import Path
@@ -16,7 +17,11 @@ def run(arguments: list[str]) -> dict:
             "stdout": result.stdout.strip(), "stderr": result.stderr.strip()}
 
 
-def main() -> int:
+def main(argv=None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path,
+                        default=ROOT / "docs/STAGE-0-CHECK-RESULTS.json")
+    args = parser.parse_args(argv)
     tests = run(["-m", "unittest", "discover", "-s", "tests", "-q"])
     count = re.search(r"Ran (\d+) tests?", tests["stderr"])
     checks = {"software_tests": tests}
@@ -32,7 +37,8 @@ def main() -> int:
               "limitations": ["Engineering tests are not model or clinical evaluations.",
                               "Review readiness is not content approval or publication.",
                               "Checksums establish local integrity, not publisher authenticity."]}
-    (ROOT / "docs/STAGE-0-CHECK-RESULTS.json").write_bytes(
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_bytes(
         (json.dumps(report, indent=2) + "\n").encode())
     for name, result in checks.items():
         print(f"{name}: exit {result['exit_code']}")

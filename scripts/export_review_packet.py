@@ -4,6 +4,7 @@ This command never approves, publishes or changes source/content records.
 Regenerate after data edits so reviewers inspect the actual current wording.
 """
 
+import argparse
 from pathlib import Path
 import json
 
@@ -15,7 +16,11 @@ from scripts.validate_content import load_bundle
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def main() -> None:
+def main(argv=None) -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path,
+                        default=ROOT / "docs/STAGE-0-REVIEW-PACKET.md")
+    args = parser.parse_args(argv)
     data = ROOT / "data"
     bundle = load_bundle(data)
     report = validate_bundle(bundle)
@@ -114,7 +119,8 @@ def main() -> None:
                   "5. Clear blockers only after their stated work is complete, then run the release gate.",
                   "6. Keep superseded content for history; exclude it from selection.", "",
                   "No review identity has been invented. This worksheet itself does not grant approval.", ""])
-    path = ROOT / "docs/STAGE-0-REVIEW-PACKET.md"
+    path = args.output
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes("\n".join(lines).encode("utf-8"))
     print(path)
 

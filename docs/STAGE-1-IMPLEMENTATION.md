@@ -16,10 +16,12 @@ environment-specific TLS check. All seven corrections are implemented. Verified
 TLS capture succeeded for all five OWH pages, so no certificate verification was
 disabled and no fallback was needed.
 
-The current health content is **not published**. All 55 unique evidence units
-still await real source/content/localisation/clinical/product decisions, so the
-14-source dry run produced 55 review tasks and zero embeddings. The pipeline is
-working when it refuses to convert those drafts into a searchable health corpus.
+The current health content is **not published**. Kajal accepted content and
+product behaviour for the 27 evidence tasks behind `PC00`, `P10` and `PP01`.
+The governed ledger contains 54 current checksum-bound decisions. Clinical,
+India-localisation and licence decisions remain pending for that slice, while
+the other evidence still needs its applicable reviews. The 14-source run therefore
+keeps all 55 tasks in review and creates zero embeddings.
 
 ## What goes in and what comes out
 
@@ -86,6 +88,7 @@ tracked, text-free `data/ingestion/audit/stage1-source-audit.json`:
 - 55 unique candidate evidence units;
 - 55 verified source anchors;
 - 55 pending review tasks;
+- 54 recorded role decisions across 27 of those tasks (content and product);
 - 0 parser/validation errors;
 - 0 embeddings and 0 published health records.
 
@@ -93,6 +96,11 @@ For each source, the audit keeps the artifact hash, source version, parser name
 and version, stable logical version, evidence/candidate/checksum lists, separate
 selected-text and source-governance checksums, governed block IDs, exact review
 task IDs and outcome. It does not commit full copyrighted source documents.
+
+`data/reviews/ingestion_decisions.json` holds the actual role decisions. The
+Stage 1 checker proves that each task ID, candidate, evidence record, source and
+checksum still exists in the canonical audit. The reviewer queue joins those
+decisions and shows only the three pending roles for the first slice.
 
 ## Independent correction pass
 
@@ -156,6 +164,9 @@ information as permission.
 .venv/Scripts/python.exe -m scripts.export_ingestion_review `
   --run-directory reports/local `
   --output docs/STAGE-1-REVIEW-QUEUE.md
+
+# Rebuild the PC00/P10/PP01 specialist packet from tracked governed records
+.venv/Scripts/python.exe -m scripts.export_stage1_slice_review
 
 # Reload role-specific reviewer decisions for one source
 .venv/Scripts/python.exe -m scripts.ingest_public_source `

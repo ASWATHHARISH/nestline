@@ -381,6 +381,20 @@ def _review_tasks(candidates: list[EvidenceCandidate],
     return tasks
 
 
+def apply_review_decisions(run: IngestionRun,
+                           decisions: list[EvidenceReviewDecision]) -> IngestionRun:
+    """Attach role decisions to an existing exact-source run.
+
+    This is useful when a reviewer responds after parsing. The same task/checksum
+    validation used during ingestion is retained, so a stale decision cannot be
+    copied onto changed evidence.
+    """
+    source_decisions = [decision for decision in decisions
+                        if decision.source_id == run.admission.source_id]
+    review_tasks = _review_tasks(run.candidates, source_decisions)
+    return run.model_copy(update={"review_tasks": review_tasks})
+
+
 def _governed_blocks(blocks: list[ParsedBlock],
                      candidates: list[EvidenceCandidate]) -> list[ParsedBlock]:
     """Retain only blocks used by selected evidence, never an unbounded page dump."""

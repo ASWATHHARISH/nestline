@@ -9,10 +9,10 @@ Nestline is meant to help a woman keep track of pregnancy and recovery after bir
 Compass is the assistant we will build inside it. The finished product should
 organise her reports, answer supported questions, help prepare suitable plans and
 questions for her care team, and direct concerning symptoms to medical help.
-We are building by stages. Today the working code is the information foundation;
-there is no working chat, user database, agent team or patient-facing safety
-system yet. Stage 1 now has controlled public-source parsing and an OCR adapter;
-private-report extraction remains Stage 4.
+We are building by stages. Today the working code includes the information
+foundation, governed ingestion, the isolated Supabase storage foundation and a
+draft-only Streamlit reviewer preview. There is no working chat, agent team or
+patient-facing safety system yet. Private-report extraction remains Stage 4.
 
 ## Stage 0, explained as a library
 
@@ -119,7 +119,7 @@ it does not mean OCR or AI extraction works.
 
 ### 8. Checks, not an AI evaluation result
 
-There are 113 passing unit tests covering the foundation, corrected Stage 1
+There are 119 passing unit tests covering the foundation, corrected Stage 1
 ingestion tests. They try valid and invalid data: broken citations, wrong weeks,
 missing conditions, altered source files, parser/OCR failures, duplicate units and
 false publication states.
@@ -142,7 +142,10 @@ Authoring checks that data and source links agree. Review-readiness additionally
 checks populated cards, explained gaps, catalogues and assessment freshness. Both
 pass. Release checks require actual reviews and published dependencies, and still
 fail. Five review roles are required: licence, content, clinical, India localisation
-and product. No names have been invented in the approval file.
+and product. Kajal's 27 content decisions and 27 product decisions for
+`PC00`/`P10`/`PP01` are now recorded in the checksum-bound Stage 1 ledger. The
+release-level approval file remains empty because the other required roles and
+the rest of the release have not been reviewed.
 
 This is not just paperwork left over. An appropriate reviewer must resolve older
 source currency, current Indian care interpretation, exact medical wording and
@@ -153,8 +156,8 @@ Their safe fallback is sourced development text without a size comparison.
 
 | Stage | What we will build | Status today |
 |---|---|---|
-| 0: Content foundation | Sources, cards, rules and review controls | Corrected draft foundation; human content release remains blocked. |
-| 1: Ingestion | Repeatedly read approved documents with versions and provenance | Seven independent-review corrections complete; tracked 14-source audit found all 55 anchors and verified TLS for every source. All content remains in review, so no embeddings/corpus are published. |
+| 0: Content foundation | Sources, cards, rules and review controls | Corrected draft foundation; rounder comparison proposals applied and hidden; product/content accepted for the three-profile slice. Specialist and full-release reviews remain blocked. |
+| 1: Ingestion | Repeatedly read approved documents with versions and provenance | Seven independent-review corrections complete; tracked 14-source audit found all 55 anchors and verified TLS for every source. The governed ledger binds 54 Kajal decisions to 27 current tasks. No embeddings/corpus are published. |
 | 2: Storage | Keep each user's information secure and separate | Supabase foundation deployed: 28 RLS-enabled tables, private file bucket, pgvector, release provenance, atomic journey versions and workspace lifecycle. Two-user isolation and lifecycle transactions passed and rolled back. |
 | 3: Onboarding | Confirm details and work out journey timing | Month/day selection contracts exist; onboarding and date resolution are not built. |
 | 4: Personal documents | Propose extracted facts and request confirmation | Eight input/truth fixtures exist; the extraction and confirmation pipeline is not built. |
@@ -162,7 +165,7 @@ Their safe fallback is sourced development text without a size comparison.
 | 6: Safety | Handle urgent and uncertain requests before normal answers | Draft rule specification and offline cases exist; reviewed live gate is not built. |
 | 7: Agents | Coordinate specialist helpers | Architecture only. |
 | 8: Answer validation | Reject unsupported or conflicting generated answers | Data-integrity checks exist; generated-answer verification is not built. |
-| 9: Experience | Build the home page, chat, plans and review screens | Architecture only. |
+| 9: Experience | Build the home page, chat, plans and review screens | Draft-only PC00/P10/PP01 reviewer preview exists; patient dashboard, onboarding, chat and plans are not built. |
 | 10: State updates | Save confirmed changes and refresh affected plans | Expected behaviours and plan schema exist; persistence/dependency updates are not built. |
 
 ## Stages, pipeline and phases
@@ -182,10 +185,10 @@ measurement has not run. Phase 7 submission packaging is not complete.
 
 ## What Kajal can review now
 
-Read STAGE-0-REVIEW-PACKET.md for actual cards, conditions, passages and catalogue
-proposals. Read STAGE-0-CORRECTION-STATUS.md for each finding and remaining owner.
-Kajal handles product wording, UI states and later AI-evaluation expectations;
-clinical approval must come from an appropriately qualified reviewer.
+Kajal's first product/content pass is recorded. Read
+STAGE-1-PC00-P10-PP01-REVIEW-HANDOFF.md for the exact 27-task specialist queue and
+the final visual gate. Clinical approval must come from an appropriately qualified
+reviewer; India-localisation and licence decisions also need real named reviewers.
 Codex handles implementation. Aswath coordinates access and reviewer availability.
 We must not mark Stage 0 fully released until those real decisions and the release
 checks are satisfied.

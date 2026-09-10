@@ -1,7 +1,7 @@
 {
-  "checked_at_utc": "2026-09-10T18:53:45.524615+00:00",
+  "checked_at_utc": "2026-09-10T20:09:06.892930+00:00",
   "execution": "Clean-checkout engineering checks and tracked exact-source audit",
-  "tests_run": 113,
+  "tests_run": 119,
   "checks": {
     "software_tests": {
       "arguments": [
@@ -14,7 +14,7 @@
       ],
       "exit_code": 0,
       "stdout": "",
-      "stderr": "----------------------------------------------------------------------\nRan 113 tests in 1.037s\n\nOK"
+      "stderr": "----------------------------------------------------------------------\nRan 119 tests in 2.445s\n\nOK"
     },
     "dependencies": {
       "arguments": [
@@ -69,13 +69,29 @@
         "OWH-WELLBEING": "review_required",
         "PIB-PMSMA": "review_required"
       },
-      "foundation_release_fingerprint": "86983b50de3af506cc7f1ff34ea31604b5efd97a0ffce2d001fa48e9ee97131c"
+      "foundation_release_fingerprint": "fdd92ab69df4585ef368916f455d09ae62f32e78266b6c9521511d90666eb5c4"
     },
-    "canonical_source_audit_errors": []
+    "canonical_source_audit_errors": [],
+    "governed_review_ledger": {
+      "present": true,
+      "decision_count": 54,
+      "task_count": 27,
+      "reviewer_names": [
+        "Kajal"
+      ],
+      "role_counts": {
+        "licence": 0,
+        "content": 27,
+        "clinical": 0,
+        "india_localisation": 0,
+        "product": 27
+      }
+    },
+    "governed_review_ledger_errors": []
   },
   "release_state": {
     "public_corpus_published": false,
-    "reason": "All current public evidence still requires actual source/content/local/clinical/product review.",
+    "reason": "The PC00/P10/PP01 slice has product/content decisions; licence, clinical and India-localisation reviews remain open, as do reviews outside that slice.",
     "production_embedding_provider_selected": false
   },
   "limitations": [

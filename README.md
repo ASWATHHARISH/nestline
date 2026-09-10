@@ -34,6 +34,14 @@ are unverified; those proposals remain hidden. No health content is published.
 Stage 1's governed ingestion system is implemented. Dry runs against all 14
 evidence-bearing sources resolve all 55 unique source passages and create 55 human
 review tasks. They correctly create zero embeddings while the content is unapproved.
+Kajal has accepted the product wording, placement and conditional behaviour for
+the 27 evidence tasks used by `PC00`, `P10` and `PP01`. Those 54 role decisions
+(content plus product) are checksum-bound in the governed ledger. Clinical,
+India-localisation and licence review remain open, so the slice is still unpublished.
+
+The attached rounder/repeatable baby-size sequence has been applied. All 42
+comparisons remain draft and hidden because measurement values and object
+dimensions are still unverified.
 
 Stage 2's Supabase storage foundation is deployed to `nestline-dev`: 28 tables,
 RLS on all 28, a private medical-document bucket, pgvector support, release-bound
@@ -52,5 +60,12 @@ Storage policy and cross-workspace mutation, then rolled back all fixtures.
 - [Stage 1 reviewer queue](docs/STAGE-1-REVIEW-QUEUE.md)
 - [Stage 1 independent-review correction status](docs/STAGE-1-CORRECTION-STATUS.md)
 - [Kajal human-review handout](docs/KAJAL-HUMAN-REVIEW-HANDOUT.md)
+- [PC00/P10/PP01 specialist and final visual review handoff](docs/STAGE-1-PC00-P10-PP01-REVIEW-HANDOFF.md)
 - [Stage 2 implementation and verification](docs/STAGE-2-IMPLEMENTATION.md)
 - [Stage 2 in plain language](docs/STAGE-2-PLAIN-LANGUAGE.md)
+
+Run the draft-only reviewer preview with:
+
+```powershell
+.venv\Scripts\python.exe -m streamlit run streamlit_app.py
+```

@@ -32,6 +32,8 @@
 - Profiles: `P09`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -61,7 +63,11 @@
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-262cfa2775b98b54ae78
@@ -95,6 +101,8 @@ Candidate checksum: 262cfa2775b98b54ae7867286033727d6b7c651d822aa1fd496a8cf5df79
 - Profiles: `P10`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -124,14 +132,19 @@ Candidate checksum: 262cfa2775b98b54ae7867286033727d6b7c651d822aa1fd496a8cf5df79
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-4ea44e6e04c231b2662a
 Candidate ID: C-E-P10-DEVELOPMENT
 Evidence ID: E-P10-DEVELOPMENT
 Source ID: BHC-WEEKS
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -185,6 +198,8 @@ A checked box in this exported document does not change publication state. The n
 - Profiles: `PC00`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -213,14 +228,19 @@ A checked box in this exported document does not change publication state. The n
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for PC00. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PC00. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-594728845df724f164a0
 Candidate ID: C-E-IN-TEST-SUPPORT
 Evidence ID: E-IN-TEST-SUPPORT
 Source ID: NHM-CHO
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -247,6 +267,8 @@ Candidate checksum: 594728845df724f164a00db77938b36c118f0ff2990d167621e0377f2c32
 - Profiles: `P09, P10, P24, P36`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -275,14 +297,19 @@ Candidate checksum: 594728845df724f164a00db77938b36c118f0ff2990d167621e0377f2c32
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-4f9763c7846632db8202
 Candidate ID: C-E-IN-BIRTH-PLAN
 Evidence ID: E-IN-BIRTH-PLAN
 Source ID: NHM-CHO
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -309,6 +336,8 @@ Candidate checksum: 4f9763c7846632db820200eb31d369cfb0967eff2f684fb35d009126d53d
 - Profiles: `PP06`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -337,7 +366,11 @@ Candidate checksum: 4f9763c7846632db820200eb31d369cfb0967eff2f684fb35d009126d53d
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-77cd641c40cd2ef04a5e
@@ -371,6 +404,8 @@ Candidate checksum: 77cd641c40cd2ef04a5e4bfa85b5750417b8551193321b19d38eb4adb5bb
 - Profiles: `P09, P10`
 - Catalogue items: `ANC-REGISTER`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -400,14 +435,19 @@ Candidate checksum: 77cd641c40cd2ef04a5e4bfa85b5750417b8551193321b19d38eb4adb5bb
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-059cacced965f62696c7
 Candidate ID: C-E-IN-REGISTRATION
 Evidence ID: E-IN-REGISTRATION
 Source ID: NHM-CHO
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -434,6 +474,8 @@ Candidate checksum: 059cacced965f62696c7831fc27d2e43068cd88d031d9c2cfa14742655ec
 - Profiles: `none`
 - Catalogue items: `ANC-CHECKS`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -463,7 +505,11 @@ Candidate checksum: 059cacced965f62696c7831fc27d2e43068cd88d031d9c2cfa14742655ec
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-bfb237dc232c8b309fd9
@@ -497,6 +543,8 @@ Candidate checksum: bfb237dc232c8b309fd96459eef45faa3f1369123f7fcba141a0321603c3
 - Profiles: `P09, P10, P24, P36`
 - Catalogue items: `ANC-CHECKS`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -526,14 +574,19 @@ Candidate checksum: bfb237dc232c8b309fd96459eef45faa3f1369123f7fcba141a0321603c3
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-a62372f158dfc78f74e4
 Candidate ID: C-E-IN-ANC-TESTS
 Evidence ID: E-IN-ANC-TESTS
 Source ID: NHM-CHO
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -560,6 +613,8 @@ Candidate checksum: a62372f158dfc78f74e47089c72eb44569f8ca6ff8ff17080dc468a7355f
 - Profiles: `none`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -588,7 +643,11 @@ Candidate checksum: a62372f158dfc78f74e47089c72eb44569f8ca6ff8ff17080dc468a7355f
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-43a4e97d1f66c5c8b312
@@ -622,6 +681,8 @@ Candidate checksum: 43a4e97d1f66c5c8b312e0ce647df07df604412b56effb47a5518ad5e6e0
 - Profiles: `none`
 - Catalogue items: `PNC-DAY-1, PNC-DAY-14, PNC-DAY-21, PNC-DAY-28, PNC-DAY-3, PNC-DAY-42, PNC-DAY-7`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -651,7 +712,11 @@ Candidate checksum: 43a4e97d1f66c5c8b312e0ce647df07df604412b56effb47a5518ad5e6e0
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-2838a25b0435a21e3130
@@ -685,6 +750,8 @@ Candidate checksum: 2838a25b0435a21e3130cb6b71f31da55f3e72f6c65a80c52a1f10db1338
 - Profiles: `PPD1`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -713,7 +780,11 @@ Candidate checksum: 2838a25b0435a21e3130cb6b71f31da55f3e72f6c65a80c52a1f10db1338
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-a842861ca186c2d3a431
@@ -747,6 +818,8 @@ Candidate checksum: a842861ca186c2d3a4313a5a69f8fbe9d41405d573ce2c795239747083d9
 - Profiles: `PPD3`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -775,7 +848,11 @@ Candidate checksum: a842861ca186c2d3a4313a5a69f8fbe9d41405d573ce2c795239747083d9
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-3a6caf113d05d8188702
@@ -809,6 +886,8 @@ Candidate checksum: 3a6caf113d05d81887020ccc6b81a9bdad8db5f82198a3e63fb5024f97ea
 - Profiles: `PPD7`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -837,7 +916,11 @@ Candidate checksum: 3a6caf113d05d81887020ccc6b81a9bdad8db5f82198a3e63fb5024f97ea
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-a96a1155952b4ce2daa8
@@ -898,6 +981,8 @@ A checked box in this exported document does not change publication state. The n
 - Profiles: `P09, P10, P24, P36`
 - Catalogue items: `FOOD-FRUIT`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -927,14 +1012,19 @@ A checked box in this exported document does not change publication state. The n
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-217ecfedf0f1b7f574bf
 Candidate ID: C-E-IN-FOOD
 Evidence ID: E-IN-FOOD
 Source ID: NHM-MOTHERHOOD
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -961,6 +1051,8 @@ Candidate checksum: 217ecfedf0f1b7f574bf5bf542482365d0fcbe4e918aabceafb49f56eaf2
 - Profiles: `none`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -989,7 +1081,11 @@ Candidate checksum: 217ecfedf0f1b7f574bf5bf542482365d0fcbe4e918aabceafb49f56eaf2
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-136828c014659afee522
@@ -1023,6 +1119,8 @@ Candidate checksum: 136828c014659afee522ad5a777b94b02bbb3edc65a74fdbbdf2e6a206d0
 - Profiles: `PP01, PP06`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -1051,14 +1149,19 @@ Candidate checksum: 136828c014659afee522ad5a777b94b02bbb3edc65a74fdbbdf2e6a206d0
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-91c6e3f3c23c7774b024
 Candidate ID: C-E-IN-REST-PP
 Evidence ID: E-IN-REST-PP
 Source ID: NHM-MOTHERHOOD
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -1085,6 +1188,8 @@ Candidate checksum: 91c6e3f3c23c7774b0244eab55107722904712947b54155f79f5433cb38c
 - Profiles: `none`
 - Catalogue items: `FOOD-CURD, FOOD-MILK, FOOD-PANEER`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -1114,7 +1219,11 @@ Candidate checksum: 91c6e3f3c23c7774b0244eab55107722904712947b54155f79f5433cb38c
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-d5a69ed18c2ed1936b2e
@@ -1148,6 +1257,8 @@ Candidate checksum: d5a69ed18c2ed1936b2eb44b51edd708047af8c2a68f19c5dd39a2801a0a
 - Profiles: `P09, P10, P24, P36`
 - Catalogue items: `FOOD-GRAINS, FOOD-PULSES`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -1177,14 +1288,19 @@ Candidate checksum: d5a69ed18c2ed1936b2eb44b51edd708047af8c2a68f19c5dd39a2801a0a
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-1c40d463148587f7f2ed
 Candidate ID: C-E-IN-FOOD-GRAINS
 Evidence ID: E-IN-FOOD-GRAINS
 Source ID: NHM-MOTHERHOOD
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -1211,6 +1327,8 @@ Candidate checksum: 1c40d463148587f7f2edaae2dda632582b4b7abaa3a63e0ec1bf6b40cabb
 - Profiles: `P09, P10, P24, P36`
 - Catalogue items: `FOOD-GREENS`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -1240,14 +1358,19 @@ Candidate checksum: 1c40d463148587f7f2edaae2dda632582b4b7abaa3a63e0ec1bf6b40cabb
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-3e0ef5cc691249acf89e
 Candidate ID: C-E-IN-FOOD-GREENS
 Evidence ID: E-IN-FOOD-GREENS
 Source ID: NHM-MOTHERHOOD
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -1274,6 +1397,8 @@ Candidate checksum: 3e0ef5cc691249acf89e932999f87097907a56edba7e1422c4cebbdb8e08
 - Profiles: `none`
 - Catalogue items: `FOOD-CHICKEN, FOOD-EGG, FOOD-FISH`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -1303,7 +1428,11 @@ Candidate checksum: 3e0ef5cc691249acf89e932999f87097907a56edba7e1422c4cebbdb8e08
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-8a03e0bb56284628b8e5
@@ -1337,6 +1466,8 @@ Candidate checksum: 8a03e0bb56284628b8e54dbfd14cf0639d93a2e87f43176b9173c9f57635
 - Profiles: `none`
 - Catalogue items: `FOOD-NUTS, FOOD-SOYA`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -1366,7 +1497,11 @@ Candidate checksum: 8a03e0bb56284628b8e54dbfd14cf0639d93a2e87f43176b9173c9f57635
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-bcc5338f9278b909988f
@@ -1400,6 +1535,8 @@ Candidate checksum: bcc5338f9278b909988fa2fc7c9958bfadd7c4e0b7df6a88cef1e379e25a
 - Profiles: `PPD0`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -1428,7 +1565,11 @@ Candidate checksum: bcc5338f9278b909988fa2fc7c9958bfadd7c4e0b7df6a88cef1e379e25a
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-ffed1ea90fb72457a063
@@ -1462,6 +1603,8 @@ Candidate checksum: ffed1ea90fb72457a06389b3e9d9d08bbbc7f0ed92f1597309c910de4b79
 - Profiles: `PPD0, PPD1, PPD2, PPD3, PPD4, PPD5, PPD6, PPD7`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -1490,7 +1633,11 @@ Candidate checksum: ffed1ea90fb72457a06389b3e9d9d08bbbc7f0ed92f1597309c910de4b79
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-d368d2f53ced8aea14c3
@@ -1524,6 +1671,8 @@ Candidate checksum: d368d2f53ced8aea14c3558a531d2dfc23f39501756348456baac8614cf1
 - Profiles: `PPD0, PPD1, PPD2, PPD3, PPD4, PPD5, PPD6, PPD7`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -1552,7 +1701,11 @@ Candidate checksum: d368d2f53ced8aea14c3558a531d2dfc23f39501756348456baac8614cf1
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-3b722f2c58264d6e7dcf
@@ -1586,6 +1739,8 @@ Candidate checksum: 3b722f2c58264d6e7dcf65cd89ff5c969491c2a5692d8875caa1dc6d1670
 - Profiles: `none`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -1614,7 +1769,11 @@ Candidate checksum: 3b722f2c58264d6e7dcf65cd89ff5c969491c2a5692d8875caa1dc6d1670
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-dff84e7ca466288bfe4c
@@ -1648,6 +1807,8 @@ Candidate checksum: dff84e7ca466288bfe4c70d3741e908651c9ec2d3c3ff7b8456e2eb51449
 - Profiles: `none`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -1676,7 +1837,11 @@ Candidate checksum: dff84e7ca466288bfe4c70d3741e908651c9ec2d3c3ff7b8456e2eb51449
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-9c831475bbccd05a809b
@@ -1736,6 +1901,8 @@ A checked box in this exported document does not change publication state. The n
 - Profiles: `PP01, PP06, PP12`
 - Catalogue items: `MOVE-PP-CONSULT`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -1764,14 +1931,19 @@ A checked box in this exported document does not change publication state. The n
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-d7a6ab35600616505571
 Candidate ID: C-E-PP-MOVEMENT-QUESTION
 Evidence ID: E-PP-MOVEMENT-QUESTION
 Source ID: NHS-PP-ACTIVE
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -1798,6 +1970,8 @@ Candidate checksum: d7a6ab35600616505571507fb9876075ec4625240a3211f44180e7411df4
 - Profiles: `PP01, PP06, PP12`
 - Catalogue items: `WELL-PP-REST`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -1826,14 +2000,19 @@ Candidate checksum: d7a6ab35600616505571507fb9876075ec4625240a3211f44180e7411df4
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-ab9c6a8121188e53c181
 Candidate ID: C-E-PP-MIND-REST
 Evidence ID: E-PP-MIND-REST
 Source ID: NHS-PP-ACTIVE
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -1860,6 +2039,8 @@ Candidate checksum: ab9c6a8121188e53c18158c749086d9ebca22b773c97c6ad3f7173313c9f
 - Profiles: `PP01, PP06, PP12`
 - Catalogue items: `WELL-PP-TALK`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -1888,14 +2069,19 @@ Candidate checksum: ab9c6a8121188e53c18158c749086d9ebca22b773c97c6ad3f7173313c9f
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-cede4dd7a7d4cb23f32a
 Candidate ID: C-E-PP-MIND-TALK
 Evidence ID: E-PP-MIND-TALK
 Source ID: NHS-PP-ACTIVE
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -1922,6 +2108,8 @@ Candidate checksum: cede4dd7a7d4cb23f32a6f52c23dbe87d53831ddadb4f558436b75072d79
 - Profiles: `PP01, PP06, PP12`
 - Catalogue items: `MOVE-PP-STRETCH, MOVE-PP-WALK`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -1950,14 +2138,19 @@ Candidate checksum: cede4dd7a7d4cb23f32a6f52c23dbe87d53831ddadb4f558436b75072d79
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-d55e6eaf9fa6a3910659
 Candidate ID: C-E-PP-GENTLE-MOVEMENT
 Evidence ID: E-PP-GENTLE-MOVEMENT
 Source ID: NHS-PP-ACTIVE
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -1984,6 +2177,8 @@ Candidate checksum: d55e6eaf9fa6a39106598cae888a628d17d77eb2059f8b8ff746c0c29fb8
 - Profiles: `PP01, PP06, PP12`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -2011,14 +2206,19 @@ Candidate checksum: d55e6eaf9fa6a39106598cae888a628d17d77eb2059f8b8ff746c0c29fb8
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-08627e8fd9c2176f011c
 Candidate ID: C-E-PP-PERSISTENT-CONCERN
 Evidence ID: E-PP-PERSISTENT-CONCERN
 Source ID: NHS-PP-ACTIVE
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -2045,6 +2245,8 @@ Candidate checksum: 08627e8fd9c2176f011c541774b0a659696fdabdf52799d821795fac5896
 - Profiles: `PP01, PP06, PP12`
 - Catalogue items: `WELL-PP-KINDNESS`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -2073,14 +2275,19 @@ Candidate checksum: 08627e8fd9c2176f011c541774b0a659696fdabdf52799d821795fac5896
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-fc7b4ad5e946d2871f88
 Candidate ID: C-E-PP-ASK-HELP
 Evidence ID: E-PP-ASK-HELP
 Source ID: NHS-PP-ACTIVE
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -2133,6 +2340,8 @@ A checked box in this exported document does not change publication state. The n
 - Profiles: `PP06, PP12`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -2160,7 +2369,11 @@ A checked box in this exported document does not change publication state. The n
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-76223b6e3db0177d3034
@@ -2220,6 +2433,8 @@ A checked box in this exported document does not change publication state. The n
 - Profiles: `PP01, PP06, PP12`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -2247,14 +2462,19 @@ A checked box in this exported document does not change publication state. The n
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-7e9058cc6079480b1a62
 Candidate ID: C-E-PP-DIET
 Evidence ID: E-PP-DIET
 Source ID: NHS-PP-DIET
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -2307,6 +2527,8 @@ A checked box in this exported document does not change publication state. The n
 - Profiles: `PP01, PP06, PP12`
 - Catalogue items: `WELL-PP-SUPPORT`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -2335,14 +2557,19 @@ A checked box in this exported document does not change publication state. The n
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-f20e639a975950a1d27a
 Candidate ID: C-E-PP-PRACTICAL-HELP
 Evidence ID: E-PP-PRACTICAL-HELP
 Source ID: NHS-PP-SUPPORT
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -2395,6 +2622,8 @@ A checked box in this exported document does not change publication state. The n
 - Profiles: `P09, P10, P24, P36`
 - Catalogue items: `WELL-PREG-FEELINGS`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -2423,14 +2652,19 @@ A checked box in this exported document does not change publication state. The n
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-339bc693632d7454391d
 Candidate ID: C-E-PREG-TALK
 Evidence ID: E-PREG-TALK
 Source ID: NHS-PREG-MIND
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -2457,6 +2691,8 @@ Candidate checksum: 339bc693632d7454391dba814571af49e04f7af6d4a517a83d60c157adb9
 - Profiles: `P09, P10, P24, P36`
 - Catalogue items: `WELL-PREG-ENJOY`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -2485,14 +2721,19 @@ Candidate checksum: 339bc693632d7454391dba814571af49e04f7af6d4a517a83d60c157adb9
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-5efbb9d4c28f4307a7fb
 Candidate ID: C-E-PREG-ENJOY
 Evidence ID: E-PREG-ENJOY
 Source ID: NHS-PREG-MIND
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -2545,6 +2786,8 @@ A checked box in this exported document does not change publication state. The n
 - Profiles: `P09, P10, P24, P36`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -2572,14 +2815,19 @@ A checked box in this exported document does not change publication state. The n
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-d39505d2e4c7e7b722c4
 Candidate ID: C-E-FOOD-HYGIENE
 Evidence ID: E-FOOD-HYGIENE
 Source ID: OWH-HEALTH
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -2606,6 +2854,8 @@ Candidate checksum: d39505d2e4c7e7b722c4be32742e24ec511b3f8db9b53e177d3079b3b3bc
 - Profiles: `P09, P10, P24, P36`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -2633,14 +2883,19 @@ Candidate checksum: d39505d2e4c7e7b722c4be32742e24ec511b3f8db9b53e177d3079b3b3bc
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-9171d005e40390e49409
 Candidate ID: C-E-MOVEMENT-CONSULT
 Evidence ID: E-MOVEMENT-CONSULT
 Source ID: OWH-HEALTH
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -2667,6 +2922,8 @@ Candidate checksum: 9171d005e40390e4940916e7b2d0f8683aa6e8a163964f9216a6c476df8b
 - Profiles: `none`
 - Catalogue items: `FOOD-CHICKEN, FOOD-CURD, FOOD-EGG, FOOD-FISH, FOOD-FRUIT, FOOD-GRAINS, FOOD-GREENS, FOOD-MILK, FOOD-NUTS, FOOD-PANEER, FOOD-PULSES, FOOD-SOYA`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -2695,7 +2952,11 @@ Candidate checksum: 9171d005e40390e4940916e7b2d0f8683aa6e8a163964f9216a6c476df8b
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-fbd3d8038d9175d3dda9
@@ -2729,6 +2990,8 @@ Candidate checksum: fbd3d8038d9175d3dda96cbc3553ca3e8d32023f9171d945003899b390d0
 - Profiles: `P09, P10, P24, P36`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -2756,14 +3019,19 @@ Candidate checksum: fbd3d8038d9175d3dda96cbc3553ca3e8d32023f9171d945003899b390d0
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-80df28d01f7c24fe6b8a
 Candidate ID: C-E-PREG-FOOD-AVOID
 Evidence ID: E-PREG-FOOD-AVOID
 Source ID: OWH-HEALTH
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -2790,6 +3058,8 @@ Candidate checksum: 80df28d01f7c24fe6b8ad7ce85d4fbdf94f7811549108669a5ffcdefc02b
 - Profiles: `P09, P10, P24, P36`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -2817,14 +3087,19 @@ Candidate checksum: 80df28d01f7c24fe6b8ad7ce85d4fbdf94f7811549108669a5ffcdefc02b
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-e9a6b716570ed5b1e9b8
 Candidate ID: C-E-PREG-MEDICINE-BOUNDARY
 Evidence ID: E-PREG-MEDICINE-BOUNDARY
 Source ID: OWH-HEALTH
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -2851,6 +3126,8 @@ Candidate checksum: e9a6b716570ed5b1e9b8c6dcc73f5d5c83c99322c3b91e578d08d9f12c6e
 - Profiles: `P09, P10, P24, P36`
 - Catalogue items: `MOVE-LOW-IMPACT, MOVE-SWIM, MOVE-WALK`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -2879,14 +3156,19 @@ Candidate checksum: e9a6b716570ed5b1e9b8c6dcc73f5d5c83c99322c3b91e578d08d9f12c6e
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-a744138f53722bafa498
 Candidate ID: C-E-PREG-MOVEMENT-OPTIONS
 Evidence ID: E-PREG-MOVEMENT-OPTIONS
 Source ID: OWH-HEALTH
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -2913,6 +3195,8 @@ Candidate checksum: a744138f53722bafa4982cabf30c9ecc2799c118e4be3082b3d09af4e766
 - Profiles: `P09, P10, P24, P36`
 - Catalogue items: `MOVE-LOW-IMPACT, MOVE-SWIM, MOVE-WALK`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -2941,14 +3225,19 @@ Candidate checksum: a744138f53722bafa4982cabf30c9ecc2799c118e4be3082b3d09af4e766
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-fb20021d2bdde298f1a7
 Candidate ID: C-E-PREG-MOVEMENT-PACE
 Evidence ID: E-PREG-MOVEMENT-PACE
 Source ID: OWH-HEALTH
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -2975,6 +3264,8 @@ Candidate checksum: fb20021d2bdde298f1a7fe19a376329c6e613d301397f6d450e3183bcda8
 - Profiles: `P09, P10, P24, P36`
 - Catalogue items: `MOVE-LOW-IMPACT, MOVE-SWIM, MOVE-WALK`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -3003,14 +3294,19 @@ Candidate checksum: fb20021d2bdde298f1a7fe19a376329c6e613d301397f6d450e3183bcda8
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-8d49aa866c092bca5fe6
 Candidate ID: C-E-PREG-MOVEMENT-STOP
 Evidence ID: E-PREG-MOVEMENT-STOP
 Source ID: OWH-HEALTH
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -3063,6 +3359,8 @@ A checked box in this exported document does not change publication state. The n
 - Profiles: `none`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -3089,7 +3387,11 @@ A checked box in this exported document does not change publication state. The n
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-1b2b012ff77e5e6acc29
@@ -3123,6 +3425,8 @@ Candidate checksum: 1b2b012ff77e5e6acc2967d173beb352bdd4d47ae6d22fdecba2a2767664
 - Profiles: `none`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -3149,7 +3453,11 @@ Candidate checksum: 1b2b012ff77e5e6acc2967d173beb352bdd4d47ae6d22fdecba2a2767664
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-dcf3f978e9718a5a7559
@@ -3209,6 +3517,8 @@ A checked box in this exported document does not change publication state. The n
 - Profiles: `P01`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -3236,7 +3546,11 @@ A checked box in this exported document does not change publication state. The n
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-7774b0b8b978a642c05a
@@ -3270,6 +3584,8 @@ Candidate checksum: 7774b0b8b978a642c05a5cdf09fc7fa8ca43286f3d896e653b5a7efb2bb4
 - Profiles: `none`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -3297,7 +3613,11 @@ Candidate checksum: 7774b0b8b978a642c05a5cdf09fc7fa8ca43286f3d896e653b5a7efb2bb4
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-6c2bb329513583654e27
@@ -3331,6 +3651,8 @@ Candidate checksum: 6c2bb329513583654e27ed7f28aa320497f5a336b3ff28f9af2647d16904
 - Profiles: `P24`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -3358,7 +3680,11 @@ Candidate checksum: 6c2bb329513583654e27ed7f28aa320497f5a336b3ff28f9af2647d16904
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-11cb2913d6c8531bd89d
@@ -3392,6 +3718,8 @@ Candidate checksum: 11cb2913d6c8531bd89d14406cf7a40a87138fad3645129bae7639daa4b8
 - Profiles: `P36`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -3419,7 +3747,11 @@ Candidate checksum: 11cb2913d6c8531bd89d14406cf7a40a87138fad3645129bae7639daa4b8
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-b8524bf1668af20b1719
@@ -3479,6 +3811,8 @@ A checked box in this exported document does not change publication state. The n
 - Profiles: `PC00`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, clinical, india_localisation`
 
 **Exact selected source text**
 
@@ -3506,14 +3840,19 @@ A checked box in this exported document does not change publication state. The n
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for PC00. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PC00. Final rendered visual review remains pending.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-abdc2b2a6fe6fb8e9350
 Candidate ID: C-E-TEST
 Evidence ID: E-TEST
 Source ID: OWH-TEST
-Role: licence | content | clinical | india_localisation | product
+Role: licence | clinical | india_localisation
 Decision: accepted | changes_requested | rejected | needs_specialist_review
 Reviewer name:
 Reviewer capacity/qualification:
@@ -3566,6 +3905,8 @@ A checked box in this exported document does not change publication state. The n
 - Profiles: `none`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -3592,7 +3933,11 @@ A checked box in this exported document does not change publication state. The n
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-44ed32e51114a1ae82b5
@@ -3626,6 +3971,8 @@ Candidate checksum: 44ed32e51114a1ae82b59e28161785d6748bb6e8749d8938db9b2b08ed3e
 - Profiles: `none`
 - Catalogue items: `none`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -3652,7 +3999,11 @@ Candidate checksum: 44ed32e51114a1ae82b59e28161785d6748bb6e8749d8938db9b2b08ed3e
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-54a3639b0dd48b7bb034
@@ -3712,6 +4063,8 @@ A checked box in this exported document does not change publication state. The n
 - Profiles: `P24, P36`
 - Catalogue items: `ANC-PMSMA`
 - Required review roles: `licence, content, clinical, india_localisation, product`
+- Current task status: `pending`
+- Pending review roles: `licence, content, clinical, india_localisation, product`
 
 **Exact selected source text**
 
@@ -3739,7 +4092,11 @@ A checked box in this exported document does not change publication state. The n
 - [ ] catalogue links
 - [ ] reuse and attribution
 
-**Record one decision per reviewer role**
+**Recorded governed decisions**
+
+- None.
+
+**Record one decision for each pending reviewer role**
 
 ```text
 Task ID: REV-24a1dde66fc57afaf702

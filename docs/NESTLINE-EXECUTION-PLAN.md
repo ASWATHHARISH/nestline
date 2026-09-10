@@ -10,7 +10,10 @@
 
 **Repository:** https://github.com/kajalchourasia-cmd/nestline
 
-**Implementation status:** Stage 0 data contracts and validation have started. See [Stage 0 handoff](STAGE-0-HANDOFF.md). Other stages remain open until their acceptance evidence is recorded.
+**Implementation status:** Stage 0's draft data foundation, Stage 1 engineering and
+the Stage 2 Supabase foundation are implemented. Kajal's content/product decisions
+for the first `PC00`/`P10`/`PP01` slice are recorded; specialist and release reviews
+remain open. See [project progress](PROJECT-PROGRESS.md).
 
 ## 1. The outcome we are building toward
 
@@ -158,6 +161,13 @@ source currency and clinical/local interpretation still need resolution, exact
 human approvals are missing, and comparisons lack verified dimensions. The
 review/publication gate is still Stage 0 work, not a later-stage promise.
 
+11 September product/content pass: Kajal accepted the wording, placement and
+conditional behaviour for the 27 exact evidence tasks behind `PC00`, `P10` and
+`PP01`. The governed Stage 1 ledger records 54 decisions. The attached comparison
+sequence was applied, but all 42 comparisons remain hidden pending measurement,
+object-dimension, clinical, localisation and licence verification. This is a
+partial review milestone; the unchecked full-release item above remains open.
+
 **Exit:** no published claim lacks approved evidence; P10/P09 applicability traps fail safely; month-only requests do not acquire an invented exact week. Team review must not be labeled clinical review unless it actually occurred.
 
 ### S1 — Governed public ingestion · 6–10 hours
@@ -168,9 +178,10 @@ review/publication gate is still Stage 0 work, not a later-stage promise.
 - [x] Provide a dry-run report showing rejected, changed, duplicate, review-required and publishable units.
 
 Engineering complete on 10 September 2026: all 55 unique passages across 14
-evidence-bearing sources resolve to source blocks. All remain review-required,
-therefore no production embeddings or public corpus were created. Publication is
-waiting on the existing Stage 0 human review gate, not hidden as later work.
+evidence-bearing sources resolve to source blocks. On 11 September, Kajal's 54
+content/product decisions were attached to 27 current tasks. All tasks remain
+review-required until their remaining roles are complete; no production embeddings
+or public corpus were created.
 
 **Exit:** ingesting the same source twice creates no duplicates; rejected sources cannot appear in retrieval; every returned citation resolves to the stored supporting passage. No live web search is used for runtime health answers.
 
