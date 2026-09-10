@@ -14,3 +14,4 @@ reports/local/
 data/ingestion/artifacts/
 data/ingestion/staging/
 data/ingestion/corpora/
+supabase/.temp/

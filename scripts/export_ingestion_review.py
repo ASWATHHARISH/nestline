@@ -42,15 +42,30 @@ def render(run: IngestionRun) -> str:
                       f"- Future personal facts: `{', '.join(candidate.personal_fact_dependencies)}`",
                       f"- Profiles: `{', '.join(candidate.linked_profile_ids) or 'none'}`",
                       f"- Catalogue items: `{', '.join(candidate.linked_catalogue_item_ids) or 'none'}`",
+                      f"- Required review roles: `{', '.join(task.required_roles)}`",
                       "", "**Exact selected source text**", "", f"> {candidate.original_text}", "",
                       "**Why it is blocked**", ""])
         lines.extend(f"- {reason}" for reason in task.blocking_reasons)
         lines.extend(["", "**Reviewer checklist**", ""])
         lines.extend(f"- [ ] {check.replace('_', ' ')}" for check in task.required_checks)
-        lines.extend(["", "Decision: [ ] approve  [ ] reject  Reviewer: __________  Date: __________", ""])
+        lines.extend(["", "**Record one decision per reviewer role**", "",
+                      "```text",
+                      f"Task ID: {task.task_id}",
+                      f"Candidate ID: {task.candidate_id}",
+                      f"Evidence ID: {task.evidence_id}",
+                      f"Source ID: {task.source_id}",
+                      "Role: licence | content | clinical | india_localisation | product",
+                      "Decision: accepted | changes_requested | rejected | needs_specialist_review",
+                      "Reviewer name:", "Reviewer capacity/qualification:", "Review date: YYYY-MM-DD",
+                      "Reason:", "Exact replacement wording (when changing):",
+                      "Supporting reference:", "Timing/week change:", "Condition change:",
+                      "Jurisdiction change:", f"Candidate checksum: {task.candidate_checksum}",
+                      "```", ""])
     lines.extend(["", "A checked box in this exported document does not change publication state. "
                   "The named decision must be entered into the governed source, evidence, fragment, "
-                  "profile and catalogue records, then the ingestion run must be repeated.", ""])
+                  "profile and catalogue records, then the ingestion run must be repeated. "
+                  "Machine-readable decisions belong in data/reviews/ingestion_decisions.json; "
+                  "the ingestion command rejects unknown task IDs and changed checksums.", ""])
     return "\n".join(lines)
 
 

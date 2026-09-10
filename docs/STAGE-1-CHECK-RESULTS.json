@@ -1,7 +1,7 @@
 {
-  "checked_at_utc": "2026-09-10T13:54:19.356345+00:00",
-  "execution": "Local engineering checks and previously captured exact-source dry runs",
-  "tests_run": 95,
+  "checked_at_utc": "2026-09-10T18:53:45.524615+00:00",
+  "execution": "Clean-checkout engineering checks and tracked exact-source audit",
+  "tests_run": 113,
   "checks": {
     "software_tests": {
       "arguments": [
@@ -14,7 +14,7 @@
       ],
       "exit_code": 0,
       "stdout": "",
-      "stderr": "----------------------------------------------------------------------\nRan 95 tests in 0.807s\n\nOK"
+      "stderr": "----------------------------------------------------------------------\nRan 113 tests in 1.037s\n\nOK"
     },
     "dependencies": {
       "arguments": [
@@ -28,8 +28,9 @@
     },
     "foundation_errors": [],
     "ingestion_schema_present": true,
-    "saved_source_dry_runs": {
-      "saved_run_count": 14,
+    "canonical_source_audit": {
+      "present": true,
+      "source_count": 14,
       "source_ids": [
         "BHC-WEEKS",
         "NHM-CHO",
@@ -48,6 +49,7 @@
       ],
       "candidate_count": 55,
       "verified_anchor_count": 55,
+      "governed_block_count": 72,
       "review_task_count": 55,
       "embedding_count": 0,
       "error_count": 0,
@@ -67,11 +69,9 @@
         "OWH-WELLBEING": "review_required",
         "PIB-PMSMA": "review_required"
       },
-      "missing_evidence_ids": [],
-      "expected_fixed_quote_missing_ids": [],
-      "unexpected_missing_ids": [],
-      "malformed_run_files": []
-    }
+      "foundation_release_fingerprint": "86983b50de3af506cc7f1ff34ea31604b5efd97a0ffce2d001fa48e9ee97131c"
+    },
+    "canonical_source_audit_errors": []
   },
   "release_state": {
     "public_corpus_published": false,

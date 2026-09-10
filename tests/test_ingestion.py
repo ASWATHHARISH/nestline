@@ -14,10 +14,12 @@ import fitz
 from app.schemas.content import ContentBundle
 from app.schemas.foundation import CatalogueItem
 from app.schemas.ingestion import (CorpusManifest, DevelopmentMeasurement,
-                                   EvidenceCandidate, EvidenceReviewTask,
-                                   IngestionRun)
+                                   EvidenceCandidate, EvidenceReviewDecision,
+                                   EvidenceReviewTask, IngestionRun, ParsedBlock,
+                                   Stage1Audit, Stage1ReviewLedger)
 from app.services.embeddings import DeterministicTestEmbeddingProvider
-from app.services.ingestion_store import publish_corpus, write_source_artifact, write_staging_run
+from app.services.ingestion_store import (latest_staging_run, publish_corpus,
+                                          write_source_artifact, write_staging_run)
 from app.services.public_ingestion import (admission_for, development_measurements_for,
                                            run_ingestion)
 from app.services.public_parsers import normalize_text, parse_html, parse_pdf
@@ -106,6 +108,15 @@ def approved_bundle() -> ContentBundle:
     return ContentBundle.model_validate_json(json.dumps(payload))
 
 
+def review_bundle() -> ContentBundle:
+    """Return the same synthetic content with every publishable layer held in draft."""
+    payload = approved_bundle().model_dump(mode="json")
+    for collection in ("evidence", "fragments", "profiles"):
+        payload[collection][0]["status"] = "draft"
+        payload[collection][0]["review"] = None
+    return ContentBundle.model_validate_json(json.dumps(payload))
+
+
 def food_catalogue(status="published", blockers=None):
     return CatalogueItem(item_id="TEST-FOOD", kind="food", title="Test food",
                          description="Synthetic catalogue link.",
@@ -183,10 +194,14 @@ class IngestionTests(unittest.TestCase):
     def test_exported_schema_matches_stage1_contracts(self):
         exported = json.loads((ROOT / "data/schemas/ingestion.schema.json").read_text(encoding="utf-8"))
         expected = {"$schema": "https://json-schema.org/draft/2020-12/schema",
-                    "records": {"evidence_candidate": EvidenceCandidate.model_json_schema(),
+                    "records": {"parsed_block": ParsedBlock.model_json_schema(),
+                                "evidence_candidate": EvidenceCandidate.model_json_schema(),
+                                "evidence_review_decision": EvidenceReviewDecision.model_json_schema(),
                                 "evidence_review_task": EvidenceReviewTask.model_json_schema(),
+                                "stage1_review_ledger": Stage1ReviewLedger.model_json_schema(),
                                 "ingestion_run": IngestionRun.model_json_schema(),
-                                "corpus_manifest": CorpusManifest.model_json_schema()}}
+                                "corpus_manifest": CorpusManifest.model_json_schema(),
+                                "stage1_audit": Stage1Audit.model_json_schema()}}
         self.assertEqual(exported, expected)
 
     def test_approved_source_creates_one_cited_embedding_and_future_metadata(self):
@@ -205,16 +220,11 @@ class IngestionTests(unittest.TestCase):
         self.assertTrue({"allergies", "dietary_restrictions", "medical_history"}
                         <= set(candidate.personal_fact_dependencies))
         self.assertEqual(candidate.original_text, TEXT)
+        self.assertEqual({block.block_id for block in run.governed_blocks},
+                         set(candidate.source_block_ids))
 
     def test_draft_records_enter_review_queue_and_never_embeddings(self):
-        payload = approved_bundle().model_dump(mode="json")
-        payload["evidence"][0]["status"] = "draft"
-        payload["evidence"][0]["review"] = None
-        payload["fragments"][0]["status"] = "draft"
-        payload["fragments"][0]["review"] = None
-        payload["profiles"][0]["status"] = "draft"
-        payload["profiles"][0]["review"] = None
-        run = run_ingestion(ContentBundle.model_validate_json(json.dumps(payload)), "TEST-SOURCE", HTML,
+        run = run_ingestion(review_bundle(), "TEST-SOURCE", HTML,
                             retrieved_at=date(2026, 9, 10),
                             embedding_provider=FixtureEmbeddingProvider())
         self.assertEqual(run.outcome, "review_required")
@@ -302,6 +312,80 @@ class IngestionTests(unittest.TestCase):
         self.assertEqual(second.diff.invalidated_profile_ids, ["P10"])
         self.assertEqual(second.diff.invalidated_catalogue_item_ids, ["TEST-FOOD"])
         self.assertIn("public-source:TEST-SOURCE", second.diff.invalidate_cache_scopes)
+        self.assertEqual(second.candidates[0].state, "review_required")
+        self.assertEqual(second.outcome, "review_required")
+        self.assertFalse(second.embeddings)
+
+    def test_governance_change_without_new_bytes_forces_review(self):
+        first = run_ingestion(approved_bundle(), "TEST-SOURCE", HTML,
+                              retrieved_at=date(2026, 9, 10),
+                              embedding_provider=FixtureEmbeddingProvider())
+        payload = approved_bundle().model_dump(mode="json")
+        payload["sources"][0]["attribution_text"] = "Updated attribution requirement"
+        governed_update = ContentBundle.model_validate_json(json.dumps(payload))
+        second = run_ingestion(governed_update, "TEST-SOURCE", HTML,
+                               retrieved_at=date(2026, 9, 11), previous=first,
+                               embedding_provider=FixtureEmbeddingProvider())
+        self.assertNotEqual(first.candidates[0].source_governance_checksum,
+                            second.candidates[0].source_governance_checksum)
+        self.assertEqual(second.candidates[0].state, "review_required")
+        self.assertEqual(second.outcome, "review_required")
+        self.assertFalse(second.embeddings)
+
+    def test_cross_date_capture_keeps_one_logical_version(self):
+        first = run_ingestion(approved_bundle(), "TEST-SOURCE", HTML,
+                              retrieved_at=date(2026, 9, 10), as_of=date(2026, 9, 10),
+                              embedding_provider=FixtureEmbeddingProvider())
+        second = run_ingestion(approved_bundle(), "TEST-SOURCE", HTML,
+                               retrieved_at=date(2026, 9, 11), as_of=date(2026, 9, 11),
+                               previous=first, embedding_provider=FixtureEmbeddingProvider())
+        self.assertEqual(first.logical_version_id, second.logical_version_id)
+        self.assertNotEqual(first.run_id, second.run_id)
+        self.assertEqual(second.diff.unchanged_candidate_ids, ["C-TEST-EVIDENCE"])
+
+    def test_review_decisions_are_role_scoped_and_version_bound(self):
+        checksum = "a" * 64
+        accepted = EvidenceReviewDecision(
+            task_id="REV-TEST", candidate_id="C-TEST", evidence_id="E-TEST", source_id="S-TEST",
+            role="product", decision="accepted", reviewer_name="Test reviewer",
+            reviewer_capacity="TEST ONLY product fixture", reviewed_at=date(2026, 9, 10),
+            reason="Synthetic acceptance.", candidate_checksum=checksum)
+        task = EvidenceReviewTask(
+            task_id="REV-TEST", candidate_id="C-TEST", evidence_id="E-TEST",
+            source_id="S-TEST", candidate_checksum=checksum,
+            required_checks=["wording"], required_roles=["product", "clinical"],
+            blocking_reasons=["Synthetic pending role."], decisions=[accepted], status="pending")
+        self.assertEqual(task.decisions[0].role, "product")
+        with self.assertRaises(ValueError):
+            EvidenceReviewDecision(
+                task_id="REV-TEST", candidate_id="C-TEST", evidence_id="E-TEST", source_id="S-TEST",
+                role="clinical", decision="changes_requested", reviewer_name="Test reviewer",
+                reviewer_capacity="TEST ONLY clinical fixture", reviewed_at=date(2026, 9, 10),
+                reason="Change needed.", candidate_checksum=checksum)
+
+    def test_ingestion_attaches_only_current_task_decisions(self):
+        first = run_ingestion(review_bundle(), "TEST-SOURCE", HTML,
+                              retrieved_at=date(2026, 9, 10))
+        task = first.review_tasks[0]
+        decision = EvidenceReviewDecision(
+            task_id=task.task_id, candidate_id=task.candidate_id,
+            evidence_id=task.evidence_id, source_id=task.source_id,
+            role="product", decision="accepted", reviewer_name="Test reviewer",
+            reviewer_capacity="TEST ONLY product fixture", reviewed_at=date(2026, 9, 10),
+            reason="Placement is suitable for this synthetic test.",
+            candidate_checksum=task.candidate_checksum)
+        ledger = Stage1ReviewLedger(decisions=[decision])
+        second = run_ingestion(review_bundle(), "TEST-SOURCE", HTML,
+                               retrieved_at=date(2026, 9, 10),
+                               review_decisions=ledger.decisions)
+        self.assertEqual(second.review_tasks[0].decisions, [decision])
+        self.assertEqual(second.review_tasks[0].status, "pending")
+
+        stale = decision.model_copy(update={"task_id": "REV-STALE"})
+        with self.assertRaisesRegex(ValueError, "absent or stale"):
+            run_ingestion(review_bundle(), "TEST-SOURCE", HTML,
+                          retrieved_at=date(2026, 9, 10),
+                          review_decisions=[stale])
 
     def test_general_measurements_reject_incomplete_or_inverted_ranges(self):
         with self.assertRaises(ValueError):
@@ -341,6 +425,12 @@ class StorageTests(unittest.TestCase):
                              retrieved_at=date(2026, 9, 10), dry_run=False,
                              embedding_provider=provider or FixtureEmbeddingProvider())
 
+    @staticmethod
+    def _publish(runs, root, version):
+        with patch("app.services.ingestion_store.approval_errors", return_value=[]), \
+                patch("app.services.ingestion_store.release_fingerprint", return_value="a" * 64):
+            return publish_corpus(runs, root, version, governance_data=root)
+
     def test_staging_and_artifact_writes_are_idempotent(self):
         run = self._committed_run()
         with TemporaryDirectory() as folder:
@@ -354,21 +444,46 @@ class StorageTests(unittest.TestCase):
             self.assertEqual(write_source_artifact(run, HTML, root / "artifacts")[1], "unchanged")
             self.assertEqual(artifact.read_bytes(), HTML)
 
+    def test_latest_staging_run_is_automatic_and_source_scoped(self):
+        first = self._committed_run()
+        second = run_ingestion(approved_bundle(), "TEST-SOURCE", HTML,
+                               retrieved_at=date(2026, 9, 11), as_of=date(2026, 9, 11),
+                               dry_run=False, previous=first,
+                               embedding_provider=FixtureEmbeddingProvider())
+        with TemporaryDirectory() as folder:
+            root = Path(folder)
+            write_staging_run(first, root)
+            write_staging_run(second, root)
+            latest = latest_staging_run(root, "TEST-SOURCE")
+            self.assertEqual(latest.run_id, second.run_id)
+            self.assertIsNone(latest_staging_run(root, "OTHER-SOURCE"))
+
     def test_corpus_is_hashed_and_immutable(self):
         run = self._committed_run()
         with TemporaryDirectory() as folder:
             root = Path(folder)
-            manifest = publish_corpus([run], root, "corpus-test-v1")
+            manifest = self._publish([run], root, "corpus-test-v1")
             self.assertEqual(manifest.embedding_provider, "fixture-provider")
+            self.assertEqual(manifest.release_fingerprint, "a" * 64)
+            self.assertTrue((root / "corpus-test-v1/blocks.jsonl").exists())
             self.assertTrue((root / "corpus-test-v1/manifest.json").exists())
             with self.assertRaises(FileExistsError):
-                publish_corpus([run], root, "corpus-test-v1")
+                self._publish([run], root, "corpus-test-v1")
+
+    def test_corpus_publication_requires_current_five_role_release_gate(self):
+        run = self._committed_run()
+        with TemporaryDirectory() as folder, \
+                patch("app.services.ingestion_store.approval_errors",
+                      return_value=["release needs actual clinical approval"]):
+            with self.assertRaisesRegex(ValueError, "clinical approval"):
+                publish_corpus([run], Path(folder), "corpus-test-v1",
+                               governance_data=Path(folder))
 
     def test_test_vectors_can_never_be_published(self):
         run = self._committed_run(DeterministicTestEmbeddingProvider())
         with TemporaryDirectory() as folder:
             with self.assertRaisesRegex(ValueError, "test embeddings"):
-                publish_corpus([run], Path(folder), "corpus-test-v1")
+                self._publish([run], Path(folder), "corpus-test-v1")
 
     def test_fixed_quote_corpus_has_no_embeddings(self):
         payload = approved_bundle().model_dump(mode="json")
@@ -384,7 +499,7 @@ class StorageTests(unittest.TestCase):
         self.assertEqual(run.outcome, "publishable")
         self.assertFalse(run.embeddings)
         with TemporaryDirectory() as folder:
-            manifest = publish_corpus([run], Path(folder), "fixed-quote-v1")
+            manifest = self._publish([run], Path(folder), "fixed-quote-v1")
             self.assertEqual(manifest.embedding_provider, "none-fixed-quote-only")
             with self.assertRaisesRegex(ValueError, "governed excerpts"):
                 write_source_artifact(run, HTML, Path(folder) / "artifacts")
@@ -397,7 +512,7 @@ class StorageTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "dry-run"):
                 write_staging_run(run, Path(folder))
             with self.assertRaisesRegex(ValueError, "committed"):
-                publish_corpus([run], Path(folder), "corpus-test-v1")
+                self._publish([run], Path(folder), "corpus-test-v1")
 
 
 class CaptureTests(unittest.TestCase):

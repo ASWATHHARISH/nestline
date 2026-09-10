@@ -22,5 +22,7 @@ jobs:
       - run: python -m scripts.validate_content
       - run: python -m scripts.validate_content --require-review-ready
       - run: python -m scripts.run_contract_evals
+      - run: python -m scripts.check_stage1
+      - run: python -m scripts.check_stage2
       # Release readiness is intentionally a separate gate: draft shells must
       # remain legal during authoring. Unit tests verify release fails closed.

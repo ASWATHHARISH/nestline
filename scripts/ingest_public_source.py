@@ -6,10 +6,11 @@ import json
 import os
 from pathlib import Path
 
-from app.schemas.ingestion import IngestionRun
+from app.schemas.ingestion import IngestionRun, Stage1ReviewLedger
 from app.services.embeddings import OpenAICompatibleEmbeddingProvider
 from app.services.foundation import read_catalogues
-from app.services.ingestion_store import write_source_artifact, write_staging_run
+from app.services.ingestion_store import (latest_staging_run, write_source_artifact,
+                                          write_staging_run)
 from app.services.public_ingestion import admission_for, run_ingestion
 from app.services.public_parsers import TesseractCliOcrProvider
 from app.services.source_capture import MAX_SOURCE_BYTES, fetch_registered_source
@@ -29,6 +30,8 @@ def main(argv=None):
     parser.add_argument("--as-of", type=date.fromisoformat, default=date.today(),
                         help="date used for currency/review gates; defaults to today")
     parser.add_argument("--previous-run", type=Path)
+    parser.add_argument("--review-decisions", type=Path,
+                        help="schema-valid Stage 1 role-decision ledger")
     parser.add_argument("--commit-staging", action="store_true")
     parser.add_argument("--output", type=Path)
     parser.add_argument("--embedding-provider")
@@ -64,7 +67,8 @@ def main(argv=None):
                          indent=2))
         return 1
     previous = (IngestionRun.model_validate_json(args.previous_run.read_text(encoding="utf-8"))
-                if args.previous_run else None)
+                if args.previous_run else latest_staging_run(
+                    ROOT / "data/ingestion/staging", args.source_id))
     provider_values = [args.embedding_provider, args.embedding_url, args.embedding_model]
     provider = None
     if any(provider_values):
@@ -77,9 +81,16 @@ def main(argv=None):
                                                      api_key=key, model=args.embedding_model)
     ocr_provider = (TesseractCliOcrProvider(args.tesseract_path)
                     if args.tesseract_path else None)
+    review_decisions = []
+    if args.review_decisions:
+        ledger = Stage1ReviewLedger.model_validate_json(
+            args.review_decisions.read_text(encoding="utf-8"))
+        review_decisions = [decision for decision in ledger.decisions
+                            if decision.source_id == args.source_id]
     run = run_ingestion(bundle, args.source_id, raw, retrieved_at=args.retrieved_at,
                         dry_run=not args.commit_staging, previous=previous,
                         embedding_provider=provider, catalogue_items=read_catalogues(ROOT / "data"),
+                        review_decisions=review_decisions,
                         ocr_provider=ocr_provider, as_of=args.as_of)
     if args.commit_staging:
         path, write_state = write_staging_run(run, ROOT / "data/ingestion/staging")
@@ -97,8 +108,10 @@ def main(argv=None):
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(rendered, encoding="utf-8", newline="\n")
-    print(json.dumps({"run_id": run.run_id, "source_id": args.source_id, "outcome": run.outcome,
+    print(json.dumps({"run_id": run.run_id, "logical_version_id": run.logical_version_id,
+                      "source_id": args.source_id, "outcome": run.outcome,
                       "blocks": run.parsed_block_count, "candidates": len(run.candidates),
+                      "governed_blocks": len(run.governed_blocks),
                       "review_tasks": len(run.review_tasks), "embeddings": len(run.embeddings),
                       "issues": len(run.issues), "write_state": write_state,
                       "staging_path": str(path.relative_to(ROOT)) if path else None,

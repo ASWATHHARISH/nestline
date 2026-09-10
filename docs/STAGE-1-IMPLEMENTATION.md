@@ -1,6 +1,6 @@
 # Stage 1 — governed public ingestion
 
-Updated 10 September 2026. This is the technical source of truth for Stage 1.
+Updated 11 September 2026. This is the technical source of truth for Stage 1.
 
 ## Outcome
 
@@ -10,6 +10,11 @@ configured OCR for an image-only PDF, resolve each selected citation back to
 source blocks, attach downstream metadata, create a human review queue, create
 embeddings only for approved retrievable units, detect updates/duplicates and
 publish an immutable local corpus version.
+
+An independent handoff review identified seven engineering corrections and one
+environment-specific TLS check. All seven corrections are implemented. Verified
+TLS capture succeeded for all five OWH pages, so no certificate verification was
+disabled and no fallback was needed.
 
 The current health content is **not published**. All 55 unique evidence units
 still await real source/content/localisation/clinical/product decisions, so the
@@ -59,7 +64,7 @@ recommendation needs. It never puts a person's report into the public corpus.
 | 12 | General development-measurement contract kept separate from a user's scan values | 20 min | Done; exact P10 2.5 cm candidate captured, while fruit/object comparisons remain unverified |
 | 13 | Recommendation metadata and profile/fragment/catalogue links | 30 min | Done |
 | 14 | Pydantic validation and citation-to-block verification | 35 min | Done |
-| 15 | Human review queue with nine required checks and no automatic approval | 30 min | Done |
+| 15 | Five-role human review queue, reloadable structured decisions and no automatic approval | 30 min | Done |
 | 16 | Profile and recommendation catalogue linkage | 25 min | Done |
 | 17 | Original citation text, normalized search text and provider-neutral embedding adapter | 35 min | Done |
 | 18 | Duplicate detection, deterministic run IDs and idempotent writes | 35 min | Done |
@@ -74,7 +79,8 @@ completed together where one test exercised several contracts.
 
 ## Current dry-run evidence
 
-`docs/STAGE-1-CHECK-RESULTS.json` records the reproducible result:
+`docs/STAGE-1-CHECK-RESULTS.json` records the clean-checkout result from the
+tracked, text-free `data/ingestion/audit/stage1-source-audit.json`:
 
 - 14 source runs;
 - 55 unique candidate evidence units;
@@ -82,6 +88,31 @@ completed together where one test exercised several contracts.
 - 55 pending review tasks;
 - 0 parser/validation errors;
 - 0 embeddings and 0 published health records.
+
+For each source, the audit keeps the artifact hash, source version, parser name
+and version, stable logical version, evidence/candidate/checksum lists, separate
+selected-text and source-governance checksums, governed block IDs, exact review
+task IDs and outcome. It does not commit full copyrighted source documents.
+
+## Independent correction pass
+
+1. The feature branch was merged with the current upstream `main` without
+   removing the Stage 0 gates.
+2. The 14-source/55-passage audit moved from ignored local reports to a tracked,
+   text-free record; the Stage 1 checker now runs in CI.
+3. Governed parsed blocks are stored in every run and a published corpus writes
+   `blocks.jsonl`; every candidate block ID must resolve exactly.
+4. Changed bytes, source version or governed source permissions force renewed
+   review, clear embeddings and invalidate linked profiles, catalogues and caches.
+5. Review decisions preserve task/candidate/evidence/source IDs, checksum,
+   reviewer role/capacity, disposition, reason, references and exact requested
+   changes. The CLI rejects stale or mismatched decision ledgers.
+6. Corpus publication rechecks the current Stage 0 fingerprint and all five
+   separate release roles instead of trusting an ingestion flag.
+7. Logical source versions are stable across capture dates, and the CLI
+   automatically loads the latest same-source staged run for comparison.
+8. All five OWH sources were captured using normal verified TLS in the full
+   14-source rerun. No insecure TLS option exists in the capture workflow.
 
 During the dry run, Stage 1 caught a duplicated NHS evidence passage. The two
 different fragments now share one canonical evidence unit. No text or meaning was
@@ -125,6 +156,13 @@ information as permission.
 .venv/Scripts/python.exe -m scripts.export_ingestion_review `
   --run-directory reports/local `
   --output docs/STAGE-1-REVIEW-QUEUE.md
+
+# Reload role-specific reviewer decisions for one source
+.venv/Scripts/python.exe -m scripts.ingest_public_source `
+  --source-id NHM-MOTHERHOOD `
+  --input data/raw/nhm-motherhood.pdf `
+  --retrieved-at 2026-09-10 `
+  --review-decisions data/reviews/ingestion_decisions.json
 
 # Recreate the Stage 1 evidence report
 .venv/Scripts/python.exe -m scripts.check_stage1

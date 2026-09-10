@@ -4,7 +4,7 @@ Stage 2 will move these records into Supabase. These functions already fail on
 overwrites and use atomic file replacement for individual staging records.
 """
 
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from hashlib import sha256
 import json
 from pathlib import Path
@@ -13,6 +13,9 @@ from tempfile import NamedTemporaryFile
 from tempfile import mkdtemp
 
 from app.schemas.ingestion import CorpusManifest, IngestionRun
+from app.services.foundation import approval_errors, release_fingerprint
+
+REQUIRED_RELEASE_ROLES = ["licence", "content", "clinical", "india_localisation", "product"]
 
 
 def _json_bytes(value) -> bytes:
@@ -31,7 +34,9 @@ def write_staging_run(run: IngestionRun, root: Path) -> tuple[Path, str]:
     payload = _json_bytes(run.model_dump(mode="json"))
     if path.exists():
         existing = IngestionRun.model_validate_json(path.read_text(encoding="utf-8"))
-        same = (existing.artifact == run.artifact and existing.admission == run.admission
+        same = (existing.logical_version_id == run.logical_version_id
+                and existing.artifact == run.artifact and existing.admission == run.admission
+                and existing.governed_blocks == run.governed_blocks
                 and existing.candidates == run.candidates and existing.review_tasks == run.review_tasks
                 and existing.embeddings == run.embeddings
                 and existing.issues == run.issues and existing.diff == run.diff
@@ -44,6 +49,22 @@ def write_staging_run(run: IngestionRun, root: Path) -> tuple[Path, str]:
         stream.write(payload)
     temporary.replace(path)
     return path, "created"
+
+
+def latest_staging_run(root: Path, source_id: str) -> IngestionRun | None:
+    """Find the newest valid capture for one source; unrelated sources are ignored."""
+    matches = []
+    for path in root.glob("*.json") if root.exists() else []:
+        run = IngestionRun.model_validate_json(path.read_text(encoding="utf-8"))
+        if run.admission.source_id == source_id:
+            matches.append(run)
+    if not matches:
+        return None
+    return max(matches, key=lambda run: (
+        run.artifact.retrieved_at if run.artifact else date.min,
+        run.evaluated_at,
+        run.created_at,
+    ))
 
 
 def write_source_artifact(run: IngestionRun, raw: bytes, root: Path) -> tuple[Path, str]:
@@ -70,7 +91,13 @@ def write_source_artifact(run: IngestionRun, raw: bytes, root: Path) -> tuple[Pa
     return path, "created"
 
 
-def publish_corpus(runs: list[IngestionRun], root: Path, corpus_version: str) -> CorpusManifest:
+def publish_corpus(runs: list[IngestionRun], root: Path, corpus_version: str, *,
+                   governance_data: Path, as_of: date | None = None) -> CorpusManifest:
+    """Publish only against the current Stage 0 fingerprint and five approvals."""
+    gate_errors = approval_errors(governance_data, as_of or date.today())
+    if gate_errors:
+        raise ValueError("current Stage 0 release approvals are incomplete: " + "; ".join(gate_errors))
+    approved_fingerprint = release_fingerprint(governance_data)
     if not runs:
         raise ValueError("at least one ingestion run is required")
     if any(run.outcome != "publishable" or run.dry_run for run in runs):
@@ -88,6 +115,12 @@ def publish_corpus(runs: list[IngestionRun], root: Path, corpus_version: str) ->
     if any(embedding.provider == "TEST_ONLY" for embedding in embeddings):
         raise ValueError("test embeddings cannot be published")
     candidate_by_evidence = {candidate.evidence_id: candidate for candidate in candidates}
+    blocks = [block for run in runs for block in run.governed_blocks]
+    block_ids = [block.block_id for block in blocks]
+    if len(block_ids) != len(set(block_ids)):
+        raise ValueError("duplicate governed source block IDs across ingestion runs")
+    if {block_id for candidate in candidates for block_id in candidate.source_block_ids} != set(block_ids):
+        raise ValueError("published candidate source blocks are not exactly resolvable")
     if any(sha256(candidate.original_text.encode("utf-8")).hexdigest()
            != candidate.original_text_sha256 for candidate in candidates):
         raise ValueError("candidate citation text checksum is invalid")
@@ -107,12 +140,17 @@ def publish_corpus(runs: list[IngestionRun], root: Path, corpus_version: str) ->
         raise FileExistsError("corpus version already exists and is immutable")
     root.mkdir(parents=True, exist_ok=True)
     temporary = Path(mkdtemp(prefix=f".{corpus_version}-", dir=root))
+    block_bytes = _jsonl_bytes([block.model_dump(mode="json") for block in blocks])
     candidate_bytes = _jsonl_bytes([candidate.model_dump(mode="json") for candidate in candidates])
     embedding_bytes = _jsonl_bytes([embedding.model_dump(mode="json") for embedding in embeddings])
+    (temporary / "blocks.jsonl").write_bytes(block_bytes)
     (temporary / "candidates.jsonl").write_bytes(candidate_bytes)
     (temporary / "embeddings.jsonl").write_bytes(embedding_bytes)
     manifest = CorpusManifest(corpus_version=corpus_version, created_at=datetime.now(timezone.utc),
                               status="published", source_artifacts=[run.artifact for run in runs],
+                              release_fingerprint=approved_fingerprint,
+                              approval_roles=REQUIRED_RELEASE_ROLES,
+                              block_file_sha256=sha256(block_bytes).hexdigest(),
                               candidate_file_sha256=sha256(candidate_bytes).hexdigest(),
                               embedding_file_sha256=sha256(embedding_bytes).hexdigest(),
                               embedding_provider=provider, embedding_model=model,

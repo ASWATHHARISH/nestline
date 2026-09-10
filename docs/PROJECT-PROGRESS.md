@@ -1,6 +1,6 @@
 # Nestline: what exists, in plain language
 
-Updated 10 September 2026 after Kajal's correction review. This is the current
+Updated 11 September 2026 after the Stage 1 correction pass and Stage 2 deployment. This is the current
 status; earlier entries in the demo log are history.
 
 ## What the project is
@@ -119,7 +119,7 @@ it does not mean OCR or AI extraction works.
 
 ### 8. Checks, not an AI evaluation result
 
-There are 95 passing unit tests: the original 68 foundation tests plus 27 Stage 1
+There are 113 passing unit tests covering the foundation, corrected Stage 1
 ingestion tests. They try valid and invalid data: broken citations, wrong weeks,
 missing conditions, altered source files, parser/OCR failures, duplicate units and
 false publication states.
@@ -154,8 +154,8 @@ Their safe fallback is sourced development text without a size comparison.
 | Stage | What we will build | Status today |
 |---|---|---|
 | 0: Content foundation | Sources, cards, rules and review controls | Corrected draft foundation; human content release remains blocked. |
-| 1: Ingestion | Repeatedly read approved documents with versions and provenance | Technical pipeline complete; 14-source dry run found all 55 anchors. All remain in review, so no embeddings/corpus are published. |
-| 2: Storage | Keep each user's information secure and separate | Local files only; database/authentication/access isolation are not built. |
+| 1: Ingestion | Repeatedly read approved documents with versions and provenance | Seven independent-review corrections complete; tracked 14-source audit found all 55 anchors and verified TLS for every source. All content remains in review, so no embeddings/corpus are published. |
+| 2: Storage | Keep each user's information secure and separate | Supabase foundation deployed: 28 RLS-enabled tables, private file bucket, pgvector, release provenance, atomic journey versions and workspace lifecycle. Two-user isolation and lifecycle transactions passed and rolled back. |
 | 3: Onboarding | Confirm details and work out journey timing | Month/day selection contracts exist; onboarding and date resolution are not built. |
 | 4: Personal documents | Propose extracted facts and request confirmation | Eight input/truth fixtures exist; the extraction and confirmation pipeline is not built. |
 | 5: Retrieval | Find the right evidence and personal facts | Draft/published/time/country/condition filters exist; SQL/vector/graph retrieval is not built. |
@@ -177,7 +177,7 @@ not a connected working pipeline.
 The architecture also has eight broader phases. Phase 0 scope/scenario/safety
 acceptance remains open. Phase 1 has draft evidence, fixtures and software contracts,
 with clinical/content release still open. Phase 2 has limited deterministic helpers.
-Phases 3-5 integration/retrieval/agents/state work are not implemented. Phase 6 AI
+Stage 2 now supplies the persistent isolation foundation. Phases 3-5 integration/retrieval/agents/state work are not implemented. Phase 6 AI
 measurement has not run. Phase 7 submission packaging is not complete.
 
 ## What Kajal can review now

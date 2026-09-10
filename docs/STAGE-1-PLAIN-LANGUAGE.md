@@ -22,6 +22,13 @@ We ran this machine on all 14 source pages/PDFs that support the current dataset
 It found all 55 unique passages in the real source text. None are lost. None are
 published. All 55 are waiting for review, so the machine made zero embeddings.
 
+Kajal's independent check found seven engineering gaps. They are now closed: the
+proof travels with a fresh Git checkout, citation block IDs point to saved blocks,
+source changes reopen review, reviewer jobs stay separate, publication checks all
+five approvals, and repeated captures share one logical version. The separate
+Windows certificate concern did not recur; all five OWH pages downloaded with
+normal certificate checking still on.
+
 That does **not** mean the feature failed. It means the lock works. A machine test
 cannot pretend to be a doctor, licence reviewer or product owner.
 

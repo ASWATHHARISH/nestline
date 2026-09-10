@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "project_ref": "jtmiduftpbvmahbmryki",
+  "project_name": "nestline-dev",
+  "verified_at": "2026-09-11T00:16:14+05:30",
+  "method": "supabase_dashboard_sql_editor",
+  "migrations": [
+    {
+      "version": "20260910000100",
+      "name": "stage2_storage",
+      "file_sha256": "36ca51f8456d08765b7ddaff4238737812a0ed4dffa68d0319b3e6f85ec1eeb4"
+    },
+    {
+      "version": "20260910000200",
+      "name": "protect_workspace_owner",
+      "file_sha256": "8ae66eaf9172fe0a26c1ba57b54f39b72381463ba144fa44e2b7afa5a2c90a18"
+    },
+    {
+      "version": "20260911000100",
+      "name": "bind_public_release_provenance",
+      "file_sha256": "f6044ac5eb81f1b9046b8e9380a627375e27a6a2329a7141820c08463420ce03"
+    },
+    {
+      "version": "20260911000200",
+      "name": "workspace_lifecycle",
+      "file_sha256": "0befb04bb94db097a1a5adbe345f7ff048214422d7f1f8eab0141ed818008bdd"
+    },
+    {
+      "version": "20260911000300",
+      "name": "workspace_owner_visibility",
+      "file_sha256": "88c09fc454f659cd897bf450fc48333d0c314d12dcf970b385b51580f71b31d0"
+    }
+  ],
+  "checks": {
+    "stage2_tables": 28,
+    "rls_enabled_tables": 28,
+    "private_medical_document_buckets": 1,
+    "vector_extension_enabled": 1,
+    "workspace_membership_policies": 4,
+    "release_bound_foreign_keys": 8,
+    "migration_history_rows": 5,
+    "workspace_lifecycle_functions": 3,
+    "document_dedup_constraints": 1,
+    "workspace_owner_visibility_policies": 1,
+    "transactional_isolation_assertions": 9,
+    "transactional_lifecycle_assertions": 5,
+    "temporary_fixture_rows_remaining": 0
+  },
+  "contains_secrets": false
+}

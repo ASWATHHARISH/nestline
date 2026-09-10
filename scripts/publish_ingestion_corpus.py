@@ -16,7 +16,8 @@ def main(argv=None):
     parser.add_argument("runs", nargs="+", type=Path)
     args = parser.parse_args(argv)
     runs = [IngestionRun.model_validate_json(path.read_text(encoding="utf-8")) for path in args.runs]
-    manifest = publish_corpus(runs, ROOT / "data/ingestion/corpora", args.corpus_version)
+    manifest = publish_corpus(runs, ROOT / "data/ingestion/corpora", args.corpus_version,
+                              governance_data=ROOT / "data")
     print(json.dumps(manifest.model_dump(mode="json"), indent=2))
 
 

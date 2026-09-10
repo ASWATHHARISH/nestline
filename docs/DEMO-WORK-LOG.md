@@ -409,3 +409,85 @@ provider/model is selected and no content is approved. Test vectors are marked
 Recovery is a real review process, not a code bypass: named reviewers must update
 the governed records, then ingestion reruns with an explicitly selected provider.
 Only committed publishable runs can create a hashed immutable corpus version.
+
+## Independent Stage 1 correction pass
+
+Kajal's handoff identified seven engineering corrections and one Windows TLS
+reproduction concern. We merged current upstream `main`, moved the audit proof
+out of ignored local reports, stored governed blocks, forced changed sources back
+to review, added five-role decisions, bound corpus publication to the Stage 0
+fingerprint, and separated logical content versions from capture dates. The CLI
+now finds the latest same-source run automatically.
+
+The tracked audit initially recorded counts but omitted parser identity and exact
+review-task IDs requested by the handoff. Recovery: expanded the text-free audit
+contract and regenerated all 14 sources. It now contains parser/version,
+artifact/source/governance/selected-text hashes, block IDs and review-task IDs.
+
+The five OWH URLs downloaded successfully through the existing verified HTTPS
+path. The earlier TLS error did not reproduce. No `verify=False`, alternate
+unverified context or certificate bypass was added.
+
+The review packet previously asked reviewers to return a document because the
+machine-readable decision schema was incomplete. Recovery: each decision now
+binds task, candidate, evidence, source, role and candidate checksum; preserves
+reviewer identity/capacity/reason and exact proposed changes; and can be reloaded
+with `--review-decisions`. Unknown or stale task decisions fail validation.
+
+## Stage 2 Supabase storage and isolation
+
+Five versioned migrations were applied to the new `nestline-dev` project. The
+first creates 28 tables, RLS on every table, a private 10 MB PDF/PNG/JPEG medical
+document bucket, dimension-neutral pgvector fields, published-only public search
+and workspace-filtered private search. Later migrations protect owner membership,
+bind ingestion provenance to one content release, add workspace/journey lifecycle
+functions and fix owner visibility during workspace creation.
+
+### The SQL editor rejected the first automation method
+
+The dashboard uses a Monaco editor. The first direct fill action failed because
+the page target changed while the editor was active. Recovery: focused the editor,
+selected its complete contents and typed the migration through the browser. Before
+execution, the editor content was copied back and compared after normalising line
+endings. Supabase returned `Success. No rows returned`, followed by live counts of
+28 Stage 2 tables, 28 RLS-enabled tables, one private bucket and the vector extension.
+
+### Dashboard SQL did not create migration history
+
+The schema was present, but `supabase_migrations.schema_migrations` initially did
+not exist because the first migration was run in the dashboard. A future CLI push
+could otherwise try to run it again. The CLI login command could not open an
+interactive token prompt in this execution channel. Recovery: used Supabase's
+documented migration-table structure, stored each exact migration body with its
+canonical timestamp/name, and verified all five version rows. Repository hashes
+and secret-free live counts are committed for drift detection.
+
+### The first lifecycle test found an RLS timing bug
+
+`create_workspace` inserted the correct `owner_user_id`, but `INSERT ... RETURNING`
+also evaluated the read policy before the AFTER INSERT membership trigger had
+created the owner row. Supabase rejected the insert. Recovery: the workspace read
+policy now permits the authenticated owner immediately and preserves membership
+access for collaborators. The repeated lifecycle transaction passed.
+
+### Live isolation and lifecycle evidence
+
+One rolled-back transaction created fictional users A and B. A saw one SQL row,
+one private vector result, one graph node and one private Storage record. B saw
+zero of all four and a cross-workspace update changed zero rows: nine assertions
+passed. A second transaction proved workspace creation, journey versions 1 and 2,
+stale-version rejection, same-document-hash rejection and demo reset. Follow-up
+queries showed zero temporary users, workspaces and Storage objects remaining.
+
+No public corpus, health embedding or real personal record was added. Stage 2
+provides storage and isolation; Stage 0 human approvals still control which public
+health content may enter the later RAG system.
+
+### The first clean-clone Stage 2 check failed on line endings
+
+The SQL and all Stage 1 checks passed in the clean clone, but every recorded SQL
+hash differed because Git checked the files out with Windows CRLF line endings
+while the original files used LF. Recovery: Stage 2 now hashes canonical UTF-8
+text after normalising CRLF to LF, matching the platform-independent Stage 0
+fingerprint approach. The repeated clean clone passed both Stage 1 and Stage 2
+checkers. No SQL or deployed schema was changed for this fix.

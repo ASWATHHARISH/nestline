@@ -1,6 +1,100 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "records": {
+    "parsed_block": {
+      "additionalProperties": false,
+      "properties": {
+        "block_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Block Id",
+          "type": "string"
+        },
+        "source_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "ordinal": {
+          "minimum": 0,
+          "title": "Ordinal",
+          "type": "integer"
+        },
+        "block_kind": {
+          "enum": [
+            "heading",
+            "paragraph",
+            "list_item",
+            "table"
+          ],
+          "title": "Block Kind",
+          "type": "string"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "normalized_text": {
+          "minLength": 1,
+          "title": "Normalized Text",
+          "type": "string"
+        },
+        "locator": {
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "heading_path": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Heading Path",
+          "type": "array"
+        },
+        "page": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Page"
+        },
+        "extraction_method": {
+          "enum": [
+            "html_structure",
+            "pdf_text",
+            "ocr"
+          ],
+          "title": "Extraction Method",
+          "type": "string"
+        },
+        "extraction_confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Extraction Confidence",
+          "type": "number"
+        }
+      },
+      "required": [
+        "block_id",
+        "source_id",
+        "ordinal",
+        "block_kind",
+        "text",
+        "normalized_text",
+        "locator",
+        "extraction_method",
+        "extraction_confidence"
+      ],
+      "title": "ParsedBlock",
+      "type": "object"
+    },
     "evidence_candidate": {
       "$defs": {
         "Applicability": {
@@ -171,6 +265,11 @@
         "source_version": {
           "minLength": 1,
           "title": "Source Version",
+          "type": "string"
+        },
+        "source_governance_checksum": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Governance Checksum",
           "type": "string"
         },
         "source_locator": {
@@ -394,6 +493,7 @@
         "source_id",
         "artifact_sha256",
         "source_version",
+        "source_governance_checksum",
         "source_locator",
         "original_text",
         "normalized_search_text",
@@ -409,9 +509,315 @@
       "title": "EvidenceCandidate",
       "type": "object"
     },
-    "evidence_review_task": {
+    "evidence_review_decision": {
       "additionalProperties": false,
-      "description": "A pending human decision; its presence never counts as approval.",
+      "description": "One person's decision within one honest review capacity.",
+      "properties": {
+        "task_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "candidate_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "evidence_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "source_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "role": {
+          "enum": [
+            "licence",
+            "content",
+            "clinical",
+            "india_localisation",
+            "product"
+          ],
+          "title": "Role",
+          "type": "string"
+        },
+        "decision": {
+          "enum": [
+            "accepted",
+            "changes_requested",
+            "rejected",
+            "needs_specialist_review"
+          ],
+          "title": "Decision",
+          "type": "string"
+        },
+        "reviewer_name": {
+          "minLength": 1,
+          "title": "Reviewer Name",
+          "type": "string"
+        },
+        "reviewer_capacity": {
+          "minLength": 1,
+          "title": "Reviewer Capacity",
+          "type": "string"
+        },
+        "reviewed_at": {
+          "format": "date",
+          "title": "Reviewed At",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "candidate_checksum": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Candidate Checksum",
+          "type": "string"
+        },
+        "exact_replacement_wording": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exact Replacement Wording"
+        },
+        "supporting_reference": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supporting Reference"
+        },
+        "proposed_timing_change": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Proposed Timing Change"
+        },
+        "proposed_condition_change": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Proposed Condition Change"
+        },
+        "proposed_jurisdiction_change": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Proposed Jurisdiction Change"
+        }
+      },
+      "required": [
+        "task_id",
+        "candidate_id",
+        "evidence_id",
+        "source_id",
+        "role",
+        "decision",
+        "reviewer_name",
+        "reviewer_capacity",
+        "reviewed_at",
+        "reason",
+        "candidate_checksum"
+      ],
+      "title": "EvidenceReviewDecision",
+      "type": "object"
+    },
+    "evidence_review_task": {
+      "$defs": {
+        "EvidenceReviewDecision": {
+          "additionalProperties": false,
+          "description": "One person's decision within one honest review capacity.",
+          "properties": {
+            "task_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Task Id",
+              "type": "string"
+            },
+            "candidate_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Candidate Id",
+              "type": "string"
+            },
+            "evidence_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Evidence Id",
+              "type": "string"
+            },
+            "source_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Source Id",
+              "type": "string"
+            },
+            "role": {
+              "enum": [
+                "licence",
+                "content",
+                "clinical",
+                "india_localisation",
+                "product"
+              ],
+              "title": "Role",
+              "type": "string"
+            },
+            "decision": {
+              "enum": [
+                "accepted",
+                "changes_requested",
+                "rejected",
+                "needs_specialist_review"
+              ],
+              "title": "Decision",
+              "type": "string"
+            },
+            "reviewer_name": {
+              "minLength": 1,
+              "title": "Reviewer Name",
+              "type": "string"
+            },
+            "reviewer_capacity": {
+              "minLength": 1,
+              "title": "Reviewer Capacity",
+              "type": "string"
+            },
+            "reviewed_at": {
+              "format": "date",
+              "title": "Reviewed At",
+              "type": "string"
+            },
+            "reason": {
+              "minLength": 1,
+              "title": "Reason",
+              "type": "string"
+            },
+            "candidate_checksum": {
+              "pattern": "^[a-f0-9]{64}$",
+              "title": "Candidate Checksum",
+              "type": "string"
+            },
+            "exact_replacement_wording": {
+              "anyOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Exact Replacement Wording"
+            },
+            "supporting_reference": {
+              "anyOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Supporting Reference"
+            },
+            "proposed_timing_change": {
+              "anyOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Proposed Timing Change"
+            },
+            "proposed_condition_change": {
+              "anyOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Proposed Condition Change"
+            },
+            "proposed_jurisdiction_change": {
+              "anyOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Proposed Jurisdiction Change"
+            }
+          },
+          "required": [
+            "task_id",
+            "candidate_id",
+            "evidence_id",
+            "source_id",
+            "role",
+            "decision",
+            "reviewer_name",
+            "reviewer_capacity",
+            "reviewed_at",
+            "reason",
+            "candidate_checksum"
+          ],
+          "title": "EvidenceReviewDecision",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Role-scoped decisions for one exact candidate version.",
       "properties": {
         "task_id": {
           "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
@@ -458,6 +864,21 @@
           "title": "Required Checks",
           "type": "array"
         },
+        "required_roles": {
+          "items": {
+            "enum": [
+              "licence",
+              "content",
+              "clinical",
+              "india_localisation",
+              "product"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Required Roles",
+          "type": "array"
+        },
         "blocking_reasons": {
           "items": {
             "minLength": 1,
@@ -467,41 +888,24 @@
           "title": "Blocking Reasons",
           "type": "array"
         },
+        "decisions": {
+          "items": {
+            "$ref": "#/$defs/EvidenceReviewDecision"
+          },
+          "title": "Decisions",
+          "type": "array"
+        },
         "status": {
           "default": "pending",
           "enum": [
             "pending",
-            "approved",
-            "rejected"
+            "accepted",
+            "changes_requested",
+            "rejected",
+            "needs_specialist_review"
           ],
           "title": "Status",
           "type": "string"
-        },
-        "reviewer": {
-          "anyOf": [
-            {
-              "minLength": 1,
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Reviewer"
-        },
-        "reviewed_at": {
-          "anyOf": [
-            {
-              "format": "date",
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Reviewed At"
         }
       },
       "required": [
@@ -511,9 +915,185 @@
         "source_id",
         "candidate_checksum",
         "required_checks",
+        "required_roles",
         "blocking_reasons"
       ],
       "title": "EvidenceReviewTask",
+      "type": "object"
+    },
+    "stage1_review_ledger": {
+      "$defs": {
+        "EvidenceReviewDecision": {
+          "additionalProperties": false,
+          "description": "One person's decision within one honest review capacity.",
+          "properties": {
+            "task_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Task Id",
+              "type": "string"
+            },
+            "candidate_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Candidate Id",
+              "type": "string"
+            },
+            "evidence_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Evidence Id",
+              "type": "string"
+            },
+            "source_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Source Id",
+              "type": "string"
+            },
+            "role": {
+              "enum": [
+                "licence",
+                "content",
+                "clinical",
+                "india_localisation",
+                "product"
+              ],
+              "title": "Role",
+              "type": "string"
+            },
+            "decision": {
+              "enum": [
+                "accepted",
+                "changes_requested",
+                "rejected",
+                "needs_specialist_review"
+              ],
+              "title": "Decision",
+              "type": "string"
+            },
+            "reviewer_name": {
+              "minLength": 1,
+              "title": "Reviewer Name",
+              "type": "string"
+            },
+            "reviewer_capacity": {
+              "minLength": 1,
+              "title": "Reviewer Capacity",
+              "type": "string"
+            },
+            "reviewed_at": {
+              "format": "date",
+              "title": "Reviewed At",
+              "type": "string"
+            },
+            "reason": {
+              "minLength": 1,
+              "title": "Reason",
+              "type": "string"
+            },
+            "candidate_checksum": {
+              "pattern": "^[a-f0-9]{64}$",
+              "title": "Candidate Checksum",
+              "type": "string"
+            },
+            "exact_replacement_wording": {
+              "anyOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Exact Replacement Wording"
+            },
+            "supporting_reference": {
+              "anyOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Supporting Reference"
+            },
+            "proposed_timing_change": {
+              "anyOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Proposed Timing Change"
+            },
+            "proposed_condition_change": {
+              "anyOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Proposed Condition Change"
+            },
+            "proposed_jurisdiction_change": {
+              "anyOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Proposed Jurisdiction Change"
+            }
+          },
+          "required": [
+            "task_id",
+            "candidate_id",
+            "evidence_id",
+            "source_id",
+            "role",
+            "decision",
+            "reviewer_name",
+            "reviewer_capacity",
+            "reviewed_at",
+            "reason",
+            "candidate_checksum"
+          ],
+          "title": "EvidenceReviewDecision",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Portable reviewer decisions that can be validated during ingestion.",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "decisions": {
+          "items": {
+            "$ref": "#/$defs/EvidenceReviewDecision"
+          },
+          "title": "Decisions",
+          "type": "array"
+        }
+      },
+      "title": "Stage1ReviewLedger",
       "type": "object"
     },
     "ingestion_run": {
@@ -748,6 +1328,11 @@
               "title": "Source Version",
               "type": "string"
             },
+            "source_governance_checksum": {
+              "pattern": "^[a-f0-9]{64}$",
+              "title": "Source Governance Checksum",
+              "type": "string"
+            },
             "source_locator": {
               "minLength": 1,
               "title": "Source Locator",
@@ -969,6 +1554,7 @@
             "source_id",
             "artifact_sha256",
             "source_version",
+            "source_governance_checksum",
             "source_locator",
             "original_text",
             "normalized_search_text",
@@ -984,9 +1570,161 @@
           "title": "EvidenceCandidate",
           "type": "object"
         },
+        "EvidenceReviewDecision": {
+          "additionalProperties": false,
+          "description": "One person's decision within one honest review capacity.",
+          "properties": {
+            "task_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Task Id",
+              "type": "string"
+            },
+            "candidate_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Candidate Id",
+              "type": "string"
+            },
+            "evidence_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Evidence Id",
+              "type": "string"
+            },
+            "source_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Source Id",
+              "type": "string"
+            },
+            "role": {
+              "enum": [
+                "licence",
+                "content",
+                "clinical",
+                "india_localisation",
+                "product"
+              ],
+              "title": "Role",
+              "type": "string"
+            },
+            "decision": {
+              "enum": [
+                "accepted",
+                "changes_requested",
+                "rejected",
+                "needs_specialist_review"
+              ],
+              "title": "Decision",
+              "type": "string"
+            },
+            "reviewer_name": {
+              "minLength": 1,
+              "title": "Reviewer Name",
+              "type": "string"
+            },
+            "reviewer_capacity": {
+              "minLength": 1,
+              "title": "Reviewer Capacity",
+              "type": "string"
+            },
+            "reviewed_at": {
+              "format": "date",
+              "title": "Reviewed At",
+              "type": "string"
+            },
+            "reason": {
+              "minLength": 1,
+              "title": "Reason",
+              "type": "string"
+            },
+            "candidate_checksum": {
+              "pattern": "^[a-f0-9]{64}$",
+              "title": "Candidate Checksum",
+              "type": "string"
+            },
+            "exact_replacement_wording": {
+              "anyOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Exact Replacement Wording"
+            },
+            "supporting_reference": {
+              "anyOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Supporting Reference"
+            },
+            "proposed_timing_change": {
+              "anyOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Proposed Timing Change"
+            },
+            "proposed_condition_change": {
+              "anyOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Proposed Condition Change"
+            },
+            "proposed_jurisdiction_change": {
+              "anyOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Proposed Jurisdiction Change"
+            }
+          },
+          "required": [
+            "task_id",
+            "candidate_id",
+            "evidence_id",
+            "source_id",
+            "role",
+            "decision",
+            "reviewer_name",
+            "reviewer_capacity",
+            "reviewed_at",
+            "reason",
+            "candidate_checksum"
+          ],
+          "title": "EvidenceReviewDecision",
+          "type": "object"
+        },
         "EvidenceReviewTask": {
           "additionalProperties": false,
-          "description": "A pending human decision; its presence never counts as approval.",
+          "description": "Role-scoped decisions for one exact candidate version.",
           "properties": {
             "task_id": {
               "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
@@ -1033,6 +1771,21 @@
               "title": "Required Checks",
               "type": "array"
             },
+            "required_roles": {
+              "items": {
+                "enum": [
+                  "licence",
+                  "content",
+                  "clinical",
+                  "india_localisation",
+                  "product"
+                ],
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Required Roles",
+              "type": "array"
+            },
             "blocking_reasons": {
               "items": {
                 "minLength": 1,
@@ -1042,41 +1795,24 @@
               "title": "Blocking Reasons",
               "type": "array"
             },
+            "decisions": {
+              "items": {
+                "$ref": "#/$defs/EvidenceReviewDecision"
+              },
+              "title": "Decisions",
+              "type": "array"
+            },
             "status": {
               "default": "pending",
               "enum": [
                 "pending",
-                "approved",
-                "rejected"
+                "accepted",
+                "changes_requested",
+                "rejected",
+                "needs_specialist_review"
               ],
               "title": "Status",
               "type": "string"
-            },
-            "reviewer": {
-              "anyOf": [
-                {
-                  "minLength": 1,
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "default": null,
-              "title": "Reviewer"
-            },
-            "reviewed_at": {
-              "anyOf": [
-                {
-                  "format": "date",
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "default": null,
-              "title": "Reviewed At"
             }
           },
           "required": [
@@ -1086,6 +1822,7 @@
             "source_id",
             "candidate_checksum",
             "required_checks",
+            "required_roles",
             "blocking_reasons"
           ],
           "title": "EvidenceReviewTask",
@@ -1209,6 +1946,100 @@
           "title": "IngestionIssue",
           "type": "object"
         },
+        "ParsedBlock": {
+          "additionalProperties": false,
+          "properties": {
+            "block_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Block Id",
+              "type": "string"
+            },
+            "source_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Source Id",
+              "type": "string"
+            },
+            "ordinal": {
+              "minimum": 0,
+              "title": "Ordinal",
+              "type": "integer"
+            },
+            "block_kind": {
+              "enum": [
+                "heading",
+                "paragraph",
+                "list_item",
+                "table"
+              ],
+              "title": "Block Kind",
+              "type": "string"
+            },
+            "text": {
+              "minLength": 1,
+              "title": "Text",
+              "type": "string"
+            },
+            "normalized_text": {
+              "minLength": 1,
+              "title": "Normalized Text",
+              "type": "string"
+            },
+            "locator": {
+              "minLength": 1,
+              "title": "Locator",
+              "type": "string"
+            },
+            "heading_path": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": "Heading Path",
+              "type": "array"
+            },
+            "page": {
+              "anyOf": [
+                {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Page"
+            },
+            "extraction_method": {
+              "enum": [
+                "html_structure",
+                "pdf_text",
+                "ocr"
+              ],
+              "title": "Extraction Method",
+              "type": "string"
+            },
+            "extraction_confidence": {
+              "maximum": 1,
+              "minimum": 0,
+              "title": "Extraction Confidence",
+              "type": "number"
+            }
+          },
+          "required": [
+            "block_id",
+            "source_id",
+            "ordinal",
+            "block_kind",
+            "text",
+            "normalized_text",
+            "locator",
+            "extraction_method",
+            "extraction_confidence"
+          ],
+          "title": "ParsedBlock",
+          "type": "object"
+        },
         "SourceAdmission": {
           "additionalProperties": false,
           "properties": {
@@ -1316,8 +2147,8 @@
               "type": "string"
             },
             "ingestion_schema_version": {
-              "const": "1.0.0",
-              "default": "1.0.0",
+              "const": "1.1.0",
+              "default": "1.1.0",
               "title": "Ingestion Schema Version",
               "type": "string"
             }
@@ -1342,6 +2173,11 @@
         "run_id": {
           "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
           "title": "Run Id",
+          "type": "string"
+        },
+        "logical_version_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Logical Version Id",
           "type": "string"
         },
         "created_at": {
@@ -1376,6 +2212,13 @@
           "minimum": 0,
           "title": "Parsed Block Count",
           "type": "integer"
+        },
+        "governed_blocks": {
+          "items": {
+            "$ref": "#/$defs/ParsedBlock"
+          },
+          "title": "Governed Blocks",
+          "type": "array"
         },
         "candidates": {
           "items": {
@@ -1421,6 +2264,7 @@
       },
       "required": [
         "run_id",
+        "logical_version_id",
         "created_at",
         "dry_run",
         "admission",
@@ -1484,8 +2328,8 @@
               "type": "string"
             },
             "ingestion_schema_version": {
-              "const": "1.0.0",
-              "default": "1.0.0",
+              "const": "1.1.0",
+              "default": "1.1.0",
               "title": "Ingestion Schema Version",
               "type": "string"
             }
@@ -1532,6 +2376,32 @@
           "minItems": 1,
           "title": "Source Artifacts",
           "type": "array"
+        },
+        "release_fingerprint": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Release Fingerprint",
+          "type": "string"
+        },
+        "approval_roles": {
+          "items": {
+            "enum": [
+              "licence",
+              "content",
+              "clinical",
+              "india_localisation",
+              "product"
+            ],
+            "type": "string"
+          },
+          "maxItems": 5,
+          "minItems": 5,
+          "title": "Approval Roles",
+          "type": "array"
+        },
+        "block_file_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Block File Sha256",
+          "type": "string"
         },
         "candidate_file_sha256": {
           "pattern": "^[a-f0-9]{64}$",
@@ -1585,6 +2455,9 @@
         "created_at",
         "status",
         "source_artifacts",
+        "release_fingerprint",
+        "approval_roles",
+        "block_file_sha256",
         "candidate_file_sha256",
         "embedding_file_sha256",
         "embedding_provider",
@@ -1593,6 +2466,195 @@
         "limitations"
       ],
       "title": "CorpusManifest",
+      "type": "object"
+    },
+    "stage1_audit": {
+      "$defs": {
+        "Stage1AuditSource": {
+          "additionalProperties": false,
+          "description": "Safe, text-free proof of one exact source ingestion result.",
+          "properties": {
+            "source_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Source Id",
+              "type": "string"
+            },
+            "logical_version_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Logical Version Id",
+              "type": "string"
+            },
+            "artifact_sha256": {
+              "pattern": "^[a-f0-9]{64}$",
+              "title": "Artifact Sha256",
+              "type": "string"
+            },
+            "source_version": {
+              "minLength": 1,
+              "title": "Source Version",
+              "type": "string"
+            },
+            "parser_name": {
+              "minLength": 1,
+              "title": "Parser Name",
+              "type": "string"
+            },
+            "parser_version": {
+              "minLength": 1,
+              "title": "Parser Version",
+              "type": "string"
+            },
+            "outcome": {
+              "enum": [
+                "rejected",
+                "review_required",
+                "publishable",
+                "published"
+              ],
+              "title": "Outcome",
+              "type": "string"
+            },
+            "candidate_ids": {
+              "items": {
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+                "type": "string"
+              },
+              "title": "Candidate Ids",
+              "type": "array"
+            },
+            "evidence_ids": {
+              "items": {
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+                "type": "string"
+              },
+              "title": "Evidence Ids",
+              "type": "array"
+            },
+            "candidate_checksums": {
+              "items": {
+                "pattern": "^[a-f0-9]{64}$",
+                "type": "string"
+              },
+              "title": "Candidate Checksums",
+              "type": "array"
+            },
+            "selected_content_checksums": {
+              "items": {
+                "pattern": "^[a-f0-9]{64}$",
+                "type": "string"
+              },
+              "title": "Selected Content Checksums",
+              "type": "array"
+            },
+            "source_governance_checksums": {
+              "items": {
+                "pattern": "^[a-f0-9]{64}$",
+                "type": "string"
+              },
+              "title": "Source Governance Checksums",
+              "type": "array"
+            },
+            "governed_block_ids": {
+              "items": {
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+                "type": "string"
+              },
+              "title": "Governed Block Ids",
+              "type": "array"
+            },
+            "review_task_ids": {
+              "items": {
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+                "type": "string"
+              },
+              "title": "Review Task Ids",
+              "type": "array"
+            },
+            "parsed_block_count": {
+              "minimum": 0,
+              "title": "Parsed Block Count",
+              "type": "integer"
+            },
+            "verified_anchor_count": {
+              "minimum": 0,
+              "title": "Verified Anchor Count",
+              "type": "integer"
+            },
+            "review_task_count": {
+              "minimum": 0,
+              "title": "Review Task Count",
+              "type": "integer"
+            },
+            "embedding_count": {
+              "minimum": 0,
+              "title": "Embedding Count",
+              "type": "integer"
+            },
+            "error_count": {
+              "minimum": 0,
+              "title": "Error Count",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "source_id",
+            "logical_version_id",
+            "artifact_sha256",
+            "source_version",
+            "parser_name",
+            "parser_version",
+            "outcome",
+            "candidate_ids",
+            "evidence_ids",
+            "candidate_checksums",
+            "selected_content_checksums",
+            "source_governance_checksums",
+            "governed_block_ids",
+            "review_task_ids",
+            "parsed_block_count",
+            "verified_anchor_count",
+            "review_task_count",
+            "embedding_count",
+            "error_count"
+          ],
+          "title": "Stage1AuditSource",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Tracked proof that a clean checkout can validate the canonical Stage 1 run.",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "foundation_release_fingerprint": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Foundation Release Fingerprint",
+          "type": "string"
+        },
+        "generated_from": {
+          "const": "exact_registered_https_sources",
+          "title": "Generated From",
+          "type": "string"
+        },
+        "sources": {
+          "items": {
+            "$ref": "#/$defs/Stage1AuditSource"
+          },
+          "minItems": 1,
+          "title": "Sources",
+          "type": "array"
+        }
+      },
+      "required": [
+        "foundation_release_fingerprint",
+        "generated_from",
+        "sources"
+      ],
+      "title": "Stage1Audit",
       "type": "object"
     }
   }

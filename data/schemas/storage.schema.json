@@ -1,0 +1,833 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "database_tables": [
+    "appointment_questions",
+    "appointments",
+    "content_releases",
+    "document_chunks",
+    "document_facts",
+    "evidence_review_decisions",
+    "evidence_review_tasks",
+    "feedback",
+    "graph_edges",
+    "graph_nodes",
+    "guidance_fragments",
+    "guideline_chunks",
+    "health_facts",
+    "human_review_cases",
+    "ingestion_runs",
+    "journey_states",
+    "medication_mentions",
+    "notifications",
+    "plan_items",
+    "plans",
+    "private_documents",
+    "public_sources",
+    "source_artifacts",
+    "source_blocks",
+    "symptom_events",
+    "weekly_profiles",
+    "workspace_members",
+    "workspaces"
+  ],
+  "workspace_owned_tables": [
+    "appointment_questions",
+    "appointments",
+    "document_chunks",
+    "document_facts",
+    "feedback",
+    "graph_edges",
+    "graph_nodes",
+    "health_facts",
+    "human_review_cases",
+    "journey_states",
+    "medication_mentions",
+    "notifications",
+    "plan_items",
+    "plans",
+    "private_documents",
+    "symptom_events"
+  ],
+  "records": {
+    "workspace": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "owner_user_id": {
+          "format": "uuid",
+          "title": "Owner User Id",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "personal_empty",
+            "fictional_demo"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "display_name": {
+          "minLength": 1,
+          "title": "Display Name",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "owner_user_id",
+        "mode",
+        "display_name",
+        "created_at",
+        "updated_at"
+      ],
+      "title": "Workspace",
+      "type": "object"
+    },
+    "journey_state": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "workspace_id": {
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        },
+        "stage": {
+          "enum": [
+            "possible_pregnancy",
+            "pregnancy",
+            "postpartum"
+          ],
+          "title": "Stage",
+          "type": "string"
+        },
+        "timing_source": {
+          "enum": [
+            "document_estimated_due_date",
+            "user_estimated_due_date",
+            "manual_week_day",
+            "approximate_month_range",
+            "delivery_date",
+            "postpartum_week"
+          ],
+          "title": "Timing Source",
+          "type": "string"
+        },
+        "gestational_week": {
+          "anyOf": [
+            {
+              "maximum": 42,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Gestational Week"
+        },
+        "gestational_day": {
+          "anyOf": [
+            {
+              "maximum": 6,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Gestational Day"
+        },
+        "postpartum_week": {
+          "anyOf": [
+            {
+              "maximum": 12,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Postpartum Week"
+        },
+        "postpartum_day": {
+          "anyOf": [
+            {
+              "maximum": 7,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Postpartum Day"
+        },
+        "estimated_due_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Estimated Due Date"
+        },
+        "delivery_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Delivery Date"
+        },
+        "approximate_month_min": {
+          "anyOf": [
+            {
+              "maximum": 10,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Approximate Month Min"
+        },
+        "approximate_month_max": {
+          "anyOf": [
+            {
+              "maximum": 10,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Approximate Month Max"
+        },
+        "user_confirmed": {
+          "title": "User Confirmed",
+          "type": "boolean"
+        },
+        "has_dating_conflict": {
+          "title": "Has Dating Conflict",
+          "type": "boolean"
+        },
+        "is_current": {
+          "title": "Is Current",
+          "type": "boolean"
+        },
+        "version": {
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "workspace_id",
+        "stage",
+        "timing_source",
+        "user_confirmed",
+        "has_dating_conflict",
+        "is_current",
+        "version"
+      ],
+      "title": "JourneyState",
+      "type": "object"
+    },
+    "private_document": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "workspace_id": {
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        },
+        "storage_object_path": {
+          "minLength": 1,
+          "title": "Storage Object Path",
+          "type": "string"
+        },
+        "original_filename": {
+          "minLength": 1,
+          "title": "Original Filename",
+          "type": "string"
+        },
+        "media_type": {
+          "minLength": 1,
+          "title": "Media Type",
+          "type": "string"
+        },
+        "byte_size": {
+          "exclusiveMinimum": 0,
+          "title": "Byte Size",
+          "type": "integer"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "uploaded",
+            "processing",
+            "needs_confirmation",
+            "confirmed",
+            "failed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "contains_real_medical_data": {
+          "title": "Contains Real Medical Data",
+          "type": "boolean"
+        },
+        "uploaded_at": {
+          "format": "date-time",
+          "title": "Uploaded At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "workspace_id",
+        "storage_object_path",
+        "original_filename",
+        "media_type",
+        "byte_size",
+        "sha256",
+        "status",
+        "contains_real_medical_data",
+        "uploaded_at"
+      ],
+      "title": "PrivateDocument",
+      "type": "object"
+    },
+    "document_fact": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "workspace_id": {
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        },
+        "document_id": {
+          "format": "uuid",
+          "title": "Document Id",
+          "type": "string"
+        },
+        "field_name": {
+          "minLength": 1,
+          "title": "Field Name",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value"
+        },
+        "source_page": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Page"
+        },
+        "source_text": {
+          "default": "",
+          "title": "Source Text",
+          "type": "string"
+        },
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "status": {
+          "enum": [
+            "proposed",
+            "confirmed",
+            "rejected",
+            "conflict"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "workspace_id",
+        "document_id",
+        "field_name",
+        "value",
+        "confidence",
+        "status"
+      ],
+      "title": "DocumentFact",
+      "type": "object"
+    },
+    "health_fact": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "workspace_id": {
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        },
+        "fact_type": {
+          "enum": [
+            "allergy",
+            "dietary_restriction",
+            "medical_history",
+            "medication",
+            "clinician_instruction",
+            "feeding_status",
+            "delivery_history",
+            "other"
+          ],
+          "title": "Fact Type",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value"
+        },
+        "source_kind": {
+          "enum": [
+            "user_reported",
+            "document_extracted",
+            "human_reviewed"
+          ],
+          "title": "Source Kind",
+          "type": "string"
+        },
+        "confirmation_status": {
+          "enum": [
+            "proposed",
+            "confirmed",
+            "rejected",
+            "conflict"
+          ],
+          "title": "Confirmation Status",
+          "type": "string"
+        },
+        "source_document_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Document Id"
+        },
+        "supersedes_fact_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supersedes Fact Id"
+        }
+      },
+      "required": [
+        "id",
+        "workspace_id",
+        "fact_type",
+        "value",
+        "source_kind",
+        "confirmation_status"
+      ],
+      "title": "HealthFact",
+      "type": "object"
+    },
+    "appointment": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "workspace_id": {
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        },
+        "scheduled_for": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scheduled For"
+        },
+        "appointment_type": {
+          "default": "",
+          "title": "Appointment Type",
+          "type": "string"
+        },
+        "location": {
+          "default": "",
+          "title": "Location",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "planned",
+            "confirmed",
+            "completed",
+            "cancelled"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "workspace_id",
+        "status"
+      ],
+      "title": "Appointment",
+      "type": "object"
+    },
+    "saved_plan": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "workspace_id": {
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        },
+        "version": {
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        },
+        "journey_state_id": {
+          "format": "uuid",
+          "title": "Journey State Id",
+          "type": "string"
+        },
+        "source_release_id": {
+          "format": "uuid",
+          "title": "Source Release Id",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "user_reviewed",
+            "saved",
+            "active",
+            "stale",
+            "replaced",
+            "archived"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "stale_reasons": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Stale Reasons",
+          "type": "array"
+        },
+        "user_confirmed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "User Confirmed At"
+        }
+      },
+      "required": [
+        "id",
+        "workspace_id",
+        "version",
+        "journey_state_id",
+        "source_release_id",
+        "status"
+      ],
+      "title": "SavedPlan",
+      "type": "object"
+    },
+    "human_review_case": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "workspace_id": {
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "not_required",
+            "offered",
+            "consented",
+            "queued",
+            "reviewed",
+            "resumed",
+            "declined",
+            "timed_out",
+            "unavailable"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "simulated": {
+          "default": true,
+          "title": "Simulated",
+          "type": "boolean"
+        },
+        "consented_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Consented At"
+        },
+        "reviewed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reviewed At"
+        }
+      },
+      "required": [
+        "id",
+        "workspace_id",
+        "state",
+        "reason"
+      ],
+      "title": "HumanReviewCase",
+      "type": "object"
+    },
+    "notification": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "workspace_id": {
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        },
+        "kind": {
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "sent",
+            "failed",
+            "cancelled"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "idempotency_key": {
+          "minLength": 1,
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "scheduled_for": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scheduled For"
+        },
+        "sent_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sent At"
+        }
+      },
+      "required": [
+        "id",
+        "workspace_id",
+        "kind",
+        "status",
+        "idempotency_key"
+      ],
+      "title": "Notification",
+      "type": "object"
+    },
+    "feedback": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "workspace_id": {
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        },
+        "rating": {
+          "anyOf": [
+            {
+              "maximum": 5,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rating"
+        },
+        "category": {
+          "minLength": 1,
+          "title": "Category",
+          "type": "string"
+        },
+        "comment": {
+          "default": "",
+          "title": "Comment",
+          "type": "string"
+        },
+        "langsmith_trace_id": {
+          "default": "",
+          "title": "Langsmith Trace Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "workspace_id",
+        "category"
+      ],
+      "title": "Feedback",
+      "type": "object"
+    }
+  }
+}

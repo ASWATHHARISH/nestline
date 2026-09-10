@@ -1,0 +1,760 @@
+{
+  "schema_version": "1.0.0",
+  "foundation_release_fingerprint": "86983b50de3af506cc7f1ff34ea31604b5efd97a0ffce2d001fa48e9ee97131c",
+  "generated_from": "exact_registered_https_sources",
+  "sources": [
+    {
+      "source_id": "BHC-WEEKS",
+      "logical_version_id": "LV-b172fe172f4bd376a6d3",
+      "artifact_sha256": "80ad52f59448eeb0d955df77fdc0e4b3f0d3abd2c391687d0b6ee9c0f092e566",
+      "source_version": "reviewed-2012-02-28;selected-2026-09-10-v1",
+      "parser_name": "beautifulsoup4",
+      "parser_version": "4.13.5;nestline-1.0.0",
+      "outcome": "review_required",
+      "candidate_ids": [
+        "C-E-P09-DEVELOPMENT",
+        "C-E-P10-DEVELOPMENT"
+      ],
+      "evidence_ids": [
+        "E-P09-DEVELOPMENT",
+        "E-P10-DEVELOPMENT"
+      ],
+      "candidate_checksums": [
+        "262cfa2775b98b54ae7867286033727d6b7c651d822aa1fd496a8cf5df79a68c",
+        "4ea44e6e04c231b2662abd63bca030adfd16005ed87588382ca45c16f07dc4ea"
+      ],
+      "selected_content_checksums": [
+        "bd52cfba5ca086bcbd57cd987d5c3167bf7ea8032f00d5f83d14ae345c7004ee",
+        "dd0daeab92923ce8fc5496b6e42531ba33ecbf83332eeae3682f1006e6431d09"
+      ],
+      "source_governance_checksums": [
+        "78e9f703253b82f32ad3284a7433a3fbf043301714725edcbcbdb98fda17023d"
+      ],
+      "governed_block_ids": [
+        "B-c014982c63c710456b27",
+        "B-f810bee8778ab15c3597"
+      ],
+      "review_task_ids": [
+        "REV-262cfa2775b98b54ae78",
+        "REV-4ea44e6e04c231b2662a"
+      ],
+      "parsed_block_count": 117,
+      "verified_anchor_count": 2,
+      "review_task_count": 2,
+      "embedding_count": 0,
+      "error_count": 0
+    },
+    {
+      "source_id": "NHM-CHO",
+      "logical_version_id": "LV-f2a9f4d9e60ce84c89f9",
+      "artifact_sha256": "e97347fc9ac72fa94c5668f04e5fc14c440a505cb0e49f28d7adabf4b862e7b8",
+      "source_version": "selected-2026-09-10-correction-v2",
+      "parser_name": "pymupdf",
+      "parser_version": "1.26.4;nestline-1.0.0",
+      "outcome": "review_required",
+      "candidate_ids": [
+        "C-E-IN-ANC-TESTS",
+        "C-E-IN-ANC-VISITS",
+        "C-E-IN-BIRTH-PLAN",
+        "C-E-IN-PNC-DAY1",
+        "C-E-IN-PNC-DAY3",
+        "C-E-IN-PNC-DAY7",
+        "C-E-IN-PNC-DAYS",
+        "C-E-IN-PNC-WEEKS",
+        "C-E-IN-PP-FOLLOWUP",
+        "C-E-IN-REGISTRATION",
+        "C-E-IN-TEST-SUPPORT"
+      ],
+      "evidence_ids": [
+        "E-IN-ANC-TESTS",
+        "E-IN-ANC-VISITS",
+        "E-IN-BIRTH-PLAN",
+        "E-IN-PNC-DAY1",
+        "E-IN-PNC-DAY3",
+        "E-IN-PNC-DAY7",
+        "E-IN-PNC-DAYS",
+        "E-IN-PNC-WEEKS",
+        "E-IN-PP-FOLLOWUP",
+        "E-IN-REGISTRATION",
+        "E-IN-TEST-SUPPORT"
+      ],
+      "candidate_checksums": [
+        "059cacced965f62696c7831fc27d2e43068cd88d031d9c2cfa14742655ec3fa1",
+        "2838a25b0435a21e3130cb6b71f31da55f3e72f6c65a80c52a1f10db13385f82",
+        "3a6caf113d05d81887020ccc6b81a9bdad8db5f82198a3e63fb5024f97eab0e9",
+        "43a4e97d1f66c5c8b312e0ce647df07df604412b56effb47a5518ad5e6e00bc2",
+        "4f9763c7846632db820200eb31d369cfb0967eff2f684fb35d009126d53d3964",
+        "594728845df724f164a00db77938b36c118f0ff2990d167621e0377f2c325d29",
+        "77cd641c40cd2ef04a5e4bfa85b5750417b8551193321b19d38eb4adb5bb1290",
+        "a62372f158dfc78f74e47089c72eb44569f8ca6ff8ff17080dc468a7355fc15c",
+        "a842861ca186c2d3a4313a5a69f8fbe9d41405d573ce2c795239747083d961eb",
+        "a96a1155952b4ce2daa8c2d82d0e499c3d3d135a1656f45fba59994a8353a413",
+        "bfb237dc232c8b309fd96459eef45faa3f1369123f7fcba141a0321603c34a37"
+      ],
+      "selected_content_checksums": [
+        "0d791402ed05f7aad9eb7393f65c314a7744b55eb0421f4b83db0d4a1929d40b",
+        "60989e717f3918343b147e57ff2522ab5d1dc677817875cb08ecae2fefc25d30",
+        "60989e717f3918343b147e57ff2522ab5d1dc677817875cb08ecae2fefc25d30",
+        "60989e717f3918343b147e57ff2522ab5d1dc677817875cb08ecae2fefc25d30",
+        "60989e717f3918343b147e57ff2522ab5d1dc677817875cb08ecae2fefc25d30",
+        "60989e717f3918343b147e57ff2522ab5d1dc677817875cb08ecae2fefc25d30",
+        "60989e717f3918343b147e57ff2522ab5d1dc677817875cb08ecae2fefc25d30",
+        "85367b4a3e37672e3ed8a1b96c1ff3d5731b58a055a7b9a81cc45b1cab0900a0",
+        "a2d9a58564a5dc4f39ef96d2b0c66b95fbeb624856b00697b2fb0cb35407d97e",
+        "ceaa6a82a0c84a723047d041706cb56714eb71c59c0199c1f4c80f909c70ee52",
+        "d9f303e89d37059eaa09382d842666b9a28942428c58274666e6e5795a24be59"
+      ],
+      "source_governance_checksums": [
+        "9cc47320c4dd4791b48e33d9dfe640d8d22a937325f0c4d4a26a3fb5dd04c3f9"
+      ],
+      "governed_block_ids": [
+        "B-2f0d579889404dfe0f46",
+        "B-3fd9f07ae868ba3f72d1",
+        "B-5a443136475ca78777ba",
+        "B-6c1c68e3de75f3dc5469",
+        "B-7d3f6a04ddeb609d9e26",
+        "B-b1a231ec47146947f32a"
+      ],
+      "review_task_ids": [
+        "REV-059cacced965f62696c7",
+        "REV-2838a25b0435a21e3130",
+        "REV-3a6caf113d05d8188702",
+        "REV-43a4e97d1f66c5c8b312",
+        "REV-4f9763c7846632db8202",
+        "REV-594728845df724f164a0",
+        "REV-77cd641c40cd2ef04a5e",
+        "REV-a62372f158dfc78f74e4",
+        "REV-a842861ca186c2d3a431",
+        "REV-a96a1155952b4ce2daa8",
+        "REV-bfb237dc232c8b309fd9"
+      ],
+      "parsed_block_count": 17,
+      "verified_anchor_count": 11,
+      "review_task_count": 11,
+      "embedding_count": 0,
+      "error_count": 0
+    },
+    {
+      "source_id": "NHM-MOTHERHOOD",
+      "logical_version_id": "LV-ac3ee389edc337bba9ec",
+      "artifact_sha256": "e742063ab9f7acd34d5cde160169ad919603f8fe9c0224277091717a4f0f7947",
+      "source_version": "selected-2026-09-10-correction-v2",
+      "parser_name": "pymupdf",
+      "parser_version": "1.26.4;nestline-1.0.0",
+      "outcome": "review_required",
+      "candidate_ids": [
+        "C-E-IN-FOOD",
+        "C-E-IN-FOOD-ANIMAL",
+        "C-E-IN-FOOD-DAIRY",
+        "C-E-IN-FOOD-GRAINS",
+        "C-E-IN-FOOD-GREENS",
+        "C-E-IN-FOOD-PLANTS",
+        "C-E-IN-PP-DAY-HELP",
+        "C-E-IN-PP-DAY-REST",
+        "C-E-IN-PP-DAY0",
+        "C-E-IN-PP-WARNINGS",
+        "C-E-IN-PREG-WARNINGS",
+        "C-E-IN-REST-PP",
+        "C-E-IN-REST-PREG"
+      ],
+      "evidence_ids": [
+        "E-IN-FOOD",
+        "E-IN-FOOD-ANIMAL",
+        "E-IN-FOOD-DAIRY",
+        "E-IN-FOOD-GRAINS",
+        "E-IN-FOOD-GREENS",
+        "E-IN-FOOD-PLANTS",
+        "E-IN-PP-DAY-HELP",
+        "E-IN-PP-DAY-REST",
+        "E-IN-PP-DAY0",
+        "E-IN-PP-WARNINGS",
+        "E-IN-PREG-WARNINGS",
+        "E-IN-REST-PP",
+        "E-IN-REST-PREG"
+      ],
+      "candidate_checksums": [
+        "136828c014659afee522ad5a777b94b02bbb3edc65a74fdbbdf2e6a206d003f1",
+        "1c40d463148587f7f2edaae2dda632582b4b7abaa3a63e0ec1bf6b40cabb9888",
+        "217ecfedf0f1b7f574bf5bf542482365d0fcbe4e918aabceafb49f56eaf2fb95",
+        "3b722f2c58264d6e7dcf65cd89ff5c969491c2a5692d8875caa1dc6d1670267d",
+        "3e0ef5cc691249acf89e932999f87097907a56edba7e1422c4cebbdb8e080cab",
+        "8a03e0bb56284628b8e54dbfd14cf0639d93a2e87f43176b9173c9f576357423",
+        "91c6e3f3c23c7774b0244eab55107722904712947b54155f79f5433cb38c38b5",
+        "9c831475bbccd05a809b5cfb2327860a8e39dc91876c4ad8fd121cd72b0443c8",
+        "bcc5338f9278b909988fa2fc7c9958bfadd7c4e0b7df6a88cef1e379e25ab726",
+        "d368d2f53ced8aea14c3558a531d2dfc23f39501756348456baac8614cf16ab5",
+        "d5a69ed18c2ed1936b2eb44b51edd708047af8c2a68f19c5dd39a2801a0ac574",
+        "dff84e7ca466288bfe4c70d3741e908651c9ec2d3c3ff7b8456e2eb514496583",
+        "ffed1ea90fb72457a06389b3e9d9d08bbbc7f0ed92f1597309c910de4b79249f"
+      ],
+      "selected_content_checksums": [
+        "091e8904dffd49bb3b4ce6bc5e8062a15021c718e5e24cb900358e94360acbb2",
+        "361c352fe6b521dac4396541312c0712a2a95fb2efe6b184aa44514b54de443e",
+        "3aad6dc0f80eb4e5fbfc170ac34019d85fd15dee358b691a7f34181a5be73476",
+        "423624bcd273d77f4cf4b63fb7069f147153b2d410b64fcb8db60fb783620e68",
+        "5ce15c0c84529b507e3cf020b47f3be4b680248963c8bfcb6cb6c606db10f6f9",
+        "651b333ce41707572386fa573d32eb93955c32630114930eef29c027ee7978ea",
+        "ade155ba14671a4432213f52a7be64de5fda5dda01db7302011fb9d3d36971a7",
+        "ade155ba14671a4432213f52a7be64de5fda5dda01db7302011fb9d3d36971a7",
+        "bed8430fd1851da54f81d7d4275c2d4778e00897275cdde91cb5f3f8a458658c",
+        "c7e7b1cd706ca3f362d4480187eea7af1dd03df29575bff2b3f73a331a85f827",
+        "dd3b6b46021139783a8e9001214aa5ae644faa28ccd3c688a31354a32fd423e7",
+        "e6083b567e31ea239462eae67a7678ae77d78cb29d3ed6b107e556b6487ca5a2",
+        "e92d157b63fc1334d3f19bae6e670e300f967cdf6cd9fe39739f2d76f3012221"
+      ],
+      "source_governance_checksums": [
+        "27bbe2fe20d99eb9e61ad9ca4c6098d47eaee5302acb622117decf9189375960"
+      ],
+      "governed_block_ids": [
+        "B-193c5d48a6a758a0d19a",
+        "B-2292ed4206820c3f3c9a",
+        "B-3145d20724c4e3f3100a",
+        "B-31e477713eb854a670eb",
+        "B-32c919e25ad5bc621c17",
+        "B-354f10057765dac926d1",
+        "B-79587fe47b0287de9c2c",
+        "B-7b8495e83f11b7ebeb04",
+        "B-8565df3aa931c3a7c7da",
+        "B-bd8aa9cb731f2ffcbeff",
+        "B-d47e26815cbc8edf29ba",
+        "B-e7b5087aa7d585037497",
+        "B-f18ec2204e3ff830a2b8"
+      ],
+      "review_task_ids": [
+        "REV-136828c014659afee522",
+        "REV-1c40d463148587f7f2ed",
+        "REV-217ecfedf0f1b7f574bf",
+        "REV-3b722f2c58264d6e7dcf",
+        "REV-3e0ef5cc691249acf89e",
+        "REV-8a03e0bb56284628b8e5",
+        "REV-91c6e3f3c23c7774b024",
+        "REV-9c831475bbccd05a809b",
+        "REV-bcc5338f9278b909988f",
+        "REV-d368d2f53ced8aea14c3",
+        "REV-d5a69ed18c2ed1936b2e",
+        "REV-dff84e7ca466288bfe4c",
+        "REV-ffed1ea90fb72457a063"
+      ],
+      "parsed_block_count": 38,
+      "verified_anchor_count": 13,
+      "review_task_count": 13,
+      "embedding_count": 0,
+      "error_count": 0
+    },
+    {
+      "source_id": "NHS-PP-ACTIVE",
+      "logical_version_id": "LV-bce3e84c569de2f35c28",
+      "artifact_sha256": "9bd10674595457997dd4e72da0e4d143d887fb9a11fe144e09f607c2d8073bb5",
+      "source_version": "selected-2026-09-10-correction-v2",
+      "parser_name": "beautifulsoup4",
+      "parser_version": "4.13.5;nestline-1.0.0",
+      "outcome": "review_required",
+      "candidate_ids": [
+        "C-E-PP-ASK-HELP",
+        "C-E-PP-GENTLE-MOVEMENT",
+        "C-E-PP-MIND-REST",
+        "C-E-PP-MIND-TALK",
+        "C-E-PP-MOVEMENT-QUESTION",
+        "C-E-PP-PERSISTENT-CONCERN"
+      ],
+      "evidence_ids": [
+        "E-PP-ASK-HELP",
+        "E-PP-GENTLE-MOVEMENT",
+        "E-PP-MIND-REST",
+        "E-PP-MIND-TALK",
+        "E-PP-MOVEMENT-QUESTION",
+        "E-PP-PERSISTENT-CONCERN"
+      ],
+      "candidate_checksums": [
+        "08627e8fd9c2176f011c541774b0a659696fdabdf52799d821795fac58968b48",
+        "ab9c6a8121188e53c18158c749086d9ebca22b773c97c6ad3f7173313c9fd87d",
+        "cede4dd7a7d4cb23f32a6f52c23dbe87d53831ddadb4f558436b75072d798d65",
+        "d55e6eaf9fa6a39106598cae888a628d17d77eb2059f8b8ff746c0c29fb823c2",
+        "d7a6ab35600616505571507fb9876075ec4625240a3211f44180e7411df452c6",
+        "fc7b4ad5e946d2871f8801929ab8590d1b7416ae6d3d491847ba27f3b88be048"
+      ],
+      "selected_content_checksums": [
+        "4f9cafc8ea86fda66d4bc8befdaad2a36ffdb073549975af6c0feef5cc9c23a3",
+        "6a02f4017de58a7299f23953c1462450bccaa03e28cf72930891ac9386c97710",
+        "6c08d0dd2df511596f38c9e16c7fd87293827cdbb774a7d25dccb022cb2c8883",
+        "b0cd76cc3772e68bff598700c4c10445517b45d9e667bdbc8767949213a4883e",
+        "d990f8fc78d493dd138203cee5dddc6514dbf1a10cbcc687d7218ffac9f55596",
+        "e735f8929c31cd1c9161bc987eddad35650a92fe4d21d87f0703673cafc6b940"
+      ],
+      "source_governance_checksums": [
+        "49563fd58fe1e20398c75a31a624660fdbdf8c7907a32623733fe692c6ee0286"
+      ],
+      "governed_block_ids": [
+        "B-0eda24c9972b565fb8b1",
+        "B-351b651528792f136112",
+        "B-91b2ff3cc75b8dbe7d06",
+        "B-9456786fe3d7c2edb65f",
+        "B-9fc47388c1f39d705226",
+        "B-a6b6b4ef7cc4ca95d966",
+        "B-b394673160ea42852393"
+      ],
+      "review_task_ids": [
+        "REV-08627e8fd9c2176f011c",
+        "REV-ab9c6a8121188e53c181",
+        "REV-cede4dd7a7d4cb23f32a",
+        "REV-d55e6eaf9fa6a3910659",
+        "REV-d7a6ab35600616505571",
+        "REV-fc7b4ad5e946d2871f88"
+      ],
+      "parsed_block_count": 62,
+      "verified_anchor_count": 6,
+      "review_task_count": 6,
+      "embedding_count": 0,
+      "error_count": 0
+    },
+    {
+      "source_id": "NHS-PP-BODY",
+      "logical_version_id": "LV-c10f78bb17cb2f2179cb",
+      "artifact_sha256": "b1b4b1cebc59418b4d17c81636bc28ff515dc340ad7456af410668d92d011c1b",
+      "source_version": "selected-2026-09-10-correction-v2",
+      "parser_name": "beautifulsoup4",
+      "parser_version": "4.13.5;nestline-1.0.0",
+      "outcome": "review_required",
+      "candidate_ids": [
+        "C-E-PP-FERTILITY"
+      ],
+      "evidence_ids": [
+        "E-PP-FERTILITY"
+      ],
+      "candidate_checksums": [
+        "76223b6e3db0177d303455e3ea6c78d0bdd5a5d366d479b8c6a1f804e57633da"
+      ],
+      "selected_content_checksums": [
+        "c41ed2898be2c874a5ea3ea26bc34b90369890e6d22f16f026ea453ec80fec8b"
+      ],
+      "source_governance_checksums": [
+        "d47428eba89e83c2073069244979b25549bcfb65e2777ba41d5f0a4c6f532116"
+      ],
+      "governed_block_ids": [
+        "B-03572ddcc13e80d82a7c"
+      ],
+      "review_task_ids": [
+        "REV-76223b6e3db0177d3034"
+      ],
+      "parsed_block_count": 65,
+      "verified_anchor_count": 1,
+      "review_task_count": 1,
+      "embedding_count": 0,
+      "error_count": 0
+    },
+    {
+      "source_id": "NHS-PP-DIET",
+      "logical_version_id": "LV-693e9c1ab5f39aac7a8a",
+      "artifact_sha256": "d57259b4a5d35255b48b56618747b685f7c993d58bcb09ee0c36c2aacd5405b0",
+      "source_version": "reviewed-2026-05-15;selected-2026-09-10-v1",
+      "parser_name": "beautifulsoup4",
+      "parser_version": "4.13.5;nestline-1.0.0",
+      "outcome": "review_required",
+      "candidate_ids": [
+        "C-E-PP-DIET"
+      ],
+      "evidence_ids": [
+        "E-PP-DIET"
+      ],
+      "candidate_checksums": [
+        "7e9058cc6079480b1a62bcfaeddf2373274a4a1e3027771c72ce46d3ad23b647"
+      ],
+      "selected_content_checksums": [
+        "31c460ff7df677a4667066e32ae3645dc6e680b654d20fd1da43b26e8a9f5ab3"
+      ],
+      "source_governance_checksums": [
+        "41955521d3581f1227db54e343db08190e54cbb3b83bac4ab837abb8c88152d2"
+      ],
+      "governed_block_ids": [
+        "B-ee96a77e707b2d629565"
+      ],
+      "review_task_ids": [
+        "REV-7e9058cc6079480b1a62"
+      ],
+      "parsed_block_count": 61,
+      "verified_anchor_count": 1,
+      "review_task_count": 1,
+      "embedding_count": 0,
+      "error_count": 0
+    },
+    {
+      "source_id": "NHS-PP-SUPPORT",
+      "logical_version_id": "LV-0724b6addbcfd4b263e6",
+      "artifact_sha256": "fc522a4e81776d1114ea9bb13085de741d36dc1996613f544eae06bb2ade2dac",
+      "source_version": "selected-2026-09-10-correction-v2",
+      "parser_name": "beautifulsoup4",
+      "parser_version": "4.13.5;nestline-1.0.0",
+      "outcome": "review_required",
+      "candidate_ids": [
+        "C-E-PP-PRACTICAL-HELP"
+      ],
+      "evidence_ids": [
+        "E-PP-PRACTICAL-HELP"
+      ],
+      "candidate_checksums": [
+        "f20e639a975950a1d27ad1114d72ead0c29a4205c61494870a012a1dcd7104a8"
+      ],
+      "selected_content_checksums": [
+        "092fe6f829f80d85c74c979ca9e89881feb9e9a69df1835ef717541f9586cd32"
+      ],
+      "source_governance_checksums": [
+        "42d9222983e3a55119bd354f903b86da65f54f96cefca36f489717b148ab53f4"
+      ],
+      "governed_block_ids": [
+        "B-16289ad287eb1d14d7bd"
+      ],
+      "review_task_ids": [
+        "REV-f20e639a975950a1d27a"
+      ],
+      "parsed_block_count": 43,
+      "verified_anchor_count": 1,
+      "review_task_count": 1,
+      "embedding_count": 0,
+      "error_count": 0
+    },
+    {
+      "source_id": "NHS-PREG-MIND",
+      "logical_version_id": "LV-08260c8ea8cae269f832",
+      "artifact_sha256": "c52c37230cb06a99529143c9cb76f1b11ef90bde27d2b09ee0d7cff2e758879b",
+      "source_version": "reviewed-2026-03-11;selected-2026-09-10-v1",
+      "parser_name": "beautifulsoup4",
+      "parser_version": "4.13.5;nestline-1.0.0",
+      "outcome": "review_required",
+      "candidate_ids": [
+        "C-E-PREG-ENJOY",
+        "C-E-PREG-TALK"
+      ],
+      "evidence_ids": [
+        "E-PREG-ENJOY",
+        "E-PREG-TALK"
+      ],
+      "candidate_checksums": [
+        "339bc693632d7454391dba814571af49e04f7af6d4a517a83d60c157adb98036",
+        "5efbb9d4c28f4307a7fb6a5e9599631f17307698bee23e2a5f86167a4f9d9b8d"
+      ],
+      "selected_content_checksums": [
+        "04cce4f9d00db2c7b93d045c5febc2812012a01202bd1ef000cdfb27209fa2de",
+        "06b533049a2c5c4c6e9dae5e8a7534c0135dec4dd8a9a37d90ab67d189f6039b"
+      ],
+      "source_governance_checksums": [
+        "c0b5fd9b98b887bd153be7479d43059962b561844e8add5b49d7c98a259a93ce"
+      ],
+      "governed_block_ids": [
+        "B-324222a6572066419caa",
+        "B-6adc6ec2c0c5f088cf68"
+      ],
+      "review_task_ids": [
+        "REV-339bc693632d7454391d",
+        "REV-5efbb9d4c28f4307a7fb"
+      ],
+      "parsed_block_count": 47,
+      "verified_anchor_count": 2,
+      "review_task_count": 2,
+      "embedding_count": 0,
+      "error_count": 0
+    },
+    {
+      "source_id": "OWH-HEALTH",
+      "logical_version_id": "LV-5dfacf0194b59bfcc803",
+      "artifact_sha256": "10b599352d40e883f8a87ec0d4f5ca588fe05f7b2ab584cb873199f9813b6003",
+      "source_version": "selected-2026-09-10-correction-v2",
+      "parser_name": "beautifulsoup4",
+      "parser_version": "4.13.5;nestline-1.0.0",
+      "outcome": "review_required",
+      "candidate_ids": [
+        "C-E-FOOD-HYGIENE",
+        "C-E-MOVEMENT-CONSULT",
+        "C-E-PREG-FOOD-AVOID",
+        "C-E-PREG-FOOD-SAFETY",
+        "C-E-PREG-MEDICINE-BOUNDARY",
+        "C-E-PREG-MOVEMENT-OPTIONS",
+        "C-E-PREG-MOVEMENT-PACE",
+        "C-E-PREG-MOVEMENT-STOP"
+      ],
+      "evidence_ids": [
+        "E-FOOD-HYGIENE",
+        "E-MOVEMENT-CONSULT",
+        "E-PREG-FOOD-AVOID",
+        "E-PREG-FOOD-SAFETY",
+        "E-PREG-MEDICINE-BOUNDARY",
+        "E-PREG-MOVEMENT-OPTIONS",
+        "E-PREG-MOVEMENT-PACE",
+        "E-PREG-MOVEMENT-STOP"
+      ],
+      "candidate_checksums": [
+        "80df28d01f7c24fe6b8ad7ce85d4fbdf94f7811549108669a5ffcdefc02b52da",
+        "8d49aa866c092bca5fe67ef427c1e23559162060bc20b880ab0dcb7ba9fe39f4",
+        "9171d005e40390e4940916e7b2d0f8683aa6e8a163964f9216a6c476df8b9138",
+        "a744138f53722bafa4982cabf30c9ecc2799c118e4be3082b3d09af4e766ab7d",
+        "d39505d2e4c7e7b722c4be32742e24ec511b3f8db9b53e177d3079b3b3bc199f",
+        "e9a6b716570ed5b1e9b8c6dcc73f5d5c83c99322c3b91e578d08d9f12c6e41e2",
+        "fb20021d2bdde298f1a7fe19a376329c6e613d301397f6d450e3183bcda8bb56",
+        "fbd3d8038d9175d3dda96cbc3553ca3e8d32023f9171d945003899b390d02d71"
+      ],
+      "selected_content_checksums": [
+        "255372a8b13c2272d324af721a85fc0f21542f41a7289d272147929f5647f51c",
+        "3ddc83519fe47398343639ac3b08369ebb8bc5b4c2fbc7c8927abc9788e21fa4",
+        "3f9d9783bab3ce9e2b9d4d60fa441bc592abe5f0bf43640e7fd8577f85a6726e",
+        "5630a5dc17aa45ae2aad6cef96b9917f9b85bf94afc5eeb4a31119f2111ceb35",
+        "6bfcebdcfb12dc13c30eb7b2b47c99deee2a36bc56d75680ef607462066be6a9",
+        "8f59b0762689747466982380bbfb4f233c5b10b7e6e8f91e0402f631ef74cee6",
+        "b3579b2a15b31a6320c2893293038fafaced4b8a222d9845dad481eb94f1edc5",
+        "d7f7d08a0abff3e9eea61d9ffdbf10c1d5b446acaa231ec4c6cc1a29345fd2b8"
+      ],
+      "source_governance_checksums": [
+        "0ef1dbb52eb13f0fc869ef0c49531fc94ffc5d99ae18a1d907401aaef5102250"
+      ],
+      "governed_block_ids": [
+        "B-129ae789d889685d99f3",
+        "B-19bc616b229caca44b34",
+        "B-1c68fba17bd154846c78",
+        "B-284960476a8fad543890",
+        "B-3691f3bdc00e63d83ddf",
+        "B-3d96a3a61666944bbe74",
+        "B-419989f2930c871385ea",
+        "B-5b233260e3c6bb570fdc",
+        "B-5d40f6ab28c0401f5eba",
+        "B-60004cd2c67a47620d7a",
+        "B-63c8f806c80880b9f8a8",
+        "B-6eb247b3969caf30f127",
+        "B-78c453be67401c8108bb",
+        "B-842cd9ea1dca3a61f044",
+        "B-8d5ea43664ef8f44f4b6",
+        "B-8dde7a21c1403531e4c2",
+        "B-997a4ab7588d076b1989",
+        "B-ac81e81fb6ecc54bb34f",
+        "B-b8830fe406c5b71e43cb",
+        "B-b90a377a3e4ccafbc748",
+        "B-bb739d210340bb798368",
+        "B-e1925d40c53fbf9d4087",
+        "B-e4308e58fb71b737cb23",
+        "B-e5eeba0c0bf59e5dcbc4",
+        "B-f4c2fedfbe1f79995703",
+        "B-fbee3ea8140f281214cf"
+      ],
+      "review_task_ids": [
+        "REV-80df28d01f7c24fe6b8a",
+        "REV-8d49aa866c092bca5fe6",
+        "REV-9171d005e40390e49409",
+        "REV-a744138f53722bafa498",
+        "REV-d39505d2e4c7e7b722c4",
+        "REV-e9a6b716570ed5b1e9b8",
+        "REV-fb20021d2bdde298f1a7",
+        "REV-fbd3d8038d9175d3dda9"
+      ],
+      "parsed_block_count": 235,
+      "verified_anchor_count": 8,
+      "review_task_count": 8,
+      "embedding_count": 0,
+      "error_count": 0
+    },
+    {
+      "source_id": "OWH-RECOVERY",
+      "logical_version_id": "LV-1ae6d608ad8d71dd1816",
+      "artifact_sha256": "136278dc3f910c29f43b05817540726cbb62627e18043d85c7f6ddf3302691c0",
+      "source_version": "page-updated-2025-09-26;selected-excerpts-2026-09-10-v1",
+      "parser_name": "beautifulsoup4",
+      "parser_version": "4.13.5;nestline-1.0.0",
+      "outcome": "review_required",
+      "candidate_ids": [
+        "C-E-PP-ACTIVITY-QUESTION",
+        "C-E-PP-REST"
+      ],
+      "evidence_ids": [
+        "E-PP-ACTIVITY-QUESTION",
+        "E-PP-REST"
+      ],
+      "candidate_checksums": [
+        "1b2b012ff77e5e6acc2967d173beb352bdd4d47ae6d22fdecba2a2767664d697",
+        "dcf3f978e9718a5a75597cd6a9e0cb5ed761f3210b8d6d5d40f9b4996256af14"
+      ],
+      "selected_content_checksums": [
+        "38714ab02a4c2fd00072b5f0a777dcd7b23e0bc3cee1c6856025a11f9315b7f5",
+        "96379f04bd08aaa0eea4612a56065c16be4a54f54c5805424cfafbb1edcb6a02"
+      ],
+      "source_governance_checksums": [
+        "3c5b4c8767a859745ecce8a214fbc14afb7b5119d2a212ded79272f7cd7cd8fe"
+      ],
+      "governed_block_ids": [
+        "B-600ba80bb41b9708b9f8",
+        "B-e829c357048610f90d4c"
+      ],
+      "review_task_ids": [
+        "REV-1b2b012ff77e5e6acc29",
+        "REV-dcf3f978e9718a5a7559"
+      ],
+      "parsed_block_count": 47,
+      "verified_anchor_count": 2,
+      "review_task_count": 2,
+      "embedding_count": 0,
+      "error_count": 0
+    },
+    {
+      "source_id": "OWH-STAGES",
+      "logical_version_id": "LV-e1f08b7392636a301a65",
+      "artifact_sha256": "132165fa797e8189ebd904481c14401f34412b3f15f70bb8528597da21a475d2",
+      "source_version": "selected-2026-09-10-correction-v2",
+      "parser_name": "beautifulsoup4",
+      "parser_version": "4.13.5;nestline-1.0.0",
+      "outcome": "review_required",
+      "candidate_ids": [
+        "C-E-DATING",
+        "C-E-FIRST-TRIMESTER",
+        "C-E-P24-DEVELOPMENT",
+        "C-E-P36-DEVELOPMENT"
+      ],
+      "evidence_ids": [
+        "E-DATING",
+        "E-FIRST-TRIMESTER",
+        "E-P24-DEVELOPMENT",
+        "E-P36-DEVELOPMENT"
+      ],
+      "candidate_checksums": [
+        "11cb2913d6c8531bd89d14406cf7a40a87138fad3645129bae7639daa4b8550c",
+        "6c2bb329513583654e27ed7f28aa320497f5a336b3ff28f9af2647d16904f3dd",
+        "7774b0b8b978a642c05a5cdf09fc7fa8ca43286f3d896e653b5a7efb2bb438ee",
+        "b8524bf1668af20b171991da00d3ed110a14e578fa3c9fa787b66982ea8adcb4"
+      ],
+      "selected_content_checksums": [
+        "562016bfaa838fe5260a512faea8f68e92809999b5dff896a1002ff85481c42d",
+        "59a61c61b6caa886017f2dd5baff22ecb68d88ae2049ccb70e2e33d4eb723e53",
+        "84b63d47bf79f3db50b0c9b0733709094e6f990d87a024fce77ea1814a4644a3",
+        "def030845e08ec9d852042e9bbff27b1b642714f929dec9fe1b1db93f2a9c57b"
+      ],
+      "source_governance_checksums": [
+        "f06dd8897407367b922d54e2f5db95b87ef29bd50bec95b93d2ba8cfa77a7b7e"
+      ],
+      "governed_block_ids": [
+        "B-0868f072f99f240890a1",
+        "B-0ad3ff0fa569c1b3dd8c",
+        "B-25612a357fd359ce2ade",
+        "B-492fc039176b9e5c0f41",
+        "B-6f07891d28c5bca516f9",
+        "B-be71cc4f08d31aa486c6",
+        "B-d65b0bdfad1d34759723"
+      ],
+      "review_task_ids": [
+        "REV-11cb2913d6c8531bd89d",
+        "REV-6c2bb329513583654e27",
+        "REV-7774b0b8b978a642c05a",
+        "REV-b8524bf1668af20b1719"
+      ],
+      "parsed_block_count": 104,
+      "verified_anchor_count": 4,
+      "review_task_count": 4,
+      "embedding_count": 0,
+      "error_count": 0
+    },
+    {
+      "source_id": "OWH-TEST",
+      "logical_version_id": "LV-143a767e270230c560e6",
+      "artifact_sha256": "ed990e5e57ba9f0103d11e5ffa0778eabe14b75fd8ad349d600b0b563894bc67",
+      "source_version": "page-updated-2025-09-26;selected-excerpts-2026-09-10-v1",
+      "parser_name": "beautifulsoup4",
+      "parser_version": "4.13.5;nestline-1.0.0",
+      "outcome": "review_required",
+      "candidate_ids": [
+        "C-E-TEST"
+      ],
+      "evidence_ids": [
+        "E-TEST"
+      ],
+      "candidate_checksums": [
+        "abdc2b2a6fe6fb8e93507ab5740d1de6812c1489b82756da954e079e0cd35bf1"
+      ],
+      "selected_content_checksums": [
+        "8a00227c127ecb34530c1c8cc4b8aa3112c228a6f0e54032bed37ce81d562f7c"
+      ],
+      "source_governance_checksums": [
+        "d21d9269a3bba73b43084f6c9ba7e3f1d2f2368ef2c2003edc58cd06f13966bf"
+      ],
+      "governed_block_ids": [
+        "B-4e6343ea96ca60810b7a"
+      ],
+      "review_task_ids": [
+        "REV-abdc2b2a6fe6fb8e9350"
+      ],
+      "parsed_block_count": 21,
+      "verified_anchor_count": 1,
+      "review_task_count": 1,
+      "embedding_count": 0,
+      "error_count": 0
+    },
+    {
+      "source_id": "OWH-WELLBEING",
+      "logical_version_id": "LV-6af3492342cb7eec7d6a",
+      "artifact_sha256": "795fe3c16f713364eb28536c49159280d66a76af7a2b42fe5420bae31339e707",
+      "source_version": "selected-2026-09-10-correction-v2",
+      "parser_name": "beautifulsoup4",
+      "parser_version": "4.13.5;nestline-1.0.0",
+      "outcome": "review_required",
+      "candidate_ids": [
+        "C-E-PP-SUPPORT-CONTEXT",
+        "C-E-PP-SUPPORT-TALK"
+      ],
+      "evidence_ids": [
+        "E-PP-SUPPORT-CONTEXT",
+        "E-PP-SUPPORT-TALK"
+      ],
+      "candidate_checksums": [
+        "44ed32e51114a1ae82b59e28161785d6748bb6e8749d8938db9b2b08ed3e018a",
+        "54a3639b0dd48b7bb0348a4d4e49dc90b6b142f8c94e26671f9e98da9dd46291"
+      ],
+      "selected_content_checksums": [
+        "70ead6666d8d3ed2008f8b9746a9f8685ddc74b65a374cf4cc9ebdbf6cea6fba",
+        "718ef6d0423c10e6ba46d401e9cffba333d6b6c9bba1708eb537832cfb76f460"
+      ],
+      "source_governance_checksums": [
+        "18aae74230ec5991bb5adbe789d9de888021b707cbabebc7f28bee3387f77abb"
+      ],
+      "governed_block_ids": [
+        "B-6f675ae8fde01633fde1",
+        "B-7be6e47fa16692e1e2c6"
+      ],
+      "review_task_ids": [
+        "REV-44ed32e51114a1ae82b5",
+        "REV-54a3639b0dd48b7bb034"
+      ],
+      "parsed_block_count": 115,
+      "verified_anchor_count": 2,
+      "review_task_count": 2,
+      "embedding_count": 0,
+      "error_count": 0
+    },
+    {
+      "source_id": "PIB-PMSMA",
+      "logical_version_id": "LV-c1e924c927ff15a0cb70",
+      "artifact_sha256": "65b8fe632d47531d38a535fc3ff3bd3def8487c26f4d8d431f6620638ff901eb",
+      "source_version": "selected-2026-09-10-correction-v2",
+      "parser_name": "pymupdf",
+      "parser_version": "1.26.4;nestline-1.0.0",
+      "outcome": "review_required",
+      "candidate_ids": [
+        "C-E-IN-PMSMA"
+      ],
+      "evidence_ids": [
+        "E-IN-PMSMA"
+      ],
+      "candidate_checksums": [
+        "24a1dde66fc57afaf702949ea49e581acfbfe7e38277dd213dec162336f03bd0"
+      ],
+      "selected_content_checksums": [
+        "52d3b8f5ade0d101bc00f56d52ccc59bfab11363ba5009dbf15c786b16ecc470"
+      ],
+      "source_governance_checksums": [
+        "6b1586a13cd93c534e96a463cb3d91ad417b24b8d34358bce96379af45fbdd9a"
+      ],
+      "governed_block_ids": [
+        "B-4e8e1018fc1fd1175c02"
+      ],
+      "review_task_ids": [
+        "REV-24a1dde66fc57afaf702"
+      ],
+      "parsed_block_count": 14,
+      "verified_anchor_count": 1,
+      "review_task_count": 1,
+      "embedding_count": 0,
+      "error_count": 0
+    }
+  ]
+}

@@ -13,6 +13,8 @@ from app.schemas.content import (Applicability, Checksum, ConditionKey, Contract
                                  Domain, Identifier, Jurisdictions, Stage, Text)
 
 BlockKind = Literal["heading", "paragraph", "list_item", "table"]
+ReviewRole = Literal["licence", "content", "clinical", "india_localisation", "product"]
+ReviewDecision = Literal["accepted", "changes_requested", "rejected", "needs_specialist_review"]
 DisplaySlot = Literal[
     "hero", "kpi_development", "kpi_timing", "nutrition_focus",
     "movement_focus", "wellbeing_focus", "symptom_education", "preparation",
@@ -56,7 +58,7 @@ class SourceArtifact(Contract):
     byte_size: int = Field(ge=1)
     parser_name: Text
     parser_version: Text
-    ingestion_schema_version: Literal["1.0.0"] = "1.0.0"
+    ingestion_schema_version: Literal["1.1.0"] = "1.1.0"
 
 
 class ParsedBlock(Contract):
@@ -101,6 +103,7 @@ class EvidenceCandidate(Contract):
     source_id: Identifier
     artifact_sha256: Checksum
     source_version: Text
+    source_governance_checksum: Checksum
     source_locator: Text
     source_block_ids: list[Identifier] = Field(default_factory=list)
     page: int | None = Field(default=None, ge=1)
@@ -152,8 +155,37 @@ class EmbeddingRecord(Contract):
         return self
 
 
+class EvidenceReviewDecision(Contract):
+    """One person's decision within one honest review capacity."""
+
+    task_id: Identifier
+    candidate_id: Identifier
+    evidence_id: Identifier
+    source_id: Identifier
+    role: ReviewRole
+    decision: ReviewDecision
+    reviewer_name: Text
+    reviewer_capacity: Text
+    reviewed_at: date
+    reason: Text
+    candidate_checksum: Checksum
+    exact_replacement_wording: Text | None = None
+    supporting_reference: Text | None = None
+    proposed_timing_change: Text | None = None
+    proposed_condition_change: Text | None = None
+    proposed_jurisdiction_change: Text | None = None
+
+    @model_validator(mode="after")
+    def changes_name_the_requested_change(self):
+        proposed = (self.exact_replacement_wording, self.proposed_timing_change,
+                    self.proposed_condition_change, self.proposed_jurisdiction_change)
+        if self.decision == "changes_requested" and not any(proposed):
+            raise ValueError("changes_requested requires an exact proposed change")
+        return self
+
+
 class EvidenceReviewTask(Contract):
-    """A pending human decision; its presence never counts as approval."""
+    """Role-scoped decisions for one exact candidate version."""
 
     task_id: Identifier
     candidate_id: Identifier
@@ -161,17 +193,57 @@ class EvidenceReviewTask(Contract):
     source_id: Identifier
     candidate_checksum: Checksum
     required_checks: list[ReviewCheck] = Field(min_length=1)
+    required_roles: list[ReviewRole] = Field(min_length=1)
     blocking_reasons: list[Text] = Field(min_length=1)
-    status: Literal["pending", "approved", "rejected"] = "pending"
-    reviewer: Text | None = None
-    reviewed_at: date | None = None
+    decisions: list[EvidenceReviewDecision] = Field(default_factory=list)
+    status: Literal[
+        "pending", "accepted", "changes_requested", "rejected", "needs_specialist_review"
+    ] = "pending"
 
     @model_validator(mode="after")
-    def decided_tasks_name_a_reviewer(self):
-        if self.status != "pending" and (self.reviewer is None or self.reviewed_at is None):
-            raise ValueError("a review decision requires a named reviewer and date")
-        if self.status == "pending" and (self.reviewer is not None or self.reviewed_at is not None):
-            raise ValueError("a pending review task cannot contain a decision attestation")
+    def decisions_match_candidate_and_status(self):
+        if len(self.required_roles) != len(set(self.required_roles)):
+            raise ValueError("review task contains duplicate required roles")
+        roles = [decision.role for decision in self.decisions]
+        if len(roles) != len(set(roles)):
+            raise ValueError("review task contains more than one decision for a role")
+        if not set(roles) <= set(self.required_roles):
+            raise ValueError("review decision uses a role that is not required")
+        if any((decision.task_id != self.task_id
+                or decision.candidate_id != self.candidate_id
+                or decision.evidence_id != self.evidence_id
+                or decision.source_id != self.source_id)
+               for decision in self.decisions):
+            raise ValueError("review decision refers to a different task or evidence record")
+        if any(decision.candidate_checksum != self.candidate_checksum for decision in self.decisions):
+            raise ValueError("review decision refers to a different candidate version")
+        dispositions = {decision.decision for decision in self.decisions}
+        if "rejected" in dispositions:
+            expected = "rejected"
+        elif "changes_requested" in dispositions:
+            expected = "changes_requested"
+        elif "needs_specialist_review" in dispositions:
+            expected = "needs_specialist_review"
+        elif set(roles) == set(self.required_roles) and dispositions == {"accepted"}:
+            expected = "accepted"
+        else:
+            expected = "pending"
+        if self.status != expected:
+            raise ValueError(f"review task status must be {expected} for its role decisions")
+        return self
+
+
+class Stage1ReviewLedger(Contract):
+    """Portable reviewer decisions that can be validated during ingestion."""
+
+    schema_version: Literal["1.0.0"] = "1.0.0"
+    decisions: list[EvidenceReviewDecision] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def one_decision_per_task_and_role(self):
+        keys = [(decision.task_id, decision.role) for decision in self.decisions]
+        if len(keys) != len(set(keys)):
+            raise ValueError("review ledger contains duplicate task/role decisions")
         return self
 
 
@@ -187,12 +259,14 @@ class IngestionDiff(Contract):
 
 class IngestionRun(Contract):
     run_id: Identifier
+    logical_version_id: Identifier
     created_at: datetime
     evaluated_at: date = Field(default_factory=date.today)
     dry_run: bool
     artifact: SourceArtifact | None = None
     admission: SourceAdmission
     parsed_block_count: int = Field(ge=0)
+    governed_blocks: list[ParsedBlock] = Field(default_factory=list)
     candidates: list[EvidenceCandidate] = Field(default_factory=list)
     review_tasks: list[EvidenceReviewTask] = Field(default_factory=list)
     embeddings: list[EmbeddingRecord] = Field(default_factory=list)
@@ -225,6 +299,16 @@ class IngestionRun(Contract):
                                  or candidate.artifact_sha256 != self.artifact.original_sha256
                                  for candidate in self.candidates):
             raise ValueError("candidate provenance differs from the run artifact")
+        block_ids = [block.block_id for block in self.governed_blocks]
+        if len(block_ids) != len(set(block_ids)):
+            raise ValueError("ingestion run contains duplicate governed blocks")
+        referenced_blocks = {block_id for candidate in self.candidates
+                             for block_id in candidate.source_block_ids}
+        if referenced_blocks != set(block_ids):
+            raise ValueError("governed blocks must resolve every candidate source block exactly")
+        if self.artifact and any(block.source_id != self.artifact.source_id
+                                 for block in self.governed_blocks):
+            raise ValueError("governed block provenance differs from the run artifact")
         errors = any(issue.severity == "error" for issue in self.issues)
         if self.outcome in {"publishable", "published"}:
             if (self.artifact is None or self.admission.decision != "eligible_for_publication"
@@ -250,6 +334,9 @@ class CorpusManifest(Contract):
     created_at: datetime
     status: Literal["draft", "published"]
     source_artifacts: list[SourceArtifact] = Field(min_length=1)
+    release_fingerprint: Checksum
+    approval_roles: list[ReviewRole] = Field(min_length=5, max_length=5)
+    block_file_sha256: Checksum
     candidate_file_sha256: Checksum
     embedding_file_sha256: Checksum
     embedding_provider: Text
@@ -257,3 +344,43 @@ class CorpusManifest(Contract):
     evidence_ids: list[Identifier] = Field(min_length=1)
     profile_ids: list[Identifier] = Field(default_factory=list)
     limitations: list[Text] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def contains_every_release_role_once(self):
+        required = {"licence", "content", "clinical", "india_localisation", "product"}
+        if set(self.approval_roles) != required or len(self.approval_roles) != len(required):
+            raise ValueError("corpus manifest must record all five release approval roles")
+        return self
+
+
+class Stage1AuditSource(Contract):
+    """Safe, text-free proof of one exact source ingestion result."""
+
+    source_id: Identifier
+    logical_version_id: Identifier
+    artifact_sha256: Checksum
+    source_version: Text
+    parser_name: Text
+    parser_version: Text
+    outcome: Literal["rejected", "review_required", "publishable", "published"]
+    candidate_ids: list[Identifier]
+    evidence_ids: list[Identifier]
+    candidate_checksums: list[Checksum]
+    selected_content_checksums: list[Checksum]
+    source_governance_checksums: list[Checksum]
+    governed_block_ids: list[Identifier]
+    review_task_ids: list[Identifier]
+    parsed_block_count: int = Field(ge=0)
+    verified_anchor_count: int = Field(ge=0)
+    review_task_count: int = Field(ge=0)
+    embedding_count: int = Field(ge=0)
+    error_count: int = Field(ge=0)
+
+
+class Stage1Audit(Contract):
+    """Tracked proof that a clean checkout can validate the canonical Stage 1 run."""
+
+    schema_version: Literal["1.0.0"] = "1.0.0"
+    foundation_release_fingerprint: Checksum
+    generated_from: Literal["exact_registered_https_sources"]
+    sources: list[Stage1AuditSource] = Field(min_length=1)

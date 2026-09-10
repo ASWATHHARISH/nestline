@@ -176,11 +176,19 @@ waiting on the existing Stage 0 human review gate, not hidden as later work.
 
 ### S2 — Storage and isolation · 8–12 hours
 
-- [ ] Version Supabase SQL migrations for workspace, journey, evidence, facts, plans, graph, review and feedback data.
-- [ ] Add RLS policies and private Storage access; derive workspace from authenticated session, never model arguments.
-- [ ] Separate user-token operations from any privileged ingestion job; no ordinary retrieval with service-role credentials.
-- [ ] Clone/reset per-session demo workspaces. Personal Mode begins empty.
-- [ ] Implement version checks, idempotency keys, atomic state updates and deletion of derived artifacts.
+- [x] Version Supabase SQL migrations for workspace, journey, evidence, facts, plans, graph, review and feedback data.
+- [x] Add RLS policies and private Storage access; derive workspace from authenticated session, never model arguments.
+- [x] Separate user-token operations from any privileged ingestion job; no ordinary retrieval with service-role credentials.
+- [x] Create/reset per-session demo workspaces. Personal Mode begins empty; Storage objects must be deleted through the Storage API before database reset.
+- [x] Implement version checks, idempotency keys, atomic state updates and deletion of derived artifacts.
+
+Completed 11 September 2026 in the `nestline-dev` Supabase project. Five tracked
+migrations create 28 RLS-enabled tables, private Storage, pgvector, release-bound
+provenance and workspace lifecycle functions. A rolled-back two-principal test
+passed nine SQL/vector/graph/Storage/mutation assertions; a second transaction
+passed workspace creation, atomic version, stale-update, document-deduplication
+and reset checks. Secret-free hashes/counts are tracked in
+`data/supabase/remote-verification.json`.
 
 **Exit:** authenticated A cannot read/search/download/mutate B's SQL, vectors, graph or files. A demo reset cannot affect another session. Migrations and seed/reset commands work on a clean test database. Deletion tests verify removal or explicit invalidation of every dependent item.
 

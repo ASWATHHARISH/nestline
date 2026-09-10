@@ -15,9 +15,9 @@ It covers the Streamlit application, one explicit profile for every pregnancy an
 
 ## Development status
 
-Stage 0 work is shared on `feat/stage-0-data-foundation` in
-`kajalchourasia-cmd/nestline`. Pull requests and changes to `main` require an
-explicit request from Aswath.
+Current engineering work is on `feat/stage-1-governed-ingestion` in
+`kajalchourasia-cmd/nestline`. No pull request or merge to `main` is created
+without Aswath's explicit request.
 
 The Stage 0 correction pass has 63 journey records: nine populated representative
 profiles, eight populated early-postpartum overlays and 46 hidden shells. There
@@ -25,7 +25,7 @@ are 31 registered sources, 14 active selected-excerpt snapshots, 55 unique evide
 and 56 draft fragments. The additional catalogues, eight fictional PDF/text/truth
 fixtures and visible software-test cases are present.
 
-Local checks pass: 95 unit tests and 64 deterministic software cases. These are
+Local checks pass: 113 unit tests and 64 deterministic software cases. These are
 not AI-model or clinical evaluations. **Stage 0 is not a completed content release:**
 source currency, current Indian clinical interpretation, exact wording and actual
 human review/publication remain open. Fruit measurements and object dimensions
@@ -34,6 +34,12 @@ are unverified; those proposals remain hidden. No health content is published.
 Stage 1's governed ingestion system is implemented. Dry runs against all 14
 evidence-bearing sources resolve all 55 unique source passages and create 55 human
 review tasks. They correctly create zero embeddings while the content is unapproved.
+
+Stage 2's Supabase storage foundation is deployed to `nestline-dev`: 28 tables,
+RLS on all 28, a private medical-document bucket, pgvector support, release-bound
+public provenance and authenticated workspace/journey lifecycle functions. A
+transactional two-user test passed across SQL, private vector search, graph,
+Storage policy and cross-workspace mutation, then rolled back all fixtures.
 
 - [Correction findings, evidence and remaining work](docs/STAGE-0-CORRECTION-STATUS.md)
 - [Current source states](docs/STAGE-0-SOURCE-STATE.json)
@@ -44,3 +50,7 @@ review tasks. They correctly create zero embeddings while the content is unappro
 - [Stage 1 implementation and operator guide](docs/STAGE-1-IMPLEMENTATION.md)
 - [Stage 1 in plain language](docs/STAGE-1-PLAIN-LANGUAGE.md)
 - [Stage 1 reviewer queue](docs/STAGE-1-REVIEW-QUEUE.md)
+- [Stage 1 independent-review correction status](docs/STAGE-1-CORRECTION-STATUS.md)
+- [Kajal human-review handout](docs/KAJAL-HUMAN-REVIEW-HANDOUT.md)
+- [Stage 2 implementation and verification](docs/STAGE-2-IMPLEMENTATION.md)
+- [Stage 2 in plain language](docs/STAGE-2-PLAIN-LANGUAGE.md)

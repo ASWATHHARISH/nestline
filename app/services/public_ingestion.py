@@ -13,11 +13,11 @@ import fitz
 from app.schemas.content import ContentBundle, EvidenceSpan, SourceRecord
 from app.schemas.foundation import CatalogueItem
 from app.schemas.ingestion import (DevelopmentMeasurement, EmbeddingRecord, EvidenceCandidate,
-                                   EvidenceReviewTask, IngestionDiff, IngestionIssue,
-                                   IngestionRun, SourceAdmission, SourceArtifact)
+                                   EvidenceReviewDecision, EvidenceReviewTask, IngestionDiff, IngestionIssue,
+                                   IngestionRun, ParsedBlock, SourceAdmission, SourceArtifact)
 from app.services.content_validation import validate_bundle
 from app.services.embeddings import EmbeddingProvider
-from app.services.foundation import fingerprint, source_freshness
+from app.services.foundation import fingerprint, review_subject, source_freshness
 from app.services.public_parsers import (OcrProvider, PARSER_VERSION, normalize_text,
                                          parse_html, parse_pdf)
 
@@ -245,6 +245,8 @@ def build_candidates(bundle: ContentBundle, source: SourceRecord, artifact: Sour
         search_text = normalize_text(f"{source.title}. {evidence.locator}. {evidence.text}")
         subject = dict(evidence_id=evidence.evidence_id, source_id=source.source_id,
                        artifact_sha256=artifact.original_sha256, source_version=source.version_or_last_update,
+                       source_governance_checksum=fingerprint(
+                           review_subject(source.model_dump(mode="json"))),
                        source_locator=evidence.locator, source_block_ids=block_ids,
                        page=evidence.page, heading_path=heading_path,
                        original_text=evidence.text, normalized_search_text=search_text,
@@ -338,41 +340,87 @@ def _embeddings(candidates: list[EvidenceCandidate], admission: SourceAdmission,
     return records, []
 
 
-def _review_tasks(candidates: list[EvidenceCandidate]) -> list[EvidenceReviewTask]:
+def _review_tasks(candidates: list[EvidenceCandidate],
+                  decisions: list[EvidenceReviewDecision] | None = None) -> list[EvidenceReviewTask]:
     checks = ["source_anchor", "domain", "stage_and_range", "wording", "jurisdiction",
               "conditions", "development_measurements", "profile_links", "catalogue_links",
               "reuse_and_attribution"]
-    return [EvidenceReviewTask(task_id=f"REV-{candidate.candidate_checksum[:20]}",
-                               candidate_id=candidate.candidate_id,
-                               evidence_id=candidate.evidence_id,
-                               source_id=candidate.source_id,
-                               candidate_checksum=candidate.candidate_checksum,
-                               required_checks=checks,
-                               blocking_reasons=candidate.review_reasons)
-            for candidate in candidates if candidate.state == "review_required"]
+    roles = ["licence", "content", "clinical", "india_localisation", "product"]
+    supplied = decisions or []
+    grouped: dict[str, list[EvidenceReviewDecision]] = {}
+    for decision in supplied:
+        grouped.setdefault(decision.task_id, []).append(decision)
+    tasks = []
+    for candidate in candidates:
+        if candidate.state != "review_required":
+            continue
+        task_id = f"REV-{candidate.candidate_checksum[:20]}"
+        task_decisions = grouped.pop(task_id, [])
+        dispositions = {decision.decision for decision in task_decisions}
+        decided_roles = {decision.role for decision in task_decisions}
+        if "rejected" in dispositions:
+            status = "rejected"
+        elif "changes_requested" in dispositions:
+            status = "changes_requested"
+        elif "needs_specialist_review" in dispositions:
+            status = "needs_specialist_review"
+        elif decided_roles == set(roles) and dispositions == {"accepted"}:
+            status = "accepted"
+        else:
+            status = "pending"
+        tasks.append(EvidenceReviewTask(
+            task_id=task_id, candidate_id=candidate.candidate_id,
+            evidence_id=candidate.evidence_id, source_id=candidate.source_id,
+            candidate_checksum=candidate.candidate_checksum,
+            required_checks=checks, required_roles=roles,
+            blocking_reasons=candidate.review_reasons,
+            decisions=task_decisions, status=status))
+    if grouped:
+        raise ValueError("review decisions refer to absent or stale tasks: "
+                         + ", ".join(sorted(grouped)))
+    return tasks
+
+
+def _governed_blocks(blocks: list[ParsedBlock],
+                     candidates: list[EvidenceCandidate]) -> list[ParsedBlock]:
+    """Retain only blocks used by selected evidence, never an unbounded page dump."""
+    wanted = {block_id for candidate in candidates for block_id in candidate.source_block_ids}
+    by_id = {block.block_id: block for block in blocks}
+    missing = wanted - by_id.keys()
+    if missing:
+        raise ValueError(f"candidate source blocks are absent from parser output: {sorted(missing)}")
+    return [block for block in blocks if block.block_id in wanted]
 
 
 def run_ingestion(bundle: ContentBundle, source_id: str, raw: bytes, *, retrieved_at: date,
                   dry_run: bool = True, previous: IngestionRun | None = None,
                   embedding_provider: EmbeddingProvider | None = None,
+                  review_decisions: list[EvidenceReviewDecision] | None = None,
                   catalogue_items: list[CatalogueItem] | None = None,
                   ocr_provider: OcrProvider | None = None,
                   as_of: date | None = None) -> IngestionRun:
     source = next((source for source in bundle.sources if source.source_id == source_id), None)
     if source is None:
         raise ValueError(f"source is not registered: {source_id}")
+    if previous is not None and previous.admission.source_id != source_id:
+        raise ValueError("previous ingestion run belongs to a different source")
     evaluated_at = as_of or date.today()
     admission = admission_for(source, evaluated_at)
-    run_seed = fingerprint({"source_id": source_id, "raw": sha256(raw).hexdigest(),
-                            "source_version": source.version_or_last_update,
+    artifact_checksum = sha256(raw).hexdigest()
+    logical_seed = fingerprint({"source_id": source_id, "raw": artifact_checksum,
+                                "source_version": source.version_or_last_update,
+                                "parser_version": PARSER_VERSION,
+                                "ingestion_schema_version": "1.1.0"})[:20]
+    logical_version_id = f"LV-{logical_seed}"
+    run_seed = fingerprint({"logical_version_id": logical_version_id,
                             "retrieved_at": retrieved_at.isoformat(),
-                            "evaluated_at": evaluated_at.isoformat(),
-                            "ingestion_version": PARSER_VERSION})[:20]
+                            "evaluated_at": evaluated_at.isoformat()})[:20]
     run_id = f"ING-{run_seed}"
     if admission.decision == "rejected":
         issues = [IngestionIssue(code="SOURCE_REJECTED", severity="error", message="; ".join(admission.reasons),
                                  source_id=source_id)]
-        return IngestionRun(run_id=run_id, created_at=datetime.now(timezone.utc), evaluated_at=evaluated_at,
+        return IngestionRun(run_id=run_id, logical_version_id=logical_version_id,
+                            created_at=datetime.now(timezone.utc), evaluated_at=evaluated_at,
                             dry_run=dry_run,
                             admission=admission, parsed_block_count=0, issues=issues, outcome="rejected")
     bundle_report = validate_bundle(bundle, require_coverage=False)
@@ -380,7 +428,8 @@ def run_ingestion(bundle: ContentBundle, source_id: str, raw: bytes, *, retrieve
         issue = IngestionIssue(code="CONTENT_BUNDLE_INVALID", severity="error",
                                message="Public content contracts failed: " + "; ".join(bundle_report.errors[:5]),
                                source_id=source_id)
-        return IngestionRun(run_id=run_id, created_at=datetime.now(timezone.utc), evaluated_at=evaluated_at,
+        return IngestionRun(run_id=run_id, logical_version_id=logical_version_id,
+                            created_at=datetime.now(timezone.utc), evaluated_at=evaluated_at,
                             dry_run=dry_run, admission=admission, parsed_block_count=0,
                             issues=[issue], outcome="rejected")
     parser_name = "beautifulsoup4" if source.document_type == "html" else "pymupdf"
@@ -388,7 +437,7 @@ def run_ingestion(bundle: ContentBundle, source_id: str, raw: bytes, *, retrieve
     artifact = SourceArtifact(source_id=source_id, canonical_url=source.canonical_url,
                               source_version=source.version_or_last_update,
                               document_type=source.document_type, retrieved_at=retrieved_at,
-                              original_sha256=sha256(raw).hexdigest(), byte_size=len(raw),
+                              original_sha256=artifact_checksum, byte_size=len(raw),
                               parser_name=parser_name, parser_version=f"{parser_version};nestline-{PARSER_VERSION}")
     selected = [evidence.page for evidence in bundle.evidence
                 if evidence.source_id == source_id and evidence.page is not None]
@@ -402,14 +451,37 @@ def run_ingestion(bundle: ContentBundle, source_id: str, raw: bytes, *, retrieve
     candidates, candidate_issues = build_candidates(bundle, source, artifact, blocks, admission=admission,
                                                      catalogue_items=catalogue_items)
     issues.extend(candidate_issues)
+    previous_candidates = ({candidate.evidence_id: candidate for candidate in previous.candidates}
+                           if previous else {})
+    governed_candidate_changed = any(
+        candidate.evidence_id in previous_candidates
+        and candidate.candidate_checksum
+        != previous_candidates[candidate.evidence_id].candidate_checksum
+        for candidate in candidates
+    )
+    source_changed = bool(previous and (
+        governed_candidate_changed
+        or (previous.artifact and (
+            previous.artifact.original_sha256 != artifact.original_sha256
+            or previous.artifact.source_version != artifact.source_version
+        ))
+        or previous.admission != admission
+    ))
+    if source_changed:
+        candidates = [candidate.model_copy(update={
+            "state": "review_required",
+            "review_reasons": list(dict.fromkeys([
+                *candidate.review_reasons,
+                "source content, version or permission state changed since the prior capture",
+            ])),
+        }) if candidate.state == "approved" else candidate for candidate in candidates]
+    governed_blocks = _governed_blocks(blocks, candidates)
     if any(issue.severity == "error" for issue in issues):
         embeddings, embedding_issues = [], []
     else:
         embeddings, embedding_issues = _embeddings(candidates, admission, embedding_provider)
     issues.extend(embedding_issues)
-    review_tasks = _review_tasks(candidates)
-    source_changed = bool(previous and previous.artifact
-                          and previous.artifact.original_sha256 != artifact.original_sha256)
+    review_tasks = _review_tasks(candidates, review_decisions)
     diff = candidate_diff(candidates, previous, source_changed=source_changed)
     has_error = any(issue.severity == "error" for issue in issues)
     if has_error or any(candidate.state == "rejected" for candidate in candidates):
@@ -418,8 +490,10 @@ def run_ingestion(bundle: ContentBundle, source_id: str, raw: bytes, *, retrieve
         outcome = "review_required"
     else:
         outcome = "publishable"
-    return IngestionRun(run_id=run_id, created_at=datetime.now(timezone.utc), evaluated_at=evaluated_at,
+    return IngestionRun(run_id=run_id, logical_version_id=logical_version_id,
+                        created_at=datetime.now(timezone.utc), evaluated_at=evaluated_at,
                         dry_run=dry_run,
                         artifact=artifact, admission=admission, parsed_block_count=len(blocks),
+                        governed_blocks=governed_blocks,
                         candidates=candidates, review_tasks=review_tasks,
                         embeddings=embeddings, issues=issues, diff=diff, outcome=outcome)

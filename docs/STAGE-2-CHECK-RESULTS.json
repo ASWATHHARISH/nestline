@@ -1,0 +1,30 @@
+{
+  "valid": true,
+  "migrations": [
+    "supabase\\migrations\\20260910000100_stage2_storage.sql",
+    "supabase\\migrations\\20260910000200_protect_workspace_owner.sql",
+    "supabase\\migrations\\20260911000100_bind_public_release_provenance.sql",
+    "supabase\\migrations\\20260911000200_workspace_lifecycle.sql",
+    "supabase\\migrations\\20260911000300_workspace_owner_visibility.sql"
+  ],
+  "tables": 28,
+  "workspace_owned_tables": 16,
+  "remote_project": "nestline-dev",
+  "remote_verified_at": "2026-09-11T00:16:14+05:30",
+  "remote_checks": {
+    "stage2_tables": 28,
+    "rls_enabled_tables": 28,
+    "private_medical_document_buckets": 1,
+    "vector_extension_enabled": 1,
+    "workspace_membership_policies": 4,
+    "release_bound_foreign_keys": 8,
+    "migration_history_rows": 5,
+    "workspace_lifecycle_functions": 3,
+    "document_dedup_constraints": 1,
+    "workspace_owner_visibility_policies": 1,
+    "transactional_isolation_assertions": 9,
+    "transactional_lifecycle_assertions": 5,
+    "temporary_fixture_rows_remaining": 0
+  },
+  "errors": []
+}
