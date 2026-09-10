@@ -10,8 +10,9 @@ Compass is the assistant we will build inside it. The finished product should
 organise her reports, answer supported questions, help prepare suitable plans and
 questions for her care team, and direct concerning symptoms to medical help.
 We are building by stages. Today the working code is the information foundation;
-there is no working chat, OCR, user database, agent team or patient-facing safety
-system yet.
+there is no working chat, user database, agent team or patient-facing safety
+system yet. Stage 1 now has controlled public-source parsing and an OCR adapter;
+private-report extraction remains Stage 4.
 
 ## Stage 0, explained as a library
 
@@ -51,7 +52,7 @@ localisation record. Foreign clinic schedules and emergency numbers cannot silen
 become Indian instructions. Five excluded sources remain excluded. CDC's warning
 list is a link-only clinical reference because third-party reuse needs clarification.
 
-### 3. The page references: 56 evidence records
+### 3. The page references: 55 unique evidence records
 
 Each record saves a selected supporting passage, its source and location, and the
 time range it supports. A file fingerprint detects local changes. It cannot prove
@@ -118,8 +119,10 @@ it does not mean OCR or AI extraction works.
 
 ### 8. Checks, not an AI evaluation result
 
-There are 68 passing unit tests. They try valid and invalid data: broken citations,
-wrong weeks, missing conditions, altered source files and false publication states.
+There are 95 passing unit tests: the original 68 foundation tests plus 27 Stage 1
+ingestion tests. They try valid and invalid data: broken citations, wrong weeks,
+missing conditions, altered source files, parser/OCR failures, duplicate units and
+false publication states.
 There are also 64 visible software cases in the future evaluation-contract file.
 The local runner checks existing deterministic functions and fixture integrity.
 **Neither count means conversations tested with Grok, GPT or any other AI model.**
@@ -151,7 +154,7 @@ Their safe fallback is sourced development text without a size comparison.
 | Stage | What we will build | Status today |
 |---|---|---|
 | 0: Content foundation | Sources, cards, rules and review controls | Corrected draft foundation; human content release remains blocked. |
-| 1: Ingestion | Repeatedly read approved documents with versions and provenance | Manual excerpts and synthetic inputs exist; automated ingestion/OCR/embeddings are not built. |
+| 1: Ingestion | Repeatedly read approved documents with versions and provenance | Technical pipeline complete; 14-source dry run found all 55 anchors. All remain in review, so no embeddings/corpus are published. |
 | 2: Storage | Keep each user's information secure and separate | Local files only; database/authentication/access isolation are not built. |
 | 3: Onboarding | Confirm details and work out journey timing | Month/day selection contracts exist; onboarding and date resolution are not built. |
 | 4: Personal documents | Propose extracted facts and request confirmation | Eight input/truth fixtures exist; the extraction and confirmation pipeline is not built. |

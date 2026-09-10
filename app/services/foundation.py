@@ -55,6 +55,8 @@ def read_catalogues(data: Path) -> list[CatalogueItem]:
 
 def source_freshness(source, today: date) -> list[str]:
     errors = []
+    if source.last_checked_at is None or source.last_checked_at > today:
+        errors.append("source check date is missing or future-dated")
     if source.retrieved_at is None or source.next_review_at is None:
         errors.append("capture or next-review date missing")
     elif source.retrieved_at > today or source.next_review_at < today:

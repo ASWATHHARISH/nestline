@@ -1,0 +1,87 @@
+{
+  "checked_at_utc": "2026-09-10T13:54:19.356345+00:00",
+  "execution": "Local engineering checks and previously captured exact-source dry runs",
+  "tests_run": 95,
+  "checks": {
+    "software_tests": {
+      "arguments": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-q"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "----------------------------------------------------------------------\nRan 95 tests in 0.807s\n\nOK"
+    },
+    "dependencies": {
+      "arguments": [
+        "-m",
+        "pip",
+        "check"
+      ],
+      "exit_code": 0,
+      "stdout": "No broken requirements found.",
+      "stderr": ""
+    },
+    "foundation_errors": [],
+    "ingestion_schema_present": true,
+    "saved_source_dry_runs": {
+      "saved_run_count": 14,
+      "source_ids": [
+        "BHC-WEEKS",
+        "NHM-CHO",
+        "NHM-MOTHERHOOD",
+        "NHS-PP-ACTIVE",
+        "NHS-PP-BODY",
+        "NHS-PP-DIET",
+        "NHS-PP-SUPPORT",
+        "NHS-PREG-MIND",
+        "OWH-HEALTH",
+        "OWH-RECOVERY",
+        "OWH-STAGES",
+        "OWH-TEST",
+        "OWH-WELLBEING",
+        "PIB-PMSMA"
+      ],
+      "candidate_count": 55,
+      "verified_anchor_count": 55,
+      "review_task_count": 55,
+      "embedding_count": 0,
+      "error_count": 0,
+      "outcomes": {
+        "BHC-WEEKS": "review_required",
+        "NHM-CHO": "review_required",
+        "NHM-MOTHERHOOD": "review_required",
+        "NHS-PP-ACTIVE": "review_required",
+        "NHS-PP-BODY": "review_required",
+        "NHS-PP-DIET": "review_required",
+        "NHS-PP-SUPPORT": "review_required",
+        "NHS-PREG-MIND": "review_required",
+        "OWH-HEALTH": "review_required",
+        "OWH-RECOVERY": "review_required",
+        "OWH-STAGES": "review_required",
+        "OWH-TEST": "review_required",
+        "OWH-WELLBEING": "review_required",
+        "PIB-PMSMA": "review_required"
+      },
+      "missing_evidence_ids": [],
+      "expected_fixed_quote_missing_ids": [],
+      "unexpected_missing_ids": [],
+      "malformed_run_files": []
+    }
+  },
+  "release_state": {
+    "public_corpus_published": false,
+    "reason": "All current public evidence still requires actual source/content/local/clinical/product review.",
+    "production_embedding_provider_selected": false
+  },
+  "limitations": [
+    "Engineering tests are not clinical review or an AI answer evaluation.",
+    "The two Better Health Channel fixed quotations are display-only under the registry and are forbidden from embeddings.",
+    "Private medical reports belong to Stage 4 and were not placed in this public corpus.",
+    "Supabase publication belongs to Stage 2; Stage 1 publishes only an immutable local corpus after approvals."
+  ]
+}

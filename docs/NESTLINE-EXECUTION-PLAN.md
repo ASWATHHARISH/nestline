@@ -149,8 +149,8 @@ Each package is ready for a GitHub issue using the stable ID. Work is not done m
 - [ ] Record actual named licence/content/clinical/India-localisation/product reviews, resolve corrections and publish the nine representative profiles plus eight day overlays. A draft or passing software check does not satisfy this gate.
 - [x] Specify draft → reviewed → published → superseded transitions and unpublished-profile UI behavior.
 
-10 September correction pass: 14 active snapshots, 56 spans/fragments, nine
-representative drafts and eight populated day overlays. Local checks: 68 unit
+10 September correction pass: 14 active snapshots, 55 spans and 56 fragments, nine
+representative drafts and eight populated day overlays. Local checks: 95 unit
 tests and 64 visible deterministic software cases. No model benchmark has run.
 Food, movement, wellbeing, follow-up and hidden comparison catalogues plus eight
 fictional PDF/text/extraction fixtures now exist. Read STAGE-0-CORRECTION-STATUS.md:
@@ -162,10 +162,15 @@ review/publication gate is still Stage 0 work, not a later-stage promise.
 
 ### S1 — Governed public ingestion · 6–10 hours
 
-- [ ] Parse approved HTML sections/PDF pages, preserve headings/tables and exact source anchors, compute checksums and record corpus/parser versions.
-- [ ] Validate candidate evidence; create normalized search text and embeddings only for approved units.
-- [ ] Make ingestion idempotent; source updates create new versions and invalidate affected published content/cache.
-- [ ] Provide a dry-run report showing rejected, changed, duplicate and publishable units.
+- [x] Parse admitted HTML sections/PDF pages, preserve headings/tables and exact source anchors, compute checksums and record corpus/parser versions.
+- [x] Validate candidate evidence; create normalized search text and embeddings only for approved units.
+- [x] Make ingestion idempotent; source updates create new versions and invalidate affected published content/cache.
+- [x] Provide a dry-run report showing rejected, changed, duplicate, review-required and publishable units.
+
+Engineering complete on 10 September 2026: all 55 unique passages across 14
+evidence-bearing sources resolve to source blocks. All remain review-required,
+therefore no production embeddings or public corpus were created. Publication is
+waiting on the existing Stage 0 human review gate, not hidden as later work.
 
 **Exit:** ingesting the same source twice creates no duplicates; rejected sources cannot appear in retrieval; every returned citation resolves to the stored supporting passage. No live web search is used for runtime health answers.
 

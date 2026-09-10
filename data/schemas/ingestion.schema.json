@@ -1,0 +1,1599 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "records": {
+    "evidence_candidate": {
+      "$defs": {
+        "Applicability": {
+          "additionalProperties": false,
+          "description": "The complete time interval supported by a passage, not a guessed week.",
+          "properties": {
+            "stage": {
+              "enum": [
+                "possible_pregnancy",
+                "pregnancy",
+                "postpartum"
+              ],
+              "title": "Stage",
+              "type": "string"
+            },
+            "unit": {
+              "enum": [
+                "week",
+                "day",
+                "none"
+              ],
+              "title": "Unit",
+              "type": "string"
+            },
+            "start": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Start"
+            },
+            "end": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "End"
+            }
+          },
+          "required": [
+            "stage",
+            "unit"
+          ],
+          "title": "Applicability",
+          "type": "object"
+        },
+        "DevelopmentMeasurement": {
+          "additionalProperties": false,
+          "description": "General source measurement; never a measurement from a user's report.",
+          "properties": {
+            "kind": {
+              "enum": [
+                "length",
+                "weight"
+              ],
+              "title": "Kind",
+              "type": "string"
+            },
+            "value": {
+              "anyOf": [
+                {
+                  "exclusiveMinimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Value"
+            },
+            "minimum": {
+              "anyOf": [
+                {
+                  "exclusiveMinimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Minimum"
+            },
+            "maximum": {
+              "anyOf": [
+                {
+                  "exclusiveMinimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Maximum"
+            },
+            "unit": {
+              "enum": [
+                "mm",
+                "cm",
+                "m",
+                "in",
+                "g",
+                "kg",
+                "oz",
+                "lb"
+              ],
+              "title": "Unit",
+              "type": "string"
+            },
+            "basis": {
+              "enum": [
+                "general_source_range",
+                "general_source_approximation"
+              ],
+              "title": "Basis",
+              "type": "string"
+            },
+            "variability_notice": {
+              "minLength": 1,
+              "title": "Variability Notice",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "unit",
+            "basis",
+            "variability_notice"
+          ],
+          "title": "DevelopmentMeasurement",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "evidence_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "source_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "artifact_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Artifact Sha256",
+          "type": "string"
+        },
+        "source_version": {
+          "minLength": 1,
+          "title": "Source Version",
+          "type": "string"
+        },
+        "source_locator": {
+          "minLength": 1,
+          "title": "Source Locator",
+          "type": "string"
+        },
+        "source_block_ids": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "title": "Source Block Ids",
+          "type": "array"
+        },
+        "page": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Page"
+        },
+        "heading_path": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Heading Path",
+          "type": "array"
+        },
+        "original_text": {
+          "minLength": 1,
+          "title": "Original Text",
+          "type": "string"
+        },
+        "normalized_search_text": {
+          "minLength": 1,
+          "title": "Normalized Search Text",
+          "type": "string"
+        },
+        "original_text_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Original Text Sha256",
+          "type": "string"
+        },
+        "source_anchor_verified": {
+          "title": "Source Anchor Verified",
+          "type": "boolean"
+        },
+        "domains": {
+          "items": {
+            "enum": [
+              "journey",
+              "nutrition",
+              "movement",
+              "wellbeing",
+              "symptoms",
+              "preparation",
+              "followup"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Domains",
+          "type": "array"
+        },
+        "display_slots": {
+          "items": {
+            "enum": [
+              "hero",
+              "kpi_development",
+              "kpi_timing",
+              "nutrition_focus",
+              "movement_focus",
+              "wellbeing_focus",
+              "symptom_education",
+              "preparation",
+              "what_may_change",
+              "consider",
+              "avoid",
+              "ask_a_professional",
+              "followup"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Display Slots",
+          "type": "array"
+        },
+        "applies_to": {
+          "$ref": "#/$defs/Applicability"
+        },
+        "jurisdiction": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Jurisdiction",
+          "type": "array"
+        },
+        "conditions_required": {
+          "items": {
+            "enum": [
+              "breastfeeding",
+              "early_home_recovery",
+              "professional_care_for_postpartum_depression",
+              "complicated_delivery_or_caesarean",
+              "uncomplicated_delivery",
+              "feels_ready_for_gentle_activity",
+              "exercise_clearance",
+              "movement_restriction",
+              "current_warning_symptom",
+              "home_birth",
+              "facility_birth",
+              "pregnancy_confirmed",
+              "consents_to_wellbeing_activity",
+              "persistent_emotional_concern",
+              "trusted_support_available"
+            ],
+            "type": "string"
+          },
+          "title": "Conditions Required",
+          "type": "array"
+        },
+        "conditions_excluded": {
+          "items": {
+            "enum": [
+              "breastfeeding",
+              "early_home_recovery",
+              "professional_care_for_postpartum_depression",
+              "complicated_delivery_or_caesarean",
+              "uncomplicated_delivery",
+              "feels_ready_for_gentle_activity",
+              "exercise_clearance",
+              "movement_restriction",
+              "current_warning_symptom",
+              "home_birth",
+              "facility_birth",
+              "pregnancy_confirmed",
+              "consents_to_wellbeing_activity",
+              "persistent_emotional_concern",
+              "trusted_support_available"
+            ],
+            "type": "string"
+          },
+          "title": "Conditions Excluded",
+          "type": "array"
+        },
+        "personal_fact_dependencies": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Personal Fact Dependencies",
+          "type": "array"
+        },
+        "development_measurements": {
+          "items": {
+            "$ref": "#/$defs/DevelopmentMeasurement"
+          },
+          "title": "Development Measurements",
+          "type": "array"
+        },
+        "linked_profile_ids": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "title": "Linked Profile Ids",
+          "type": "array"
+        },
+        "linked_fragment_ids": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "title": "Linked Fragment Ids",
+          "type": "array"
+        },
+        "linked_catalogue_item_ids": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "title": "Linked Catalogue Item Ids",
+          "type": "array"
+        },
+        "state": {
+          "enum": [
+            "rejected",
+            "review_required",
+            "approved"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "review_reasons": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Review Reasons",
+          "type": "array"
+        },
+        "candidate_checksum": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Candidate Checksum",
+          "type": "string"
+        }
+      },
+      "required": [
+        "candidate_id",
+        "evidence_id",
+        "source_id",
+        "artifact_sha256",
+        "source_version",
+        "source_locator",
+        "original_text",
+        "normalized_search_text",
+        "original_text_sha256",
+        "source_anchor_verified",
+        "domains",
+        "display_slots",
+        "applies_to",
+        "jurisdiction",
+        "state",
+        "candidate_checksum"
+      ],
+      "title": "EvidenceCandidate",
+      "type": "object"
+    },
+    "evidence_review_task": {
+      "additionalProperties": false,
+      "description": "A pending human decision; its presence never counts as approval.",
+      "properties": {
+        "task_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "candidate_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "evidence_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "source_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "candidate_checksum": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Candidate Checksum",
+          "type": "string"
+        },
+        "required_checks": {
+          "items": {
+            "enum": [
+              "source_anchor",
+              "domain",
+              "stage_and_range",
+              "wording",
+              "jurisdiction",
+              "conditions",
+              "development_measurements",
+              "profile_links",
+              "catalogue_links",
+              "reuse_and_attribution"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Required Checks",
+          "type": "array"
+        },
+        "blocking_reasons": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Blocking Reasons",
+          "type": "array"
+        },
+        "status": {
+          "default": "pending",
+          "enum": [
+            "pending",
+            "approved",
+            "rejected"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "reviewer": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reviewer"
+        },
+        "reviewed_at": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reviewed At"
+        }
+      },
+      "required": [
+        "task_id",
+        "candidate_id",
+        "evidence_id",
+        "source_id",
+        "candidate_checksum",
+        "required_checks",
+        "blocking_reasons"
+      ],
+      "title": "EvidenceReviewTask",
+      "type": "object"
+    },
+    "ingestion_run": {
+      "$defs": {
+        "Applicability": {
+          "additionalProperties": false,
+          "description": "The complete time interval supported by a passage, not a guessed week.",
+          "properties": {
+            "stage": {
+              "enum": [
+                "possible_pregnancy",
+                "pregnancy",
+                "postpartum"
+              ],
+              "title": "Stage",
+              "type": "string"
+            },
+            "unit": {
+              "enum": [
+                "week",
+                "day",
+                "none"
+              ],
+              "title": "Unit",
+              "type": "string"
+            },
+            "start": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Start"
+            },
+            "end": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "End"
+            }
+          },
+          "required": [
+            "stage",
+            "unit"
+          ],
+          "title": "Applicability",
+          "type": "object"
+        },
+        "DevelopmentMeasurement": {
+          "additionalProperties": false,
+          "description": "General source measurement; never a measurement from a user's report.",
+          "properties": {
+            "kind": {
+              "enum": [
+                "length",
+                "weight"
+              ],
+              "title": "Kind",
+              "type": "string"
+            },
+            "value": {
+              "anyOf": [
+                {
+                  "exclusiveMinimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Value"
+            },
+            "minimum": {
+              "anyOf": [
+                {
+                  "exclusiveMinimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Minimum"
+            },
+            "maximum": {
+              "anyOf": [
+                {
+                  "exclusiveMinimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Maximum"
+            },
+            "unit": {
+              "enum": [
+                "mm",
+                "cm",
+                "m",
+                "in",
+                "g",
+                "kg",
+                "oz",
+                "lb"
+              ],
+              "title": "Unit",
+              "type": "string"
+            },
+            "basis": {
+              "enum": [
+                "general_source_range",
+                "general_source_approximation"
+              ],
+              "title": "Basis",
+              "type": "string"
+            },
+            "variability_notice": {
+              "minLength": 1,
+              "title": "Variability Notice",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "unit",
+            "basis",
+            "variability_notice"
+          ],
+          "title": "DevelopmentMeasurement",
+          "type": "object"
+        },
+        "EmbeddingRecord": {
+          "additionalProperties": false,
+          "properties": {
+            "chunk_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Chunk Id",
+              "type": "string"
+            },
+            "evidence_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Evidence Id",
+              "type": "string"
+            },
+            "source_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Source Id",
+              "type": "string"
+            },
+            "candidate_checksum": {
+              "pattern": "^[a-f0-9]{64}$",
+              "title": "Candidate Checksum",
+              "type": "string"
+            },
+            "provider": {
+              "minLength": 1,
+              "title": "Provider",
+              "type": "string"
+            },
+            "model": {
+              "minLength": 1,
+              "title": "Model",
+              "type": "string"
+            },
+            "dimensions": {
+              "minimum": 1,
+              "title": "Dimensions",
+              "type": "integer"
+            },
+            "vector": {
+              "items": {
+                "type": "number"
+              },
+              "minItems": 1,
+              "title": "Vector",
+              "type": "array"
+            }
+          },
+          "required": [
+            "chunk_id",
+            "evidence_id",
+            "source_id",
+            "candidate_checksum",
+            "provider",
+            "model",
+            "dimensions",
+            "vector"
+          ],
+          "title": "EmbeddingRecord",
+          "type": "object"
+        },
+        "EvidenceCandidate": {
+          "additionalProperties": false,
+          "properties": {
+            "candidate_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Candidate Id",
+              "type": "string"
+            },
+            "evidence_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Evidence Id",
+              "type": "string"
+            },
+            "source_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Source Id",
+              "type": "string"
+            },
+            "artifact_sha256": {
+              "pattern": "^[a-f0-9]{64}$",
+              "title": "Artifact Sha256",
+              "type": "string"
+            },
+            "source_version": {
+              "minLength": 1,
+              "title": "Source Version",
+              "type": "string"
+            },
+            "source_locator": {
+              "minLength": 1,
+              "title": "Source Locator",
+              "type": "string"
+            },
+            "source_block_ids": {
+              "items": {
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+                "type": "string"
+              },
+              "title": "Source Block Ids",
+              "type": "array"
+            },
+            "page": {
+              "anyOf": [
+                {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Page"
+            },
+            "heading_path": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": "Heading Path",
+              "type": "array"
+            },
+            "original_text": {
+              "minLength": 1,
+              "title": "Original Text",
+              "type": "string"
+            },
+            "normalized_search_text": {
+              "minLength": 1,
+              "title": "Normalized Search Text",
+              "type": "string"
+            },
+            "original_text_sha256": {
+              "pattern": "^[a-f0-9]{64}$",
+              "title": "Original Text Sha256",
+              "type": "string"
+            },
+            "source_anchor_verified": {
+              "title": "Source Anchor Verified",
+              "type": "boolean"
+            },
+            "domains": {
+              "items": {
+                "enum": [
+                  "journey",
+                  "nutrition",
+                  "movement",
+                  "wellbeing",
+                  "symptoms",
+                  "preparation",
+                  "followup"
+                ],
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Domains",
+              "type": "array"
+            },
+            "display_slots": {
+              "items": {
+                "enum": [
+                  "hero",
+                  "kpi_development",
+                  "kpi_timing",
+                  "nutrition_focus",
+                  "movement_focus",
+                  "wellbeing_focus",
+                  "symptom_education",
+                  "preparation",
+                  "what_may_change",
+                  "consider",
+                  "avoid",
+                  "ask_a_professional",
+                  "followup"
+                ],
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Display Slots",
+              "type": "array"
+            },
+            "applies_to": {
+              "$ref": "#/$defs/Applicability"
+            },
+            "jurisdiction": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Jurisdiction",
+              "type": "array"
+            },
+            "conditions_required": {
+              "items": {
+                "enum": [
+                  "breastfeeding",
+                  "early_home_recovery",
+                  "professional_care_for_postpartum_depression",
+                  "complicated_delivery_or_caesarean",
+                  "uncomplicated_delivery",
+                  "feels_ready_for_gentle_activity",
+                  "exercise_clearance",
+                  "movement_restriction",
+                  "current_warning_symptom",
+                  "home_birth",
+                  "facility_birth",
+                  "pregnancy_confirmed",
+                  "consents_to_wellbeing_activity",
+                  "persistent_emotional_concern",
+                  "trusted_support_available"
+                ],
+                "type": "string"
+              },
+              "title": "Conditions Required",
+              "type": "array"
+            },
+            "conditions_excluded": {
+              "items": {
+                "enum": [
+                  "breastfeeding",
+                  "early_home_recovery",
+                  "professional_care_for_postpartum_depression",
+                  "complicated_delivery_or_caesarean",
+                  "uncomplicated_delivery",
+                  "feels_ready_for_gentle_activity",
+                  "exercise_clearance",
+                  "movement_restriction",
+                  "current_warning_symptom",
+                  "home_birth",
+                  "facility_birth",
+                  "pregnancy_confirmed",
+                  "consents_to_wellbeing_activity",
+                  "persistent_emotional_concern",
+                  "trusted_support_available"
+                ],
+                "type": "string"
+              },
+              "title": "Conditions Excluded",
+              "type": "array"
+            },
+            "personal_fact_dependencies": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": "Personal Fact Dependencies",
+              "type": "array"
+            },
+            "development_measurements": {
+              "items": {
+                "$ref": "#/$defs/DevelopmentMeasurement"
+              },
+              "title": "Development Measurements",
+              "type": "array"
+            },
+            "linked_profile_ids": {
+              "items": {
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+                "type": "string"
+              },
+              "title": "Linked Profile Ids",
+              "type": "array"
+            },
+            "linked_fragment_ids": {
+              "items": {
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+                "type": "string"
+              },
+              "title": "Linked Fragment Ids",
+              "type": "array"
+            },
+            "linked_catalogue_item_ids": {
+              "items": {
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+                "type": "string"
+              },
+              "title": "Linked Catalogue Item Ids",
+              "type": "array"
+            },
+            "state": {
+              "enum": [
+                "rejected",
+                "review_required",
+                "approved"
+              ],
+              "title": "State",
+              "type": "string"
+            },
+            "review_reasons": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": "Review Reasons",
+              "type": "array"
+            },
+            "candidate_checksum": {
+              "pattern": "^[a-f0-9]{64}$",
+              "title": "Candidate Checksum",
+              "type": "string"
+            }
+          },
+          "required": [
+            "candidate_id",
+            "evidence_id",
+            "source_id",
+            "artifact_sha256",
+            "source_version",
+            "source_locator",
+            "original_text",
+            "normalized_search_text",
+            "original_text_sha256",
+            "source_anchor_verified",
+            "domains",
+            "display_slots",
+            "applies_to",
+            "jurisdiction",
+            "state",
+            "candidate_checksum"
+          ],
+          "title": "EvidenceCandidate",
+          "type": "object"
+        },
+        "EvidenceReviewTask": {
+          "additionalProperties": false,
+          "description": "A pending human decision; its presence never counts as approval.",
+          "properties": {
+            "task_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Task Id",
+              "type": "string"
+            },
+            "candidate_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Candidate Id",
+              "type": "string"
+            },
+            "evidence_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Evidence Id",
+              "type": "string"
+            },
+            "source_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Source Id",
+              "type": "string"
+            },
+            "candidate_checksum": {
+              "pattern": "^[a-f0-9]{64}$",
+              "title": "Candidate Checksum",
+              "type": "string"
+            },
+            "required_checks": {
+              "items": {
+                "enum": [
+                  "source_anchor",
+                  "domain",
+                  "stage_and_range",
+                  "wording",
+                  "jurisdiction",
+                  "conditions",
+                  "development_measurements",
+                  "profile_links",
+                  "catalogue_links",
+                  "reuse_and_attribution"
+                ],
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Required Checks",
+              "type": "array"
+            },
+            "blocking_reasons": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Blocking Reasons",
+              "type": "array"
+            },
+            "status": {
+              "default": "pending",
+              "enum": [
+                "pending",
+                "approved",
+                "rejected"
+              ],
+              "title": "Status",
+              "type": "string"
+            },
+            "reviewer": {
+              "anyOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Reviewer"
+            },
+            "reviewed_at": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Reviewed At"
+            }
+          },
+          "required": [
+            "task_id",
+            "candidate_id",
+            "evidence_id",
+            "source_id",
+            "candidate_checksum",
+            "required_checks",
+            "blocking_reasons"
+          ],
+          "title": "EvidenceReviewTask",
+          "type": "object"
+        },
+        "IngestionDiff": {
+          "additionalProperties": false,
+          "properties": {
+            "new_candidate_ids": {
+              "items": {
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+                "type": "string"
+              },
+              "title": "New Candidate Ids",
+              "type": "array"
+            },
+            "unchanged_candidate_ids": {
+              "items": {
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+                "type": "string"
+              },
+              "title": "Unchanged Candidate Ids",
+              "type": "array"
+            },
+            "changed_evidence_ids": {
+              "items": {
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+                "type": "string"
+              },
+              "title": "Changed Evidence Ids",
+              "type": "array"
+            },
+            "removed_evidence_ids": {
+              "items": {
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+                "type": "string"
+              },
+              "title": "Removed Evidence Ids",
+              "type": "array"
+            },
+            "invalidated_profile_ids": {
+              "items": {
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+                "type": "string"
+              },
+              "title": "Invalidated Profile Ids",
+              "type": "array"
+            },
+            "invalidated_catalogue_item_ids": {
+              "items": {
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+                "type": "string"
+              },
+              "title": "Invalidated Catalogue Item Ids",
+              "type": "array"
+            },
+            "invalidate_cache_scopes": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": "Invalidate Cache Scopes",
+              "type": "array"
+            }
+          },
+          "title": "IngestionDiff",
+          "type": "object"
+        },
+        "IngestionIssue": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Code",
+              "type": "string"
+            },
+            "severity": {
+              "enum": [
+                "info",
+                "warning",
+                "error"
+              ],
+              "title": "Severity",
+              "type": "string"
+            },
+            "message": {
+              "minLength": 1,
+              "title": "Message",
+              "type": "string"
+            },
+            "source_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Source Id",
+              "type": "string"
+            },
+            "page": {
+              "anyOf": [
+                {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Page"
+            },
+            "locator": {
+              "default": "",
+              "title": "Locator",
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "severity",
+            "message",
+            "source_id"
+          ],
+          "title": "IngestionIssue",
+          "type": "object"
+        },
+        "SourceAdmission": {
+          "additionalProperties": false,
+          "properties": {
+            "source_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Source Id",
+              "type": "string"
+            },
+            "decision": {
+              "enum": [
+                "rejected",
+                "parse_for_review",
+                "eligible_for_publication"
+              ],
+              "title": "Decision",
+              "type": "string"
+            },
+            "reasons": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Reasons",
+              "type": "array"
+            },
+            "may_store": {
+              "title": "May Store",
+              "type": "boolean"
+            },
+            "may_embed": {
+              "title": "May Embed",
+              "type": "boolean"
+            },
+            "may_display": {
+              "title": "May Display",
+              "type": "boolean"
+            },
+            "fixed_quote_only": {
+              "title": "Fixed Quote Only",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "source_id",
+            "decision",
+            "reasons",
+            "may_store",
+            "may_embed",
+            "may_display",
+            "fixed_quote_only"
+          ],
+          "title": "SourceAdmission",
+          "type": "object"
+        },
+        "SourceArtifact": {
+          "additionalProperties": false,
+          "properties": {
+            "source_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Source Id",
+              "type": "string"
+            },
+            "canonical_url": {
+              "minLength": 1,
+              "title": "Canonical Url",
+              "type": "string"
+            },
+            "source_version": {
+              "minLength": 1,
+              "title": "Source Version",
+              "type": "string"
+            },
+            "document_type": {
+              "enum": [
+                "html",
+                "pdf"
+              ],
+              "title": "Document Type",
+              "type": "string"
+            },
+            "retrieved_at": {
+              "format": "date",
+              "title": "Retrieved At",
+              "type": "string"
+            },
+            "original_sha256": {
+              "pattern": "^[a-f0-9]{64}$",
+              "title": "Original Sha256",
+              "type": "string"
+            },
+            "byte_size": {
+              "minimum": 1,
+              "title": "Byte Size",
+              "type": "integer"
+            },
+            "parser_name": {
+              "minLength": 1,
+              "title": "Parser Name",
+              "type": "string"
+            },
+            "parser_version": {
+              "minLength": 1,
+              "title": "Parser Version",
+              "type": "string"
+            },
+            "ingestion_schema_version": {
+              "const": "1.0.0",
+              "default": "1.0.0",
+              "title": "Ingestion Schema Version",
+              "type": "string"
+            }
+          },
+          "required": [
+            "source_id",
+            "canonical_url",
+            "source_version",
+            "document_type",
+            "retrieved_at",
+            "original_sha256",
+            "byte_size",
+            "parser_name",
+            "parser_version"
+          ],
+          "title": "SourceArtifact",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "run_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "evaluated_at": {
+          "format": "date",
+          "title": "Evaluated At",
+          "type": "string"
+        },
+        "dry_run": {
+          "title": "Dry Run",
+          "type": "boolean"
+        },
+        "artifact": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SourceArtifact"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "admission": {
+          "$ref": "#/$defs/SourceAdmission"
+        },
+        "parsed_block_count": {
+          "minimum": 0,
+          "title": "Parsed Block Count",
+          "type": "integer"
+        },
+        "candidates": {
+          "items": {
+            "$ref": "#/$defs/EvidenceCandidate"
+          },
+          "title": "Candidates",
+          "type": "array"
+        },
+        "review_tasks": {
+          "items": {
+            "$ref": "#/$defs/EvidenceReviewTask"
+          },
+          "title": "Review Tasks",
+          "type": "array"
+        },
+        "embeddings": {
+          "items": {
+            "$ref": "#/$defs/EmbeddingRecord"
+          },
+          "title": "Embeddings",
+          "type": "array"
+        },
+        "issues": {
+          "items": {
+            "$ref": "#/$defs/IngestionIssue"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "diff": {
+          "$ref": "#/$defs/IngestionDiff"
+        },
+        "outcome": {
+          "enum": [
+            "rejected",
+            "review_required",
+            "publishable",
+            "published"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_id",
+        "created_at",
+        "dry_run",
+        "admission",
+        "parsed_block_count",
+        "outcome"
+      ],
+      "title": "IngestionRun",
+      "type": "object"
+    },
+    "corpus_manifest": {
+      "$defs": {
+        "SourceArtifact": {
+          "additionalProperties": false,
+          "properties": {
+            "source_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Source Id",
+              "type": "string"
+            },
+            "canonical_url": {
+              "minLength": 1,
+              "title": "Canonical Url",
+              "type": "string"
+            },
+            "source_version": {
+              "minLength": 1,
+              "title": "Source Version",
+              "type": "string"
+            },
+            "document_type": {
+              "enum": [
+                "html",
+                "pdf"
+              ],
+              "title": "Document Type",
+              "type": "string"
+            },
+            "retrieved_at": {
+              "format": "date",
+              "title": "Retrieved At",
+              "type": "string"
+            },
+            "original_sha256": {
+              "pattern": "^[a-f0-9]{64}$",
+              "title": "Original Sha256",
+              "type": "string"
+            },
+            "byte_size": {
+              "minimum": 1,
+              "title": "Byte Size",
+              "type": "integer"
+            },
+            "parser_name": {
+              "minLength": 1,
+              "title": "Parser Name",
+              "type": "string"
+            },
+            "parser_version": {
+              "minLength": 1,
+              "title": "Parser Version",
+              "type": "string"
+            },
+            "ingestion_schema_version": {
+              "const": "1.0.0",
+              "default": "1.0.0",
+              "title": "Ingestion Schema Version",
+              "type": "string"
+            }
+          },
+          "required": [
+            "source_id",
+            "canonical_url",
+            "source_version",
+            "document_type",
+            "retrieved_at",
+            "original_sha256",
+            "byte_size",
+            "parser_name",
+            "parser_version"
+          ],
+          "title": "SourceArtifact",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "corpus_version": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Corpus Version",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "published"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "source_artifacts": {
+          "items": {
+            "$ref": "#/$defs/SourceArtifact"
+          },
+          "minItems": 1,
+          "title": "Source Artifacts",
+          "type": "array"
+        },
+        "candidate_file_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Candidate File Sha256",
+          "type": "string"
+        },
+        "embedding_file_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Embedding File Sha256",
+          "type": "string"
+        },
+        "embedding_provider": {
+          "minLength": 1,
+          "title": "Embedding Provider",
+          "type": "string"
+        },
+        "embedding_model": {
+          "minLength": 1,
+          "title": "Embedding Model",
+          "type": "string"
+        },
+        "evidence_ids": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "profile_ids": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "title": "Profile Ids",
+          "type": "array"
+        },
+        "limitations": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Limitations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "corpus_version",
+        "created_at",
+        "status",
+        "source_artifacts",
+        "candidate_file_sha256",
+        "embedding_file_sha256",
+        "embedding_provider",
+        "embedding_model",
+        "evidence_ids",
+        "limitations"
+      ],
+      "title": "CorpusManifest",
+      "type": "object"
+    }
+  }
+}

@@ -303,3 +303,109 @@ unreviewed and altered evidence. Source auditing caught licence restrictions in
 our original plan, so we changed the dataset rather than pretending those sources
 were usable. The current milestone is a reviewable foundation, not a clinically
 validated assistant."
+
+## Stage 1 implementation: public-source ingestion
+
+### What we built
+
+Stage 1 now admits only exact registered sources, records their version and hash,
+parses structured HTML and selected PDF pages, exposes a controlled OCR boundary,
+resolves selected evidence back to source blocks, adds week/domain/country/
+condition/dashboard metadata, creates a human review queue, and supports
+idempotent staging, source-update invalidation and immutable corpus versions.
+
+All 14 evidence-bearing sources were dry-run. The result was 55 verified source
+anchors, 55 pending review tasks, zero parser errors and zero embeddings. Zero is
+intentional because none of the health records has actual publication approval.
+
+### The first real-source run rejected passages
+
+The first dry run did not silently accept near matches. It exposed three parser
+representation problems: HTML punctuation around links, evidence deliberately
+assembled from labelled bullets in more than one source block, and a PDF text
+layer that returned `registratio n` with a false space.
+
+Recovery: citation verification now normalizes punctuation only for matching,
+checks each selected sentence or labelled bullet, repairs a narrowly defined
+single-letter PDF split for both sides of the comparison, and stores every matched
+source block ID. Original citation text is never rewritten by this normalization.
+The rerun resolved every selected passage.
+
+### A dashboard slot was absent from the Stage 1 type
+
+The OWH stages dry run initially failed because the existing weekly profile uses
+`what_may_change`, while the new display-slot type omitted it.
+
+Recovery: added the existing slot to the typed Stage 1 contract and schema. We did
+not rename the Stage 0 UI contract to make the test pass.
+
+### Duplicate detection found duplicated Stage 0 evidence
+
+The NHS postpartum-body page had the same complete fertility sentence stored as
+`E-PP-FERTILITY` and `E-PP-FERTILITY-FEEDING` with identical scope. Two distinct
+fragments used the sentence to support two different pieces of wording.
+
+Recovery: retained one canonical evidence span, linked both fragments to it,
+regenerated the governed snapshot/profile references, and refreshed the two
+explicit Codex claim assessments. The evidence count changed from 56 to 55; the
+56 distinct fragments remain. Stage 0 and Stage 1 checks both pass after the fix.
+
+### OCR was not installed on the workstation
+
+PyMuPDF was available after adding the pinned Stage 1 dependencies, but no local
+Tesseract executable was installed. Pretending scanned pages were parsed would
+have made the demo unsafe.
+
+Recovery: implemented and tested an explicit Tesseract CLI adapter. An image-only
+page without that configured adapter returns `NEEDS_OCR`; a failed adapter returns
+`OCR_FAILED`; successful OCR is labelled `OCR_APPLIED` with provider/version and
+confidence. The selected real PDFs have usable text layers, so no real source
+needed OCR in this run.
+
+### Dry-run files initially failed their own schema
+
+The CLI first mixed operator fields such as `write_state` into the serialized
+`IngestionRun`. Strict Pydantic validation correctly rejected those files.
+
+Recovery: the output file now contains only the typed run. Operator write/artifact
+states remain in the console summary. All 14 saved dry-run reports now validate.
+
+### Capture date and currency date were initially the same input
+
+The first implementation used the artifact's retrieval date to decide whether a
+source review was overdue. Replaying an old capture could therefore judge currency
+in the past instead of today.
+
+Recovery: each run now records a separate `evaluated_at` date. The run ID binds
+both dates, and a regression test proves an old retrieval date cannot bypass an
+overdue current review.
+
+### The first P10 measurement candidate failed checksum serialization
+
+The exact P10 passage contains a 2.5 cm length. When that typed candidate was first
+added, the real-source run stopped because the checksum builder received a Pydantic
+object instead of canonical JSON.
+
+Recovery: measurement candidates are converted to validated JSON before hashing.
+The annotation is bound to the exact evidence checksum; an evidence edit makes it
+stale. The full candidate-path test and the BHC source rerun now pass. No fruit or
+object comparison was promoted.
+
+### Network capture was blocked inside the sandbox
+
+The first exact-URL fetch failed with a Windows socket-permission error. This was
+an execution boundary, not a source or parsing result.
+
+Recovery: reran the administrative capture with the allowed network permission.
+The capture code still restricts requests to registered public HTTPS URLs, checks
+public DNS, host-preserving redirects, content type, empty bodies and a 20 MB limit.
+
+### Embeddings and publication remain deliberately empty
+
+The repository has a provider-neutral OpenAI-compatible embedding adapter, but no
+provider/model is selected and no content is approved. Test vectors are marked
+`TEST_ONLY` and the corpus publisher rejects them.
+
+Recovery is a real review process, not a code bypass: named reviewers must update
+the governed records, then ingestion reruns with an explicitly selected provider.
+Only committed publishable runs can create a hashed immutable corpus version.

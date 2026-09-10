@@ -3,7 +3,7 @@
 Checked 10 September 2026. Current state is generated in STAGE-0-SOURCE-STATE.json:
 31 registered, 14 permission-researched, 14 active excerpt snapshots, 12 sources in
 assembled drafts/catalogues, zero human source approvals and zero published evidence.
-The 56 spans and 56 fragments remain draft. Permission research is not legal approval.
+The 55 unique spans and 56 fragments remain draft. Permission research is not legal approval.
 
 Full supporting passages replaced the day-42 and conditional-exercise anchors.
 The breastfeeding draft no longer adds an unsupported restriction. Further clipped

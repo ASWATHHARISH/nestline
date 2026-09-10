@@ -2,7 +2,7 @@
 
 Generated from the local dataset. Draft review material, not a patient-facing guide.
 
-Inventory: 63 records; 31 source entries; 56 evidence spans; 56 fragments; 0 published profiles.
+Inventory: 63 records; 31 source entries; 55 evidence spans; 56 fragments; 0 published profiles.
 
 ## How Kajal and the team use this
 
@@ -10,7 +10,7 @@ Read each draft alongside its linked evidence and full official source context. 
 
 Nine representative profiles and eight early-day overlays are proposed Indian educational content. Original source countries remain unchanged; each adopted foreign passage has an explicit, unapproved localisation record. Nothing is published. BHC week 9/10 text is quotation-only and was last reviewed by that publisher in 2012: explicitly review currency before approving it. NHM CHO use is limited to free distribution. This is not commercial launch clearance.
 
-Release review fingerprint: `c14f3374b1f01c78c59d4931d7c6232333f0a2ce69ca787f718b63e4fb3f0914`
+Release review fingerprint: `86983b50de3af506cc7f1ff34ea31604b5efd97a0ffce2d001fa48e9ee97131c`
 
 Review this exact dataset version. Any content change requires a new packet and review.
 
@@ -873,11 +873,11 @@ Codex assessment (not human approval): Complete source sentence retains three-we
 Breastfeeding does not automatically rule out another pregnancy.
 
 Timing: postpartum, week, 3 to 12.
-Evidence: E-PP-FERTILITY-FEEDING
+Evidence: E-PP-FERTILITY
 Required confirmed conditions: None specified.
 Required confirmed absences: None specified.
 
-Codex assessment (not human approval): Complete sentence now supports the breastfeeding exception; the isolated earlier clause was insufficient context. Human wording, licence and India-localisation review remains pending.
+Codex assessment (not human approval): The same complete sentence supports the breastfeeding exception without duplicating the evidence unit. Human wording, licence and India-localisation review remains pending.
 
 ### F-PP-DIET
 
@@ -1508,19 +1508,7 @@ Applicability rationale: General postpartum fertility education. Not a predictio
 Delivery: retrievable. Reuse: Selected original text only; standard NHS terms section 3 and OGL v3.0: https://www.nhs.uk/our-policies/terms-and-conditions/ . Excludes Best Start in Life, third-party content, images and videos. Unchanged quotations must carry Information from the NHS website, as at 100926, linked to the source, and the OGL notice/link. Adapted wording uses the generic OGL attribution rather than implying NHS approval of Nestline wording. No endorsement. Named review pending.
 Localisation: Proposed Indian educational use of this specific passage, not the entire foreign page. No foreign appointment schedule, drug dose, emergency number or entitlement is adopted. The original publisher jurisdiction is preserved. Check wording and applicability against the full source before approval. Named review pending.
 Snapshot: `guidelines/snapshots/NHS-PP-BODY-2026-09-10-v2.json`
-Snapshot SHA-256: `c1c740c4b2b8c40d459f54556735164b7c67bf0bf61f7786fb9059ee6e71e28f`
-
-### E-PP-FERTILITY-FEEDING
-
-Source: [Your body after the birth](https://www.nhs.uk/pregnancy/labour-and-birth/your-body/)
-Original country: UK; proposed evidence country: IN.
-Selected exact text: “You can get pregnant again just 3 weeks after the birth of your baby, even if you're breastfeeding and your periods have not started again yet.”
-Locator: How soon after giving birth can I get pregnant? / breastfeeding clause / expanded supporting unit
-Applicability rationale: Read together with the preceding fertility statement. Does not evaluate eligibility for lactational amenorrhoea contraception.
-Delivery: retrievable. Reuse: Selected original text only; standard NHS terms section 3 and OGL v3.0: https://www.nhs.uk/our-policies/terms-and-conditions/ . Excludes Best Start in Life, third-party content, images and videos. Unchanged quotations must carry Information from the NHS website, as at 100926, linked to the source, and the OGL notice/link. Adapted wording uses the generic OGL attribution rather than implying NHS approval of Nestline wording. No endorsement. Named review pending.
-Localisation: Proposed Indian educational use of this specific passage, not the entire foreign page. No foreign appointment schedule, drug dose, emergency number or entitlement is adopted. The original publisher jurisdiction is preserved. Check wording and applicability against the full source before approval. Named review pending.
-Snapshot: `guidelines/snapshots/NHS-PP-BODY-2026-09-10-v2.json`
-Snapshot SHA-256: `c1c740c4b2b8c40d459f54556735164b7c67bf0bf61f7786fb9059ee6e71e28f`
+Snapshot SHA-256: `fbc475eec72358ca1f209ce7c86517c1ea81105f7fa3a44e4670f87d2a915438`
 
 ### E-PP-DIET
 

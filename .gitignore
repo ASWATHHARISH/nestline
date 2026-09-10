@@ -11,3 +11,6 @@ dist/
 data/raw/
 data/private/
 reports/local/
+data/ingestion/artifacts/
+data/ingestion/staging/
+data/ingestion/corpora/

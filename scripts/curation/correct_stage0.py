@@ -92,7 +92,6 @@ def main():
         "E-PP-SUPPORT-CONTEXT": "Here are some ways to begin feeling better or getting more rest, in addition to talking to a health care professional:",
         "E-PP-SUPPORT-TALK": "Here are some ways to begin feeling better or getting more rest, in addition to talking to a health care professional: Talk about your feelings with your partner, supportive family members, and friends.",
         "E-PP-FERTILITY": "You can get pregnant again just 3 weeks after the birth of your baby, even if you're breastfeeding and your periods have not started again yet.",
-        "E-PP-FERTILITY-FEEDING": "You can get pregnant again just 3 weeks after the birth of your baby, even if you're breastfeeding and your periods have not started again yet.",
         "E-PP-PRACTICAL-HELP": "It's best to be clear about the kind of help you want, rather than going along with what's offered and feeling resentful.",
     }
     for eid, text in replacements.items():
@@ -101,6 +100,10 @@ def main():
         span["locator"] = span["locator"].split(" / expanded supporting unit")[0] + " / expanded supporting unit"
         changed.add(span["source_id"])
     fragments["F-DATING"]["text"] = "Pregnancy weeks are counted from the first day of the last normal menstrual period."
+    # Both fertility fragments are distinct wording supported by the same full
+    # source sentence. Keep one evidence unit and link both fragments to it.
+    evidence.pop("E-PP-FERTILITY-FEEDING", None)
+    fragments["F-PP-FERTILITY-FEEDING"]["evidence_span_ids"] = ["E-PP-FERTILITY"]
     # Empty duration and population-specific headings remain explicit in the locator.
 
     # Preserve complete clinical conditions, not a short anchor plus an unsourced note.
