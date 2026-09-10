@@ -61,6 +61,7 @@ Storage policy and cross-workspace mutation, then rolled back all fixtures.
 - [Stage 1 independent-review correction status](docs/STAGE-1-CORRECTION-STATUS.md)
 - [Kajal human-review handout](docs/KAJAL-HUMAN-REVIEW-HANDOUT.md)
 - [PC00/P10/PP01 specialist and final visual review handoff](docs/STAGE-1-PC00-P10-PP01-REVIEW-HANDOFF.md)
+- [Kajal updated approval import record](docs/STAGE-1-KAJAL-APPROVAL-IMPORT-RECORD.md)
 - [Stage 2 implementation and verification](docs/STAGE-2-IMPLEMENTATION.md)
 - [Stage 2 in plain language](docs/STAGE-2-PLAIN-LANGUAGE.md)
 

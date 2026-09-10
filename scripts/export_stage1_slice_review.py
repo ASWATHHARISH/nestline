@@ -107,6 +107,7 @@ def render(ledger_path: Path, audit_path: Path) -> str:
         f"- Recorded product/content decisions: **{len(target_decisions)}**",
         f"- Fetal-size comparisons: **{len(comparisons)} draft and hidden**",
         "- Public corpus and production embeddings: **not released**",
+        "- Product approval evidence: [Kajal approval import record](STAGE-1-KAJAL-APPROVAL-IMPORT-RECORD.md)",
         "",
         "## Where this fits in the plan",
         "",

@@ -8,6 +8,7 @@ This is the current reviewer packet for the first demonstration slice. It is gen
 - Recorded product/content decisions: **54**
 - Fetal-size comparisons: **42 draft and hidden**
 - Public corpus and production embeddings: **not released**
+- Product approval evidence: [Kajal approval import record](STAGE-1-KAJAL-APPROVAL-IMPORT-RECORD.md)
 
 ## Where this fits in the plan
 
@@ -64,8 +65,8 @@ A reviewer must use their real name, capacity/qualification and review date. A t
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for PC00. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PC00. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for PC00. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PC00. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -112,8 +113,8 @@ Candidate checksum: 594728845df724f164a00db77938b36c118f0ff2990d167621e0377f2c32
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for PC00. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PC00. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for PC00. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PC00. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -162,8 +163,8 @@ Candidate checksum: abdc2b2a6fe6fb8e93507ab5740d1de6812c1489b82756da954e079e0cd3
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -210,8 +211,8 @@ Candidate checksum: d39505d2e4c7e7b722c4be32742e24ec511b3f8db9b53e177d3079b3b3bc
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -258,8 +259,8 @@ Candidate checksum: a62372f158dfc78f74e47089c72eb44569f8ca6ff8ff17080dc468a7355f
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -306,8 +307,8 @@ Candidate checksum: 4f9763c7846632db820200eb31d369cfb0967eff2f684fb35d009126d53d
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -354,8 +355,8 @@ Candidate checksum: 217ecfedf0f1b7f574bf5bf542482365d0fcbe4e918aabceafb49f56eaf2
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -402,8 +403,8 @@ Candidate checksum: 1c40d463148587f7f2edaae2dda632582b4b7abaa3a63e0ec1bf6b40cabb
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -450,8 +451,8 @@ Candidate checksum: 3e0ef5cc691249acf89e932999f87097907a56edba7e1422c4cebbdb8e08
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -498,8 +499,8 @@ Candidate checksum: 059cacced965f62696c7831fc27d2e43068cd88d031d9c2cfa14742655ec
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -546,8 +547,8 @@ Candidate checksum: 9171d005e40390e4940916e7b2d0f8683aa6e8a163964f9216a6c476df8b
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -594,8 +595,8 @@ Candidate checksum: 4ea44e6e04c231b2662abd63bca030adfd16005ed87588382ca45c16f07d
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -642,8 +643,8 @@ Candidate checksum: 5efbb9d4c28f4307a7fb6a5e9599631f17307698bee23e2a5f86167a4f9d
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -690,8 +691,8 @@ Candidate checksum: 80df28d01f7c24fe6b8ad7ce85d4fbdf94f7811549108669a5ffcdefc02b
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -738,8 +739,8 @@ Candidate checksum: e9a6b716570ed5b1e9b8c6dcc73f5d5c83c99322c3b91e578d08d9f12c6e
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -786,8 +787,8 @@ Candidate checksum: a744138f53722bafa4982cabf30c9ecc2799c118e4be3082b3d09af4e766
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -834,8 +835,8 @@ Candidate checksum: fb20021d2bdde298f1a7fe19a376329c6e613d301397f6d450e3183bcda8
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -882,8 +883,8 @@ Candidate checksum: 8d49aa866c092bca5fe67ef427c1e23559162060bc20b880ab0dcb7ba9fe
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for P10. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for P10. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -932,8 +933,8 @@ Candidate checksum: 339bc693632d7454391dba814571af49e04f7af6d4a517a83d60c157adb9
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -980,8 +981,8 @@ Candidate checksum: 91c6e3f3c23c7774b0244eab55107722904712947b54155f79f5433cb38c
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -1028,8 +1029,8 @@ Candidate checksum: fc7b4ad5e946d2871f8801929ab8590d1b7416ae6d3d491847ba27f3b88b
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -1076,8 +1077,8 @@ Candidate checksum: 7e9058cc6079480b1a62bcfaeddf2373274a4a1e3027771c72ce46d3ad23
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -1124,8 +1125,8 @@ Candidate checksum: d55e6eaf9fa6a39106598cae888a628d17d77eb2059f8b8ff746c0c29fb8
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -1172,8 +1173,8 @@ Candidate checksum: ab9c6a8121188e53c18158c749086d9ebca22b773c97c6ad3f7173313c9f
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -1220,8 +1221,8 @@ Candidate checksum: cede4dd7a7d4cb23f32a6f52c23dbe87d53831ddadb4f558436b75072d79
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -1268,8 +1269,8 @@ Candidate checksum: d7a6ab35600616505571507fb9876075ec4625240a3211f44180e7411df4
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 
@@ -1316,8 +1317,8 @@ Candidate checksum: 08627e8fd9c2176f011c541774b0a659696fdabdf52799d821795fac5896
 
 **Decisions already recorded**
 
-- `content` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
-- `product` — **accepted** by Kajal (Nestline product/content reviewer) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
+- `content` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed user-facing wording for PP01. This content decision does not provide clinical, India-localisation or licence approval.
+- `product` — **accepted** by Kajal (Product/content review) on 2026-09-11: Accepted the proposed placement and conditional behaviour for PP01. Final rendered visual review remains pending.
 
 **Each remaining reviewer records one decision**
 

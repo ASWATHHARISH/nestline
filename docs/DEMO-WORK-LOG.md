@@ -516,3 +516,18 @@ the three profiles with fictional condition scenarios, makes unknown facts visib
 as “needs information”, and labels the entire app as unavailable to public users,
 embeddings and live RAG. It is a visual-review artifact, not the Stage 9 patient
 application or a content release.
+
+## Updated Kajal approval bundle import
+
+The updated handoff and worksheet restate the accepted product/content scope,
+Kajal's review capacity/date and the specialist boundaries. The user supplied the
+explicit typed instruction to import these decisions. We preserved both attached
+files byte-for-byte with SHA-256 identifiers and updated all 54 governed role
+decisions to cite them.
+
+The replacement comparison CSV exactly matched the catalogue already applied, so
+no duplicate data edit or new fingerprint was created. Two PC00 task IDs printed
+in the worksheet belonged to an older candidate version. We retained the approved
+stable evidence IDs and resolved them to the current canonical tasks/checksums;
+the governed checker rejects the obsolete task IDs. Specialist and final rendered
+UI approvals remain pending.

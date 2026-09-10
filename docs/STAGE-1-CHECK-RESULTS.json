@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-09-10T20:09:06.892930+00:00",
+  "checked_at_utc": "2026-09-10T20:34:42.778305+00:00",
   "execution": "Clean-checkout engineering checks and tracked exact-source audit",
   "tests_run": 119,
   "checks": {
@@ -14,7 +14,7 @@
       ],
       "exit_code": 0,
       "stdout": "",
-      "stderr": "----------------------------------------------------------------------\nRan 119 tests in 2.445s\n\nOK"
+      "stderr": "----------------------------------------------------------------------\nRan 119 tests in 1.867s\n\nOK"
     },
     "dependencies": {
       "arguments": [
