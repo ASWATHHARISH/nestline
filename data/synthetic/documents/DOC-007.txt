@@ -1,0 +1,9 @@
+FICTIONAL DEMO DATA - NOT A REAL MEDICAL RECORD
+DOC-007 | Follow-up instruction
+Recorded date: 2026-05-20
+No real person, hospital, clinician or medicine is represented.
+followup_date: 2026-05-28
+followup_reason: Review the conflicting activity instructions.
+task_dedupe_key: DEMO-MAYA:followup:2026-05-28
+All extracted facts are proposals until a user explicitly confirms them.
+For software testing only. Never use these invented instructions for care.

@@ -1,0 +1,92 @@
+{
+  "document_id": "DOC-004",
+  "workspace_id": "DEMO-MAYA",
+  "fictional": true,
+  "recorded_date": "2026-05-14",
+  "pdf_sha256": "e2743e6c0d5b595c22f7402c534010df3004946ec6d9fbf436e9d8e3ffd15fe4",
+  "source_text_sha256": "9c632cc9383bce0b308a0be9b984b89c9c970cb3ccb955ca59608646ce07b3e7",
+  "facts": [
+    {
+      "field": "pregnancy_week",
+      "value": "24",
+      "source_text": "pregnancy_week: 24",
+      "page": 1,
+      "source_line": 5,
+      "coordinates": [
+        [
+          35,
+          204.0,
+          555,
+          218.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "extract_verbatim"
+    },
+    {
+      "field": "estimated_due_date",
+      "value": "2026-09-03",
+      "source_text": "estimated_due_date: 2026-09-03",
+      "page": 1,
+      "source_line": 6,
+      "coordinates": [
+        [
+          35,
+          229.0,
+          555,
+          243.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "extract_verbatim"
+    },
+    {
+      "field": "followup_date",
+      "value": "2026-05-28",
+      "source_text": "followup_date: 2026-05-28",
+      "page": 1,
+      "source_line": 7,
+      "coordinates": [
+        [
+          35,
+          254.0,
+          555,
+          268.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "extract_verbatim"
+    },
+    {
+      "field": "new_allergy_information",
+      "value": "not supplied",
+      "source_text": "new_allergy_information: not supplied",
+      "page": 1,
+      "source_line": 8,
+      "coordinates": [
+        [
+          35,
+          279.0,
+          555,
+          293.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "abstain"
+    }
+  ],
+  "expected_behaviors": [
+    "retain_prior_history",
+    "missing_does_not_remove_allergy"
+  ],
+  "untrusted_instruction_text": [],
+  "date_semantics": "fixed fixture clock; never substitute today's date",
+  "expected_graph_changes": [
+    "retain_prior_history",
+    "missing_does_not_remove_allergy"
+  ]
+}

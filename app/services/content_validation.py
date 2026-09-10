@@ -10,6 +10,7 @@ from app.schemas.content import ContentBundle
 REPRESENTATIVE_PROFILE_IDS = frozenset(
     {"PC00", "P01", "P09", "P10", "P24", "P36", "PP01", "PP06", "PP12"}
 )
+REQUIRED_DAY_IDS = frozenset(f"PPD{i}" for i in range(8))
 
 
 def expected_profile_ids() -> set[str]:
@@ -163,7 +164,7 @@ def review_readiness_errors(bundle: ContentBundle) -> list[str]:
     """
     errors = []
     profiles = {p.profile_id: p for p in bundle.profiles}
-    for key in sorted(REPRESENTATIVE_PROFILE_IDS):
+    for key in sorted(REPRESENTATIVE_PROFILE_IDS | REQUIRED_DAY_IDS):
         profile = profiles.get(key)
         if profile is None:
             errors.append(f"{key}: missing representative profile")
@@ -173,9 +174,11 @@ def review_readiness_errors(bundle: ContentBundle) -> list[str]:
         if not profile.hero.title.strip() or not profile.hero.development_evidence_ids:
             errors.append(f"{key}: sourced hero required for review")
         slots = profile.card_slots.model_dump()
-        required = ({"preparation", "ask_a_professional"} if key == "PC00"
+        required = ({"what_may_change"} if key == "P01" else
+                    {"preparation", "symptom_education"} if key in REQUIRED_DAY_IDS else
+                    {"preparation", "ask_a_professional"} if key == "PC00"
                     else {"nutrition_focus", "movement_focus", "wellbeing_focus", "preparation"})
-        if profile.applies_to.stage == "pregnancy":
+        if profile.applies_to.stage == "pregnancy" and key != "P01":
             required |= {"what_may_change", "ask_a_professional"}
         if key == "PP06":
             required.add("ask_a_professional")
@@ -187,4 +190,7 @@ def review_readiness_errors(bundle: ContentBundle) -> list[str]:
                 errors.append(f"{key}: empty slot needs a reviewable reason: {slot}")
         for slot in profile.slot_notes.keys() - slots.keys():
             errors.append(f"{key}: unknown slot note: {slot}")
+    for profile in bundle.profiles:
+        if profile.status == "draft" and not profile.publication_blockers:
+            errors.append(f"{profile.profile_id}: draft needs explicit blockers")
     return errors

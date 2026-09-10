@@ -323,7 +323,23 @@
         },
         "conditions_required": {
           "items": {
-            "minLength": 1,
+            "enum": [
+              "breastfeeding",
+              "early_home_recovery",
+              "professional_care_for_postpartum_depression",
+              "complicated_delivery_or_caesarean",
+              "uncomplicated_delivery",
+              "feels_ready_for_gentle_activity",
+              "exercise_clearance",
+              "movement_restriction",
+              "current_warning_symptom",
+              "home_birth",
+              "facility_birth",
+              "pregnancy_confirmed",
+              "consents_to_wellbeing_activity",
+              "persistent_emotional_concern",
+              "trusted_support_available"
+            ],
             "type": "string"
           },
           "title": "Conditions Required",
@@ -331,7 +347,23 @@
         },
         "conditions_excluded": {
           "items": {
-            "minLength": 1,
+            "enum": [
+              "breastfeeding",
+              "early_home_recovery",
+              "professional_care_for_postpartum_depression",
+              "complicated_delivery_or_caesarean",
+              "uncomplicated_delivery",
+              "feels_ready_for_gentle_activity",
+              "exercise_clearance",
+              "movement_restriction",
+              "current_warning_symptom",
+              "home_birth",
+              "facility_birth",
+              "pregnancy_confirmed",
+              "consents_to_wellbeing_activity",
+              "persistent_emotional_concern",
+              "trusted_support_available"
+            ],
             "type": "string"
           },
           "title": "Conditions Excluded",
@@ -714,6 +746,77 @@
           ],
           "default": null,
           "title": "Max Quote Sections"
+        },
+        "retrieved_at": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Retrieved At"
+        },
+        "publisher_updated_at": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Publisher Updated At"
+        },
+        "next_review_at": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Next Review At"
+        },
+        "revalidation_status": {
+          "default": "unverified",
+          "enum": [
+            "unverified",
+            "current_capture",
+            "needs_currency_review",
+            "changed",
+            "withdrawn"
+          ],
+          "title": "Revalidation Status",
+          "type": "string"
+        },
+        "paraphrase_permission": {
+          "default": "unverified",
+          "enum": [
+            "permitted",
+            "restricted",
+            "unverified"
+          ],
+          "title": "Paraphrase Permission",
+          "type": "string"
+        },
+        "commercial_permission": {
+          "default": "unverified",
+          "enum": [
+            "permitted",
+            "restricted",
+            "unverified"
+          ],
+          "title": "Commercial Permission",
+          "type": "string"
         }
       },
       "required": [

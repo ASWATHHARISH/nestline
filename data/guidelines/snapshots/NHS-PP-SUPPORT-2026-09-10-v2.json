@@ -1,0 +1,13 @@
+{
+  "source_id": "NHS-PP-SUPPORT",
+  "canonical_url": "https://www.nhs.uk/baby/support-and-services/relationships-after-having-a-baby/",
+  "version": "selected-2026-09-10-correction-v2",
+  "captured_at": "2026-09-10",
+  "capture_method": "Selected complete supporting passages; whitespace and list punctuation normalised. Source conditions preserved. Official source context read; not a full-page archive.",
+  "sections": [
+    {
+      "locator": "Relationships with family and friends / help paragraph opening / expanded supporting unit",
+      "text": "It's best to be clear about the kind of help you want, rather than going along with what's offered and feeling resentful."
+    }
+  ]
+}

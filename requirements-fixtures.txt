@@ -1,0 +1,3 @@
+# Optional offline fixture creation/QA; versions used for these artifacts.
+reportlab==4.4.9
+pypdf==6.10.0

@@ -1,0 +1,17 @@
+{
+  "source_id": "OWH-WELLBEING",
+  "canonical_url": "https://womenshealth.gov/mental-health/mental-health-conditions/postpartum-depression",
+  "version": "selected-2026-09-10-correction-v2",
+  "captured_at": "2026-09-10",
+  "capture_method": "Selected complete supporting passages; whitespace and list punctuation normalised. Source conditions preserved. Official source context read; not a full-page archive.",
+  "sections": [
+    {
+      "locator": "What can I do at home to feel better while seeing a doctor for postpartum depression? / introduction clause / expanded supporting unit",
+      "text": "Here are some ways to begin feeling better or getting more rest, in addition to talking to a health care professional:"
+    },
+    {
+      "locator": "What can I do at home to feel better while seeing a doctor for postpartum depression? / feelings bullet / expanded supporting unit",
+      "text": "Here are some ways to begin feeling better or getting more rest, in addition to talking to a health care professional: Talk about your feelings with your partner, supportive family members, and friends."
+    }
+  ]
+}

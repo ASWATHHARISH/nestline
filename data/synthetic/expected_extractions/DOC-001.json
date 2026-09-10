@@ -1,0 +1,126 @@
+{
+  "document_id": "DOC-001",
+  "workspace_id": "DEMO-MAYA",
+  "fictional": true,
+  "recorded_date": "2026-02-05",
+  "pdf_sha256": "70e8f0be9c7c13e90c3329decab261b075d8440e4e35a2ff63908173fd2a070b",
+  "source_text_sha256": "fdafcb5f6f0fc415205b1aaf3b326c272f76cb04d61a94ceadb3a60226e261fb",
+  "facts": [
+    {
+      "field": "persona",
+      "value": "Maya - fictional demo persona",
+      "source_text": "persona: Maya - fictional demo persona",
+      "page": 1,
+      "source_line": 5,
+      "coordinates": [
+        [
+          35,
+          204.0,
+          555,
+          218.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "extract_verbatim"
+    },
+    {
+      "field": "pregnancy_week",
+      "value": "10",
+      "source_text": "pregnancy_week: 10",
+      "page": 1,
+      "source_line": 6,
+      "coordinates": [
+        [
+          35,
+          229.0,
+          555,
+          243.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "extract_verbatim"
+    },
+    {
+      "field": "estimated_due_date",
+      "value": "2026-09-03",
+      "source_text": "estimated_due_date: 2026-09-03",
+      "page": 1,
+      "source_line": 7,
+      "coordinates": [
+        [
+          35,
+          254.0,
+          555,
+          268.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "extract_verbatim"
+    },
+    {
+      "field": "reported_allergy",
+      "value": "peanut",
+      "source_text": "reported_allergy: peanut",
+      "page": 1,
+      "source_line": 8,
+      "coordinates": [
+        [
+          35,
+          279.0,
+          555,
+          293.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "extract_verbatim"
+    },
+    {
+      "field": "dietary_preference",
+      "value": "vegetarian",
+      "source_text": "dietary_preference: vegetarian",
+      "page": 1,
+      "source_line": 9,
+      "coordinates": [
+        [
+          35,
+          304.0,
+          555,
+          318.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "extract_verbatim"
+    },
+    {
+      "field": "workspace",
+      "value": "DEMO-MAYA",
+      "source_text": "workspace: DEMO-MAYA",
+      "page": 1,
+      "source_line": 10,
+      "coordinates": [
+        [
+          35,
+          329.0,
+          555,
+          343.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "extract_verbatim"
+    }
+  ],
+  "expected_behaviors": [
+    "all_facts_require_confirmation"
+  ],
+  "untrusted_instruction_text": [],
+  "date_semantics": "fixed fixture clock; never substitute today's date",
+  "expected_graph_changes": [
+    "all_facts_require_confirmation"
+  ]
+}

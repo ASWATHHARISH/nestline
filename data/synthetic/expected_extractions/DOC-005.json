@@ -1,0 +1,58 @@
+{
+  "document_id": "DOC-005",
+  "workspace_id": "DEMO-MAYA",
+  "fictional": true,
+  "recorded_date": "2026-05-14",
+  "pdf_sha256": "3184658db4d3d96f8a3b4b318ac42a344b8c91b9938a40d153105ab799ecc024",
+  "source_text_sha256": "21483b304627f5fe35bf3b182429a2e50bc1125f97ecd1384a2dcddec18e0cea",
+  "facts": [
+    {
+      "field": "recorded_instruction",
+      "value": "Walking permitted in this fictional scenario.",
+      "source_text": "recorded_instruction: Walking permitted in this fictional scenario.",
+      "page": 1,
+      "source_line": 5,
+      "coordinates": [
+        [
+          35,
+          204.0,
+          555,
+          218.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "extract_verbatim"
+    },
+    {
+      "field": "instruction_scope",
+      "value": "walking only; no general activity clearance",
+      "source_text": "instruction_scope: walking only; no general activity clearance",
+      "page": 1,
+      "source_line": 6,
+      "coordinates": [
+        [
+          35,
+          229.0,
+          555,
+          243.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "extract_verbatim"
+    }
+  ],
+  "expected_behaviors": [
+    "propose_movement_fact",
+    "retain_scope",
+    "plan_dependency_movement"
+  ],
+  "untrusted_instruction_text": [],
+  "date_semantics": "fixed fixture clock; never substitute today's date",
+  "expected_graph_changes": [
+    "propose_movement_fact",
+    "retain_scope",
+    "plan_dependency_movement"
+  ]
+}

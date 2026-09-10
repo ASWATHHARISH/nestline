@@ -14,6 +14,13 @@ Stage = Literal["possible_pregnancy", "pregnancy", "postpartum"]
 Status = Literal["draft", "reviewed", "published", "superseded"]
 Domain = Literal["journey", "nutrition", "movement", "wellbeing", "symptoms", "preparation", "followup"]
 Jurisdictions = Annotated[list[Text], Field(min_length=1)]
+ConditionKey = Literal[
+    "breastfeeding", "early_home_recovery", "professional_care_for_postpartum_depression",
+    "complicated_delivery_or_caesarean", "uncomplicated_delivery", "feels_ready_for_gentle_activity",
+    "exercise_clearance", "movement_restriction", "current_warning_symptom",
+    "home_birth", "facility_birth", "pregnancy_confirmed", "consents_to_wellbeing_activity",
+    "persistent_emotional_concern", "trusted_support_available",
+]
 
 
 class Contract(BaseModel):
@@ -89,6 +96,12 @@ class SourceRecord(Contract):
     delivery_mode: Literal["retrievable", "fixed_quote"] = "retrievable"
     attribution_text: str = ""
     max_quote_sections: Annotated[int, Field(ge=1)] | None = None
+    retrieved_at: date | None = None
+    publisher_updated_at: date | None = None
+    next_review_at: date | None = None
+    revalidation_status: Literal["unverified", "current_capture", "needs_currency_review", "changed", "withdrawn"] = "unverified"
+    paraphrase_permission: Literal["permitted", "restricted", "unverified"] = "unverified"
+    commercial_permission: Literal["permitted", "restricted", "unverified"] = "unverified"
 
     @model_validator(mode="after")
     def approved_metadata(self) -> Self:
@@ -149,8 +162,8 @@ class GuidanceFragment(Contract):
     evidence_span_ids: Annotated[list[Identifier], Field(min_length=1)]
     status: Status = "draft"
     review: Review | None = None
-    conditions_required: list[Text] = Field(default_factory=list)
-    conditions_excluded: list[Text] = Field(default_factory=list)
+    conditions_required: list[ConditionKey] = Field(default_factory=list)
+    conditions_excluded: list[ConditionKey] = Field(default_factory=list)
     presentation: Literal["paraphrase", "quotation"] = "paraphrase"
 
 

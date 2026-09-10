@@ -69,7 +69,9 @@ class ContentTests(unittest.TestCase):
         with redirect_stdout(StringIO()) as output:
             result = main(["--require-release"])
         self.assertEqual(result, 1)
-        self.assertEqual(len(json.loads(output.getvalue())["errors"]), 9)
+        errors = json.loads(output.getvalue())["errors"]
+        self.assertEqual(sum("published profile:" in e for e in errors), 17)
+        self.assertTrue(any("clinical approval" in e for e in errors))
 
     def test_fake_publication_of_shell_is_blocked(self):
         bundle = load_bundle(ROOT / "data")

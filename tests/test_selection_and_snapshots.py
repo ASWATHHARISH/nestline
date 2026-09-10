@@ -47,18 +47,18 @@ class SelectionTests(unittest.TestCase):
 
     def test_missing_condition_is_not_inferred_clearance(self):
         data = fixture()
-        data["fragments"][0]["conditions_required"] = ["clearance"]
-        data["fragments"][0]["conditions_excluded"] = ["restriction"]
+        data["fragments"][0]["conditions_required"] = ["exercise_clearance"]
+        data["fragments"][0]["conditions_excluded"] = ["movement_restriction"]
         scope = Applicability(stage="pregnancy", unit="week", start=10, end=10)
         self.assertEqual(select_content(bundle(data), scope, "IN")["fragment_ids"], [])
-        self.assertEqual(select_content(bundle(data), scope, "IN", frozenset({"clearance"}))["fragment_ids"], [])
-        result = select_content(bundle(data), scope, "IN", frozenset({"clearance"}), frozenset({"restriction"}))
+        self.assertEqual(select_content(bundle(data), scope, "IN", frozenset({"exercise_clearance"}))["fragment_ids"], [])
+        result = select_content(bundle(data), scope, "IN", frozenset({"exercise_clearance"}), frozenset({"movement_restriction"}))
         self.assertEqual(result["fragment_ids"], ["TEST-FRAGMENT"])
 
     def test_conflicting_condition_reports_are_rejected(self):
         scope = pregnancy_month_scope(3)
         with self.assertRaises(ValueError):
-            select_content(bundle(fixture()), scope, "IN", frozenset({"x"}), frozenset({"x"}))
+            select_content(bundle(fixture()), scope, "IN", frozenset({"breastfeeding"}), frozenset({"breastfeeding"}))
 
     def test_month_nine_keeps_beyond_term_uncertainty(self):
         self.assertEqual(pregnancy_month_scope(9).end, 42)
@@ -103,7 +103,7 @@ class ProvenanceTests(unittest.TestCase):
 
     def test_conditions_cannot_contradict_each_other(self):
         data = fixture()
-        data["fragments"][0].update(conditions_required=["x"], conditions_excluded=["x"])
+        data["fragments"][0].update(conditions_required=["breastfeeding"], conditions_excluded=["breastfeeding"])
         self.assertFalse(check(data).valid)
 
     def test_real_saved_excerpts_match_the_manifest(self):

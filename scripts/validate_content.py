@@ -3,10 +3,12 @@
 import argparse
 import csv
 import json
+from datetime import date
 from pathlib import Path
 
 from app.schemas.content import ContentBundle
-from app.services.content_validation import REPRESENTATIVE_PROFILE_IDS, review_readiness_errors, validate_bundle
+from app.services.content_validation import review_readiness_errors, validate_bundle
+from app.services.foundation import release_errors, validate_foundation
 from app.services.source_snapshots import validate_snapshots
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,13 +30,15 @@ def load_bundle(data: Path) -> ContentBundle:
     with (data / "guidelines/source_registry.csv").open(encoding="utf-8", newline="") as stream:
         sources = list(csv.DictReader(stream))
     structured = {"jurisdiction", "topics", "allowed_use", "review", "journey_stages", "selected_sections"}
-    optional = {"publication_date", "last_checked_at", "content_checksum", "supersedes_source_id"}
+    optional = {"publication_date", "last_checked_at", "content_checksum", "supersedes_source_id",
+                "retrieved_at", "publisher_updated_at", "next_review_at"}
     for source in sources:
         for key in structured:
             if key in source:
                 source[key] = json.loads(source[key])
         for key in optional:
-            source[key] = source[key] or None
+            if key in source:
+                source[key] = source[key] or None
         if "max_quote_sections" in source:
             source["max_quote_sections"] = int(source["max_quote_sections"]) if source["max_quote_sections"] else None
     payload = dict(sources=sources,
@@ -65,10 +69,9 @@ def main(argv=None) -> int:
             report.errors.append("coverage matrix differs from weekly manifest")
         if args.require_release or args.require_review_ready:
             report.errors.extend(review_readiness_errors(bundle))
+            report.errors.extend(validate_foundation(bundle, args.data_dir))
         if args.require_release:
-            published = {p.profile_id for p in bundle.profiles if p.status == "published"}
-            for missing in sorted(REPRESENTATIVE_PROFILE_IDS - published):
-                report.errors.append(f"release requires reviewed, published profile: {missing}")
+            report.errors.extend(release_errors(bundle, args.data_dir, date.today()))
         mode = "release" if args.require_release else "review_ready" if args.require_review_ready else "authoring"
         print(json.dumps({"valid": report.valid, "mode": mode,
                           "profiles": len(bundle.profiles), "published_profiles": report.published_profiles,

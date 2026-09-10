@@ -1,0 +1,53 @@
+{
+  "source_id": "NHM-CHO",
+  "canonical_url": "https://www.nhm.gov.in/New_Update-2022-23/MH/GUIDELINES-%20MH/CHO_Booklet_%20Maternal_Health-English.pdf",
+  "version": "selected-2026-09-10-correction-v2",
+  "captured_at": "2026-09-10",
+  "capture_method": "Selected complete supporting passages; whitespace and list punctuation normalised. Source conditions preserved. Official source context read; not a full-page archive.",
+  "sections": [
+    {
+      "locator": "Page 11 / section 3.1 / first bullet",
+      "text": "Early diagnosis of pregnancy using Nischay Kits."
+    },
+    {
+      "locator": "Page 11 / section 3.1 / birth planning bullet",
+      "text": "Support in birth planning and birth preparedness including birth companion of choice."
+    },
+    {
+      "locator": "Page 11 / 3.1 / complete PNC home-visit bullet",
+      "text": "Ensuring PNC home visits for delivered women (Institutional Delivery) on 3rd, 7th,14th, 21st, 28th and 42nd Day (6 Visits) and in case of Home Delivery follow up to be done on 1st, 3rd, 7th, 14th, 21st, 28th and 42nd Day (7 Visits)."
+    },
+    {
+      "locator": "Page 11 / 3.1 / registration bullet",
+      "text": "Registration of all the pregnant women in the first trimester of pregnancy."
+    },
+    {
+      "locator": "Page 11 / 3.1 / antenatal-check bullet",
+      "text": "Ensuring four antenatal care checks in VHSND."
+    },
+    {
+      "locator": "Page 11 / 3.1 / testing bullet",
+      "text": "Test all pregnant women for urine (albumin and sugar), haemoglobin, syphilis, HIV and blood grouping."
+    },
+    {
+      "locator": "Page 11 / 3.1 / complete PNC home-visit bullet / day scope",
+      "text": "Ensuring PNC home visits for delivered women (Institutional Delivery) on 3rd, 7th,14th, 21st, 28th and 42nd Day (6 Visits) and in case of Home Delivery follow up to be done on 1st, 3rd, 7th, 14th, 21st, 28th and 42nd Day (7 Visits)."
+    },
+    {
+      "locator": "Page 11 / 3.1 / complete PNC home-visit bullet / week scope",
+      "text": "Ensuring PNC home visits for delivered women (Institutional Delivery) on 3rd, 7th,14th, 21st, 28th and 42nd Day (6 Visits) and in case of Home Delivery follow up to be done on 1st, 3rd, 7th, 14th, 21st, 28th and 42nd Day (7 Visits)."
+    },
+    {
+      "locator": "Page 11 / complete PNC schedule / selected day 1",
+      "text": "Ensuring PNC home visits for delivered women (Institutional Delivery) on 3rd, 7th,14th, 21st, 28th and 42nd Day (6 Visits) and in case of Home Delivery follow up to be done on 1st, 3rd, 7th, 14th, 21st, 28th and 42nd Day (7 Visits)."
+    },
+    {
+      "locator": "Page 11 / complete PNC schedule / selected day 3",
+      "text": "Ensuring PNC home visits for delivered women (Institutional Delivery) on 3rd, 7th,14th, 21st, 28th and 42nd Day (6 Visits) and in case of Home Delivery follow up to be done on 1st, 3rd, 7th, 14th, 21st, 28th and 42nd Day (7 Visits)."
+    },
+    {
+      "locator": "Page 11 / complete PNC schedule / selected day 7",
+      "text": "Ensuring PNC home visits for delivered women (Institutional Delivery) on 3rd, 7th,14th, 21st, 28th and 42nd Day (6 Visits) and in case of Home Delivery follow up to be done on 1st, 3rd, 7th, 14th, 21st, 28th and 42nd Day (7 Visits)."
+    }
+  ]
+}

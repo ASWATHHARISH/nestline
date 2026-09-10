@@ -24,6 +24,7 @@ def main() -> int:
                         ("publication_gate", ["--require-release"])):
         checks[name] = run(["-m", "scripts.validate_content", *extra])
     checks["dependencies"] = run(["-m", "pip", "check"])
+    checks["software_contract_cases"] = run(["-m", "scripts.run_contract_evals"])
     report = {"checked_at_utc": datetime.now(timezone.utc).isoformat(),
               "execution": "Local checks; this report does not attest a GitHub Actions run",
               "tests_run": int(count.group(1)) if count else None,

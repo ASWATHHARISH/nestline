@@ -146,14 +146,17 @@ Each package is ready for a GitHub issue using the stable ID. Work is not done m
 - [x] Create `P01`–`P42`, `PP01`–`PP12`, `PC00`, and `PPD0`–`PPD7` records; distinguish 54 weekly records from 63 total records including special states/overlays.
 - [x] Map exact selected draft source spans to stage, week/range, jurisdiction, publisher/version, reuse status and review status. Preserve reusable fragments rather than invent weekly variation.
 - [x] Populate review drafts for `PC00`, `P01`, `P09`, `P10`, `P24`, `P36`, `PP01`, `PP06`, `PP12`, including domain cards and explicit empty-slot reasons.
-- [ ] Record actual named source/content/localisation reviews, resolve reviewer corrections and publish the nine representative profiles. A draft or passing software check does not satisfy this gate.
+- [ ] Record actual named licence/content/clinical/India-localisation/product reviews, resolve corrections and publish the nine representative profiles plus eight day overlays. A draft or passing software check does not satisfy this gate.
 - [x] Specify draft → reviewed → published → superseded transitions and unpublished-profile UI behavior.
 
-10 September completion pass: 13 snapshots, 28 spans/fragments, nine profiles ready
-for review and 47 passing engineering tests. The actual named review/publication
-gate remains open. BHC exact-week quotes cannot enter embeddings or be rewritten;
-foreign general passages require explicit India localisation review. Read the
-current packet before signing off. This remaining gate belongs to Stage 0.
+10 September correction pass: 14 active snapshots, 56 spans/fragments, nine
+representative drafts and eight populated day overlays. Local checks: 68 unit
+tests and 64 visible deterministic software cases. No model benchmark has run.
+Food, movement, wellbeing, follow-up and hidden comparison catalogues plus eight
+fictional PDF/text/extraction fixtures now exist. Read STAGE-0-CORRECTION-STATUS.md:
+source currency and clinical/local interpretation still need resolution, exact
+human approvals are missing, and comparisons lack verified dimensions. The
+review/publication gate is still Stage 0 work, not a later-stage promise.
 
 **Exit:** no published claim lacks approved evidence; P10/P09 applicability traps fail safely; month-only requests do not acquire an invented exact week. Team review must not be labeled clinical review unless it actually occurred.
 

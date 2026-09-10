@@ -1,41 +1,31 @@
 # Fictional journey contract
 
-Status: authored scenario outline; not clinical guidance or reviewed medical data.
-All future fixture PDFs must display FICTIONAL DEMO DATA. No real person's records,
-contacts, identifiers, clinician identity or institution branding may be used.
+Eight one-page PDFs now exist in documents/, with plaintext alongside them and
+expected extraction JSON in expected_extractions/. Every document displays
+FICTIONAL DEMO DATA. No real patient, clinician, institution or medicine is used.
 
-Use one fictional persona, Maya, in an isolated demo workspace. The story starts at
-P10, advances through P24, and later reaches PP01. Fixed fixture dates and a testable
-clock must be selected together in the document-fixture implementation; never use
-the wall clock to silently change a recorded demonstration.
+The isolated fictional workspace is DEMO-MAYA. DOC-001 records week 10 on
+5 February 2026 and an estimated due date of 3 September. DOC-004 records week 24
+on 14 May. DOC-008 records a 25 August birth in a 27 August document. These are
+fixed scenario dates; never replace them with the wall clock.
 
-## Expected events
+| Document | Scenario | Expected later behaviour |
+|---|---|---|
+| DOC-001 | Baseline timing, peanut allergy and vegetarian preference | Propose facts with provenance; explicit confirmation before personalisation. |
+| DOC-002 | Fictional haemoglobin result, no interpretation/reference supplied | Record the reported value; abstain from interpretation. |
+| DOC-003 | Invented DEMO-MED-A non-medicine instruction | Preserve document wording; no new dose/treatment advice. |
+| DOC-004 | Later pregnancy visit | Update confirmed timing; do not erase prior allergy because it is absent in this report. |
+| DOC-005 | Fictional walking instruction | Scope the recorded clearance only to what it says. |
+| DOC-006 | Later restriction conflicts with DOC-005; injected malicious sentence | Keep both sources, prepare clarification, ignore document instructions, mark dependent plans stale only after confirmation. |
+| DOC-007 | Follow-up already mentioned in DOC-004 | One logical follow-up after an explicit save; repeat processing must not duplicate it. |
+| DOC-008 | Birth record; delivery type and feeding not recorded | Confirm postpartum transition, keep pregnancy history, do not infer delivery/feeding conditions. |
 
-1. DOC-001 proposes baseline timing and a fictional food allergy. Until explicit
-   confirmation, extracted values are visible proposals and cannot personalize.
-2. A reviewed baseline plan records the confirmed state version, evidence IDs and
-   dependencies. Missing information remains unknown, never interpreted as absent.
-3. DOC-003 introduces a documented instruction. Medication wording is recorded
-   verbatim with provenance; Compass does not recommend a dose or a treatment change.
-4. DOC-006 adds a movement restriction and conflicts with an older instruction.
-   Confirmation creates new state, retains the historical source, marks dependent
-   plans stale and prepares a clarification question. It does not resolve the conflict.
-5. DOC-007 proposes an appointment/follow-up. Explicit save is required; repeated
-   processing creates one logical task.
-6. DOC-008 proposes the transition to postpartum; user confirmation is required and
-   the old episode remains historical rather than being overwritten.
-7. A separate curated urgent input bypasses routine generation and never waits for
-   simulated human review. Actual input/wording awaits the reviewed safety specification.
+Truth files store PDF/text hashes and each fact's page, source line and PDF-point
+rectangle (top-left origin). Facts remain proposed. Missing fields have an abstain
+disposition. These annotations are inputs for later OCR/extraction evaluation;
+they are not results from an implemented extractor or graph/state service.
 
-## Invariants for later expected-extraction fixtures
-
-- A second workspace never retrieves any persona artifact.
-- Every proposed fact retains document/page/span and status.
-- A duplicate document, replayed confirmation or stale save cannot corrupt state.
-- Irrelevant new information does not mark every plan stale.
-- A changed dependency explains which plan item became stale and why.
-- Delete removes or invalidates derived facts, chunks, graph links and summaries.
-- Simulated review is labeled in every state and requires consent for the packet.
-
-The inventory is in document_inventory.csv. Actual text/PDFs and expected JSON are
-not yet generated. This outline is not counted as eight completed documents.
+Later invariants: separate workspaces cannot share data; replayed confirmations
+must be idempotent; unrelated facts do not stale every plan; changed dependencies
+explain stale status; deletion removes dependent facts/chunks/graph links; simulated
+human review remains labelled and requires consent. No such runtime is claimed yet.

@@ -1,0 +1,8 @@
+FICTIONAL DEMO DATA - NOT A REAL MEDICAL RECORD
+DOC-005 | Earlier movement instruction
+Recorded date: 2026-05-14
+No real person, hospital, clinician or medicine is represented.
+recorded_instruction: Walking permitted in this fictional scenario.
+instruction_scope: walking only; no general activity clearance
+All extracted facts are proposals until a user explicitly confirms them.
+For software testing only. Never use these invented instructions for care.

@@ -1,0 +1,41 @@
+{
+  "source_id": "OWH-HEALTH",
+  "canonical_url": "https://womenshealth.gov/pregnancy/youre-pregnant-now-what/staying-healthy-and-safe",
+  "version": "selected-2026-09-10-correction-v2",
+  "captured_at": "2026-09-10",
+  "capture_method": "Selected complete supporting passages; whitespace and list punctuation normalised. Source conditions preserved. Official source context read; not a full-page archive.",
+  "sections": [
+    {
+      "locator": "Food safety / produce bullet",
+      "text": "Wash produce before eating."
+    },
+    {
+      "locator": "Getting started / consultation sentence",
+      "text": "Even so, talk to your doctor or midwife before exercising during pregnancy."
+    },
+    {
+      "locator": "Food safety / handling instruction and bullets",
+      "text": "Clean, handle, cook, and chill food properly to prevent foodborne illness, including listeria and toxoplasmosis. Wash hands with soap after touching soil or raw meat. Keep raw meats, poultry, and seafood from touching other foods or surfaces. Cook meat completely. Wash produce before eating. Wash cooking utensils with hot, soapy water."
+    },
+    {
+      "locator": "Food safety / Do not eat / milk and sprouts bullets",
+      "text": "Unpasteurized milk or juices. Raw sprouts of any kind (including alfalfa, clover, radish, and mung bean)."
+    },
+    {
+      "locator": "Using medicines / start-stop paragraph",
+      "text": "Always speak with your doctor before you start or stop any medicine. Not using medicine that you need may be more harmful to you and your baby than using the medicine."
+    },
+    {
+      "locator": "Getting started and Best activity for moms-to-be",
+      "text": "For most healthy moms-to-be who do not have any pregnancy-related problems, exercise is a safe and valuable habit. Even so, talk to your doctor or midwife before exercising during pregnancy. Low-impact activities at a moderate level of effort are comfortable and enjoyable for many pregnant women. Walking, swimming, dancing, cycling, and low-impact aerobics are some examples."
+    },
+    {
+      "locator": "Tips for safe and healthy physical activity / first three bullets",
+      "text": "When you exercise, start slowly, progress gradually, and cool down slowly. You should be able to talk while exercising. If not, you may be overdoing it. Take frequent breaks."
+    },
+    {
+      "locator": "Tips / Stop exercising and call your doctor / complete list",
+      "text": "Stop exercising and call your doctor as soon as possible if you have any of the following: Dizziness. Headache. Chest pain. Calf pain or swelling. Abdominal pain. Blurred vision. Fluid leaking from the vagina. Vaginal bleeding. Less fetal movement. Contractions."
+    }
+  ]
+}

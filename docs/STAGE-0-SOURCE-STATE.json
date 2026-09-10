@@ -1,0 +1,612 @@
+{
+  "checked_on": "2026-09-10",
+  "interpretation": "Permission researched is a documented reuse assessment, not a named legal approval. Assembled can mean draft.",
+  "summary": {
+    "registered": 31,
+    "permission_researched": 14,
+    "snapshotted": 14,
+    "assembled": 12,
+    "human_source_review": 0,
+    "published_evidence": 0
+  },
+  "catalogues": {
+    "comparison": 42,
+    "followup": 10,
+    "food": 12,
+    "movement": 6,
+    "wellbeing": 6
+  },
+  "sources": [
+    {
+      "source_id": "MEDLINEPLUS-01",
+      "url": "https://medlineplus.gov/ency/article/002398.htm",
+      "state": "excluded",
+      "permission_researched": false,
+      "allowed_use": [],
+      "snapshotted": false,
+      "evidence_count": 0,
+      "assembled": false,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "US"
+      ],
+      "freshness_issues": [
+        "not admitted to content corpus"
+      ]
+    },
+    {
+      "source_id": "NHS-01",
+      "url": "https://www.nhs.uk/best-start-in-life/pregnancy/week-by-week-guide-to-pregnancy/",
+      "state": "excluded",
+      "permission_researched": false,
+      "allowed_use": [],
+      "snapshotted": false,
+      "evidence_count": 0,
+      "assembled": false,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "UK"
+      ],
+      "freshness_issues": [
+        "not admitted to content corpus"
+      ]
+    },
+    {
+      "source_id": "PBB-01",
+      "url": "https://www.pregnancybirthbaby.org.au/pregnancy/pregnancy-stages/pregnancy-week-by-week",
+      "state": "excluded",
+      "permission_researched": false,
+      "allowed_use": [],
+      "snapshotted": false,
+      "evidence_count": 0,
+      "assembled": false,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "AU"
+      ],
+      "freshness_issues": [
+        "not admitted to content corpus"
+      ]
+    },
+    {
+      "source_id": "NHS-02",
+      "url": "https://www.nhs.uk/best-start-in-life/pregnancy/week-by-week-guide-to-pregnancy/3rd-trimester/week-41/",
+      "state": "excluded",
+      "permission_researched": false,
+      "allowed_use": [],
+      "snapshotted": false,
+      "evidence_count": 0,
+      "assembled": false,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "UK"
+      ],
+      "freshness_issues": [
+        "not admitted to content corpus"
+      ]
+    },
+    {
+      "source_id": "WHO-01",
+      "url": "https://www.who.int/publications/i/item/9789240052796",
+      "state": "candidate",
+      "permission_researched": false,
+      "allowed_use": [],
+      "snapshotted": false,
+      "evidence_count": 0,
+      "assembled": false,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "GLOBAL"
+      ],
+      "freshness_issues": [
+        "not admitted to content corpus"
+      ]
+    },
+    {
+      "source_id": "WHO-02",
+      "url": "https://www.who.int/publications/b/59332",
+      "state": "candidate",
+      "permission_researched": false,
+      "allowed_use": [],
+      "snapshotted": false,
+      "evidence_count": 0,
+      "assembled": false,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "GLOBAL"
+      ],
+      "freshness_issues": [
+        "not admitted to content corpus"
+      ]
+    },
+    {
+      "source_id": "WHO-03",
+      "url": "https://www.who.int/publications/i/item/9789241549912/",
+      "state": "candidate",
+      "permission_researched": false,
+      "allowed_use": [],
+      "snapshotted": false,
+      "evidence_count": 0,
+      "assembled": false,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "GLOBAL"
+      ],
+      "freshness_issues": [
+        "not admitted to content corpus"
+      ]
+    },
+    {
+      "source_id": "WHO-04",
+      "url": "https://iris.who.int/bitstream/handle/10665/339745/9789240020306-eng.pdf",
+      "state": "candidate",
+      "permission_researched": false,
+      "allowed_use": [],
+      "snapshotted": false,
+      "evidence_count": 0,
+      "assembled": false,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "GLOBAL"
+      ],
+      "freshness_issues": [
+        "not admitted to content corpus"
+      ]
+    },
+    {
+      "source_id": "NIN-01",
+      "url": "https://www.nin.res.in/dietaryguidelines/pdfjs/locale/DGI07052024P.pdf",
+      "state": "excluded",
+      "permission_researched": false,
+      "allowed_use": [],
+      "snapshotted": false,
+      "evidence_count": 0,
+      "assembled": false,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "IN"
+      ],
+      "freshness_issues": [
+        "not admitted to content corpus"
+      ]
+    },
+    {
+      "source_id": "WHO-05",
+      "url": "https://iris.who.int/bitstream/handle/10665/336656/9789240015128-eng.pdf",
+      "state": "candidate",
+      "permission_researched": false,
+      "allowed_use": [],
+      "snapshotted": false,
+      "evidence_count": 0,
+      "assembled": false,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "GLOBAL"
+      ],
+      "freshness_issues": [
+        "not admitted to content corpus"
+      ]
+    },
+    {
+      "source_id": "WHO-06",
+      "url": "https://www.who.int/publications/i/item/9789240057142",
+      "state": "candidate",
+      "permission_researched": false,
+      "allowed_use": [],
+      "snapshotted": false,
+      "evidence_count": 0,
+      "assembled": false,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "GLOBAL"
+      ],
+      "freshness_issues": [
+        "not admitted to content corpus"
+      ]
+    },
+    {
+      "source_id": "WHO-07",
+      "url": "https://www.who.int/publications/i/item/9789240045989",
+      "state": "candidate",
+      "permission_researched": false,
+      "allowed_use": [],
+      "snapshotted": false,
+      "evidence_count": 0,
+      "assembled": false,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "GLOBAL"
+      ],
+      "freshness_issues": [
+        "not admitted to content corpus"
+      ]
+    },
+    {
+      "source_id": "WHO-08",
+      "url": "https://www.who.int/publications/i/item/9789240090347",
+      "state": "candidate",
+      "permission_researched": false,
+      "allowed_use": [],
+      "snapshotted": false,
+      "evidence_count": 0,
+      "assembled": false,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "GLOBAL"
+      ],
+      "freshness_issues": [
+        "not admitted to content corpus"
+      ]
+    },
+    {
+      "source_id": "WHO-09",
+      "url": "https://www.who.int/teams/maternal-newborn-child-adolescent-health-and-ageing/handbooks/programme-manager-s-handbook-mncah/recommendations-on-interventions-along-life-course/maternal",
+      "state": "candidate",
+      "permission_researched": false,
+      "allowed_use": [],
+      "snapshotted": false,
+      "evidence_count": 0,
+      "assembled": false,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "GLOBAL"
+      ],
+      "freshness_issues": [
+        "not admitted to content corpus"
+      ]
+    },
+    {
+      "source_id": "NHM-01",
+      "url": "https://www.nhm.gov.in/index1.php?lang=1&level=3&lid=377&sublinkid=839",
+      "state": "candidate",
+      "permission_researched": false,
+      "allowed_use": [],
+      "snapshotted": false,
+      "evidence_count": 0,
+      "assembled": false,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "IN"
+      ],
+      "freshness_issues": [
+        "not admitted to content corpus"
+      ]
+    },
+    {
+      "source_id": "CDC-01",
+      "url": "https://www.cdc.gov/hearher/maternal-warning-signs/index.html",
+      "state": "candidate",
+      "permission_researched": false,
+      "allowed_use": [],
+      "snapshotted": false,
+      "evidence_count": 0,
+      "assembled": false,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "US"
+      ],
+      "freshness_issues": [
+        "not admitted to content corpus"
+      ]
+    },
+    {
+      "source_id": "OWH-STAGES",
+      "url": "https://womenshealth.gov/pregnancy/youre-pregnant-now-what/stages-pregnancy",
+      "state": "candidate",
+      "permission_researched": true,
+      "allowed_use": [
+        "store",
+        "embed",
+        "display"
+      ],
+      "snapshotted": true,
+      "evidence_count": 4,
+      "assembled": true,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "US"
+      ],
+      "freshness_issues": []
+    },
+    {
+      "source_id": "OWH-TEST",
+      "url": "https://womenshealth.gov/pregnancy/you-get-pregnant/knowing-if-you-are-pregnant",
+      "state": "candidate",
+      "permission_researched": true,
+      "allowed_use": [
+        "store",
+        "embed",
+        "display"
+      ],
+      "snapshotted": true,
+      "evidence_count": 1,
+      "assembled": true,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "US"
+      ],
+      "freshness_issues": []
+    },
+    {
+      "source_id": "OWH-HEALTH",
+      "url": "https://womenshealth.gov/pregnancy/youre-pregnant-now-what/staying-healthy-and-safe",
+      "state": "candidate",
+      "permission_researched": true,
+      "allowed_use": [
+        "store",
+        "embed",
+        "display"
+      ],
+      "snapshotted": true,
+      "evidence_count": 8,
+      "assembled": true,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "US"
+      ],
+      "freshness_issues": []
+    },
+    {
+      "source_id": "OWH-RECOVERY",
+      "url": "https://womenshealth.gov/pregnancy/childbirth-and-beyond/recovering-birth",
+      "state": "candidate",
+      "permission_researched": true,
+      "allowed_use": [
+        "store",
+        "embed",
+        "display"
+      ],
+      "snapshotted": true,
+      "evidence_count": 2,
+      "assembled": false,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "US"
+      ],
+      "freshness_issues": []
+    },
+    {
+      "source_id": "OWH-WELLBEING",
+      "url": "https://womenshealth.gov/mental-health/mental-health-conditions/postpartum-depression",
+      "state": "candidate",
+      "permission_researched": true,
+      "allowed_use": [
+        "store",
+        "embed",
+        "display"
+      ],
+      "snapshotted": true,
+      "evidence_count": 2,
+      "assembled": false,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "US"
+      ],
+      "freshness_issues": []
+    },
+    {
+      "source_id": "BHC-WEEKS",
+      "url": "https://www.betterhealth.vic.gov.au/health/healthyliving/pregnancy-week-by-week",
+      "state": "candidate",
+      "permission_researched": true,
+      "allowed_use": [
+        "store",
+        "display"
+      ],
+      "snapshotted": true,
+      "evidence_count": 2,
+      "assembled": true,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "AU"
+      ],
+      "freshness_issues": [
+        "source currency decision pending or source changed/withdrawn"
+      ]
+    },
+    {
+      "source_id": "NHM-MOTHERHOOD",
+      "url": "https://www.nhm.gov.in/images/pdf/programmes/maternal-health/guidelines/my_safe_motherhood_booklet_english.pdf",
+      "state": "candidate",
+      "permission_researched": true,
+      "allowed_use": [
+        "store",
+        "embed",
+        "display"
+      ],
+      "snapshotted": true,
+      "evidence_count": 13,
+      "assembled": true,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "IN"
+      ],
+      "freshness_issues": [
+        "source currency decision pending or source changed/withdrawn"
+      ]
+    },
+    {
+      "source_id": "NHM-CHO",
+      "url": "https://www.nhm.gov.in/New_Update-2022-23/MH/GUIDELINES-%20MH/CHO_Booklet_%20Maternal_Health-English.pdf",
+      "state": "candidate",
+      "permission_researched": true,
+      "allowed_use": [
+        "store",
+        "embed",
+        "display"
+      ],
+      "snapshotted": true,
+      "evidence_count": 11,
+      "assembled": true,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "IN"
+      ],
+      "freshness_issues": [
+        "source currency decision pending or source changed/withdrawn"
+      ]
+    },
+    {
+      "source_id": "NHS-PREG-MIND",
+      "url": "https://www.nhs.uk/pregnancy/mental-health-in-pregnancy-and-after-the-birth/mental-health/",
+      "state": "candidate",
+      "permission_researched": true,
+      "allowed_use": [
+        "store",
+        "embed",
+        "display"
+      ],
+      "snapshotted": true,
+      "evidence_count": 2,
+      "assembled": true,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "UK"
+      ],
+      "freshness_issues": []
+    },
+    {
+      "source_id": "NHS-PP-BODY",
+      "url": "https://www.nhs.uk/pregnancy/labour-and-birth/your-body/",
+      "state": "candidate",
+      "permission_researched": true,
+      "allowed_use": [
+        "store",
+        "embed",
+        "display"
+      ],
+      "snapshotted": true,
+      "evidence_count": 2,
+      "assembled": true,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "UK"
+      ],
+      "freshness_issues": []
+    },
+    {
+      "source_id": "NHS-PP-DIET",
+      "url": "https://www.nhs.uk/baby/breastfeeding-and-bottle-feeding/breastfeeding-and-lifestyle/diet/",
+      "state": "candidate",
+      "permission_researched": true,
+      "allowed_use": [
+        "store",
+        "embed",
+        "display"
+      ],
+      "snapshotted": true,
+      "evidence_count": 1,
+      "assembled": true,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "UK"
+      ],
+      "freshness_issues": []
+    },
+    {
+      "source_id": "NHS-PP-ACTIVE",
+      "url": "https://www.nhs.uk/baby/support-and-services/keeping-fit-and-healthy-with-a-baby/",
+      "state": "candidate",
+      "permission_researched": true,
+      "allowed_use": [
+        "store",
+        "embed",
+        "display"
+      ],
+      "snapshotted": true,
+      "evidence_count": 6,
+      "assembled": true,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "UK"
+      ],
+      "freshness_issues": []
+    },
+    {
+      "source_id": "NHS-PP-SUPPORT",
+      "url": "https://www.nhs.uk/baby/support-and-services/relationships-after-having-a-baby/",
+      "state": "candidate",
+      "permission_researched": true,
+      "allowed_use": [
+        "store",
+        "embed",
+        "display"
+      ],
+      "snapshotted": true,
+      "evidence_count": 1,
+      "assembled": true,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "UK"
+      ],
+      "freshness_issues": []
+    },
+    {
+      "source_id": "CDC-WARNINGS",
+      "url": "https://www.cdc.gov/hearher/maternal-warning-signs/index.html",
+      "state": "candidate",
+      "permission_researched": false,
+      "allowed_use": [],
+      "snapshotted": false,
+      "evidence_count": 0,
+      "assembled": false,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "US"
+      ],
+      "freshness_issues": [
+        "not admitted to content corpus"
+      ]
+    },
+    {
+      "source_id": "PIB-PMSMA",
+      "url": "https://static.pib.gov.in/WriteReadData/specificdocs/documents/2026/jun/doc202668887301.pdf",
+      "state": "candidate",
+      "permission_researched": true,
+      "allowed_use": [
+        "store",
+        "embed",
+        "display"
+      ],
+      "snapshotted": true,
+      "evidence_count": 1,
+      "assembled": true,
+      "human_source_review": false,
+      "published_evidence": 0,
+      "source_country": [
+        "IN"
+      ],
+      "freshness_issues": []
+    }
+  ]
+}

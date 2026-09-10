@@ -1,0 +1,74 @@
+{
+  "document_id": "DOC-007",
+  "workspace_id": "DEMO-MAYA",
+  "fictional": true,
+  "recorded_date": "2026-05-20",
+  "pdf_sha256": "a604b5cc0519f8c10c8b5f395b6367881dca140776a36e9b8b60f5dfe254890e",
+  "source_text_sha256": "a8e7c84449e3c97b85db761b08b2db73d96b53fc19a4c5454d05da0a02a73770",
+  "facts": [
+    {
+      "field": "followup_date",
+      "value": "2026-05-28",
+      "source_text": "followup_date: 2026-05-28",
+      "page": 1,
+      "source_line": 5,
+      "coordinates": [
+        [
+          35,
+          204.0,
+          555,
+          218.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "extract_verbatim"
+    },
+    {
+      "field": "followup_reason",
+      "value": "Review the conflicting activity instructions.",
+      "source_text": "followup_reason: Review the conflicting activity instructions.",
+      "page": 1,
+      "source_line": 6,
+      "coordinates": [
+        [
+          35,
+          229.0,
+          555,
+          243.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "extract_verbatim"
+    },
+    {
+      "field": "task_dedupe_key",
+      "value": "DEMO-MAYA:followup:2026-05-28",
+      "source_text": "task_dedupe_key: DEMO-MAYA:followup:2026-05-28",
+      "page": 1,
+      "source_line": 7,
+      "coordinates": [
+        [
+          35,
+          254.0,
+          555,
+          268.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "extract_verbatim"
+    }
+  ],
+  "expected_behaviors": [
+    "explicit_save_required",
+    "replay_creates_one_logical_task"
+  ],
+  "untrusted_instruction_text": [],
+  "date_semantics": "fixed fixture clock; never substitute today's date",
+  "expected_graph_changes": [
+    "explicit_save_required",
+    "replay_creates_one_logical_task"
+  ]
+}

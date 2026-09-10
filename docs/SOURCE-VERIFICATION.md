@@ -1,3 +1,44 @@
+# Source verification: current correction pass
+
+Checked 10 September 2026. Current state is generated in STAGE-0-SOURCE-STATE.json:
+31 registered, 14 permission-researched, 14 active excerpt snapshots, 12 sources in
+assembled drafts/catalogues, zero human source approvals and zero published evidence.
+The 56 spans and 56 fragments remain draft. Permission research is not legal approval.
+
+Full supporting passages replaced the day-42 and conditional-exercise anchors.
+The breastfeeding draft no longer adds an unsupported restriction. Further clipped
+pregnancy-timing, professional-care and fertility sentences were expanded. NHM
+pages 9-11, 14 and 16 now support bounded food, care, warning and contact drafts.
+Older clinical instructions and images were not broadly ingested.
+
+The 8 June 2026 [PIB PMSMA publication](https://static.pib.gov.in/WriteReadData/specificdocs/documents/2026/jun/doc202668887301.pdf)
+adds current programme information. Selected original text follows
+[PIB's copyright policy](https://www.pib.gov.in/ContentPage.aspx?lang=2&menuid=3604&reg=48).
+This does not transfer the separate PMSMA website's permissions or copy photographs.
+Pages 2 and 3 were checked for programme timing and eligible trimesters.
+
+The [CDC warning page](https://www.cdc.gov/hearher/maternal-warning-signs/index.html)
+credits AIM. [CDC's policy](https://www.cdc.gov/other/agencymaterials.html) has
+third-party exceptions, and [AIM/ACOG's terms on its warning resource](https://saferbirth.org/aim-resources/aim-cornerstones/urgent-maternal-warning-signs/)
+permit whole unmodified noncommercial documents, not automatically extracted or
+adapted text. CDC-WARNINGS is therefore link-only: no copied evidence, no snapshot
+and no embeddings. Draft safety rules reference clinical sections for actual review.
+
+Retrieved, publisher-updated and next-review dates are distinct fields. Current
+capture does not establish medical currency. BHC's 2012 source and the older/undated
+NHM booklets explicitly need currency decisions. Source revalidation is checked at
+release; a scheduled monitor has not been implemented. No external reminders were set.
+
+Read ANC-PNC-SOURCE-COMPARISON.md for the WHO cross-check and unresolved local
+schedule interpretation. It uses reference links and does not ingest WHO text.
+
+Failed HTTP and PDF-tool attempts are in DEMO-WORK-LOG.md. Local research PDFs and
+renders remain ignored. Old snapshot versions are preserved as history; only the
+path in the current source registry is active. The original NHM full-PDF hashes
+remain in the historical v1 snapshots; current v2 hashes cover selected excerpt files.
+
+## Earlier research history (superseded counts and next steps)
+
 # Source verification work log
 
 ## Latest selected-source pass: 10 September 2026

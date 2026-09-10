@@ -1,3 +1,84 @@
+# Demo work log: corrections, failures and recovery
+
+## Current correction pass - 10 September 2026
+
+Earlier claims of completion were too broad. Kajal found real problems: a day-42
+statement with only a tiny supporting anchor, a missing activity condition in the
+saved paragraph, an unsupported diet clause, poorly timed P01 preparation and empty
+early-day overlays. Software consistency did not establish clinical correctness.
+
+### What we changed
+
+- Restored complete source passages and corrected wording. Also expanded timing,
+  professional-care and fertility evidence where old fragments were too clipped.
+- Limited P01 to pregnancy timing. Populated all eight early-postpartum overlays
+  with sourced, reusable rest/help content and appropriate contact information.
+- Changed selection to card-level states: missing details withhold the affected
+  card rather than the whole week. Added a typed condition dictionary and conflict
+  checks. Confirmed absence is required where a restriction must be absent.
+- Added draft food, movement, wellbeing, follow-up and comparison catalogues.
+  Food constraints reject known conflicts and ask about unfamiliar constraints.
+  No fruit measurements or clinical approvals were invented to fill a table.
+- Built eight fictional reports with matching extraction truth and provenance.
+- Added per-fragment Codex assessments, stale-assessment checks and actual review
+  roles bound to a content fingerprint. No human reviewer has approved the data.
+
+### Failures encountered and how we recovered
+
+1. **Old tests used loose condition names.** The new registry rejected fake keys
+   such as clearance/restriction, and the exported schema was stale. Updated the
+   fixtures to the real typed keys and regenerated the schema; did not loosen it.
+2. **The old release test expected only nine errors.** The complete gate now checks
+   eight day overlays, catalogues, role approvals and currency too. Updated the
+   regression to assert specific missing obligations rather than hide new failures.
+3. **A government-hosted page included a third-party warning list.** CDC credits
+   AIM/ACOG, and the general federal reuse policy does not clear every third-party
+   passage. Removed copied warning passages before committing; retain link-only
+   references for clinical review. Licensed NHM excerpts support general escalation.
+   No claim that NHM proves every CDC-specific threshold is made.
+4. **Download/extraction tools were uneven.** Some official page downloads returned
+   403/404. Recorded those failures; used readable official pages where available.
+   The local pdftotext command was unavailable, so pypdf extracted NHM source text.
+   We did not label a failed download as a verified full-file capture.
+   The PIB web screenshot also missed its cache; downloading the official PDF
+   and rendering pages 2 and 3 locally completed that visual source check.
+5. **PDF rendering warned about the Symbol font.** Fixtures use ordinary Latin text;
+   all eight rendered pages were inspected and showed no clipping/overlap or missing
+   fixture text. The warning was logged, not taken as proof that rendering failed.
+6. **Approval hashes could have invalidated themselves.** Hashing raw workflow
+   statuses would change the fingerprint when a reviewer recorded approval. The
+   fingerprint now binds content/source/conditions and ignores review/status fields;
+   separate release checks still enforce those fields. A regression proves wording
+   changes invalidate the fingerprint while recording a review does not.
+7. **Current Indian programme descriptions differ from global contact guidance.**
+   Documented NHM, June 2026 PMSMA and WHO contexts separately. A local clinical
+   decision is still needed; we did not silently merge them into one schedule.
+
+### What can be demonstrated now
+
+In VS Code run the unit tests, authoring/review-readiness checks and the release
+check. Open P01, a day overlay, a full source passage, the review packet and DOC-006.
+Show the difference between evidence, a draft card, a recorded assessment and actual
+publication. The draft release refusal is an honest control demonstration.
+
+The current run passes 68 unit tests and 64 visible deterministic software cases.
+These are not model or medical evaluations. OCR and real state-change behaviour
+are not implemented. The machine-readable local report is STAGE-0-CHECK-RESULTS.json.
+
+### Remaining work to disclose in a demo
+
+Source currency, current Indian clinical interpretation, exact wording, actual
+human approvals and publication are still open. Size-comparison measurements and
+object dimensions are unverified; those cards remain hidden. Safety patterns need
+clinical review and much broader validation before live use. Read
+STAGE-0-CORRECTION-STATUS.md rather than describing the whole Stage 0 as released.
+
+## Historical entries below
+
+The following entries describe earlier passes. Their counts, missing-artifact
+lists and whole-profile filtering behaviour are superseded by the correction pass
+above; they are preserved to explain what changed and why.
+
 # Nestline: what happened, what failed, and how we recovered
 
 ## Latest pass: preparing all nine profiles for review (10 September 2026)

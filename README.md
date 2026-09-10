@@ -19,13 +19,20 @@ Stage 0 work is shared on `feat/stage-0-data-foundation` in
 `kajalchourasia-cmd/nestline`. Pull requests and changes to `main` require an
 explicit request from Aswath.
 
-Stage 0 has 63 journey records, 29 source entries, 13 saved excerpt snapshots,
-28 evidence spans, 28 fragments and nine representative profiles prepared for
-review. All 47 engineering tests and the review-readiness check pass locally.
-The remaining Stage 0 gate is actual named review of the content, reuse terms,
-currency and India applicability, followed by publication. All profiles remain
-unpublished until that happens; Stage 0 is not yet a completed release.
+The Stage 0 correction pass has 63 journey records: nine populated representative
+profiles, eight populated early-postpartum overlays and 46 hidden shells. There
+are 31 registered sources, 14 active selected-excerpt snapshots, 56 evidence spans
+and 56 draft fragments. The additional catalogues, eight fictional PDF/text/truth
+fixtures and visible software-test cases are present.
 
+Local checks pass: 68 unit tests and 64 deterministic software cases. These are
+not AI-model or clinical evaluations. **Stage 0 is not a completed content release:**
+source currency, current Indian clinical interpretation, exact wording and actual
+human review/publication remain open. Fruit measurements and object dimensions
+are unverified; those proposals remain hidden. No health content is published.
+
+- [Correction findings, evidence and remaining work](docs/STAGE-0-CORRECTION-STATUS.md)
+- [Current source states](docs/STAGE-0-SOURCE-STATE.json)
 - [Plain-language project progress](docs/PROJECT-PROGRESS.md)
 - [Demo work log: failures and recovery](docs/DEMO-WORK-LOG.md)
 - [Actual content review packet](docs/STAGE-0-REVIEW-PACKET.md)

@@ -1,0 +1,12 @@
+FICTIONAL DEMO DATA - NOT A REAL MEDICAL RECORD
+DOC-008 | Postpartum discharge summary
+Recorded date: 2026-08-27
+No real person, hospital, clinician or medicine is represented.
+delivery_date: 2026-08-25
+delivery_setting: facility
+delivery_type: not recorded
+feeding_method: not recorded
+current_journey: postpartum
+discharge_instruction: Follow the documented local follow-up arrangements.
+All extracted facts are proposals until a user explicitly confirms them.
+For software testing only. Never use these invented instructions for care.

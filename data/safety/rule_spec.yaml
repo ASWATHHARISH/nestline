@@ -1,0 +1,235 @@
+{
+  "version": "1.0.0",
+  "status": "draft",
+  "jurisdiction": "IN",
+  "language": "en",
+  "urgent_message": "This may need urgent medical attention. Seek medical help now. In India, call 112 for an emergency or go to the nearest emergency department. Tell the team you are pregnant or recently gave birth. Do not wait for Compass or a scheduled appointment.",
+  "clarify_message": "More context is needed before routine advice. If symptoms are severe, worsening or you feel unsafe, seek urgent medical help. Compass cannot diagnose or confirm that a symptom is safe.",
+  "no_match_message": "No configured warning pattern matched. This does not rule out a medical problem.",
+  "help_routes": {
+    "emergency": {
+      "number": "112",
+      "jurisdiction": "IN",
+      "source_url": "https://112.gov.in/",
+      "verified_on": "2026-09-10"
+    },
+    "mental_health_support": {
+      "number": "14416",
+      "jurisdiction": "IN",
+      "source_url": "https://mohfw.gov.in/sites/default/files/Rapid%20Assessment%20report%20on%20TeleMANAS.pdf",
+      "verified_on": "2026-09-10",
+      "use": "Tele-MANAS support; do not substitute it for emergency care"
+    }
+  },
+  "rules": [
+    {
+      "rule_id": "S-BREATHING",
+      "route": "urgent",
+      "patterns": [
+        "\\b(can't|cannot|can not|not able to) breathe\\b",
+        "\\b(shortness of breath|short of breath|breathing (issue|problem|difficulty)|difficulty breathing|trouble breathing)\\b"
+      ],
+      "evidence_span_ids": [
+        "E-IN-PREG-WARNINGS",
+        "E-IN-PP-WARNINGS"
+      ],
+      "reference_locators": [
+        {
+          "source_id": "CDC-WARNINGS",
+          "locator": "Urgent maternal warning signs: BREATHING",
+          "use": "link_only_clinical_review_reference"
+        }
+      ],
+      "rationale": "Draft product escalation examples: NHM supports general escalation, while the specific symptom interpretation requires review against the linked CDC/AIM section. No copied CDC list, diagnosis, or validated triage claim."
+    },
+    {
+      "rule_id": "S-CHEST",
+      "route": "urgent",
+      "patterns": [
+        "\\b(chest pain|chest pressure|tight chest|chest feels tight)\\b"
+      ],
+      "evidence_span_ids": [
+        "E-IN-PREG-WARNINGS",
+        "E-IN-PP-WARNINGS"
+      ],
+      "reference_locators": [
+        {
+          "source_id": "CDC-WARNINGS",
+          "locator": "Urgent maternal warning signs: CHEST",
+          "use": "link_only_clinical_review_reference"
+        }
+      ],
+      "rationale": "Draft product escalation examples: NHM supports general escalation, while the specific symptom interpretation requires review against the linked CDC/AIM section. No copied CDC list, diagnosis, or validated triage claim."
+    },
+    {
+      "rule_id": "S-BLEEDING",
+      "route": "urgent",
+      "patterns": [
+        "\\b(heavy bleeding|bleeding heavily|soaking.*pad|large blood clots)\\b"
+      ],
+      "evidence_span_ids": [
+        "E-IN-PREG-WARNINGS",
+        "E-IN-PP-WARNINGS"
+      ],
+      "reference_locators": [
+        {
+          "source_id": "CDC-WARNINGS",
+          "locator": "Urgent maternal warning signs: BLEEDING",
+          "use": "link_only_clinical_review_reference"
+        }
+      ],
+      "rationale": "Draft product escalation examples: NHM supports general escalation, while the specific symptom interpretation requires review against the linked CDC/AIM section. No copied CDC list, diagnosis, or validated triage claim."
+    },
+    {
+      "rule_id": "S-FETAL",
+      "route": "urgent",
+      "patterns": [
+        "\\b(baby.*(not moving|stopped moving|moving less)|reduced fetal movement|less fetal movement)\\b"
+      ],
+      "evidence_span_ids": [
+        "E-IN-PREG-WARNINGS",
+        "E-IN-PP-WARNINGS"
+      ],
+      "reference_locators": [
+        {
+          "source_id": "CDC-WARNINGS",
+          "locator": "Urgent maternal warning signs: FETAL",
+          "use": "link_only_clinical_review_reference"
+        }
+      ],
+      "rationale": "Draft product escalation examples: NHM supports general escalation, while the specific symptom interpretation requires review against the linked CDC/AIM section. No copied CDC list, diagnosis, or validated triage claim."
+    },
+    {
+      "rule_id": "S-SELF-HARM",
+      "route": "urgent",
+      "patterns": [
+        "\\b(kill myself|hurt myself|harm myself|hurt my baby|harm my baby|end my life|suicid)\\w*\\b"
+      ],
+      "evidence_span_ids": [
+        "E-IN-PREG-WARNINGS",
+        "E-IN-PP-WARNINGS"
+      ],
+      "reference_locators": [
+        {
+          "source_id": "CDC-WARNINGS",
+          "locator": "Urgent maternal warning signs: SELF-HARM",
+          "use": "link_only_clinical_review_reference"
+        }
+      ],
+      "rationale": "Draft product escalation examples: NHM supports general escalation, while the specific symptom interpretation requires review against the linked CDC/AIM section. No copied CDC list, diagnosis, or validated triage claim."
+    },
+    {
+      "rule_id": "S-NEURO",
+      "route": "urgent",
+      "patterns": [
+        "\\b(fainted|fainting|passed out|blurred vision|blurry vision|worst headache|severe headache)\\b"
+      ],
+      "evidence_span_ids": [
+        "E-IN-PREG-WARNINGS",
+        "E-IN-PP-WARNINGS"
+      ],
+      "reference_locators": [
+        {
+          "source_id": "CDC-WARNINGS",
+          "locator": "Urgent maternal warning signs: NEURO",
+          "use": "link_only_clinical_review_reference"
+        }
+      ],
+      "rationale": "Draft product escalation examples: NHM supports general escalation, while the specific symptom interpretation requires review against the linked CDC/AIM section. No copied CDC list, diagnosis, or validated triage claim."
+    },
+    {
+      "rule_id": "S-FEVER",
+      "route": "urgent",
+      "patterns": [
+        "\\b(fever|temperature).*(38|39|40|100\\.4|101|102|103)\\b"
+      ],
+      "evidence_span_ids": [
+        "E-IN-PREG-WARNINGS",
+        "E-IN-PP-WARNINGS"
+      ],
+      "reference_locators": [
+        {
+          "source_id": "CDC-WARNINGS",
+          "locator": "Urgent maternal warning signs: FEVER",
+          "use": "link_only_clinical_review_reference"
+        }
+      ],
+      "rationale": "Draft product escalation examples: NHM supports general escalation, while the specific symptom interpretation requires review against the linked CDC/AIM section. No copied CDC list, diagnosis, or validated triage claim."
+    },
+    {
+      "rule_id": "S-PAIN",
+      "route": "urgent",
+      "patterns": [
+        "\\b(severe|unbearable) (abdominal|belly|stomach) pain\\b"
+      ],
+      "evidence_span_ids": [
+        "E-IN-PREG-WARNINGS",
+        "E-IN-PP-WARNINGS"
+      ],
+      "reference_locators": [
+        {
+          "source_id": "CDC-WARNINGS",
+          "locator": "Urgent maternal warning signs: PAIN",
+          "use": "link_only_clinical_review_reference"
+        }
+      ],
+      "rationale": "Draft product escalation examples: NHM supports general escalation, while the specific symptom interpretation requires review against the linked CDC/AIM section. No copied CDC list, diagnosis, or validated triage claim."
+    },
+    {
+      "rule_id": "S-FLUID",
+      "route": "urgent",
+      "patterns": [
+        "\\b(fluid leaking|leaking fluid|water broke)\\b"
+      ],
+      "evidence_span_ids": [
+        "E-IN-PREG-WARNINGS",
+        "E-IN-PP-WARNINGS"
+      ],
+      "reference_locators": [
+        {
+          "source_id": "CDC-WARNINGS",
+          "locator": "Urgent maternal warning signs: FLUID",
+          "use": "link_only_clinical_review_reference"
+        }
+      ],
+      "rationale": "Draft product escalation examples: NHM supports general escalation, while the specific symptom interpretation requires review against the linked CDC/AIM section. No copied CDC list, diagnosis, or validated triage claim."
+    },
+    {
+      "rule_id": "S-VOMITING",
+      "route": "urgent",
+      "patterns": [
+        "\\b(can't|cannot|unable to) keep (water|fluids|anything) down\\b"
+      ],
+      "evidence_span_ids": [
+        "E-IN-PREG-WARNINGS",
+        "E-IN-PP-WARNINGS"
+      ],
+      "reference_locators": [
+        {
+          "source_id": "CDC-WARNINGS",
+          "locator": "Urgent maternal warning signs: VOMITING",
+          "use": "link_only_clinical_review_reference"
+        }
+      ],
+      "rationale": "Draft product escalation examples: NHM supports general escalation, while the specific symptom interpretation requires review against the linked CDC/AIM section. No copied CDC list, diagnosis, or validated triage claim."
+    },
+    {
+      "rule_id": "S-CLARIFY",
+      "route": "clarify",
+      "patterns": [
+        "\\b(pain|bleeding|dizzy|fever|sad|anxious|overwhelmed|nausea|vomiting|medicine|dose|symptom)\\b"
+      ],
+      "evidence_span_ids": [
+        "E-PREG-MEDICINE-BOUNDARY",
+        "E-PP-PERSISTENT-CONCERN"
+      ],
+      "rationale": "Product policy: ambiguous symptoms, medication changes and emotional concerns require clarification or professional handoff; no diagnosis."
+    }
+  ],
+  "limitations": [
+    "Not a clinically validated triage system. Runtime refuses draft rules.",
+    "English patterns only; paraphrases, spelling variations, other languages and unknown symptoms are not comprehensively covered.",
+    "Negation, historical and third-person mentions can over-trigger; no automatic de-escalation is attempted.",
+    "No-match is not medical clearance. These are contract fixtures, not evidence of population-level sensitivity."
+  ]
+}

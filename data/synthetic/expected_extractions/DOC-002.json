@@ -1,0 +1,92 @@
+{
+  "document_id": "DOC-002",
+  "workspace_id": "DEMO-MAYA",
+  "fictional": true,
+  "recorded_date": "2026-02-06",
+  "pdf_sha256": "22e37a5f3f7dcb74292cf84cf71db676f49e8c481d52c08f0425d8d0a74b7f38",
+  "source_text_sha256": "1e2eb949fd065070655cc043a94d2cdba26acf86dce176ac1e5eebdcbe6478c1",
+  "facts": [
+    {
+      "field": "haemoglobin",
+      "value": "10.8 g/dL",
+      "source_text": "haemoglobin: 10.8 g/dL",
+      "page": 1,
+      "source_line": 5,
+      "coordinates": [
+        [
+          35,
+          204.0,
+          555,
+          218.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "extract_verbatim"
+    },
+    {
+      "field": "specimen",
+      "value": "blood",
+      "source_text": "specimen: blood",
+      "page": 1,
+      "source_line": 6,
+      "coordinates": [
+        [
+          35,
+          229.0,
+          555,
+          243.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "extract_verbatim"
+    },
+    {
+      "field": "reference_range",
+      "value": "not supplied",
+      "source_text": "reference_range: not supplied",
+      "page": 1,
+      "source_line": 7,
+      "coordinates": [
+        [
+          35,
+          254.0,
+          555,
+          268.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "abstain"
+    },
+    {
+      "field": "interpretation",
+      "value": "not supplied",
+      "source_text": "interpretation: not supplied",
+      "page": 1,
+      "source_line": 8,
+      "coordinates": [
+        [
+          35,
+          279.0,
+          555,
+          293.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "abstain"
+    }
+  ],
+  "expected_behaviors": [
+    "do_not_infer_diagnosis",
+    "abstain_reference_range"
+  ],
+  "untrusted_instruction_text": [],
+  "date_semantics": "fixed fixture clock; never substitute today's date",
+  "expected_graph_changes": [
+    "do_not_infer_diagnosis",
+    "abstain_reference_range"
+  ]
+}
