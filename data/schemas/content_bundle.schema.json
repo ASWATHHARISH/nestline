@@ -224,6 +224,17 @@
           "default": "",
           "title": "Applicability Note",
           "type": "string"
+        },
+        "localisation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Localisation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         }
       },
       "required": [
@@ -325,6 +336,15 @@
           },
           "title": "Conditions Excluded",
           "type": "array"
+        },
+        "presentation": {
+          "default": "paraphrase",
+          "enum": [
+            "paraphrase",
+            "quotation"
+          ],
+          "title": "Presentation",
+          "type": "string"
         }
       },
       "required": [
@@ -369,6 +389,62 @@
         }
       },
       "title": "Hero",
+      "type": "object"
+    },
+    "Localisation": {
+      "additionalProperties": false,
+      "description": "An explicit proposed adoption; the publisher's country remains unchanged.",
+      "properties": {
+        "source_jurisdiction": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Source Jurisdiction",
+          "type": "array"
+        },
+        "target_jurisdiction": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Target Jurisdiction",
+          "type": "array"
+        },
+        "category": {
+          "enum": [
+            "basic_biology",
+            "general_education"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "rationale": {
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        },
+        "review": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Review"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "source_jurisdiction",
+        "target_jurisdiction",
+        "category",
+        "rationale"
+      ],
+      "title": "Localisation",
       "type": "object"
     },
     "Review": {
@@ -611,6 +687,33 @@
           "default": "",
           "title": "Snapshot Path",
           "type": "string"
+        },
+        "delivery_mode": {
+          "default": "retrievable",
+          "enum": [
+            "retrievable",
+            "fixed_quote"
+          ],
+          "title": "Delivery Mode",
+          "type": "string"
+        },
+        "attribution_text": {
+          "default": "",
+          "title": "Attribution Text",
+          "type": "string"
+        },
+        "max_quote_sections": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Quote Sections"
         }
       },
       "required": [
@@ -714,6 +817,14 @@
           },
           "title": "Publication Blockers",
           "type": "array"
+        },
+        "slot_notes": {
+          "additionalProperties": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Slot Notes",
+          "type": "object"
         }
       },
       "required": [

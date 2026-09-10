@@ -48,5 +48,24 @@ def select_content(bundle: ContentBundle, scope: Applicability, jurisdiction: st
     profile_ids = sorted(p.profile_id for p in bundle.profiles if eligible(p)
                          and p.applies_to == scope
                          and set(p.guidance_fragment_ids) <= set(fragment_ids))
+    sources = {s.source_id: s for s in bundle.sources}
+    evidence = {e.evidence_id: e for e in bundle.evidence}
+    # Future ingestion/composition must use this permitted subset, not all cards.
+    retrievable = sorted(f.fragment_id for f in bundle.fragments if f.fragment_id in fragment_ids
+                         and all(sources[evidence[ref].source_id].delivery_mode == "retrievable"
+                                 and "embed" in sources[evidence[ref].source_id].allowed_use
+                                 for ref in f.evidence_span_ids))
+    quotations = []
+    quote_ids = set(fragment_ids) - set(retrievable)
+    for fragment in bundle.fragments:
+        if fragment.fragment_id not in quote_ids:
+            continue
+        source = sources[evidence[fragment.evidence_span_ids[0]].source_id]
+        quotations.append({"fragment_id": fragment.fragment_id, "text": fragment.text,
+                           "presentation": "quotation", "attribution": source.attribution_text,
+                           "source_url": source.canonical_url})
     return {"profile_ids": profile_ids, "fragment_ids": fragment_ids,
+            "retrievable_fragment_ids": retrievable,
+            "fixed_quote_fragment_ids": sorted(quote_ids),
+            "quotation_cards": quotations,
             "status": "available" if profile_ids or fragment_ids else "content_unavailable"}

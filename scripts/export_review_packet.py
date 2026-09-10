@@ -5,6 +5,8 @@ Regenerate after data edits so reviewers inspect the actual current wording.
 """
 
 from pathlib import Path
+from hashlib import sha256
+import json
 
 from app.services.content_validation import REPRESENTATIVE_PROFILE_IDS, validate_bundle
 from app.services.source_snapshots import validate_snapshots
@@ -21,6 +23,8 @@ def main() -> None:
     if errors:
         raise ValueError("Fix dataset before review: " + "; ".join(errors))
     fragments = {f.fragment_id: f for f in bundle.fragments}
+    digest = sha256(json.dumps(bundle.model_dump(mode="json"), sort_keys=True,
+                              separators=(",", ":")).encode()).hexdigest()
     lines = ["# Stage 0 content review packet", "",
              "Generated from the local dataset. Draft review material, not a patient-facing guide.", "",
              f"Inventory: {len(bundle.profiles)} records; {len(bundle.sources)} source entries; "
@@ -30,9 +34,13 @@ def main() -> None:
              "Read each draft alongside its linked evidence and full official source context. "
              "Check wording, true timing, conditions, source permissions and country applicability. "
              "Record requested changes first. A product review is not a clinical review.", "",
-             "Current drafts are US reference material. They cannot be served to an IN request. "
-             "Changing a country label alone is not localisation. P09/P10 still lack a permitted "
-             "exact-week development source, and PP12 needs broader recovery coverage.", "",
+             "The nine profiles are proposed Indian educational content. Original source countries "
+             "remain unchanged; each adopted foreign passage has an explicit, unapproved localisation "
+             "record. Nothing is published. BHC week 9/10 text is quotation-only and was last reviewed "
+             "by that publisher in 2012: explicitly review currency before approving it. NHM CHO use "
+             "is limited to free distribution. This is not commercial launch clearance.", "",
+             f"Dataset SHA-256: `{digest}`", "",
+             "Review this exact dataset version. Any content change requires a new packet and review.", "",
              "Reviewer name: PENDING", "Review date: PENDING", "Decision and scope: PENDING", "",
              "## Representative profiles", ""]
     for profile in bundle.profiles:
@@ -43,7 +51,15 @@ def main() -> None:
                       f"Working hero label: {profile.hero.title}", "",
                       "Hero evidence: " + ", ".join(profile.hero.development_evidence_ids), ""])
         for slot, ids in profile.card_slots.model_dump().items():
-            lines.append(f"- **{slot.replace('_', ' ')}:** " + (", ".join(ids) if ids else "Not populated; do not infer advice."))
+            lines.append(f"- **{slot.replace('_', ' ')}:**")
+            if not ids:
+                lines.append("  " + profile.slot_notes.get(slot, "Not populated; do not infer advice."))
+            for ref in ids:
+                fragment = fragments[ref]
+                wording = f'\"{fragment.text}\"' if fragment.presentation == "quotation" else fragment.text
+                lines.append(f"  {wording} (`{ref}`)")
+                if fragment.conditions_required:
+                    lines.append("  Show only when confirmed: " + ", ".join(fragment.conditions_required) + ".")
         lines.extend(["", "Publication blockers:", ""])
         lines.extend(f"- {blocker}" for blocker in profile.publication_blockers)
         lines.append("")
@@ -62,7 +78,12 @@ def main() -> None:
     for span in bundle.evidence:
         source = sources[span.source_id]
         lines.extend([f"### {span.evidence_id}", "", f"Source: [{source.title}]({source.canonical_url})",
+                      f"Original country: {', '.join(source.jurisdiction)}; proposed evidence country: {', '.join(span.jurisdiction)}.",
+                      f"Selected exact text: “{span.text}”",
                       f"Locator: {span.locator}", f"Applicability rationale: {span.applicability_note}",
+                      f"Delivery: {source.delivery_mode}. Reuse: {source.license_or_reuse_note}",
+                      "Localisation: " + (span.localisation.rationale + " Named review pending." if span.localisation and not span.localisation.review
+                                          else "See recorded review." if span.localisation else "No cross-country adoption proposed."),
                       f"Snapshot: `{source.snapshot_path}`", f"Snapshot SHA-256: `{span.source_checksum}`", ""])
     lines.extend(["## Approval sequence", "",
                   "1. Resolve missing evidence and locality decisions; revise draft wording.",

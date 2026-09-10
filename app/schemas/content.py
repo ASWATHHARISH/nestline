@@ -86,12 +86,23 @@ class SourceRecord(Contract):
     journey_stages: list[Stage] = Field(default_factory=list)
     selected_sections: list[Text] = Field(default_factory=list)
     snapshot_path: str = ""
+    delivery_mode: Literal["retrievable", "fixed_quote"] = "retrievable"
+    attribution_text: str = ""
+    max_quote_sections: Annotated[int, Field(ge=1)] | None = None
 
     @model_validator(mode="after")
     def approved_metadata(self) -> Self:
+        if self.delivery_mode == "fixed_quote" and "embed" in self.allowed_use:
+            raise ValueError("fixed quotations cannot be granted embedding permission")
+        if self.delivery_mode == "fixed_quote":
+            if not self.attribution_text.strip() or self.max_quote_sections is None:
+                raise ValueError("fixed quotations require attribution and an explicit excerpt limit")
+            if len(self.selected_sections) > self.max_quote_sections:
+                raise ValueError("selected quotations exceed the source permission limit")
         if self.status == "approved_for_capstone":
-            if self.reuse_status != "permitted" or set(self.allowed_use) != {"store", "embed", "display"}:
-                raise ValueError("approval requires documented store/embed/display permission")
+            required = {"store", "display"} if self.delivery_mode == "fixed_quote" else {"store", "embed", "display"}
+            if self.reuse_status != "permitted" or set(self.allowed_use) != required:
+                raise ValueError("approval requires documented permissions for the selected delivery mode")
             if not all((self.version_or_last_update.strip(), self.last_checked_at,
                         self.license_or_reuse_note.strip(), self.review, self.content_checksum,
                         self.journey_stages, self.selected_sections, self.snapshot_path.strip())):
@@ -99,6 +110,15 @@ class SourceRecord(Contract):
             if self.document_type == "index":
                 raise ValueError("a discovery index cannot be an approved evidence source")
         return self
+
+
+class Localisation(Contract):
+    """An explicit proposed adoption; the publisher's country remains unchanged."""
+    source_jurisdiction: Jurisdictions
+    target_jurisdiction: Jurisdictions
+    category: Literal["basic_biology", "general_education"]
+    rationale: Text
+    review: Review | None = None
 
 
 class EvidenceSpan(Contract):
@@ -116,6 +136,7 @@ class EvidenceSpan(Contract):
     status: Status = "draft"
     review: Review | None = None
     applicability_note: str = ""
+    localisation: Localisation | None = None
 
 
 class GuidanceFragment(Contract):
@@ -130,6 +151,7 @@ class GuidanceFragment(Contract):
     review: Review | None = None
     conditions_required: list[Text] = Field(default_factory=list)
     conditions_excluded: list[Text] = Field(default_factory=list)
+    presentation: Literal["paraphrase", "quotation"] = "paraphrase"
 
 
 class Hero(Contract):
@@ -166,6 +188,7 @@ class WeeklyProfile(Contract):
     version: Text = "1.0.0"
     content_priority: Literal["representative", "coverage_shell", "day_overlay"]
     publication_blockers: list[Text] = Field(default_factory=list)
+    slot_notes: dict[str, Text] = Field(default_factory=dict)
 
     @model_validator(mode="after")
     def identity_matches_time(self) -> Self:

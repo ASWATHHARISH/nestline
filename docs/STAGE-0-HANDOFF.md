@@ -10,9 +10,13 @@ or deployment is claimed to be implemented by this change.
   fragments, heroes/cards and weekly profiles, plus exported JSON Schema.
 - All 63 journey shells with a checked coverage matrix; nine canonical representative
   profiles are prioritized without reducing the overall record coverage.
-- 21 source entries with a first-pass audit; five OWH excerpt snapshots support
-  eleven draft evidence spans and eleven fragments across nine review drafts.
-  Full source approval, domain coverage and India applicability remain pending.
+- 29 source entries, 13 selected-excerpt snapshots, 28 evidence spans and 28
+  fragments. Nine representative profiles have concrete domain cards and reasons
+  for intentionally empty slots. Named review remains pending.
+- Proposed India adoption records preserve original foreign jurisdictions and
+  require their own named review. NHM passages supply local guidance.
+- Quote-only permissions preserve wording and attribution and exclude those
+  fragments from the model-retrieval subset.
 - A command-line authoring check for schemas, identifiers, citations, source versions,
   checksums, review metadata, applicability and jurisdiction.
 - A stricter release mode that fails while representative profiles remain unpublished.
@@ -34,11 +38,13 @@ python -m venv .venv
 .venv/Scripts/python -m pip install -r requirements.txt
 .venv/Scripts/python -m unittest discover -s tests -v
 .venv/Scripts/python -m scripts.validate_content
+.venv/Scripts/python -m scripts.validate_content --require-review-ready
 .venv/Scripts/python -m scripts.validate_content --require-release
 .venv/Scripts/python -m scripts.export_review_packet
 ```
 
-The last command deliberately exits 1 until reviewed content is populated. An
+The `--require-release` command deliberately exits 1 until the representative
+content has actually been reviewed and published. An
 authoring pass means the draft dataset is structurally consistent, not ready to serve
 health answers. Regenerate the schema with `python -m scripts.export_content_schema`
 when Python contracts change; tests detect a stale schema export.
@@ -53,16 +59,20 @@ matrix is an audit view of the weekly manifest. Snapshot checksums refer to actu
 selected-excerpt JSON bytes, not full publisher webpages. Git attributes preserve
 LF newlines for these files across Windows and Linux.
 
-The latest local run passed 41 engineering tests. Read PROJECT-PROGRESS.md
+The latest local run passed 47 engineering tests. Read PROJECT-PROGRESS.md
 for precise stage/phase status and DEMO-WORK-LOG.md for failures and recovery.
+Run `python -m scripts.check_stage0` to refresh the machine-readable check report.
+It returns the release gate's nonzero status while review/publication is pending.
 
 ## Next working sequence
 
-1. Resolve the remaining source/content gaps recorded in STAGE-0-REVIEW-PACKET.md,
-   particularly exact P09/P10 development, broader PP12 content and India applicability.
-   The initial nine drafts are not nine finished care guides.
-2. Kajal reviews the card structure, product wording and intended applicability with
-   the team. Record actual reviewer identities; never pre-fill fictitious approval.
+1. Review the concrete cards in STAGE-0-REVIEW-PACKET.md against their full source
+   context. Exact P09/P10 evidence, broader PP12 material and local NHM guidance
+   have been added. Explicitly assess the older BHC source and its quote-only use.
+2. Record actual source, evidence, localisation, fragment and profile reviews for
+   the packet's dataset fingerprint. Correct rejected items, regenerate the packet
+   and review again. Publish dependencies in order and rerun the release gate.
+   This is still Stage 0; it is not being silently deferred to Stage 1.
 3. Codex implements versioned public ingestion and document fixtures, preserving
    source snapshots/locators. Supabase isolation can proceed alongside this once
    account access exists.

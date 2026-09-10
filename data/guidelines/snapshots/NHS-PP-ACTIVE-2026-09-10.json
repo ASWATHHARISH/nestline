@@ -1,0 +1,21 @@
+{
+  "source_id": "NHS-PP-ACTIVE",
+  "canonical_url": "https://www.nhs.uk/baby/support-and-services/keeping-fit-and-healthy-with-a-baby/",
+  "version": "reviewed-2026-04-20;selected-2026-09-10-v1",
+  "captured_at": "2026-09-10",
+  "capture_method": "Selected exact excerpts; whitespace normalised. Full context read from official source. Not a full-document archive.",
+  "sections": [
+    {
+      "locator": "When can I start exercising after birth? / final sentence",
+      "text": "Talk to your midwife, health visitor or GP before starting anything strenuous."
+    },
+    {
+      "locator": "Look after your mental health / first bullet",
+      "text": "making time to rest"
+    },
+    {
+      "locator": "Look after your mental health / final bullet",
+      "text": "talking to people about your feelings"
+    }
+  ]
+}

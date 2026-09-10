@@ -19,10 +19,12 @@ Stage 0 work is shared on `feat/stage-0-data-foundation` in
 `kajalchourasia-cmd/nestline`. Pull requests and changes to `main` require an
 explicit request from Aswath.
 
-Stage 0 has 63 journey records, 21 source entries, five saved excerpt snapshots,
-11 evidence spans, 11 fragments and nine populated review drafts. All profiles
-remain unpublished. Local engineering checks pass; content completion, India
-applicability and actual review remain open.
+Stage 0 has 63 journey records, 29 source entries, 13 saved excerpt snapshots,
+28 evidence spans, 28 fragments and nine representative profiles prepared for
+review. All 47 engineering tests and the review-readiness check pass locally.
+The remaining Stage 0 gate is actual named review of the content, reuse terms,
+currency and India applicability, followed by publication. All profiles remain
+unpublished until that happens; Stage 0 is not yet a completed release.
 
 - [Plain-language project progress](docs/PROJECT-PROGRESS.md)
 - [Demo work log: failures and recovery](docs/DEMO-WORK-LOG.md)

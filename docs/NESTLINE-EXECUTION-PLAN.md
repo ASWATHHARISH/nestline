@@ -144,14 +144,16 @@ Each package is ready for a GitHub issue using the stable ID. Work is not done m
 
 - [x] Create `source_registry.csv`, `section_manifest.jsonl`, `weekly_content_manifest.jsonl`, `coverage_matrix.csv` and a publication validator.
 - [x] Create `P01`–`P42`, `PP01`–`PP12`, `PC00`, and `PPD0`–`PPD7` records; distinguish 54 weekly records from 63 total records including special states/overlays.
-- [ ] Map exact selected source spans to stage, week/range, jurisdiction, publisher/version, reuse status and review status. Preserve reusable fragments rather than invent weekly variation.
-- [ ] Populate the canonical representative profiles: `PC00`, `P01`, `P09`, `P10`, `P24`, `P36`, `PP01`, `PP06`, `PP12`; record partial-release coverage separately.
+- [x] Map exact selected draft source spans to stage, week/range, jurisdiction, publisher/version, reuse status and review status. Preserve reusable fragments rather than invent weekly variation.
+- [x] Populate review drafts for `PC00`, `P01`, `P09`, `P10`, `P24`, `P36`, `PP01`, `PP06`, `PP12`, including domain cards and explicit empty-slot reasons.
+- [ ] Record actual named source/content/localisation reviews, resolve reviewer corrections and publish the nine representative profiles. A draft or passing software check does not satisfy this gate.
 - [x] Specify draft → reviewed → published → superseded transitions and unpublished-profile UI behavior.
 
-10 September local update: five selected source snapshots, eleven spans/fragments,
-nine initial review drafts and 41 passing engineering tests. The two unchecked
-content items remain open: draft mappings are not approved India content or deeply
-curated, published profiles. Read PROJECT-PROGRESS.md and the review packet.
+10 September completion pass: 13 snapshots, 28 spans/fragments, nine profiles ready
+for review and 47 passing engineering tests. The actual named review/publication
+gate remains open. BHC exact-week quotes cannot enter embeddings or be rewritten;
+foreign general passages require explicit India localisation review. Read the
+current packet before signing off. This remaining gate belongs to Stage 0.
 
 **Exit:** no published claim lacks approved evidence; P10/P09 applicability traps fail safely; month-only requests do not acquire an invented exact week. Team review must not be labeled clinical review unless it actually occurred.
 

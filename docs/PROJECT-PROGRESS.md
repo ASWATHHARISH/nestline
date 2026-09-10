@@ -42,8 +42,8 @@ We created 63 separate records:
 | PP01-PP12 | 12 | One for each postpartum week. |
 | PPD0-PPD7 | 8 | Extra records for early days after delivery. |
 
-These are labelled containers, not 63 completed medical guides. Nine have initial
-source-linked draft content; 54 remain empty shells. All 63 remain unpublished.
+These are labelled containers, not 63 completed medical guides. Nine have populated
+source-linked content ready for review; 54 remain empty shells. All 63 remain unpublished.
 P42 is deliberately not a generic wellness page.
 
 Files: data/weekly/weekly_content_manifest.jsonl and coverage_matrix.csv.
@@ -51,21 +51,31 @@ The checker confirms that both files agree and no record is missing.
 
 ### 2. Keep a register of information sources
 
-The register has 21 entries: the original 16 candidates and five new OWH sources.
+The register has 29 entries, including selected OWH, NHM, standard NHS and Better
+Health Channel sources.
 For each we record who published it, the URL, country, reuse status, check date,
 version, and what we may not conclude from it. A check date can mean a failed
 access attempt; it does not mean the source was approved.
 
-Four sources are excluded from ingestion: the A.D.A.M. article, the two NHS Best
-Start entries, and the Pregnancy Birth and Baby index. WHO/NIN/NHM/CDC entries
-remain candidates with explicit pending work. Five OWH sources permit the
-selected text reuse, but have not received our content review.
+The original A.D.A.M., NHS Best Start and Pregnancy Birth and Baby candidates are
+excluded. NIN is now excluded too because its product-reuse permission was not
+established. Official hosting is not permission to ingest everything on a site.
+
+NHM supplies Indian material. The other selected pages retain their original US,
+UK or Australian source labels. An explicit proposed India adoption record states
+what is being reused and requires a real review before publication. We do not
+import foreign emergency numbers, clinic schedules or service entitlements.
+
+The two Better Health Channel passages may only appear as unchanged, attributed
+short quotations. The code excludes them from the AI-retrieval subset. Their
+source was reviewed in 2012, which is clearly flagged for the content reviewer.
+NHM CHO material is for free distribution; this is not a commercial launch licence.
 
 Files: data/guidelines/source_registry.csv and source_audit.jsonl.
 
 ### 3. Save the exact small pieces we intend to use
 
-There are five local excerpt snapshots and eleven evidence records. Each evidence
+There are 13 local excerpt snapshots and 28 evidence records. Each evidence
 record identifies a source, a heading or paragraph location, the exact selected
 words, the time range they support, and the country label.
 
@@ -79,7 +89,7 @@ These snapshots contain selected excerpts, not entire downloaded websites.
 
 ### 4. Write small reusable pieces of guidance
 
-We created eleven draft fragments. A fragment contains one small claim or action
+We created 28 draft fragments. A fragment contains one small claim or action
 and points back to its evidence. Stable guidance can be used in several weeks;
 we do not rewrite it to pretend something medically new happens every week.
 
@@ -94,25 +104,37 @@ File: data/guidelines/guidance_fragments.jsonl.
 
 ### 5. Assemble the nine representative review drafts
 
-| Profile | Present draft material | Important remaining work |
+| Profile | What the draft now contains | Review focus |
 |---|---|---|
-| PC00 | Following home-test instructions | Fuller verification/next-step content and review. |
-| P01 | How gestational dating is counted | Review early-week wording without implying conception or confirmed pregnancy. |
-| P09 | Trimester-wide changes, dating, food hygiene, exercise consultation | Permitted exact-week development evidence and review. |
-| P10 | The same applicable general fragments, in its own record | Same exact-week gap; never relabel P09 evidence as P10 evidence. |
-| P24 | Selected 24-week development, food hygiene, exercise consultation | Broader cards and review. |
-| P36 | Selected 36-week development, food hygiene, exercise consultation | Broader preparation and review. |
-| PP01 | Conditional early-home rest and support alongside professional care | Broader first-week recovery and day-overlay review. |
-| PP06 | A question about resuming activity and conditional support | Local follow-up context and broader recovery content. |
-| PP12 | Conditional ongoing support alongside professional care | Broader recovery content; no invented week-12 milestone. |
+| PC00 | Test instructions and asking a local health worker about testing | Do not assume pregnancy is confirmed. |
+| P01 | Dating explanation plus stable food, rest, wellbeing and preparation cards | Week 1 must not imply conception has happened. |
+| P09 | Its own exact-week quotation, first-trimester changes and general domain cards | Check older source currency and preserve quotation-only use. |
+| P10 | Its own exact-week quotation and applicable general cards | Never substitute the P09 passage or treat approximate size as a scan result. |
+| P24 | Week-24 development and stable food, rest, wellbeing and preparation | General education, not an individual fetal assessment. |
+| P36 | Week-36 development and birth preparation | No prediction of delivery timing or permission to exercise. |
+| PP01 | Rest, practical help, general wellbeing and conditional nutrition/activity cards | Feeding and delivery conditions must be confirmed. |
+| PP06 | Local day-42 follow-up, ongoing support and fertility education | No claim of full recovery at six weeks; do not wait with symptoms. |
+| PP12 | Ongoing support, practical help, fertility education and conditional cards | No invented week-12 milestone or assumption of depression. |
 
-Every row is still a **draft**. US reference jurisdiction is deliberately retained
-on these nine drafts; the product's intended Indian context still needs suitable
-content and review. The other shells retain the intended IN context.
+All nine are **proposed Indian drafts**, not approved Indian health content. Every
+cross-country adoption has its own review requirement. Older US-only conditional
+fragments are retained as draft source work but are not assembled into these profiles.
 
-An empty nutrition or symptom card means we have no reviewed content in that
-slot. It does not mean there is nothing the user needs to know. We must not ask
-a language model to fill those gaps from memory.
+Empty slots now have an explicit explanation in `slot_notes`, visible in the
+review packet. For example, PC00 focuses on testing rather than inventing a
+pregnancy routine. We do not add symptom reassurance simply to fill a box.
+Conditional breastfeeding or delivery-specific cards remain unavailable when the
+condition is unknown. The current selector conservatively withholds a complete
+profile if any of its required fragments is filtered out; later UI work must show
+eligible cards and unavailable states without inventing content.
+
+There are three different checks:
+
+1. **Authoring:** are the records and citations internally consistent?
+2. **Review ready:** do the nine profiles have concrete domain cards, sourced
+   heroes and reasons for empty slots? This now passes.
+3. **Release:** have actual named reviews happened and the nine profiles been
+   published? This still fails deliberately because those reviews are pending.
 
 ### 6. Stop unfinished content from being shown
 
@@ -157,11 +179,11 @@ File: app/services/content_selection.py.
 
 ### 8. Check the system deliberately with bad examples
 
-There are now 41 software tests. Examples include a made-up citation, the wrong
+There are now 47 software tests. Examples include a made-up citation, the wrong
 week, a changed source file, a foreign source requested for India, an unreviewed
 profile marked published, and missing information treated as clearance.
 
-These tests pass locally. They are not 41 conversations with an AI model. The
+These tests pass locally. They are not 47 conversations with an AI model. The
 planned 45 development and 15 held-out product scenarios have not been run.
 
 ### 9. What the code files mean
@@ -219,7 +241,7 @@ these files and no new runtime dependency was needed for this pass.
 | Phase | Meaning | Current position |
 |---|---|---|
 | 0 | Freeze scope, scenarios and safety boundaries | Architecture and owner decisions exist; full scenario/safety lock not signed off. |
-| 1 | Prepare evidence, fictional data and evaluation contracts | Source/data foundation underway; content review, document fixtures and eval contract incomplete. |
+| 1 | Prepare evidence, fictional data and evaluation contracts | Representative content prepared; named review, document fixtures and eval contract incomplete. |
 | 2 | Build app scaffold and deterministic core | Only data tooling and limited selection contracts exist. |
 | 3 | Connect retrieval and document updates | Not implemented. |
 | 4 | Connect safety and agents | Not implemented. |
@@ -236,6 +258,7 @@ and prepare expected behaviours for the later AI evaluations. Codex handles the
 technical implementation; Kajal is not being assigned backend coding.
 
 Do not mark the whole Stage 0 complete yet. Its engineering foundation is tested,
-but the requirement to deeply source, review and publish the representative
-profiles is still open. Product acceptance is a separate real action, not a flag
+but actual named content/localisation review and publication of the representative
+profiles are still open. The content packet is prepared; the team must review it.
+This remaining sign-off belongs to Stage 0, not an upcoming stage. Product acceptance is a separate real action, not a flag
 we should toggle just to make a test green.

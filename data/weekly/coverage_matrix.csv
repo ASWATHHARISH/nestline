@@ -1,6 +1,6 @@
 profile_id,status,content_priority,blocker
-PC00,draft,representative,Awaiting selected evidence and recorded content review
-P01,draft,representative,Awaiting selected evidence and recorded content review
+PC00,draft,representative,Content packet prepared; actual named source/content/localisation review and publication pending
+P01,draft,representative,Content packet prepared; actual named source/content/localisation review and publication pending
 P02,draft,coverage_shell,Awaiting selected evidence and recorded content review
 P03,draft,coverage_shell,Awaiting selected evidence and recorded content review
 P04,draft,coverage_shell,Awaiting selected evidence and recorded content review
@@ -8,8 +8,8 @@ P05,draft,coverage_shell,Awaiting selected evidence and recorded content review
 P06,draft,coverage_shell,Awaiting selected evidence and recorded content review
 P07,draft,coverage_shell,Awaiting selected evidence and recorded content review
 P08,draft,coverage_shell,Awaiting selected evidence and recorded content review
-P09,draft,representative,Awaiting selected evidence and recorded content review
-P10,draft,representative,Awaiting selected evidence and recorded content review
+P09,draft,representative,Content packet prepared; actual named source/content/localisation review and publication pending
+P10,draft,representative,Content packet prepared; actual named source/content/localisation review and publication pending
 P11,draft,coverage_shell,Awaiting selected evidence and recorded content review
 P12,draft,coverage_shell,Awaiting selected evidence and recorded content review
 P13,draft,coverage_shell,Awaiting selected evidence and recorded content review
@@ -23,7 +23,7 @@ P20,draft,coverage_shell,Awaiting selected evidence and recorded content review
 P21,draft,coverage_shell,Awaiting selected evidence and recorded content review
 P22,draft,coverage_shell,Awaiting selected evidence and recorded content review
 P23,draft,coverage_shell,Awaiting selected evidence and recorded content review
-P24,draft,representative,Awaiting selected evidence and recorded content review
+P24,draft,representative,Content packet prepared; actual named source/content/localisation review and publication pending
 P25,draft,coverage_shell,Awaiting selected evidence and recorded content review
 P26,draft,coverage_shell,Awaiting selected evidence and recorded content review
 P27,draft,coverage_shell,Awaiting selected evidence and recorded content review
@@ -35,25 +35,25 @@ P32,draft,coverage_shell,Awaiting selected evidence and recorded content review
 P33,draft,coverage_shell,Awaiting selected evidence and recorded content review
 P34,draft,coverage_shell,Awaiting selected evidence and recorded content review
 P35,draft,coverage_shell,Awaiting selected evidence and recorded content review
-P36,draft,representative,Awaiting selected evidence and recorded content review
+P36,draft,representative,Content packet prepared; actual named source/content/localisation review and publication pending
 P37,draft,coverage_shell,Awaiting selected evidence and recorded content review
 P38,draft,coverage_shell,Awaiting selected evidence and recorded content review
 P39,draft,coverage_shell,Awaiting selected evidence and recorded content review
 P40,draft,coverage_shell,Awaiting selected evidence and recorded content review
 P41,draft,coverage_shell,Awaiting selected evidence and recorded content review
 P42,draft,coverage_shell,Awaiting selected evidence and recorded content review
-PP01,draft,representative,Awaiting selected evidence and recorded content review
+PP01,draft,representative,Content packet prepared; actual named source/content/localisation review and publication pending
 PP02,draft,coverage_shell,Awaiting selected evidence and recorded content review
 PP03,draft,coverage_shell,Awaiting selected evidence and recorded content review
 PP04,draft,coverage_shell,Awaiting selected evidence and recorded content review
 PP05,draft,coverage_shell,Awaiting selected evidence and recorded content review
-PP06,draft,representative,Awaiting selected evidence and recorded content review
+PP06,draft,representative,Content packet prepared; actual named source/content/localisation review and publication pending
 PP07,draft,coverage_shell,Awaiting selected evidence and recorded content review
 PP08,draft,coverage_shell,Awaiting selected evidence and recorded content review
 PP09,draft,coverage_shell,Awaiting selected evidence and recorded content review
 PP10,draft,coverage_shell,Awaiting selected evidence and recorded content review
 PP11,draft,coverage_shell,Awaiting selected evidence and recorded content review
-PP12,draft,representative,Awaiting selected evidence and recorded content review
+PP12,draft,representative,Content packet prepared; actual named source/content/localisation review and publication pending
 PPD0,draft,day_overlay,Awaiting selected evidence and recorded content review
 PPD1,draft,day_overlay,Awaiting selected evidence and recorded content review
 PPD2,draft,day_overlay,Awaiting selected evidence and recorded content review

@@ -84,7 +84,12 @@ def validate_bundle(bundle: ContentBundle, *, require_coverage: bool = True) -> 
         if span.text_checksum != sha256(span.text.encode("utf-8")).hexdigest():
             error(key, "evidence text checksum mismatch")
         if "GLOBAL" not in source.jurisdiction and not set(span.jurisdiction) <= set(source.jurisdiction):
-            error(key, "evidence jurisdiction exceeds source jurisdiction")
+            adoption = span.localisation
+            if (adoption is None or set(adoption.source_jurisdiction) != set(source.jurisdiction)
+                    or set(adoption.target_jurisdiction) != set(span.jurisdiction)):
+                error(key, "evidence jurisdiction exceeds source jurisdiction without a matching localisation record")
+            elif span.status in {"reviewed", "published"} and adoption.review is None:
+                error(key, "localisation requires a named review before publication")
         if span.status in {"reviewed", "published"}:
             if source.status != "approved_for_capstone":
                 error(key, "source is not approved")
@@ -100,6 +105,12 @@ def validate_bundle(bundle: ContentBundle, *, require_coverage: bool = True) -> 
                 error(key, f"unknown evidence: {ref}")
                 continue
             require_scope(key, fragment, span)
+            source = sources.get(span.source_id)
+            # Quote-only permission cannot silently turn into generated advice.
+            if source and source.delivery_mode == "fixed_quote":
+                if (fragment.presentation != "quotation" or fragment.text != span.text
+                        or len(fragment.evidence_span_ids) != 1):
+                    error(key, "fixed-quote source requires one unchanged quotation")
             if fragment.status in {"reviewed", "published"} and span.status != "published":
                 error(key, f"evidence is not published: {ref}")
 
@@ -142,3 +153,38 @@ def validate_bundle(bundle: ContentBundle, *, require_coverage: bool = True) -> 
             if profile.status in {"reviewed", "published"} and span.status != "published":
                 error(key, f"evidence is not published: {ref}")
     return report
+
+
+def review_readiness_errors(bundle: ContentBundle) -> list[str]:
+    """Check that a reviewer has concrete cards and explicit empty-slot decisions.
+
+    This is an authoring milestone, never a substitute for the publication gate.
+    Domain coverage is tailored to the representative scope, not a word count.
+    """
+    errors = []
+    profiles = {p.profile_id: p for p in bundle.profiles}
+    for key in sorted(REPRESENTATIVE_PROFILE_IDS):
+        profile = profiles.get(key)
+        if profile is None:
+            errors.append(f"{key}: missing representative profile")
+            continue
+        if profile.jurisdiction != ["IN"]:
+            errors.append(f"{key}: India review target must be explicit")
+        if not profile.hero.title.strip() or not profile.hero.development_evidence_ids:
+            errors.append(f"{key}: sourced hero required for review")
+        slots = profile.card_slots.model_dump()
+        required = ({"preparation", "ask_a_professional"} if key == "PC00"
+                    else {"nutrition_focus", "movement_focus", "wellbeing_focus", "preparation"})
+        if profile.applies_to.stage == "pregnancy":
+            required |= {"what_may_change", "ask_a_professional"}
+        if key == "PP06":
+            required.add("ask_a_professional")
+        for slot in sorted(required):
+            if not slots[slot]:
+                errors.append(f"{key}: required review card is empty: {slot}")
+        for slot, refs in slots.items():
+            if not refs and slot not in profile.slot_notes:
+                errors.append(f"{key}: empty slot needs a reviewable reason: {slot}")
+        for slot in profile.slot_notes.keys() - slots.keys():
+            errors.append(f"{key}: unknown slot note: {slot}")
+    return errors

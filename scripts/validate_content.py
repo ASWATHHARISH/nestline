@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 
 from app.schemas.content import ContentBundle
-from app.services.content_validation import REPRESENTATIVE_PROFILE_IDS, validate_bundle
+from app.services.content_validation import REPRESENTATIVE_PROFILE_IDS, review_readiness_errors, validate_bundle
 from app.services.source_snapshots import validate_snapshots
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -35,6 +35,8 @@ def load_bundle(data: Path) -> ContentBundle:
                 source[key] = json.loads(source[key])
         for key in optional:
             source[key] = source[key] or None
+        if "max_quote_sections" in source:
+            source["max_quote_sections"] = int(source["max_quote_sections"]) if source["max_quote_sections"] else None
     payload = dict(sources=sources,
                    evidence=read_jsonl(data / "guidelines/section_manifest.jsonl"),
                    fragments=read_jsonl(data / "guidelines/guidance_fragments.jsonl"),
@@ -47,6 +49,8 @@ def main(argv=None) -> int:
     parser.add_argument("--data-dir", type=Path, default=ROOT / "data")
     parser.add_argument("--require-release", action="store_true",
                         help="fail unless all canonical representative profiles are published")
+    parser.add_argument("--require-review-ready", action="store_true",
+                        help="require representative cards and explicit empty-slot decisions; does not approve them")
     args = parser.parse_args(argv)
     try:
         bundle = load_bundle(args.data_dir)
@@ -59,11 +63,14 @@ def main(argv=None) -> int:
         declared = {r["profile_id"]: (r["status"], r["content_priority"]) for r in rows}
         if actual != declared or len(rows) != len(actual):
             report.errors.append("coverage matrix differs from weekly manifest")
+        if args.require_release or args.require_review_ready:
+            report.errors.extend(review_readiness_errors(bundle))
         if args.require_release:
             published = {p.profile_id for p in bundle.profiles if p.status == "published"}
             for missing in sorted(REPRESENTATIVE_PROFILE_IDS - published):
                 report.errors.append(f"release requires reviewed, published profile: {missing}")
-        print(json.dumps({"valid": report.valid, "mode": "release" if args.require_release else "authoring",
+        mode = "release" if args.require_release else "review_ready" if args.require_review_ready else "authoring"
+        print(json.dumps({"valid": report.valid, "mode": mode,
                           "profiles": len(bundle.profiles), "published_profiles": report.published_profiles,
                           "sources": len(bundle.sources), "evidence_spans": len(bundle.evidence),
                           "fragments": len(bundle.fragments), "errors": report.errors}, indent=2))

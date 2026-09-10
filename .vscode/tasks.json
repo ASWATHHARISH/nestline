@@ -5,37 +5,90 @@
       "label": "Nestline: test data contracts",
       "type": "process",
       "command": "${workspaceFolder}/.venv/bin/python",
-      "windows": {"command": "${workspaceFolder}/.venv/Scripts/python.exe"},
-      "args": ["-m", "unittest", "discover", "-s", "tests", "-v"],
-      "options": {"cwd": "${workspaceFolder}"},
-      "group": {"kind": "test", "isDefault": true},
+      "windows": {
+        "command": "${workspaceFolder}/.venv/Scripts/python.exe"
+      },
+      "args": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
       "problemMatcher": []
     },
     {
       "label": "Nestline: validate draft dataset",
       "type": "process",
       "command": "${workspaceFolder}/.venv/bin/python",
-      "windows": {"command": "${workspaceFolder}/.venv/Scripts/python.exe"},
-      "args": ["-m", "scripts.validate_content"],
-      "options": {"cwd": "${workspaceFolder}"},
+      "windows": {
+        "command": "${workspaceFolder}/.venv/Scripts/python.exe"
+      },
+      "args": [
+        "-m",
+        "scripts.validate_content"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Nestline: check content ready for review",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "windows": {
+        "command": "${workspaceFolder}/.venv/Scripts/python.exe"
+      },
+      "args": [
+        "-m",
+        "scripts.validate_content",
+        "--require-review-ready"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
       "problemMatcher": []
     },
     {
       "label": "Nestline: check publication readiness (expected to fail while draft)",
       "type": "process",
       "command": "${workspaceFolder}/.venv/bin/python",
-      "windows": {"command": "${workspaceFolder}/.venv/Scripts/python.exe"},
-      "args": ["-m", "scripts.validate_content", "--require-release"],
-      "options": {"cwd": "${workspaceFolder}"},
+      "windows": {
+        "command": "${workspaceFolder}/.venv/Scripts/python.exe"
+      },
+      "args": [
+        "-m",
+        "scripts.validate_content",
+        "--require-release"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
       "problemMatcher": []
     },
     {
       "label": "Nestline: regenerate content review packet",
       "type": "process",
       "command": "${workspaceFolder}/.venv/bin/python",
-      "windows": {"command": "${workspaceFolder}/.venv/Scripts/python.exe"},
-      "args": ["-m", "scripts.export_review_packet"],
-      "options": {"cwd": "${workspaceFolder}"},
+      "windows": {
+        "command": "${workspaceFolder}/.venv/Scripts/python.exe"
+      },
+      "args": [
+        "-m",
+        "scripts.export_review_packet"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
       "problemMatcher": []
     }
   ]

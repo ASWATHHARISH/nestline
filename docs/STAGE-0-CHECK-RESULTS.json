@@ -1,33 +1,64 @@
 {
-  "checked_on": "2026-09-10",
-  "execution": "Local Windows project virtual environment; no GitHub push",
-  "software_tests": {
-    "command": ".venv/Scripts/python.exe -m unittest discover -s tests -q",
-    "exit_code": 0,
-    "tests_run": 41,
-    "result": "OK",
-    "meaning": "Engineering regression tests, not AI or clinical evaluations"
+  "checked_at_utc": "2026-09-10T07:23:02.707489+00:00",
+  "execution": "Local checks; this report does not attest a GitHub Actions run",
+  "tests_run": 47,
+  "checks": {
+    "software_tests": {
+      "arguments": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-q"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "----------------------------------------------------------------------\nRan 47 tests in 0.309s\n\nOK"
+    },
+    "authoring_validation": {
+      "arguments": [
+        "-m",
+        "scripts.validate_content"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"valid\": true,\n  \"mode\": \"authoring\",\n  \"profiles\": 63,\n  \"published_profiles\": 0,\n  \"sources\": 29,\n  \"evidence_spans\": 28,\n  \"fragments\": 28,\n  \"errors\": []\n}",
+      "stderr": ""
+    },
+    "review_readiness": {
+      "arguments": [
+        "-m",
+        "scripts.validate_content",
+        "--require-review-ready"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"valid\": true,\n  \"mode\": \"review_ready\",\n  \"profiles\": 63,\n  \"published_profiles\": 0,\n  \"sources\": 29,\n  \"evidence_spans\": 28,\n  \"fragments\": 28,\n  \"errors\": []\n}",
+      "stderr": ""
+    },
+    "publication_gate": {
+      "arguments": [
+        "-m",
+        "scripts.validate_content",
+        "--require-release"
+      ],
+      "exit_code": 1,
+      "stdout": "{\n  \"valid\": false,\n  \"mode\": \"release\",\n  \"profiles\": 63,\n  \"published_profiles\": 0,\n  \"sources\": 29,\n  \"evidence_spans\": 28,\n  \"fragments\": 28,\n  \"errors\": [\n    \"release requires reviewed, published profile: P01\",\n    \"release requires reviewed, published profile: P09\",\n    \"release requires reviewed, published profile: P10\",\n    \"release requires reviewed, published profile: P24\",\n    \"release requires reviewed, published profile: P36\",\n    \"release requires reviewed, published profile: PC00\",\n    \"release requires reviewed, published profile: PP01\",\n    \"release requires reviewed, published profile: PP06\",\n    \"release requires reviewed, published profile: PP12\"\n  ]\n}",
+      "stderr": ""
+    },
+    "dependencies": {
+      "arguments": [
+        "-m",
+        "pip",
+        "check"
+      ],
+      "exit_code": 0,
+      "stdout": "No broken requirements found.",
+      "stderr": ""
+    }
   },
-  "authoring_validation": {
-    "valid": true,
-    "profiles": 63,
-    "sources": 21,
-    "evidence_spans": 11,
-    "fragments": 11,
-    "published_profiles": 0
-  },
-  "publication_gate": {
-    "command": ".venv/Scripts/python.exe -m scripts.validate_content --require-release",
-    "exit_code": 1,
-    "result": "Correctly refused publication",
-    "unpublished_required_profiles": ["P01", "P09", "P10", "P24", "P36", "PC00", "PP01", "PP06", "PP12"]
-  },
-  "dependency_check": "pip check: No broken requirements found",
-  "diff_whitespace_check": "git diff --check: no whitespace errors",
   "limitations": [
-    "Source snapshots are manually selected excerpts, not full-page archives or publisher signatures.",
-    "Actual named content review and India applicability approval are pending.",
-    "Some exact-week and domain content gaps remain; see review packet.",
-    "No model answers, RLS, live application or clinical safety workflow were tested."
+    "Engineering tests are not model or clinical evaluations.",
+    "Review readiness is not content approval or publication.",
+    "Checksums establish local integrity, not publisher authenticity."
   ]
 }

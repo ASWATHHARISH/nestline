@@ -1,5 +1,71 @@
 # Nestline: what happened, what failed, and how we recovered
 
+## Latest pass: preparing all nine profiles for review (10 September 2026)
+
+**Current result:** 63 records; nine populated representative profiles; 29 source
+entries; 13 saved selected-excerpt snapshots; 28 spans and 28 fragments. All 47
+engineering tests pass. Authoring and review-readiness pass. Publication remains
+blocked because no actual named content/localisation review has been recorded.
+The earlier sections below describe the previous pass and its then-open gaps.
+
+### What changed
+
+We added distinct week-9 and week-10 development quotations; Indian food/rest,
+birth-preparation and day-42 follow-up material; pregnancy wellbeing; and broader
+postpartum support, fertility education and conditional nutrition/activity content.
+The same stable guidance can appear in several weeks. We do not invent a new fact
+for every week or describe week 12 as automatic recovery.
+
+The readable review packet now shows actual card wording, required conditions,
+original source country, proposed India use, permissions and reasons for empty
+slots. Its dataset fingerprint identifies the exact content being reviewed.
+
+### What failed and how we recovered
+
+| Problem found | Recovery | What remains explicit |
+|---|---|---|
+| Original weekly sources did not establish dataset reuse permission | Found Better Health Channel's short-quotation route for weeks 9 and 10 | Two unchanged quotes only, attribution required, no embeddings; 2012 source currency needs review. |
+| A foreign source could not honestly become Indian guidance by changing a label | Added explicit localisation proposals and a separate review requirement | Source country remains unchanged; no foreign schedules or entitlements imported. |
+| PP12 had only conditional depression-related material | Added general months-after-birth support and practical-help evidence | No depression assumption or invented week-12 milestone. |
+| General Indian nutrition candidate had restrictive reuse terms | Kept NIN excluded and selected small original NHM text passages | Older NHM doses, schedules and third-party pictures were not adopted. |
+| PDF rendering attempt could not import PyMuPDF | Used the already available Poppler renderer and inspected the relevant pages | Full PDFs and rendered pages stay in ignored local raw storage. |
+| Network sandbox blocked the official PDF download | Retried the same public downloads with authorized network access | Only selected attributed excerpts and original-document hashes enter Git. |
+| The handoff described the wrong command as the expected failure | Named `--require-release` explicitly | Review-ready and release are separate checks. |
+
+### Engineering changes worth demonstrating
+
+- A foreign draft can carry a proposed India adaptation, but publishing it without
+  that adaptation's named review fails.
+- Quote-only material cannot be assigned embedding permission, rewritten, copied
+  beyond its configured excerpt limit or selected without attribution metadata.
+- Review readiness checks domain cards and explanations for empty slots; passing
+  it never sets a published flag.
+- The selection contract returns a separate model-retrievable subset and attributed
+  quotation cards. The future ingestion and UI must preserve that boundary.
+- `scripts/check_stage0.py` reruns checks and writes the actual outputs to
+  `STAGE-0-CHECK-RESULTS.json`; its exit status still follows the release gate.
+
+### Reproduce the current result
+
+```powershell
+.venv/Scripts/python.exe -m scripts.check_stage0
+```
+
+Expect engineering and review-ready checks to pass and the publication gate to
+exit 1 until real reviews are recorded. This is an honest demonstration of the
+publication safeguard, not a completed health assistant or clinical validation.
+
+### Remaining Stage 0 sign-off
+
+The team must review this exact packet's wording, claim support, permissions,
+source currency, India applicability and empty/conditional cards. Record the
+actual reviewer and corrections. Publish approved source/evidence/fragment/profile
+dependencies in order, then rerun the release check. Do not relabel this work as
+Stage 1 or fabricate a reviewer to turn the check green. No authenticated review
+portal or clinical evaluation is claimed by these local-file tools.
+
+## Earlier pass: historical findings and results
+
 Last updated: 10 September 2026. Work was built and tested locally in VS Code.
 Aswath subsequently authorized sharing it directly on a feature branch in Kajal's
 repository. This upload does not publish health content or mark Stage 0 complete.

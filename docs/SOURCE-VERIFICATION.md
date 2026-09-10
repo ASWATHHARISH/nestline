@@ -1,5 +1,50 @@
 # Source verification work log
 
+## Latest selected-source pass: 10 September 2026
+
+The current inventory is 29 registry entries and 13 selected-excerpt snapshots.
+Every source remains a candidate or excluded; no named content approval is claimed.
+
+- **NHM CHO, February 2022:** physical PDF page 4 permits attributed reproduction
+  when distributed free of cost. Page 11 supports testing services, birth
+  preparation and local postnatal follow-up. This is free-capstone permission,
+  not commercial clearance. [Official booklet](https://www.nhm.gov.in/New_Update-2022-23/MH/GUIDELINES-%20MH/CHO_Booklet_%20Maternal_Health-English.pdf).
+- **NHM My Safe Motherhood:** visually inspected physical pages 10, 12 and 16 for
+  local food variety, avoiding overexertion and early postpartum rest. Publication
+  date is not printed; no date is invented. Older dose, vaccination and sleeping-
+  position instructions and credited illustrations were not selected.
+  [Official booklet](https://www.nhm.gov.in/images/pdf/programmes/maternal-health/guidelines/my_safe_motherhood_booklet_english.pdf),
+  [NHM copyright policy](https://www.nhm.gov.in/nhm/about-nhm/index4.php?lang=1&level=0&lid=13&linkid=8).
+  The policy was found through official search; a subsequent direct web fetch failed.
+- **Better Health Channel:** the [week-by-week page](https://www.betterhealth.vic.gov.au/health/healthyliving/pregnancy-week-by-week)
+  explicitly labels weeks 9 and 10. Its review date is **28 February 2012**, not
+  the current access date. Under [its terms](https://www.betterhealth.vic.gov.au/about/terms-of-use),
+  only two short attributed quotations are selected. The source is `fixed_quote`,
+  allows store/display only and cannot enter embeddings or model paraphrasing.
+  Source currency and Indian applicability require actual review. No inference
+  that all its other clinical statements are current or reusable is made.
+- **Standard NHS pages:** pregnancy mental health and postpartum body, diet,
+  activity and practical-support pages are outside Best Start in Life. Selected
+  original text uses the [standard terms/OGL route](https://www.nhs.uk/our-policies/terms-and-conditions/).
+  No linked videos, pictures, third-party material or UK services were ingested.
+  Unchanged copies require the NHS attribution, copied-date disclosure and source
+  link. Adapted wording uses the generic OGL notice and must not imply NHS approval.
+  Full attribution requirements are in each source record. No fees may be charged
+  specifically for access to NHS content.
+- **NIN:** the [2024 document](https://nin.res.in/dietaryguidelines/pdfjs/locale/DGI_2024.pdf)
+  was found at an alternative official URL; its indexed copyright notice restricts
+  reproduction/storage for products without written permission. The full web
+  fetch exceeded the tool's size limit. Keep it excluded; no passage is ingested.
+
+Both NHM snapshots record the SHA-256 of the downloaded full PDF as well as the
+usual selected-excerpt hash. PDFs and rendered page images remain ignored local
+research files. All source countries remain original; proposed India adaptations
+are separately recorded and unapproved. Permission declarations are engineering
+research notes, not a legal opinion or a publisher endorsement.
+
+The older sections below preserve the discovery history; their counts and pending
+source suggestions describe the earlier pass, not the current review packet.
+
 ## Update: 10 September 2026
 
 The first-pass outcomes now live in `data/guidelines/source_audit.jsonl`. Five
