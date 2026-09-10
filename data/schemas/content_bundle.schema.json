@@ -2,6 +2,7 @@
   "$defs": {
     "Applicability": {
       "additionalProperties": false,
+      "description": "The complete time interval supported by a passage, not a guessed week.",
       "properties": {
         "stage": {
           "enum": [
@@ -135,6 +136,7 @@
     },
     "EvidenceSpan": {
       "additionalProperties": false,
+      "description": "Exact selected source text. The fragment below contains our draft wording.",
       "properties": {
         "evidence_id": {
           "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
@@ -217,6 +219,11 @@
             }
           ],
           "default": null
+        },
+        "applicability_note": {
+          "default": "",
+          "title": "Applicability Note",
+          "type": "string"
         }
       },
       "required": [
@@ -235,6 +242,7 @@
     },
     "GuidanceFragment": {
       "additionalProperties": false,
+      "description": "One reusable claim; conditions must survive retrieval and composition.",
       "properties": {
         "fragment_id": {
           "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
@@ -365,6 +373,7 @@
     },
     "Review": {
       "additionalProperties": false,
+      "description": "A real person's recorded review; passing validation is not a review.",
       "properties": {
         "reviewer": {
           "minLength": 1,
@@ -401,6 +410,7 @@
     },
     "SourceRecord": {
       "additionalProperties": false,
+      "description": "Permission and provenance for one version of selected source material.",
       "properties": {
         "source_id": {
           "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
@@ -576,6 +586,31 @@
           ],
           "default": null,
           "title": "Supersedes Source Id"
+        },
+        "journey_stages": {
+          "items": {
+            "enum": [
+              "possible_pregnancy",
+              "pregnancy",
+              "postpartum"
+            ],
+            "type": "string"
+          },
+          "title": "Journey Stages",
+          "type": "array"
+        },
+        "selected_sections": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Selected Sections",
+          "type": "array"
+        },
+        "snapshot_path": {
+          "default": "",
+          "title": "Snapshot Path",
+          "type": "string"
         }
       },
       "required": [
@@ -594,6 +629,7 @@
     },
     "WeeklyProfile": {
       "additionalProperties": false,
+      "description": "An assembly of evidence links. Empty slots mean missing content, not advice.",
       "properties": {
         "profile_id": {
           "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
@@ -670,6 +706,14 @@
           ],
           "title": "Content Priority",
           "type": "string"
+        },
+        "publication_blockers": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Publication Blockers",
+          "type": "array"
         }
       },
       "required": [

@@ -32,16 +32,17 @@ def fixture():
                          "reuse_status": "permitted", "allowed_use": ["store", "embed", "display"],
                          "license_or_reuse_note": "Self-authored test text only",
                          "prohibited_inferences": "Not medical evidence", "review": review,
-                         "content_checksum": checksum}],
+                         "content_checksum": checksum, "journey_stages": ["pregnancy"],
+                         "selected_sections": ["#test"], "snapshot_path": "guidelines/snapshots/test.json"}],
             "evidence": [{"evidence_id": "TEST-EVIDENCE", "source_id": "TEST-SOURCE",
                           "source_version": "test-v1", "source_checksum": checksum,
                           "locator": "#test", "text": text, "text_checksum": checksum,
-                          "applies_to": scope, "jurisdiction": ["IN"], "status": "published",
+                          "applies_to": deepcopy(scope), "jurisdiction": ["IN"], "status": "published",
                           "review": review}],
             "fragments": [{"fragment_id": "TEST-FRAGMENT", "domain": "journey", "text": text,
-                           "applies_to": scope, "jurisdiction": ["IN"], "status": "published",
+                           "applies_to": deepcopy(scope), "jurisdiction": ["IN"], "status": "published",
                            "evidence_span_ids": ["TEST-EVIDENCE"], "review": review}],
-            "profiles": [{"profile_id": "P10", "applies_to": scope, "status": "published",
+            "profiles": [{"profile_id": "P10", "applies_to": deepcopy(scope), "status": "published",
                           "hero": {"title": "Test profile", "development_evidence_ids": ["TEST-EVIDENCE"]},
                           "guidance_fragment_ids": ["TEST-FRAGMENT"],
                           "source_evidence_ids": ["TEST-EVIDENCE"], "jurisdiction": ["IN"],
@@ -92,7 +93,8 @@ class ContentTests(unittest.TestCase):
         cases = {"reuse_status": "unverified", "allowed_use": ["display"],
                  "version_or_last_update": "", "last_checked_at": None,
                  "license_or_reuse_note": "", "review": None, "content_checksum": None,
-                 "document_type": "index"}
+                 "document_type": "index", "journey_stages": [],
+                 "selected_sections": [], "snapshot_path": ""}
         for key, value in cases.items():
             with self.subTest(field=key):
                 data = fixture()

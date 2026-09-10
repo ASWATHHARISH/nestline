@@ -21,6 +21,7 @@ class Contract(BaseModel):
 
 
 class Review(Contract):
+    """A real person's recorded review; passing validation is not a review."""
     reviewer: Text
     reviewed_at: date
     kind: Literal["content_reviewed", "clinician_reviewed"]
@@ -28,6 +29,7 @@ class Review(Contract):
 
 
 class Applicability(Contract):
+    """The complete time interval supported by a passage, not a guessed week."""
     stage: Stage
     unit: Literal["week", "day", "none"]
     start: int | None = None
@@ -61,6 +63,7 @@ class Applicability(Contract):
 
 
 class SourceRecord(Contract):
+    """Permission and provenance for one version of selected source material."""
     source_id: Identifier
     title: Text
     publisher: Text
@@ -80,6 +83,9 @@ class SourceRecord(Contract):
     review: Review | None = None
     content_checksum: Checksum | None = None
     supersedes_source_id: Identifier | None = None
+    journey_stages: list[Stage] = Field(default_factory=list)
+    selected_sections: list[Text] = Field(default_factory=list)
+    snapshot_path: str = ""
 
     @model_validator(mode="after")
     def approved_metadata(self) -> Self:
@@ -87,14 +93,16 @@ class SourceRecord(Contract):
             if self.reuse_status != "permitted" or set(self.allowed_use) != {"store", "embed", "display"}:
                 raise ValueError("approval requires documented store/embed/display permission")
             if not all((self.version_or_last_update.strip(), self.last_checked_at,
-                        self.license_or_reuse_note.strip(), self.review, self.content_checksum)):
-                raise ValueError("approval requires version, check date, reuse note, review and checksum")
+                        self.license_or_reuse_note.strip(), self.review, self.content_checksum,
+                        self.journey_stages, self.selected_sections, self.snapshot_path.strip())):
+                raise ValueError("approval requires version, date, permission, review, checksum, stages, sections and snapshot")
             if self.document_type == "index":
                 raise ValueError("a discovery index cannot be an approved evidence source")
         return self
 
 
 class EvidenceSpan(Contract):
+    """Exact selected source text. The fragment below contains our draft wording."""
     evidence_id: Identifier
     source_id: Identifier
     source_version: Text
@@ -107,9 +115,11 @@ class EvidenceSpan(Contract):
     jurisdiction: Jurisdictions
     status: Status = "draft"
     review: Review | None = None
+    applicability_note: str = ""
 
 
 class GuidanceFragment(Contract):
+    """One reusable claim; conditions must survive retrieval and composition."""
     fragment_id: Identifier
     domain: Domain
     text: Text
@@ -143,6 +153,7 @@ class CardSlots(Contract):
 
 
 class WeeklyProfile(Contract):
+    """An assembly of evidence links. Empty slots mean missing content, not advice."""
     profile_id: Identifier
     applies_to: Applicability
     status: Status = "draft"
@@ -154,6 +165,7 @@ class WeeklyProfile(Contract):
     review: Review | None = None
     version: Text = "1.0.0"
     content_priority: Literal["representative", "coverage_shell", "day_overlay"]
+    publication_blockers: list[Text] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def identity_matches_time(self) -> Self:

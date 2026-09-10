@@ -15,7 +15,16 @@ It covers the Streamlit application, one explicit profile for every pregnancy an
 
 ## Development status
 
-Work is published to `ASWATHHARISH/nestline`. Upstream pull requests require an
-explicit request from Aswath. See [repository workflow](docs/DEVELOPMENT-WORKFLOW.md).
+Stage 0 work is shared on `feat/stage-0-data-foundation` in
+`kajalchourasia-cmd/nestline`. Pull requests and changes to `main` require an
+explicit request from Aswath.
 
-Stage 0 implementation has started: typed dataset contracts, all 63 journey shells, candidate source registry and offline integrity checks. No medical content is published yet. See [Stage 0 setup and handoff](docs/STAGE-0-HANDOFF.md).
+Stage 0 has 63 journey records, 21 source entries, five saved excerpt snapshots,
+11 evidence spans, 11 fragments and nine populated review drafts. All profiles
+remain unpublished. Local engineering checks pass; content completion, India
+applicability and actual review remain open.
+
+- [Plain-language project progress](docs/PROJECT-PROGRESS.md)
+- [Demo work log: failures and recovery](docs/DEMO-WORK-LOG.md)
+- [Actual content review packet](docs/STAGE-0-REVIEW-PACKET.md)
+- [Stage 0 setup and handoff](docs/STAGE-0-HANDOFF.md)

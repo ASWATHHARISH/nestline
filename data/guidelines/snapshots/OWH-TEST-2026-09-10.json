@@ -1,0 +1,13 @@
+{
+  "source_id": "OWH-TEST",
+  "canonical_url": "https://womenshealth.gov/pregnancy/you-get-pregnant/knowing-if-you-are-pregnant",
+  "version": "page-updated-2025-09-26;selected-excerpts-2026-09-10-v1",
+  "captured_at": "2026-09-10",
+  "capture_method": "Manually selected exact excerpts from official page; whitespace normalised. Not a full-page archive.",
+  "sections": [
+    {
+      "locator": "Home pregnancy tests / directions paragraph",
+      "text": "The most important part of using any HPT is to follow the directions exactly as written."
+    }
+  ]
+}

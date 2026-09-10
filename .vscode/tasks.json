@@ -19,6 +19,24 @@
       "args": ["-m", "scripts.validate_content"],
       "options": {"cwd": "${workspaceFolder}"},
       "problemMatcher": []
+    },
+    {
+      "label": "Nestline: check publication readiness (expected to fail while draft)",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "windows": {"command": "${workspaceFolder}/.venv/Scripts/python.exe"},
+      "args": ["-m", "scripts.validate_content", "--require-release"],
+      "options": {"cwd": "${workspaceFolder}"},
+      "problemMatcher": []
+    },
+    {
+      "label": "Nestline: regenerate content review packet",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "windows": {"command": "${workspaceFolder}/.venv/Scripts/python.exe"},
+      "args": ["-m", "scripts.export_review_packet"],
+      "options": {"cwd": "${workspaceFolder}"},
+      "problemMatcher": []
     }
   ]
 }

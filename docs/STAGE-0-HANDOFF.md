@@ -10,12 +10,16 @@ or deployment is claimed to be implemented by this change.
   fragments, heroes/cards and weekly profiles, plus exported JSON Schema.
 - All 63 journey shells with a checked coverage matrix; nine canonical representative
   profiles are prioritized without reducing the overall record coverage.
-- Source candidates transcribed from the canonical architecture. URLs, source dates,
-  reuse permissions and actual passages still require individual verification.
+- 21 source entries with a first-pass audit; five OWH excerpt snapshots support
+  eleven draft evidence spans and eleven fragments across nine review drafts.
+  Full source approval, domain coverage and India applicability remain pending.
 - A command-line authoring check for schemas, identifiers, citations, source versions,
   checksums, review metadata, applicability and jurisdiction.
 - A stricter release mode that fails while representative profiles remain unpublished.
 - A fictional journey specification and eight-document inventory for the next stage.
+- Published-only selection contract covering uncertain months, jurisdictions and
+  confirmed conditions; this is not the complete Stage 3 journey resolver.
+- A review worksheet and plain-language/demo work logs for the team.
 
 ## Run locally
 
@@ -31,6 +35,7 @@ python -m venv .venv
 .venv/Scripts/python -m unittest discover -s tests -v
 .venv/Scripts/python -m scripts.validate_content
 .venv/Scripts/python -m scripts.validate_content --require-release
+.venv/Scripts/python -m scripts.export_review_packet
 ```
 
 The last command deliberately exits 1 until reviewed content is populated. An
@@ -42,15 +47,20 @@ Validation evidence for this initial change: a fresh Windows Python 3.12 virtual
 environment installed all pinned dependencies and ran the local checks. The GitHub
 Actions workflow is provided but its hosted run is not yet verified.
 
-CSV array/object columns use JSON values, not ad hoc comma-splitting. Empty evidence
-and fragment JSONL files are deliberate: no retrieved medical passages have been
-approved or copied yet. The coverage matrix is an audit view of the weekly manifest.
+CSV array/object columns use JSON values, not ad hoc comma-splitting. Evidence and
+fragment JSONL files now contain drafts; none is approved or published. The coverage
+matrix is an audit view of the weekly manifest. Snapshot checksums refer to actual
+selected-excerpt JSON bytes, not full publisher webpages. Git attributes preserve
+LF newlines for these files across Windows and Linux.
+
+The latest local run passed 41 engineering tests. Read PROJECT-PROGRESS.md
+for precise stage/phase status and DEMO-WORK-LOG.md for failures and recovery.
 
 ## Next working sequence
 
-1. Codex verifies candidate sources and exact reuse terms and selects passages for the
-   nine canonical representative profiles. Begin with PC00/P10/PP01 to validate the
-   pipeline, then complete the rest; this is build order, not a reduced final target.
+1. Resolve the remaining source/content gaps recorded in STAGE-0-REVIEW-PACKET.md,
+   particularly exact P09/P10 development, broader PP12 content and India applicability.
+   The initial nine drafts are not nine finished care guides.
 2. Kajal reviews the card structure, product wording and intended applicability with
    the team. Record actual reviewer identities; never pre-fill fictitious approval.
 3. Codex implements versioned public ingestion and document fixtures, preserving

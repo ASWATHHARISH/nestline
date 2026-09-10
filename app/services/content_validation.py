@@ -7,8 +7,13 @@ from hashlib import sha256
 
 from app.schemas.content import ContentBundle
 
+REPRESENTATIVE_PROFILE_IDS = frozenset(
+    {"PC00", "P01", "P09", "P10", "P24", "P36", "PP01", "PP06", "PP12"}
+)
+
 
 def expected_profile_ids() -> set[str]:
+    """54 weekly records plus possible pregnancy and eight day overlays."""
     return ({"PC00"} | {f"P{i:02d}" for i in range(1, 43)}
             | {f"PP{i:02d}" for i in range(1, 13)} | {f"PPD{i}" for i in range(8)})
 
@@ -65,6 +70,17 @@ def validate_bundle(bundle: ContentBundle, *, require_coverage: bool = True) -> 
         if source is None:
             error(key, "unknown source")
             continue
+        # Draft is a review state, not permission to copy restricted material.
+        if source.status in {"excluded", "superseded"}:
+            error(key, "excluded or superseded source cannot support evidence")
+        if source.reuse_status != "permitted" or "store" not in source.allowed_use:
+            error(key, "stored evidence requires documented storage permission")
+        if source.document_type == "index":
+            error(key, "discovery index cannot support a health claim")
+        if span.source_version != source.version_or_last_update or span.source_checksum != source.content_checksum:
+            error(key, "source version/checksum mismatch")
+        if source.journey_stages and span.applies_to.stage not in source.journey_stages:
+            error(key, "evidence stage is absent from source metadata")
         if span.text_checksum != sha256(span.text.encode("utf-8")).hexdigest():
             error(key, "evidence text checksum mismatch")
         if "GLOBAL" not in source.jurisdiction and not set(span.jurisdiction) <= set(source.jurisdiction):
@@ -72,12 +88,12 @@ def validate_bundle(bundle: ContentBundle, *, require_coverage: bool = True) -> 
         if span.status in {"reviewed", "published"}:
             if source.status != "approved_for_capstone":
                 error(key, "source is not approved")
-            if span.source_version != source.version_or_last_update or span.source_checksum != source.content_checksum:
-                error(key, "source version/checksum mismatch")
 
     for fragment in bundle.fragments:
         key = fragment.fragment_id
         require_review(key, fragment)
+        if set(fragment.conditions_required) & set(fragment.conditions_excluded):
+            error(key, "a condition cannot be both required and excluded")
         for ref in fragment.evidence_span_ids:
             span = evidence.get(ref)
             if span is None:
@@ -90,6 +106,13 @@ def validate_bundle(bundle: ContentBundle, *, require_coverage: bool = True) -> 
     for profile in bundle.profiles:
         key = profile.profile_id
         require_review(key, profile)
+        if require_coverage:
+            expected_priority = ("representative" if key in REPRESENTATIVE_PROFILE_IDS
+                                 else "day_overlay" if key.startswith("PPD") else "coverage_shell")
+            if profile.content_priority != expected_priority:
+                error(key, "priority differs from canonical coverage plan")
+        if profile.status in {"reviewed", "published"} and profile.publication_blockers:
+            error(key, "unresolved publication blockers")
         if profile.status == "published":
             report.published_profiles += 1
             if not profile.hero.title.strip() or not profile.hero.development_evidence_ids:

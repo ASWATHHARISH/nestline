@@ -1,0 +1,25 @@
+{
+  "source_id": "OWH-STAGES",
+  "canonical_url": "https://womenshealth.gov/pregnancy/youre-pregnant-now-what/stages-pregnancy",
+  "version": "page-updated-2025-09-26;selected-excerpts-2026-09-10-v1",
+  "captured_at": "2026-09-10",
+  "capture_method": "Manually selected exact excerpts from official page; whitespace normalised. Not a full-page archive.",
+  "sections": [
+    {
+      "locator": "Introduction / gestational dating clause",
+      "text": "counting from the first day of your last normal period"
+    },
+    {
+      "locator": "First trimester (week 1-week 12) / symptom list",
+      "text": "Mood swings"
+    },
+    {
+      "locator": "Your developing baby / At 24 weeks / first bullet",
+      "text": "Bone marrow begins to make blood cells."
+    },
+    {
+      "locator": "Your developing baby / At 36 weeks / second bullet opening",
+      "text": "Body fat increases."
+    }
+  ]
+}
