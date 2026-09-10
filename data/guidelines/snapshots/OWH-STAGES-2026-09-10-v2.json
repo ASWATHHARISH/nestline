@@ -1,0 +1,25 @@
+{
+  "source_id": "OWH-STAGES",
+  "canonical_url": "https://womenshealth.gov/pregnancy/youre-pregnant-now-what/stages-pregnancy",
+  "version": "selected-2026-09-10-correction-v2",
+  "captured_at": "2026-09-10",
+  "capture_method": "Selected complete supporting passages; whitespace and list punctuation normalised. Source conditions preserved. Official source context read; not a full-page archive.",
+  "sections": [
+    {
+      "locator": "Introduction / gestational dating clause / expanded supporting unit",
+      "text": "Pregnancy lasts about 40 weeks, counting from the first day of your last normal period."
+    },
+    {
+      "locator": "First trimester (week 1-week 12) / symptom list / expanded supporting unit",
+      "text": "First trimester (week 1-week 12). Other changes may include: Mood swings. Just as each woman is different, so is each pregnancy."
+    },
+    {
+      "locator": "Your developing baby / At 24 weeks / first bullet",
+      "text": "Bone marrow begins to make blood cells."
+    },
+    {
+      "locator": "Your developing baby / At 36 weeks / second bullet opening",
+      "text": "Body fat increases."
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "source_id": "BHC-WEEKS",
+  "canonical_url": "https://www.betterhealth.vic.gov.au/health/healthyliving/pregnancy-week-by-week",
+  "version": "reviewed-2012-02-28;selected-2026-09-10-v1",
+  "captured_at": "2026-09-10",
+  "capture_method": "Selected exact excerpts; whitespace normalised. Full context read from official source. Not a full-document archive.",
+  "sections": [
+    {
+      "locator": "Pregnancy week 9 / first sentence",
+      "text": "The eyes, mouth and tongue are forming."
+    },
+    {
+      "locator": "Pregnancy week 10 / first sentence",
+      "text": "The embryo is now known as a fetus and is about 2.5 cm in length."
+    }
+  ]
+}

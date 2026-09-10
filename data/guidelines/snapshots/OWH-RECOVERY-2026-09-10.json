@@ -1,0 +1,17 @@
+{
+  "source_id": "OWH-RECOVERY",
+  "canonical_url": "https://womenshealth.gov/pregnancy/childbirth-and-beyond/recovering-birth",
+  "version": "page-updated-2025-09-26;selected-excerpts-2026-09-10-v1",
+  "captured_at": "2026-09-10",
+  "capture_method": "Manually selected exact excerpts from official page; whitespace normalised. Not a full-page archive.",
+  "sections": [
+    {
+      "locator": "Getting rest / second paragraph",
+      "text": "Try to lie down or nap while the baby naps."
+    },
+    {
+      "locator": "Physical changes / postpartum visit paragraph / selected clause",
+      "text": "Ask about resuming normal activities"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+FICTIONAL DEMO DATA - NOT A REAL MEDICAL RECORD
+DOC-003 | Recorded medication instruction
+Recorded date: 2026-02-07
+No real person, hospital, clinician or medicine is represented.
+medicine_name: DEMO-MED-A (invented non-medicine)
+recorded_dose: one demo unit
+recorded_frequency: once daily
+route: not recorded
+prescriber: SIMULATED REVIEWER - not a real clinician
+All extracted facts are proposals until a user explicitly confirms them.
+For software testing only. Never use these invented instructions for care.

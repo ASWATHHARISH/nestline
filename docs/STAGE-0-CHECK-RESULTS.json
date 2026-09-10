@@ -1,0 +1,73 @@
+{
+  "checked_at_utc": "2026-09-10T11:34:23.821112+00:00",
+  "execution": "Local checks; this report does not attest a GitHub Actions run",
+  "tests_run": 68,
+  "checks": {
+    "software_tests": {
+      "arguments": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-q"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "----------------------------------------------------------------------\nRan 68 tests in 1.185s\n\nOK"
+    },
+    "authoring_validation": {
+      "arguments": [
+        "-m",
+        "scripts.validate_content"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"valid\": true,\n  \"mode\": \"authoring\",\n  \"profiles\": 63,\n  \"published_profiles\": 0,\n  \"sources\": 31,\n  \"evidence_spans\": 56,\n  \"fragments\": 56,\n  \"errors\": []\n}",
+      "stderr": ""
+    },
+    "review_readiness": {
+      "arguments": [
+        "-m",
+        "scripts.validate_content",
+        "--require-review-ready"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"valid\": true,\n  \"mode\": \"review_ready\",\n  \"profiles\": 63,\n  \"published_profiles\": 0,\n  \"sources\": 31,\n  \"evidence_spans\": 56,\n  \"fragments\": 56,\n  \"errors\": []\n}",
+      "stderr": ""
+    },
+    "publication_gate": {
+      "arguments": [
+        "-m",
+        "scripts.validate_content",
+        "--require-release"
+      ],
+      "exit_code": 1,
+      "stdout": "{\n  \"valid\": false,\n  \"mode\": \"release\",\n  \"profiles\": 63,\n  \"published_profiles\": 0,\n  \"sources\": 31,\n  \"evidence_spans\": 56,\n  \"fragments\": 56,\n  \"errors\": [\n    \"release needs actual licence approval for current data fingerprint\",\n    \"release needs actual content approval for current data fingerprint\",\n    \"release needs actual clinical approval for current data fingerprint\",\n    \"release needs actual india_localisation approval for current data fingerprint\",\n    \"release needs actual product approval for current data fingerprint\",\n    \"release requires reviewed, published profile: P01\",\n    \"release requires reviewed, published profile: P09\",\n    \"release requires reviewed, published profile: P10\",\n    \"release requires reviewed, published profile: P24\",\n    \"release requires reviewed, published profile: P36\",\n    \"release requires reviewed, published profile: PC00\",\n    \"release requires reviewed, published profile: PP01\",\n    \"release requires reviewed, published profile: PP06\",\n    \"release requires reviewed, published profile: PP12\",\n    \"release requires reviewed, published profile: PPD0\",\n    \"release requires reviewed, published profile: PPD1\",\n    \"release requires reviewed, published profile: PPD2\",\n    \"release requires reviewed, published profile: PPD3\",\n    \"release requires reviewed, published profile: PPD4\",\n    \"release requires reviewed, published profile: PPD5\",\n    \"release requires reviewed, published profile: PPD6\",\n    \"release requires reviewed, published profile: PPD7\",\n    \"release requires reviewed catalogue item: ANC-REGISTER\",\n    \"release requires reviewed catalogue item: ANC-CHECKS\",\n    \"release requires reviewed catalogue item: ANC-PMSMA\",\n    \"release requires reviewed catalogue item: PNC-DAY-1\",\n    \"release requires reviewed catalogue item: PNC-DAY-3\",\n    \"release requires reviewed catalogue item: PNC-DAY-7\",\n    \"release requires reviewed catalogue item: PNC-DAY-14\",\n    \"release requires reviewed catalogue item: PNC-DAY-21\",\n    \"release requires reviewed catalogue item: PNC-DAY-28\",\n    \"release requires reviewed catalogue item: PNC-DAY-42\",\n    \"release requires reviewed catalogue item: FOOD-MILK\",\n    \"release requires reviewed catalogue item: FOOD-CURD\",\n    \"release requires reviewed catalogue item: FOOD-PANEER\",\n    \"release requires reviewed catalogue item: FOOD-PULSES\",\n    \"release requires reviewed catalogue item: FOOD-GRAINS\",\n    \"release requires reviewed catalogue item: FOOD-GREENS\",\n    \"release requires reviewed catalogue item: FOOD-EGG\",\n    \"release requires reviewed catalogue item: FOOD-CHICKEN\",\n    \"release requires reviewed catalogue item: FOOD-FISH\",\n    \"release requires reviewed catalogue item: FOOD-SOYA\",\n    \"release requires reviewed catalogue item: FOOD-NUTS\",\n    \"release requires reviewed catalogue item: FOOD-FRUIT\",\n    \"release requires reviewed catalogue item: MOVE-WALK\",\n    \"release requires reviewed catalogue item: MOVE-SWIM\",\n    \"release requires reviewed catalogue item: MOVE-LOW-IMPACT\",\n    \"release requires reviewed catalogue item: MOVE-PP-WALK\",\n    \"release requires reviewed catalogue item: MOVE-PP-STRETCH\",\n    \"release requires reviewed catalogue item: MOVE-PP-CONSULT\",\n    \"release requires reviewed catalogue item: WELL-PREG-FEELINGS\",\n    \"release requires reviewed catalogue item: WELL-PREG-ENJOY\",\n    \"release requires reviewed catalogue item: WELL-PP-REST\",\n    \"release requires reviewed catalogue item: WELL-PP-SUPPORT\",\n    \"release requires reviewed catalogue item: WELL-PP-TALK\",\n    \"release requires reviewed catalogue item: WELL-PP-KINDNESS\",\n    \"BHC-WEEKS: source currency decision pending or source changed/withdrawn\",\n    \"NHM-MOTHERHOOD: source currency decision pending or source changed/withdrawn\",\n    \"NHM-CHO: source currency decision pending or source changed/withdrawn\",\n    \"reviewed safety contract required; draft regex examples cannot protect live users\"\n  ]\n}",
+      "stderr": ""
+    },
+    "dependencies": {
+      "arguments": [
+        "-m",
+        "pip",
+        "check"
+      ],
+      "exit_code": 0,
+      "stdout": "No broken requirements found.",
+      "stderr": ""
+    },
+    "software_contract_cases": {
+      "arguments": [
+        "-m",
+        "scripts.run_contract_evals"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"dataset_sha256\": \"625fba30225591ce182602c4c7d9d9ed9817830b3da2a9a9295823821f6546e0\",\n  \"scope\": \"Visible deterministic regression cases; no model/OCR execution or clinical validation\",\n  \"total\": 64,\n  \"passed\": 64\n}",
+      "stderr": ""
+    }
+  },
+  "limitations": [
+    "Engineering tests are not model or clinical evaluations.",
+    "Review readiness is not content approval or publication.",
+    "Checksums establish local integrity, not publisher authenticity."
+  ]
+}

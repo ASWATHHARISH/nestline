@@ -1,0 +1,10 @@
+FICTIONAL DEMO DATA - NOT A REAL MEDICAL RECORD
+DOC-002 | Laboratory report
+Recorded date: 2026-02-06
+No real person, hospital, clinician or medicine is represented.
+haemoglobin: 10.8 g/dL
+specimen: blood
+reference_range: not supplied
+interpretation: not supplied
+All extracted facts are proposals until a user explicitly confirms them.
+For software testing only. Never use these invented instructions for care.

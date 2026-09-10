@@ -1,0 +1,26 @@
+name: Data contracts
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: python -m pip install -r requirements.txt
+      - run: python -m unittest discover -s tests -v
+      - run: python -m scripts.validate_content
+      - run: python -m scripts.validate_content --require-review-ready
+      - run: python -m scripts.run_contract_evals
+      # Release readiness is intentionally a separate gate: draft shells must
+      # remain legal during authoring. Unit tests verify release fails closed.

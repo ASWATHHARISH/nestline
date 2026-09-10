@@ -1,0 +1,130 @@
+{
+  "document_id": "DOC-008",
+  "workspace_id": "DEMO-MAYA",
+  "fictional": true,
+  "recorded_date": "2026-08-27",
+  "pdf_sha256": "7f3e482cd829c51ca2240b78a5cbc1ea83a0da8f8a0770145d242ff09d9be0d6",
+  "source_text_sha256": "4a8008bdaa910352aadea5d7b5d3d04c068d8f2574e1c6b863439aaa27bcb685",
+  "facts": [
+    {
+      "field": "delivery_date",
+      "value": "2026-08-25",
+      "source_text": "delivery_date: 2026-08-25",
+      "page": 1,
+      "source_line": 5,
+      "coordinates": [
+        [
+          35,
+          204.0,
+          555,
+          218.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "extract_verbatim"
+    },
+    {
+      "field": "delivery_setting",
+      "value": "facility",
+      "source_text": "delivery_setting: facility",
+      "page": 1,
+      "source_line": 6,
+      "coordinates": [
+        [
+          35,
+          229.0,
+          555,
+          243.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "extract_verbatim"
+    },
+    {
+      "field": "delivery_type",
+      "value": "not recorded",
+      "source_text": "delivery_type: not recorded",
+      "page": 1,
+      "source_line": 7,
+      "coordinates": [
+        [
+          35,
+          254.0,
+          555,
+          268.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "abstain"
+    },
+    {
+      "field": "feeding_method",
+      "value": "not recorded",
+      "source_text": "feeding_method: not recorded",
+      "page": 1,
+      "source_line": 8,
+      "coordinates": [
+        [
+          35,
+          279.0,
+          555,
+          293.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "abstain"
+    },
+    {
+      "field": "current_journey",
+      "value": "postpartum",
+      "source_text": "current_journey: postpartum",
+      "page": 1,
+      "source_line": 9,
+      "coordinates": [
+        [
+          35,
+          304.0,
+          555,
+          318.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "extract_verbatim"
+    },
+    {
+      "field": "discharge_instruction",
+      "value": "Follow the documented local follow-up arrangements.",
+      "source_text": "discharge_instruction: Follow the documented local follow-up arrangements.",
+      "page": 1,
+      "source_line": 10,
+      "coordinates": [
+        [
+          35,
+          329.0,
+          555,
+          343.0
+        ]
+      ],
+      "coordinate_system": "PDF points, top-left origin",
+      "status": "proposed",
+      "extraction_disposition": "extract_verbatim"
+    }
+  ],
+  "expected_behaviors": [
+    "propose_episode_transition",
+    "do_not_infer_caesarean_or_breastfeeding",
+    "retain_pregnancy_episode"
+  ],
+  "untrusted_instruction_text": [],
+  "date_semantics": "fixed fixture clock; never substitute today's date",
+  "expected_graph_changes": [
+    "propose_episode_transition",
+    "do_not_infer_caesarean_or_breastfeeding",
+    "retain_pregnancy_episode"
+  ]
+}

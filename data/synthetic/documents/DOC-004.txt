@@ -1,0 +1,10 @@
+FICTIONAL DEMO DATA - NOT A REAL MEDICAL RECORD
+DOC-004 | Routine visit summary
+Recorded date: 2026-05-14
+No real person, hospital, clinician or medicine is represented.
+pregnancy_week: 24
+estimated_due_date: 2026-09-03
+followup_date: 2026-05-28
+new_allergy_information: not supplied
+All extracted facts are proposals until a user explicitly confirms them.
+For software testing only. Never use these invented instructions for care.

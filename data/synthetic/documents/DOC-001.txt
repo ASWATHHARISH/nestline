@@ -1,0 +1,12 @@
+FICTIONAL DEMO DATA - NOT A REAL MEDICAL RECORD
+DOC-001 | Pregnancy intake summary
+Recorded date: 2026-02-05
+No real person, hospital, clinician or medicine is represented.
+persona: Maya - fictional demo persona
+pregnancy_week: 10
+estimated_due_date: 2026-09-03
+reported_allergy: peanut
+dietary_preference: vegetarian
+workspace: DEMO-MAYA
+All extracted facts are proposals until a user explicitly confirms them.
+For software testing only. Never use these invented instructions for care.

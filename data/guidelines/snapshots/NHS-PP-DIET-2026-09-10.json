@@ -1,0 +1,13 @@
+{
+  "source_id": "NHS-PP-DIET",
+  "canonical_url": "https://www.nhs.uk/baby/breastfeeding-and-bottle-feeding/breastfeeding-and-lifestyle/diet/",
+  "version": "reviewed-2026-05-15;selected-2026-09-10-v1",
+  "captured_at": "2026-09-10",
+  "capture_method": "Selected exact excerpts; whitespace normalised. Full context read from official source. Not a full-document archive.",
+  "sections": [
+    {
+      "locator": "Introduction / first sentence",
+      "text": "You do not need to follow a special diet while you're breastfeeding."
+    }
+  ]
+}

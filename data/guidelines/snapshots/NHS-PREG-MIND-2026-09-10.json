@@ -1,0 +1,17 @@
+{
+  "source_id": "NHS-PREG-MIND",
+  "canonical_url": "https://www.nhs.uk/pregnancy/mental-health-in-pregnancy-and-after-the-birth/mental-health/",
+  "version": "reviewed-2026-03-11;selected-2026-09-10-v1",
+  "captured_at": "2026-09-10",
+  "capture_method": "Selected exact excerpts; whitespace normalised. Full context read from official source. Not a full-document archive.",
+  "sections": [
+    {
+      "locator": "Things you can do / Do / feelings bullet",
+      "text": "talk about your feelings to a friend, family member, midwife or doctor"
+    },
+    {
+      "locator": "Things you can do / Do / enjoyment bullet",
+      "text": "try to make time to regularly do something you enjoy"
+    }
+  ]
+}

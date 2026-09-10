@@ -1,0 +1,172 @@
+{
+  "$defs": {
+    "Applicability": {
+      "additionalProperties": false,
+      "description": "The complete time interval supported by a passage, not a guessed week.",
+      "properties": {
+        "stage": {
+          "enum": [
+            "possible_pregnancy",
+            "pregnancy",
+            "postpartum"
+          ],
+          "title": "Stage",
+          "type": "string"
+        },
+        "unit": {
+          "enum": [
+            "week",
+            "day",
+            "none"
+          ],
+          "title": "Unit",
+          "type": "string"
+        },
+        "start": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start"
+        },
+        "end": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "End"
+        }
+      },
+      "required": [
+        "stage",
+        "unit"
+      ],
+      "title": "Applicability",
+      "type": "object"
+    },
+    "PlanItem": {
+      "additionalProperties": false,
+      "properties": {
+        "item_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Item Id",
+          "type": "string"
+        },
+        "catalogue_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Catalogue Id",
+          "type": "string"
+        },
+        "evidence_span_ids": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Span Ids",
+          "type": "array"
+        },
+        "confirmed_fact_ids": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "title": "Confirmed Fact Ids",
+          "type": "array"
+        },
+        "constraint_tags": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Constraint Tags",
+          "type": "array"
+        },
+        "state": {
+          "default": "proposed",
+          "enum": [
+            "proposed",
+            "confirmed",
+            "stale"
+          ],
+          "title": "State",
+          "type": "string"
+        }
+      },
+      "required": [
+        "item_id",
+        "catalogue_id",
+        "evidence_span_ids"
+      ],
+      "title": "PlanItem",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "plan_id": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+      "title": "Plan Id",
+      "type": "string"
+    },
+    "workspace_id": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+      "title": "Workspace Id",
+      "type": "string"
+    },
+    "version": {
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    },
+    "journey": {
+      "$ref": "#/$defs/Applicability"
+    },
+    "items": {
+      "items": {
+        "$ref": "#/$defs/PlanItem"
+      },
+      "minItems": 1,
+      "title": "Items",
+      "type": "array"
+    },
+    "unresolved_conflicts": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Unresolved Conflicts",
+      "type": "array"
+    },
+    "user_confirmed": {
+      "default": false,
+      "title": "User Confirmed",
+      "type": "boolean"
+    },
+    "source_release_checksum": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Source Release Checksum",
+      "type": "string"
+    }
+  },
+  "required": [
+    "plan_id",
+    "workspace_id",
+    "version",
+    "journey",
+    "items",
+    "source_release_checksum"
+  ],
+  "title": "Plan",
+  "type": "object"
+}

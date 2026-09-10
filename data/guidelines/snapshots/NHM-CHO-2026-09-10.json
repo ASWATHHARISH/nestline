@@ -1,0 +1,22 @@
+{
+  "source_id": "NHM-CHO",
+  "canonical_url": "https://www.nhm.gov.in/New_Update-2022-23/MH/GUIDELINES-%20MH/CHO_Booklet_%20Maternal_Health-English.pdf",
+  "version": "February-2022;selected-2026-09-10-v1",
+  "captured_at": "2026-09-10",
+  "capture_method": "Selected exact excerpts; whitespace normalised. Full context read from official source. Not a full-document archive.",
+  "sections": [
+    {
+      "locator": "Page 11 / section 3.1 / first bullet",
+      "text": "Early diagnosis of pregnancy using Nischay Kits."
+    },
+    {
+      "locator": "Page 11 / section 3.1 / birth planning bullet",
+      "text": "Support in birth planning and birth preparedness including birth companion of choice."
+    },
+    {
+      "locator": "Page 11 / section 3.1 / PNC visits / day-42 anchor",
+      "text": "42nd Day"
+    }
+  ],
+  "original_document_sha256": "e97347fc9ac72fa94c5668f04e5fc14c440a505cb0e49f28d7adabf4b862e7b8"
+}

@@ -1,0 +1,17 @@
+{
+  "source_id": "OWH-HEALTH",
+  "canonical_url": "https://womenshealth.gov/pregnancy/youre-pregnant-now-what/staying-healthy-and-safe",
+  "version": "page-updated-2025-09-26;selected-excerpts-2026-09-10-v1",
+  "captured_at": "2026-09-10",
+  "capture_method": "Manually selected exact excerpts from official page; whitespace normalised. Not a full-page archive.",
+  "sections": [
+    {
+      "locator": "Food safety / produce bullet",
+      "text": "Wash produce before eating."
+    },
+    {
+      "locator": "Getting started / consultation sentence",
+      "text": "Even so, talk to your doctor or midwife before exercising during pregnancy."
+    }
+  ]
+}

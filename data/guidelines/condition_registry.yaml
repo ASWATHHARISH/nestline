@@ -1,0 +1,216 @@
+{
+  "version": "1.0.0",
+  "unknown_policy": "needs_information",
+  "conditions": [
+    {
+      "key": "breastfeeding",
+      "definition": "The user explicitly reports currently breastfeeding.",
+      "values": [
+        "confirmed_present",
+        "confirmed_absent",
+        "unknown"
+      ],
+      "provenance": [
+        "user_confirmation",
+        "confirmed_document_fact"
+      ],
+      "owner": "product_and_clinical_review"
+    },
+    {
+      "key": "early_home_recovery",
+      "definition": "The user confirms being in the early days of recovery at home.",
+      "values": [
+        "confirmed_present",
+        "confirmed_absent",
+        "unknown"
+      ],
+      "provenance": [
+        "user_confirmation",
+        "confirmed_document_fact"
+      ],
+      "owner": "product_and_clinical_review"
+    },
+    {
+      "key": "professional_care_for_postpartum_depression",
+      "definition": "The user confirms professional care for postpartum depression; no diagnosis inferred.",
+      "values": [
+        "confirmed_present",
+        "confirmed_absent",
+        "unknown"
+      ],
+      "provenance": [
+        "user_confirmation",
+        "confirmed_document_fact"
+      ],
+      "owner": "product_and_clinical_review"
+    },
+    {
+      "key": "complicated_delivery_or_caesarean",
+      "definition": "Confirmed complicated delivery or caesarean; no inference from a missing delivery detail.",
+      "values": [
+        "confirmed_present",
+        "confirmed_absent",
+        "unknown"
+      ],
+      "provenance": [
+        "user_confirmation",
+        "confirmed_document_fact"
+      ],
+      "owner": "product_and_clinical_review"
+    },
+    {
+      "key": "uncomplicated_delivery",
+      "definition": "The user or confirmed record explicitly describes an uncomplicated birth.",
+      "values": [
+        "confirmed_present",
+        "confirmed_absent",
+        "unknown"
+      ],
+      "provenance": [
+        "user_confirmation",
+        "confirmed_document_fact"
+      ],
+      "owner": "product_and_clinical_review"
+    },
+    {
+      "key": "feels_ready_for_gentle_activity",
+      "definition": "The user explicitly feels ready for gentle activity; this is not clinical clearance.",
+      "values": [
+        "confirmed_present",
+        "confirmed_absent",
+        "unknown"
+      ],
+      "provenance": [
+        "user_confirmation",
+        "confirmed_document_fact"
+      ],
+      "owner": "product_and_clinical_review"
+    },
+    {
+      "key": "exercise_clearance",
+      "definition": "A confirmed care-professional instruction establishes activity suitability in this context.",
+      "values": [
+        "confirmed_present",
+        "confirmed_absent",
+        "unknown"
+      ],
+      "provenance": [
+        "user_confirmation",
+        "confirmed_document_fact"
+      ],
+      "owner": "product_and_clinical_review"
+    },
+    {
+      "key": "movement_restriction",
+      "definition": "A confirmed active movement restriction exists; absence requires confirmation too.",
+      "values": [
+        "confirmed_present",
+        "confirmed_absent",
+        "unknown"
+      ],
+      "provenance": [
+        "user_confirmation",
+        "confirmed_document_fact"
+      ],
+      "owner": "product_and_clinical_review"
+    },
+    {
+      "key": "current_warning_symptom",
+      "definition": "A current concerning symptom is reported or the reviewed safety route flags one.",
+      "values": [
+        "confirmed_present",
+        "confirmed_absent",
+        "unknown"
+      ],
+      "provenance": [
+        "user_confirmation",
+        "confirmed_document_fact"
+      ],
+      "owner": "product_and_clinical_review"
+    },
+    {
+      "key": "home_birth",
+      "definition": "Confirmed delivery at home.",
+      "values": [
+        "confirmed_present",
+        "confirmed_absent",
+        "unknown"
+      ],
+      "provenance": [
+        "user_confirmation",
+        "confirmed_document_fact"
+      ],
+      "owner": "product_and_clinical_review"
+    },
+    {
+      "key": "facility_birth",
+      "definition": "Confirmed delivery in a health facility.",
+      "values": [
+        "confirmed_present",
+        "confirmed_absent",
+        "unknown"
+      ],
+      "provenance": [
+        "user_confirmation",
+        "confirmed_document_fact"
+      ],
+      "owner": "product_and_clinical_review"
+    },
+    {
+      "key": "pregnancy_confirmed",
+      "definition": "The user explicitly confirms pregnancy; a late period alone does not establish it.",
+      "values": [
+        "confirmed_present",
+        "confirmed_absent",
+        "unknown"
+      ],
+      "provenance": [
+        "user_confirmation",
+        "confirmed_document_fact"
+      ],
+      "owner": "product_and_clinical_review"
+    },
+    {
+      "key": "consents_to_wellbeing_activity",
+      "definition": "The user chooses an optional wellbeing activity and may stop at any time.",
+      "values": [
+        "confirmed_present",
+        "confirmed_absent",
+        "unknown"
+      ],
+      "provenance": [
+        "user_confirmation",
+        "confirmed_document_fact"
+      ],
+      "owner": "product_and_clinical_review"
+    },
+    {
+      "key": "persistent_emotional_concern",
+      "definition": "The user reports persistent concern or difficulty coping; no diagnosis inferred.",
+      "values": [
+        "confirmed_present",
+        "confirmed_absent",
+        "unknown"
+      ],
+      "provenance": [
+        "user_confirmation",
+        "confirmed_document_fact"
+      ],
+      "owner": "product_and_clinical_review"
+    },
+    {
+      "key": "trusted_support_available",
+      "definition": "The user identifies someone they trust and want to involve; no partner assumed.",
+      "values": [
+        "confirmed_present",
+        "confirmed_absent",
+        "unknown"
+      ],
+      "provenance": [
+        "user_confirmation",
+        "confirmed_document_fact"
+      ],
+      "owner": "product_and_clinical_review"
+    }
+  ]
+}

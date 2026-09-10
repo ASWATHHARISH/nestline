@@ -1,0 +1,17 @@
+{
+  "source_id": "NHS-PP-BODY",
+  "canonical_url": "https://www.nhs.uk/pregnancy/labour-and-birth/your-body/",
+  "version": "reviewed-2024-04-25;selected-2026-09-10-v1",
+  "captured_at": "2026-09-10",
+  "capture_method": "Selected exact excerpts; whitespace normalised. Full context read from official source. Not a full-document archive.",
+  "sections": [
+    {
+      "locator": "How soon after giving birth can I get pregnant? / first clause",
+      "text": "You can get pregnant again just 3 weeks after the birth of your baby"
+    },
+    {
+      "locator": "How soon after giving birth can I get pregnant? / breastfeeding clause",
+      "text": "even if you're breastfeeding"
+    }
+  ]
+}

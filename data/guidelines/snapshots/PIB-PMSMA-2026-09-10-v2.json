@@ -1,0 +1,13 @@
+{
+  "source_id": "PIB-PMSMA",
+  "canonical_url": "https://static.pib.gov.in/WriteReadData/specificdocs/documents/2026/jun/doc202668887301.pdf",
+  "version": "selected-2026-09-10-correction-v2",
+  "captured_at": "2026-09-10",
+  "capture_method": "Selected complete supporting passages; whitespace and list punctuation normalised. Source conditions preserved. Official source context read; not a full-page archive.",
+  "sections": [
+    {
+      "locator": "Page 2 / programme opening paragraph",
+      "text": "Launched on June 9, 2016, PMSMA provides free, comprehensive antenatal care to pregnant women - particularly those in their second and third trimesters - at designated government health facilities on the 9th of every month."
+    }
+  ]
+}

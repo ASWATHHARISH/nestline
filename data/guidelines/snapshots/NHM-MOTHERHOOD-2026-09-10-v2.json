@@ -1,0 +1,61 @@
+{
+  "source_id": "NHM-MOTHERHOOD",
+  "canonical_url": "https://www.nhm.gov.in/images/pdf/programmes/maternal-health/guidelines/my_safe_motherhood_booklet_english.pdf",
+  "version": "selected-2026-09-10-correction-v2",
+  "captured_at": "2026-09-10",
+  "capture_method": "Selected complete supporting passages; whitespace and list punctuation normalised. Source conditions preserved. Official source context read; not a full-page archive.",
+  "sections": [
+    {
+      "locator": "Page 10 / bottom banner opening",
+      "text": "Prefer using variety of local seasonal foods, vegetables and fruits"
+    },
+    {
+      "locator": "Page 12 / Rest during pregnancy / final bullet",
+      "text": "Do not overexert yourself and delegate few tasks to others."
+    },
+    {
+      "locator": "Page 16 / Postpartum care / rest bullet",
+      "text": "Take adequate rest."
+    },
+    {
+      "locator": "Page 9 / dairy bullet",
+      "text": "Take milk and dairy products like curd, buttermilk, paneer-these are rich in calcium, proteins and vitamins."
+    },
+    {
+      "locator": "Page 9 / cereals and pulses sentence",
+      "text": "Cereals, whole grains and pulses are good sources of proteins."
+    },
+    {
+      "locator": "Page 9 / leafy-vegetables bullet",
+      "text": "Green leafy vegetables are a rich source of iron and folic acid."
+    },
+    {
+      "locator": "Page 9 / non-vegetarian sources bullet",
+      "text": "For non-vegetarians, meat, egg, chicken or fish are good sources of proteins, vitamins and iron."
+    },
+    {
+      "locator": "Page 10 / proteins row",
+      "text": "Paneer, milk and other milk products, combined grains, seeds, nuts, egg, meat, poultry, soya beans."
+    },
+    {
+      "locator": "Page 16 / day-of-delivery follow-up bullet",
+      "text": "You and your baby should be seen by a health worker on the day of delivery, and on 3rd day, 7th day and 6 weeks after delivery."
+    },
+    {
+      "locator": "Page 16 / postpartum rest bullet / day scope",
+      "text": "Take adequate rest."
+    },
+    {
+      "locator": "Page 16 / immediate-help bullet",
+      "text": "Take immediate medical help if any complication occurs in yourself or your baby."
+    },
+    {
+      "locator": "Page 14 / pregnancy danger signals and immediate-help instruction",
+      "text": "If any complications occur- seek help immediately to preserve your health and life. DANGER SIGNALS DURING PREGNANCY. Generalised weakness, easy fatigability and breathlessness. Severe pain in abdomen. Bleeding per vaginum. Excessive swelling in legs. Fever. Convulsions."
+    },
+    {
+      "locator": "Page 16 / immediate-help instruction and Contact FRU list",
+      "text": "Take immediate medical help if any complication occurs in yourself or your baby. Contact F R U. Excessive vaginal bleeding. Inability to control defecation/urine. Foul smelling vaginal discharge. Difficulty in breathing. Blurred vision and fits. Fever. Fainting."
+    }
+  ]
+}

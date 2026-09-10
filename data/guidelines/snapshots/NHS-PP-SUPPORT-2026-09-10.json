@@ -1,0 +1,13 @@
+{
+  "source_id": "NHS-PP-SUPPORT",
+  "canonical_url": "https://www.nhs.uk/baby/support-and-services/relationships-after-having-a-baby/",
+  "version": "reviewed-2026-05-20;selected-2026-09-10-v1",
+  "captured_at": "2026-09-10",
+  "capture_method": "Selected exact excerpts; whitespace normalised. Full context read from official source. Not a full-document archive.",
+  "sections": [
+    {
+      "locator": "Relationships with family and friends / help paragraph opening",
+      "text": "It's best to be clear about the kind of help you want"
+    }
+  ]
+}
