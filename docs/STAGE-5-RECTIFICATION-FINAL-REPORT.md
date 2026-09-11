@@ -1,5 +1,7 @@
 # Nestline Stage 5 second-rectification final report
 
+> **Historical record:** This report describes the second rectification. Current final semantic-closure evidence is in STAGE-5-FINAL-CONSOLIDATED-CORRECTION-AND-STAGE-6-GATE.md.
+
 **Prepared:** 12 September 2026
 **Repository:** `kajalchourasia-cmd/nestline`
 **Branch:** `feat/stage-1-governed-ingestion`

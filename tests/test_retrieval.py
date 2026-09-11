@@ -16,12 +16,13 @@ from pydantic import ValidationError
 from app.schemas.retrieval import (
     AuthenticatedRetrievalScope, EvidencePacket, EvidenceRequirementPolicy,
     JourneyPosition, PublicEvidenceCandidate, RetrievalRequest, RetrievalResult,
-    RerankerInput, canonical_evidence_policy_values,
+    RerankerInput, TrustedRetrievalState, canonical_evidence_policy_values,
 )
 from app.services.embeddings import DeterministicTestEmbeddingProvider
 from app.services.retrieval import (
     CandidateHit, FixtureRetrievalRepository, PersonalCacheEntry,
-    RetrievalDatabaseUnavailable, RetrievalGateway, Stage5RetrievalCache,
+    RetrievalDatabaseUnavailable, RetrievalGateway, RetrievalInvalidCandidate,
+    Stage5RetrievalCache,
 )
 from app.services.retrieval_policy import build_evidence_policy, build_trusted_query
 
@@ -121,6 +122,8 @@ def expanded_candidate_fixture():
         candidate["evidence_id"] = f"EV-NUT-24-X{index}"
         candidate["source_id"] = f"SRC-NUT-24-X{index}"
         candidate["source_title"] = f"Synthetic nutrition source {index}"
+        candidate["spans"][0]["source_id"] = candidate["source_id"]
+        candidate["spans"][0]["evidence_id"] = candidate["evidence_id"]
         payload["public_records"].append(row)
 
     passage_base = next(
@@ -769,10 +772,380 @@ class Stage5CacheAndFailureTests(unittest.TestCase):
         packet = retrieve(RetrievalGateway(
             SlowRepository(fixture()),
             embedding_provider=DeterministicTestEmbeddingProvider(),
-            corpus_version="fixture", release_version="fixture"),
+            corpus_version="stage5-fixture-v2",
+            release_version="fixture-release-v2"),
             request(timeout_ms=10)).packet
         self.assertEqual(packet.abstention.reason, "retrieval_timeout")
         self.assertIn("retrieval_timeout", packet.answerability.blocking_reasons)
+
+
+class Stage5FinalSemanticClosureTests(unittest.TestCase):
+    """Consolidated adversarial matrix for the final Stage 5 handoff."""
+
+    @staticmethod
+    def _json(payload):
+        return json.dumps(payload, default=str)
+
+    def _reject_packet(self, payload, label):
+        with self.subTest(label=label), self.assertRaises(ValidationError):
+            EvidencePacket.model_validate_json(self._json(payload))
+
+    def _reject_result(self, payload, label):
+        with self.subTest(label=label), self.assertRaises(ValidationError):
+            RetrievalResult.model_validate_json(self._json(payload))
+
+    def test_answerability_and_abstention_are_canonically_derived(self):
+        supported = retrieve(gateway(), request()).packet
+        partial = retrieve(
+            gateway(),
+            request("How should my peanut allergy change week 25 nutrition guidance?", week=25),
+            purpose="mixed_personalized_guidance",
+        ).packet
+        unsupported = retrieve(
+            gateway(), request("What hospital documents should I prepare at week 25?", "preparation", 25)
+        ).packet
+        conflicted = retrieve(
+            gateway(),
+            request("How should my conflicting prenatal yoga record affect week 25 movement guidance?", "movement", 25),
+            scope(WORKSPACE_F, OWNER_F, 1),
+            "mixed_personalized_guidance",
+        ).packet
+        self.assertEqual(
+            [supported.answerability.support_state, partial.answerability.support_state,
+             unsupported.answerability.support_state, conflicted.answerability.support_state],
+            ["fully_supported", "partially_supported", "unsupported", "clarification_required"],
+        )
+
+        base = supported.model_dump(mode="python")
+        mutations = []
+        mutations.append(("full_with_missing_support", lambda p: p["answerability"].update({
+            "satisfied_support": [], "missing_support": list(p["answerability"]["required_support"]),
+        })))
+        mutations.append(("satisfied_boolean_false", lambda p: p["answerability"].update({
+            "public_guidance_supported": False,
+        })))
+        def conflict_while_generating(payload):
+            identifier = UUID("c7777777-7777-4777-8777-777777777777")
+            payload["unresolved_conflicts"] = [{
+                "conflict_id": identifier, "fact_type": "allergy",
+                "proposed_values": ["sesame"], "source_document_ids": [],
+                "clarification_question_ids": [], "state": "requires_clarification",
+            }]
+            payload["answerability"]["relevant_conflict_ids"] = [str(identifier)]
+            payload["allowed_claim_types"].append("clarification_required")
+        mutations.append(("generation_with_conflict", conflict_while_generating))
+        def clarification_without_issue(payload):
+            payload["answerability"].update({
+                "support_state": "clarification_required",
+                "ordinary_generation_allowed": False,
+            })
+            payload["abstention"] = {
+                "should_abstain": True, "reason": "partial_support", "detail": "invalid",
+            }
+        mutations.append(("clarification_without_issue", clarification_without_issue))
+        for label, mutate in mutations:
+            payload = deepcopy(base); mutate(payload); self._reject_packet(payload, label)
+
+        payload = deepcopy(unsupported.model_dump(mode="python"))
+        payload["abstention"]["reason"] = "unresolved_conflict"
+        self._reject_packet(payload, "conflict_reason_without_conflict")
+
+    def test_abstention_reasons_and_precedence_are_fixed(self):
+        cases = [
+            (retrieve(gateway(), request()).packet, "none"),
+            (retrieve(gateway(), request("No matching preparation evidence at week 25", "preparation", 25)).packet,
+             "no_approved_public_content"),
+            (retrieve(gateway(), request("Why is my plan stale?", "movement", graph=False),
+                      purpose="causal_explanation").packet, "no_eligible_evidence"),
+            (retrieve(gateway(), request("How should my peanut allergy change week 25 nutrition guidance?", week=25),
+                      purpose="mixed_personalized_guidance").packet, "partial_support"),
+            (retrieve(gateway(), request("What should I prepare now?", "preparation"),
+                      scope(WORKSPACE_B, OWNER_B, 999)).packet, "missing_information"),
+            (retrieve(gateway(), request("How should my conflicting prenatal yoga record affect week 25 movement guidance?", "movement", 25),
+                      scope(WORKSPACE_F, OWNER_F, 1), "mixed_personalized_guidance").packet,
+             "unresolved_conflict"),
+        ]
+        for packet, reason in cases:
+            with self.subTest(reason=reason):
+                self.assertEqual(packet.abstention.reason, reason)
+                payload = packet.model_dump(mode="python")
+                payload["abstention"]["reason"] = (
+                    "no_eligible_evidence" if reason != "no_eligible_evidence" else "partial_support"
+                )
+                payload["abstention"]["should_abstain"] = True
+                self._reject_packet(payload, f"invalid_inverse_{reason}")
+
+        payload = fixture()
+        context = payload["personal_contexts"][str(WORKSPACE_A)]
+        context["unresolved_conflicts"].append({
+            "conflict_id": "c8111111-7777-4777-8777-777777777777",
+            "fact_type": "allergy", "proposed_values": ["sesame", "none"],
+            "source_document_ids": [], "clarification_question_ids": [],
+            "state": "requires_clarification",
+        })
+        context["missing_information"].append({
+            "field": "allergy_detail", "reason": "Missing allergy detail.",
+            "required_for": ["personal_record"],
+        })
+        both = retrieve(
+            gateway(payload), request("What allergies are in my record?"),
+            purpose="personal_record_lookup",
+        ).packet
+        self.assertEqual(both.abstention.reason, "unresolved_conflict")
+
+        class SlowBrokenRepository(FixtureRetrievalRepository):
+            def authenticated_scope(self, requested_scope):
+                time.sleep(0.02)
+                raise RetrievalDatabaseUnavailable("synthetic outage")
+        database_and_timeout = retrieve(
+            RetrievalGateway(
+                SlowBrokenRepository(fixture()),
+                embedding_provider=DeterministicTestEmbeddingProvider(),
+                corpus_version="stage5-fixture-v2", release_version="fixture-release-v2",
+            ), request(timeout_ms=10),
+        ).packet
+        self.assertEqual(
+            database_and_timeout.answerability.blocking_reasons,
+            ["database_unavailable", "retrieval_timeout"],
+        )
+        self.assertEqual(database_and_timeout.abstention.reason, "database_unavailable")
+
+    def test_all_trusted_journey_relations_enforce_the_truth_table(self):
+        results = {
+            "current": retrieve(gateway(), request()),
+            "explicit_other": retrieve(
+                gateway(), request("What should I prepare at week 30?", "preparation", 30)
+            ),
+            "overridden_to_current": retrieve(
+                gateway(), request("What applies to me now?", week=12)
+            ),
+            "unconfirmed_current": retrieve(
+                gateway(), request(), scope(WORKSPACE_B, OWNER_B, 2)
+            ),
+        }
+        for relation, result in results.items():
+            state = result.packet.trusted_state
+            with self.subTest(valid=relation):
+                self.assertEqual(state.journey_relation, relation)
+                TrustedRetrievalState.model_validate_json(state.model_dump_json())
+
+        current = results["current"].packet.trusted_state.model_dump(mode="python")
+        explicit = results["explicit_other"].packet.trusted_state.model_dump(mode="python")
+        overridden = results["overridden_to_current"].packet.trusted_state.model_dump(mode="python")
+        unconfirmed = results["unconfirmed_current"].packet.trusted_state.model_dump(mode="python")
+        invalid = [
+            ("current_without_current", {**current, "current_journey": None}),
+            ("current_mismatch", {**current, "effective_journey": JourneyPosition(stage="pregnancy", unit="week", exact=25)}),
+            ("explicit_equal_current", {**current, "journey_relation": "explicit_other"}),
+            ("explicit_effective_not_requested", {**explicit, "effective_journey": explicit["current_journey"]}),
+            ("override_without_current", {**overridden, "current_journey": None}),
+            ("override_effective_requested", {**overridden, "effective_journey": overridden["requested_journey"]}),
+            ("unconfirmed_with_current", {**unconfirmed, "current_journey": current["current_journey"]}),
+            ("unconfirmed_effective_mismatch", {**unconfirmed, "effective_journey": JourneyPosition(stage="pregnancy", unit="week", exact=25)}),
+        ]
+        for label, payload in invalid:
+            with self.subTest(invalid=label), self.assertRaises(ValidationError):
+                TrustedRetrievalState.model_validate_json(self._json(payload))
+
+    def test_missing_information_is_category_specific_pairwise(self):
+        categories = [
+            ("allergy_detail", "What allergies are in my record?", "nutrition"),
+            ("restriction_detail", "What restrictions are in my record?", "movement"),
+            ("medication_list", "What medications are in my record?", "followup"),
+            ("medical_condition", "What conditions are in my record?", "wellbeing"),
+            ("appointment_date", "What appointments are in my record?", "preparation"),
+            ("journey_week", "What week am I in?", "journey"),
+        ]
+        for missing_field, question, domain in categories:
+            payload = fixture()
+            context = payload["personal_contexts"][str(WORKSPACE_A)]
+            context["missing_information"] = [{
+                "field": missing_field, "reason": "Required fictional detail is missing.",
+                "required_for": ["personal_record"],
+            }]
+            packet = retrieve(
+                gateway(payload), request(question, domain),
+                purpose="personal_record_lookup",
+            ).packet
+            with self.subTest(positive=missing_field):
+                self.assertEqual([item.field for item in packet.missing_information], [missing_field])
+                self.assertEqual(packet.abstention.reason, "missing_information")
+            for other_field, other_question, other_domain in categories:
+                if other_field == missing_field:
+                    continue
+                packet = retrieve(
+                    gateway(payload), request(other_question, other_domain),
+                    purpose="personal_record_lookup",
+                ).packet
+                with self.subTest(missing=missing_field, unrelated=other_field):
+                    self.assertEqual(packet.missing_information, [])
+
+    def test_conflicts_are_category_specific_pairwise(self):
+        categories = [
+            ("allergy", "allergy", ["sesame"], "What allergies are in my record?", "nutrition"),
+            ("restriction", "dietary_restriction", ["avoid lifting"], "What restrictions are in my record?", "movement"),
+            ("medication", "medication", ["fictional tablet"], "What medications are in my record?", "followup"),
+            ("condition", "medical_history", ["fictional condition"], "What conditions are in my record?", "wellbeing"),
+            ("appointment", "appointment", ["2026-10-01"], "What appointments are in my record?", "preparation"),
+            ("journey", "journey_state", [23, 24], "What week am I in?", "journey"),
+        ]
+        for index, (category, fact_type, values, question, domain) in enumerate(categories, 1):
+            payload = fixture()
+            context = payload["personal_contexts"][str(WORKSPACE_A)]
+            identifier = f"c900000{index}-7777-4777-8777-777777777777"
+            context["unresolved_conflicts"] = [{
+                "conflict_id": identifier, "fact_type": fact_type,
+                "proposed_values": values, "source_document_ids": [],
+                "clarification_question_ids": [], "state": "requires_clarification",
+            }]
+            packet = retrieve(
+                gateway(payload), request(question, domain),
+                purpose="personal_record_lookup",
+            ).packet
+            with self.subTest(positive=category):
+                self.assertEqual(
+                    [str(item.conflict_id) for item in packet.unresolved_conflicts],
+                    [identifier],
+                )
+            for other_category, _, _, other_question, other_domain in categories:
+                if other_category == category:
+                    continue
+                packet = retrieve(
+                    gateway(payload), request(other_question, other_domain),
+                    purpose="personal_record_lookup",
+                ).packet
+                with self.subTest(conflict=category, unrelated=other_category):
+                    self.assertEqual(packet.unresolved_conflicts, [])
+
+    def test_packet_inventory_applicability_and_span_mutations_are_rejected(self):
+        base = retrieve(gateway(), request()).packet.model_dump(mode="python")
+        mutations = [
+            ("evidence_ids", lambda p: p.update({"evidence_ids": []})),
+            ("source_ids", lambda p: p.update({"source_ids": []})),
+            ("exact_spans", lambda p: p.update({"exact_spans": []})),
+            ("required_citations", lambda p: p.update({"required_citations": []})),
+            ("allowed_claim_types", lambda p: p.update({"allowed_claim_types": []})),
+            ("selected_without_rank", lambda p: p.update({"ranked_candidates": []})),
+            ("rank_without_selected", lambda p: p.update({"approved_guideline_passages": []})),
+            ("wrong_corpus_mode", lambda p: p.update({"corpus_mode": "production_release"})),
+            ("wrong_domain", lambda p: p["approved_guideline_passages"][0].update({"domain": "movement"})),
+            ("wrong_week", lambda p: p["approved_guideline_passages"][0].update({"journey": {"stage": "pregnancy", "unit": "week", "exact": 25, "range_start": None, "range_end": None}})),
+            ("wrong_jurisdiction", lambda p: p["approved_guideline_passages"][0].update({"jurisdictions": ["US"]})),
+            ("wrong_condition", lambda p: p["approved_guideline_passages"][0].update({"conditions_required": ["home_birth"]})),
+            ("wrong_lane", lambda p: (p.update({"evidence_lanes": ["guideline"]}), p["approved_guideline_passages"][0].update({"evidence_lane": "weekly_profile"}))),
+            ("wrong_span_hash", lambda p: p["approved_guideline_passages"][0]["spans"][0].update({"text_sha256": "0" * 64})),
+            ("wrong_span_source", lambda p: p["approved_guideline_passages"][0]["spans"][0].update({"source_id": "OTHER"})),
+            ("wrong_span_evidence", lambda p: p["approved_guideline_passages"][0]["spans"][0].update({"evidence_id": "OTHER"})),
+        ]
+        for label, mutate in mutations:
+            payload = deepcopy(base); mutate(payload); self._reject_packet(payload, label)
+
+        expanded = retrieve(gateway(expanded_candidate_fixture()), request(max_candidates=5)).packet.model_dump(mode="python")
+        self.assertGreater(len(expanded["ranked_candidates"]), 1)
+        for label, mutate in (
+            ("duplicate_rank", lambda p: p["ranked_candidates"][1].update({"rank": 1})),
+            ("wrong_kind", lambda p: p["ranked_candidates"][0].update({"candidate_kind": "personal_passage"})),
+            ("wrong_tie_breaker", lambda p: p["ranked_candidates"][0].update({"stable_tie_breaker": "OTHER"})),
+        ):
+            payload = deepcopy(expanded); mutate(payload); self._reject_packet(payload, label)
+
+        personal = retrieve(
+            gateway(), request("What allergy is in my confirmed record?"),
+            purpose="personal_record_lookup",
+        ).packet.model_dump(mode="python")
+        self.assertTrue(personal["permitted_personal_passages"])
+        personal["permitted_personal_passages"][0]["span"]["text_sha256"] = "0" * 64
+        self._reject_packet(personal, "personal_span_hash")
+
+        weekly = deepcopy(base)
+        weekly["weekly_profile"] = {
+            "profile_id": "P24-FIXTURE", "release_id": "55555555-5555-4555-8555-555555555555",
+            "corpus_version": "stage5-fixture-v2",
+            "journey": {"stage": "pregnancy", "unit": "week", "exact": 24,
+                        "range_start": None, "range_end": None},
+            "jurisdiction": ["IN"], "hero": {"title": "fixture"},
+            "card_slots": {}, "evidence_ids": [], "status": "published", "fixture_only": True,
+        }
+        weekly["allowed_claim_types"].append("published_weekly_profile")
+        EvidencePacket.model_validate_json(self._json(weekly))
+        wrong_weekly = deepcopy(weekly)
+        wrong_weekly["weekly_profile"]["jurisdiction"] = ["US"]
+        self._reject_packet(wrong_weekly, "weekly_profile_jurisdiction")
+
+    def test_graph_workspace_edges_and_trace_binding_are_strict(self):
+        graph_result = retrieve(
+            gateway(), request("Why is my movement plan stale after the restriction?", "movement"),
+            purpose="causal_explanation",
+        )
+        graph = graph_result.packet.model_dump(mode="python")
+        graph["graph_paths"][0]["workspace_id"] = WORKSPACE_B
+        self._reject_packet(graph, "graph_workspace")
+        graph = graph_result.packet.model_dump(mode="python")
+        graph["graph_paths"][0]["edges"][0]["to_node_id"] = uuid4()
+        self._reject_packet(graph, "graph_disconnected_edge")
+        graph = graph_result.packet.model_dump(mode="python")
+        graph["graph_paths"][0]["edges"][0]["from_node_id"] = graph["graph_paths"][0]["nodes"][1]["node_id"]
+        self._reject_packet(graph, "graph_reversed_edge")
+
+        base = retrieve(gateway(), request()).model_dump(mode="python")
+        mutations = [
+            ("question", lambda p: p["packet"].update({"question": "Different question"})),
+            ("normalized_query", lambda p: p["trace"].update({"normalized_query": "different query"})),
+            ("jurisdiction", lambda p: p["trace"].update({"jurisdiction": "US"})),
+            ("timestamps", lambda p: p["trace"].update({"completed_at": p["trace"]["started_at"] - __import__("datetime").timedelta(seconds=1)})),
+            ("ranking_digest", lambda p: p["trace"].update({"deterministic_order_digest": "0" * 64})),
+            ("filter_version", lambda p: p["trace"].update({"filter_version": "wrong"})),
+            ("ranking_version", lambda p: p["trace"].update({"ranking_version": "wrong"})),
+            ("policy_version", lambda p: p["trace"].update({"policy_version": "wrong"})),
+            ("corpus_version", lambda p: p["trace"].update({"corpus_version": "wrong"})),
+            ("release_version", lambda p: p["trace"].update({"release_version": "wrong"})),
+        ]
+        for label, mutate in mutations:
+            payload = deepcopy(base); mutate(payload); self._reject_result(payload, label)
+
+    def test_component_failure_and_blocker_semantics_are_strict(self):
+        base = retrieve(gateway(), request()).model_dump(mode="python")
+        payload = deepcopy(base)
+        payload["packet"]["component_results"][0].update({"status": "failed", "failure": None})
+        payload["trace"]["component_results"] = deepcopy(payload["packet"]["component_results"])
+        self._reject_result(payload, "failed_without_failure")
+
+        payload = deepcopy(base)
+        failure = {"code": "database_unavailable", "recoverable": True,
+                   "component": "exact_sql", "detail": "synthetic"}
+        payload["packet"]["component_results"][0]["failure"] = failure
+        payload["packet"]["failures"].append(failure)
+        payload["trace"]["component_results"] = deepcopy(payload["packet"]["component_results"])
+        self._reject_result(payload, "ok_with_failure")
+
+        degraded = retrieve(gateway(provider=False), request()).model_dump(mode="python")
+        payload = deepcopy(degraded)
+        personal = next(item for item in payload["packet"]["component_results"]
+                        if item["component"] == "personal_vector")
+        personal["failure"]["component"] = "public_vector"
+        payload["trace"]["component_results"] = deepcopy(payload["packet"]["component_results"])
+        self._reject_result(payload, "wrong_failure_owner")
+
+        payload = deepcopy(degraded)
+        payload["packet"]["failures"] = []
+        self._reject_result(payload, "component_failure_missing_from_packet")
+
+        payload = deepcopy(base)
+        payload["packet"]["answerability"]["blocking_reasons"] = ["database_unavailable"]
+        self._reject_result(payload, "database_blocker_without_exact_failure")
+
+    def test_malformed_repository_candidate_raises_typed_failure(self):
+        class MalformedRepository(FixtureRetrievalRepository):
+            def public_full_text(self, request, limit):
+                self._called("public_full_text")
+                return [{"not": "a candidate hit"}]
+        service = RetrievalGateway(
+            MalformedRepository(fixture()),
+            embedding_provider=DeterministicTestEmbeddingProvider(),
+            corpus_version="stage5-fixture-v2", release_version="fixture-release-v2",
+        )
+        with self.assertRaises(RetrievalInvalidCandidate):
+            retrieve(service, request())
 
 
 if __name__ == "__main__":

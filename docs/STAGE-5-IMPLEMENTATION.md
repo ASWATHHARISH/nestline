@@ -2,13 +2,15 @@
 
 **Updated:** 12 September 2026
 **Branch:** `feat/stage-1-governed-ingestion`
-**Independently reviewed remote HEAD:** `3991896135eca094bc0ab0462f3e87c615469978`
-**Second-rectification implementation commit:** `467422a62a3db31740a2d631538a73c2f34cc526`
+**Final consolidated review baseline:** `2a067945986d68f85fba6234b9cb59be90a90eab`
+**Current authoritative evidence:** `STAGE-5-FINAL-CONSOLIDATED-CORRECTION-AND-STAGE-6-GATE.md`
 **Stage 6 status:** not started
 
 ## Scope
 
 Stage 5 supplies one read-only Retrieval Gateway for future specialists. It combines exact SQL, PostgreSQL full-text search, pgvector discovery and bounded PostgreSQL graph traversal. It filters candidates before ranking, merges eligible candidates deterministically, isolates public and personal caches, and returns a typed Evidence Packet with explicit support and failure states.
+
+The final consolidated correction adds one canonical semantic-validation boundary across answerability, journey state, category relevance, graph structure, packet inventories, trace identity and failure behavior. The final evidence set contains 56 focused Stage 5 tests, 232 total Python tests and 212 generated adversarial matrix cases. See the authoritative evidence file above for exact results and the Stage 6 gate.
 
 It does not generate health answers, implement safety routing, confirm personal facts, write graph state, select a production embedding provider, publish draft health content or deploy a public application.
 

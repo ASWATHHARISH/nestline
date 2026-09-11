@@ -1,6 +1,6 @@
 {
-  "schema_version": "stage5-rectification-matrix-v1",
-  "reviewed_commit": "3991896135eca094bc0ab0462f3e87c615469978",
+  "schema_version": "stage5-rectification-matrix-v2",
+  "reviewed_commit": "2a067945986d68f85fba6234b9cb59be90a90eab",
   "fixture_only": true,
   "contains_real_medical_data": false,
   "reproduced_before": {
@@ -813,6 +813,835 @@
         "abstention_reason": "missing_information",
         "passed": true
       }
+    ],
+    "final_answerability": [
+      {
+        "kind": "invalid_answerability",
+        "case": "fully_supported_with_missing_support",
+        "passed": true
+      },
+      {
+        "kind": "invalid_answerability",
+        "case": "satisfied_support_boolean_false",
+        "passed": true
+      },
+      {
+        "kind": "invalid_answerability",
+        "case": "generation_allowed_with_conflict",
+        "passed": true
+      },
+      {
+        "kind": "invalid_answerability",
+        "case": "clarification_without_issue",
+        "passed": true
+      },
+      {
+        "kind": "invalid_answerability",
+        "case": "conflict_reason_without_conflict",
+        "passed": true
+      },
+      {
+        "kind": "valid_abstention",
+        "case": "none",
+        "passed": true
+      },
+      {
+        "kind": "invalid_abstention_inverse",
+        "case": "none",
+        "passed": true
+      },
+      {
+        "kind": "valid_abstention",
+        "case": "no_approved_public_content",
+        "passed": true
+      },
+      {
+        "kind": "invalid_abstention_inverse",
+        "case": "no_approved_public_content",
+        "passed": true
+      },
+      {
+        "kind": "valid_abstention",
+        "case": "no_eligible_evidence",
+        "passed": true
+      },
+      {
+        "kind": "invalid_abstention_inverse",
+        "case": "no_eligible_evidence",
+        "passed": true
+      },
+      {
+        "kind": "valid_abstention",
+        "case": "partial_support",
+        "passed": true
+      },
+      {
+        "kind": "invalid_abstention_inverse",
+        "case": "partial_support",
+        "passed": true
+      },
+      {
+        "kind": "valid_abstention",
+        "case": "missing_information",
+        "passed": true
+      },
+      {
+        "kind": "invalid_abstention_inverse",
+        "case": "missing_information",
+        "passed": true
+      },
+      {
+        "kind": "valid_abstention",
+        "case": "unresolved_conflict",
+        "passed": true
+      },
+      {
+        "kind": "invalid_abstention_inverse",
+        "case": "unresolved_conflict",
+        "passed": true
+      },
+      {
+        "kind": "valid_abstention",
+        "case": "database_unavailable",
+        "passed": true
+      },
+      {
+        "kind": "invalid_abstention_inverse",
+        "case": "database_unavailable",
+        "passed": true
+      },
+      {
+        "kind": "valid_abstention",
+        "case": "retrieval_timeout",
+        "passed": true
+      },
+      {
+        "kind": "invalid_abstention_inverse",
+        "case": "retrieval_timeout",
+        "passed": true
+      },
+      {
+        "kind": "abstention_precedence",
+        "case": "conflict_before_missing",
+        "passed": true
+      },
+      {
+        "kind": "abstention_precedence",
+        "case": "database_before_timeout",
+        "passed": true
+      }
+    ],
+    "trusted_journey": [
+      {
+        "kind": "valid_journey_relation",
+        "case": "current",
+        "passed": true
+      },
+      {
+        "kind": "valid_journey_relation",
+        "case": "explicit_other",
+        "passed": true
+      },
+      {
+        "kind": "valid_journey_relation",
+        "case": "overridden_to_current",
+        "passed": true
+      },
+      {
+        "kind": "valid_journey_relation",
+        "case": "unconfirmed_current",
+        "passed": true
+      },
+      {
+        "kind": "invalid_journey_relation",
+        "case": "current_without_current",
+        "passed": true
+      },
+      {
+        "kind": "invalid_journey_relation",
+        "case": "current_mismatch",
+        "passed": true
+      },
+      {
+        "kind": "invalid_journey_relation",
+        "case": "explicit_equal_current",
+        "passed": true
+      },
+      {
+        "kind": "invalid_journey_relation",
+        "case": "explicit_effective_not_requested",
+        "passed": true
+      },
+      {
+        "kind": "invalid_journey_relation",
+        "case": "override_without_current",
+        "passed": true
+      },
+      {
+        "kind": "invalid_journey_relation",
+        "case": "override_effective_requested",
+        "passed": true
+      },
+      {
+        "kind": "invalid_journey_relation",
+        "case": "unconfirmed_with_current",
+        "passed": true
+      },
+      {
+        "kind": "invalid_journey_relation",
+        "case": "unconfirmed_effective_mismatch",
+        "passed": true
+      }
+    ],
+    "pairwise_conflicts": [
+      {
+        "kind": "conflict_positive",
+        "case": "allergy",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "allergy_vs_restriction",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "allergy_vs_medication",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "allergy_vs_condition",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "allergy_vs_appointment",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "allergy_vs_journey",
+        "passed": true
+      },
+      {
+        "kind": "conflict_positive",
+        "case": "restriction",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "restriction_vs_allergy",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "restriction_vs_medication",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "restriction_vs_condition",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "restriction_vs_appointment",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "restriction_vs_journey",
+        "passed": true
+      },
+      {
+        "kind": "conflict_positive",
+        "case": "medication",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "medication_vs_allergy",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "medication_vs_restriction",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "medication_vs_condition",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "medication_vs_appointment",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "medication_vs_journey",
+        "passed": true
+      },
+      {
+        "kind": "conflict_positive",
+        "case": "condition",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "condition_vs_allergy",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "condition_vs_restriction",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "condition_vs_medication",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "condition_vs_appointment",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "condition_vs_journey",
+        "passed": true
+      },
+      {
+        "kind": "conflict_positive",
+        "case": "appointment",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "appointment_vs_allergy",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "appointment_vs_restriction",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "appointment_vs_medication",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "appointment_vs_condition",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "appointment_vs_journey",
+        "passed": true
+      },
+      {
+        "kind": "conflict_positive",
+        "case": "journey",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "journey_vs_allergy",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "journey_vs_restriction",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "journey_vs_medication",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "journey_vs_condition",
+        "passed": true
+      },
+      {
+        "kind": "conflict_pairwise_negative",
+        "case": "journey_vs_appointment",
+        "passed": true
+      }
+    ],
+    "pairwise_missing_information": [
+      {
+        "kind": "missing_positive",
+        "case": "allergy",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "allergy_vs_restriction",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "allergy_vs_medication",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "allergy_vs_condition",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "allergy_vs_appointment",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "allergy_vs_journey",
+        "passed": true
+      },
+      {
+        "kind": "missing_positive",
+        "case": "restriction",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "restriction_vs_allergy",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "restriction_vs_medication",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "restriction_vs_condition",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "restriction_vs_appointment",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "restriction_vs_journey",
+        "passed": true
+      },
+      {
+        "kind": "missing_positive",
+        "case": "medication",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "medication_vs_allergy",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "medication_vs_restriction",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "medication_vs_condition",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "medication_vs_appointment",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "medication_vs_journey",
+        "passed": true
+      },
+      {
+        "kind": "missing_positive",
+        "case": "condition",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "condition_vs_allergy",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "condition_vs_restriction",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "condition_vs_medication",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "condition_vs_appointment",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "condition_vs_journey",
+        "passed": true
+      },
+      {
+        "kind": "missing_positive",
+        "case": "appointment",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "appointment_vs_allergy",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "appointment_vs_restriction",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "appointment_vs_medication",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "appointment_vs_condition",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "appointment_vs_journey",
+        "passed": true
+      },
+      {
+        "kind": "missing_positive",
+        "case": "journey",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "journey_vs_allergy",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "journey_vs_restriction",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "journey_vs_medication",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "journey_vs_condition",
+        "passed": true
+      },
+      {
+        "kind": "missing_pairwise_negative",
+        "case": "journey_vs_appointment",
+        "passed": true
+      }
+    ],
+    "packet_inventory_applicability": [
+      {
+        "kind": "packet_inventory",
+        "case": "remove_evidence_ids",
+        "passed": true
+      },
+      {
+        "kind": "packet_inventory",
+        "case": "remove_source_ids",
+        "passed": true
+      },
+      {
+        "kind": "packet_inventory",
+        "case": "remove_exact_spans",
+        "passed": true
+      },
+      {
+        "kind": "packet_inventory",
+        "case": "remove_required_citations",
+        "passed": true
+      },
+      {
+        "kind": "packet_inventory",
+        "case": "remove_allowed_claim_types",
+        "passed": true
+      },
+      {
+        "kind": "packet_inventory",
+        "case": "remove_ranked_candidates",
+        "passed": true
+      },
+      {
+        "kind": "packet_inventory",
+        "case": "remove_selected_passages",
+        "passed": true
+      },
+      {
+        "kind": "packet_inventory",
+        "case": "wrong_corpus_mode",
+        "passed": true
+      },
+      {
+        "kind": "packet_inventory",
+        "case": "wrong_domain",
+        "passed": true
+      },
+      {
+        "kind": "packet_inventory",
+        "case": "wrong_week",
+        "passed": true
+      },
+      {
+        "kind": "packet_inventory",
+        "case": "wrong_jurisdiction",
+        "passed": true
+      },
+      {
+        "kind": "packet_inventory",
+        "case": "wrong_condition",
+        "passed": true
+      },
+      {
+        "kind": "packet_inventory",
+        "case": "wrong_lane",
+        "passed": true
+      },
+      {
+        "kind": "packet_inventory",
+        "case": "wrong_span_hash",
+        "passed": true
+      },
+      {
+        "kind": "packet_inventory",
+        "case": "wrong_span_source",
+        "passed": true
+      },
+      {
+        "kind": "packet_inventory",
+        "case": "wrong_span_evidence",
+        "passed": true
+      },
+      {
+        "kind": "packet_inventory",
+        "case": "missing_display_permission",
+        "passed": true
+      },
+      {
+        "kind": "packet_inventory",
+        "case": "candidate_ranking_authority",
+        "passed": true
+      },
+      {
+        "kind": "packet_inventory",
+        "case": "ranked_source_version",
+        "passed": true
+      },
+      {
+        "kind": "packet_inventory",
+        "case": "component_rank_score_keys",
+        "passed": true
+      },
+      {
+        "kind": "ranking_inventory",
+        "case": "duplicate_rank",
+        "passed": true
+      },
+      {
+        "kind": "ranking_inventory",
+        "case": "wrong_kind",
+        "passed": true
+      },
+      {
+        "kind": "ranking_inventory",
+        "case": "wrong_tie_breaker",
+        "passed": true
+      },
+      {
+        "kind": "personal_inventory",
+        "case": "personal_span_hash",
+        "passed": true
+      },
+      {
+        "kind": "weekly_profile",
+        "case": "valid_fixture",
+        "passed": true
+      },
+      {
+        "kind": "weekly_profile",
+        "case": "wrong_jurisdiction",
+        "passed": true
+      }
+    ],
+    "graph_trace_failure_semantics": [
+      {
+        "kind": "graph",
+        "case": "wrong_workspace",
+        "passed": true
+      },
+      {
+        "kind": "graph",
+        "case": "disconnected_edge",
+        "passed": true
+      },
+      {
+        "kind": "graph",
+        "case": "reversed_edge",
+        "passed": true
+      },
+      {
+        "kind": "graph_bound",
+        "case": "depth",
+        "passed": true
+      },
+      {
+        "kind": "graph_bound",
+        "case": "path_count",
+        "passed": true
+      },
+      {
+        "kind": "graph_bound",
+        "case": "adjacent_edges",
+        "passed": true
+      },
+      {
+        "kind": "graph_bound",
+        "case": "cycle_excluded",
+        "passed": true
+      },
+      {
+        "kind": "trace",
+        "case": "question",
+        "passed": true
+      },
+      {
+        "kind": "trace",
+        "case": "normalized_query",
+        "passed": true
+      },
+      {
+        "kind": "trace",
+        "case": "jurisdiction",
+        "passed": true
+      },
+      {
+        "kind": "trace",
+        "case": "timestamps",
+        "passed": true
+      },
+      {
+        "kind": "trace",
+        "case": "ranking_digest",
+        "passed": true
+      },
+      {
+        "kind": "trace",
+        "case": "filter_version",
+        "passed": true
+      },
+      {
+        "kind": "trace",
+        "case": "ranking_version",
+        "passed": true
+      },
+      {
+        "kind": "trace",
+        "case": "policy_version",
+        "passed": true
+      },
+      {
+        "kind": "trace",
+        "case": "corpus_version",
+        "passed": true
+      },
+      {
+        "kind": "trace",
+        "case": "release_version",
+        "passed": true
+      },
+      {
+        "kind": "component",
+        "case": "failed_without_failure",
+        "passed": true
+      },
+      {
+        "kind": "component",
+        "case": "ok_with_failure",
+        "passed": true
+      },
+      {
+        "kind": "blocker",
+        "case": "database_without_exact_failure",
+        "passed": true
+      },
+      {
+        "kind": "component",
+        "case": "degraded_without_failure_or_filters",
+        "passed": true
+      },
+      {
+        "kind": "component",
+        "case": "wrong_failure_owner",
+        "passed": true
+      },
+      {
+        "kind": "component",
+        "case": "component_failure_missing_from_packet",
+        "passed": true
+      },
+      {
+        "kind": "blocker",
+        "case": "arbitrary_blocker",
+        "passed": true
+      },
+      {
+        "kind": "packet_failure",
+        "case": "missing_no_public_failure",
+        "passed": true
+      },
+      {
+        "kind": "malformed_candidate",
+        "case": "wrong_repository_shape",
+        "passed": true
+      }
+    ],
+    "valid_policy_packets": [
+      {
+        "kind": "valid_policy_packet",
+        "case": "public_guidance",
+        "passed": true
+      },
+      {
+        "kind": "valid_policy_packet",
+        "case": "personal_record_lookup",
+        "passed": true
+      },
+      {
+        "kind": "valid_policy_packet",
+        "case": "causal_explanation",
+        "passed": true
+      },
+      {
+        "kind": "valid_policy_packet",
+        "case": "mixed_personalized_guidance",
+        "passed": true
+      }
     ]
   },
   "checks": {
@@ -835,6 +1664,34 @@
     "generic_missing_relevance": {
       "numerator": 6,
       "denominator": 6
+    },
+    "final_answerability_semantics": {
+      "numerator": 23,
+      "denominator": 23
+    },
+    "trusted_journey_semantics": {
+      "numerator": 12,
+      "denominator": 12
+    },
+    "pairwise_conflict_relevance": {
+      "numerator": 36,
+      "denominator": 36
+    },
+    "pairwise_missing_relevance": {
+      "numerator": 36,
+      "denominator": 36
+    },
+    "packet_inventory_applicability": {
+      "numerator": 26,
+      "denominator": 26
+    },
+    "graph_trace_failure_semantics": {
+      "numerator": 26,
+      "denominator": 26
+    },
+    "valid_policy_packets": {
+      "numerator": 4,
+      "denominator": 4
     }
   },
   "valid": true

@@ -1,23 +1,23 @@
-# Nestline Stage 5 second rectification: independent re-review handoff
+# Nestline Stage 5 final consolidated correction: review handoff
 
 **Prepared:** 12 September 2026
 **Repository:** `kajalchourasia-cmd/nestline`
 **Branch:** `feat/stage-1-governed-ingestion`
-**Independently reviewed remote HEAD:** `3991896135eca094bc0ab0462f3e87c615469978`
-**Corrected implementation commit:** `467422a62a3db31740a2d631538a73c2f34cc526`
-**Engineering verdict:** `READY FOR INDEPENDENT RE-REVIEW` locally
-**Stage 6 verdict:** NO-GO until this exact rectification is accepted
+**Final consolidated review baseline:** `2a067945986d68f85fba6234b9cb59be90a90eab`
+**Authoritative evidence:** `STAGE-5-FINAL-CONSOLIDATED-CORRECTION-AND-STAGE-6-GATE.md`
+**Engineering verdict:** `READY FOR FINAL REMOTE VERIFICATION` locally
+**Stage 6 verdict:** NO-GO until both required GitHub jobs pass on the exact pushed correction
 **Remote publication:** none for this change set
 
 ## Review decision requested
 
-Please determine whether the second Stage 5 rectification fixes policy-dependent and candidate-limit cache reuse, prevents caller-defined evidence policy changes, rejects contradictory packet/result state, and surfaces generic-category conflicts/missing information while preserving prior Stage 1–5 security behavior.
+Please review the final consolidated evidence file first. It verifies the earlier cache/policy changes and closes the remaining cross-field semantics across answerability, trusted journey state, category relevance, graph paths, evidence inventories, packet/trace identity and component failures. The current local evidence is 56/56 focused Stage 5 tests, 232/232 total Python tests and 212/212 generated adversarial cases.
 
 Acceptance permits a separate Stage 6 implementation to begin. It does not approve clinical content, public release, production embeddings, agents, answer generation or deployment.
 
 ## Read in this order
 
-1. `docs/STAGE-5-SECOND-RECTIFICATION-AND-RE-REVIEW-HANDOFF.md`
+1. `docs/STAGE-5-FINAL-CONSOLIDATED-CORRECTION-AND-STAGE-6-GATE.md`
 2. `docs/STAGE-5-SELF-VERIFICATION-AND-STAGE-6-READINESS.md`
 3. `docs/STAGE-5-IMPLEMENTATION.md`
 4. `docs/STAGE-5-PLAIN-LANGUAGE.md`
@@ -50,8 +50,8 @@ The two answerability defects from the first review remain fixed.
 | Exported typed contracts | 20 |
 | Frozen development cases | 28 |
 | Planned domains covered | 7/7 |
-| Focused Stage 5 Python tests | 47/47 |
-| Complete Python suite | 223/223 |
+| Focused Stage 5 Python tests | 56/56 |
+| Complete Python suite | 232/232 |
 | Cache equivalence matrix | 10/10 |
 | Policy rejection matrix | 10/10 |
 | Contract mutation matrix | 17/17 |

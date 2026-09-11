@@ -1,5 +1,7 @@
 # Nestline Stage 5 second rectification and independent re-review handoff
 
+> **Historical record:** This handoff was superseded by STAGE-5-FINAL-CONSOLIDATED-CORRECTION-AND-STAGE-6-GATE.md, which contains the final 212-case semantic-closure evidence.
+
 **Prepared:** 12 September 2026
 **Repository:** `kajalchourasia-cmd/nestline`
 **Branch:** `feat/stage-1-governed-ingestion`

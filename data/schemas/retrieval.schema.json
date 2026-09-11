@@ -1000,7 +1000,10 @@
         },
         "blocking_reasons": {
           "items": {
-            "minLength": 1,
+            "enum": [
+              "database_unavailable",
+              "retrieval_timeout"
+            ],
             "type": "string"
           },
           "title": "Blocking Reasons",
@@ -2941,7 +2944,10 @@
             },
             "blocking_reasons": {
               "items": {
-                "minLength": 1,
+                "enum": [
+                  "database_unavailable",
+                  "retrieval_timeout"
+                ],
                 "type": "string"
               },
               "title": "Blocking Reasons",
@@ -4602,6 +4608,18 @@
           "title": "Jurisdiction",
           "type": "string"
         },
+        "evidence_lanes": {
+          "items": {
+            "enum": [
+              "guideline",
+              "weekly_profile"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Lanes",
+          "type": "array"
+        },
         "retrieval_policy": {
           "$ref": "#/$defs/EvidenceRequirementPolicy"
         },
@@ -4806,6 +4824,7 @@
         "domain",
         "journey",
         "jurisdiction",
+        "evidence_lanes",
         "retrieval_policy",
         "trusted_state",
         "answerability",
@@ -4983,6 +5002,11 @@
           "title": "Normalized Query",
           "type": "string"
         },
+        "jurisdiction": {
+          "minLength": 1,
+          "title": "Jurisdiction",
+          "type": "string"
+        },
         "public_cache_key": {
           "minLength": 1,
           "title": "Public Cache Key",
@@ -5006,6 +5030,21 @@
         "policy_id": {
           "minLength": 1,
           "title": "Policy Id",
+          "type": "string"
+        },
+        "policy_version": {
+          "minLength": 1,
+          "title": "Policy Version",
+          "type": "string"
+        },
+        "corpus_version": {
+          "minLength": 1,
+          "title": "Corpus Version",
+          "type": "string"
+        },
+        "release_version": {
+          "minLength": 1,
+          "title": "Release Version",
           "type": "string"
         },
         "resolved_state_version": {
@@ -5050,11 +5089,15 @@
         "completed_at",
         "total_latency_ms",
         "normalized_query",
+        "jurisdiction",
         "public_cache_key",
         "personal_cache_key",
         "filter_version",
         "ranking_version",
         "policy_id",
+        "policy_version",
+        "corpus_version",
+        "release_version",
         "resolved_state_version",
         "journey_relation",
         "component_results",
@@ -5204,7 +5247,10 @@
             },
             "blocking_reasons": {
               "items": {
-                "minLength": 1,
+                "enum": [
+                  "database_unavailable",
+                  "retrieval_timeout"
+                ],
                 "type": "string"
               },
               "title": "Blocking Reasons",
@@ -5508,6 +5554,18 @@
               "title": "Jurisdiction",
               "type": "string"
             },
+            "evidence_lanes": {
+              "items": {
+                "enum": [
+                  "guideline",
+                  "weekly_profile"
+                ],
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Evidence Lanes",
+              "type": "array"
+            },
             "retrieval_policy": {
               "$ref": "#/$defs/EvidenceRequirementPolicy"
             },
@@ -5712,6 +5770,7 @@
             "domain",
             "journey",
             "jurisdiction",
+            "evidence_lanes",
             "retrieval_policy",
             "trusted_state",
             "answerability",
@@ -6765,6 +6824,11 @@
               "title": "Normalized Query",
               "type": "string"
             },
+            "jurisdiction": {
+              "minLength": 1,
+              "title": "Jurisdiction",
+              "type": "string"
+            },
             "public_cache_key": {
               "minLength": 1,
               "title": "Public Cache Key",
@@ -6788,6 +6852,21 @@
             "policy_id": {
               "minLength": 1,
               "title": "Policy Id",
+              "type": "string"
+            },
+            "policy_version": {
+              "minLength": 1,
+              "title": "Policy Version",
+              "type": "string"
+            },
+            "corpus_version": {
+              "minLength": 1,
+              "title": "Corpus Version",
+              "type": "string"
+            },
+            "release_version": {
+              "minLength": 1,
+              "title": "Release Version",
               "type": "string"
             },
             "resolved_state_version": {
@@ -6832,11 +6911,15 @@
             "completed_at",
             "total_latency_ms",
             "normalized_query",
+            "jurisdiction",
             "public_cache_key",
             "personal_cache_key",
             "filter_version",
             "ranking_version",
             "policy_id",
+            "policy_version",
+            "corpus_version",
+            "release_version",
             "resolved_state_version",
             "journey_relation",
             "component_results",

@@ -8,6 +8,8 @@ passes it to the gateway separately from user-controlled input.
 from __future__ import annotations
 
 from datetime import datetime
+from hashlib import sha256
+import json
 from typing import Any, Literal, Self
 from uuid import UUID, uuid4
 
@@ -42,6 +44,20 @@ JourneyRelation = Literal[
 SupportState = Literal[
     "unsupported", "partially_supported", "fully_supported",
     "clarification_required",
+]
+RuntimeBlocker = Literal["database_unavailable", "retrieval_timeout"]
+AbstentionReason = Literal[
+    "none", "no_eligible_evidence", "no_approved_public_content",
+    "database_unavailable", "retrieval_timeout", "unresolved_conflict",
+    "missing_information", "partial_support",
+]
+CorpusMode = Literal[
+    "production_release", "controlled_fixture", "no_public_release",
+]
+AllowedClaimType = Literal[
+    "confirmed_personal_record", "record_only_medication",
+    "approved_guideline_paraphrase", "published_weekly_profile",
+    "clarification_required", "evaluation_only_symptom_record",
 ]
 
 POLICY_VERSION = "stage5-answerability-v3"
@@ -207,9 +223,27 @@ class TrustedRetrievalState(Contract):
     jurisdiction_source: Literal["request_profile"]
 
     @model_validator(mode="after")
-    def cache_version_is_server_version(self) -> Self:
+    def trusted_state_is_structurally_consistent(self) -> Self:
         if self.cache_state_version != self.scope.state_version:
             raise ValueError("cache state version must come from authenticated scope")
+        current = self.current_journey
+        requested = self.requested_journey
+        effective = self.effective_journey
+        relation = self.journey_relation
+        if relation == "current":
+            valid = current is not None and requested == effective == current
+        elif relation == "explicit_other":
+            valid = (current is not None and effective == requested
+                     and requested != current)
+        elif relation == "overridden_to_current":
+            valid = (current is not None and effective == current
+                     and requested != current)
+        else:
+            valid = current is None and effective == requested
+        if not valid:
+            raise ValueError(
+                "trusted journey relation contradicts current/requested/effective state"
+            )
         return self
 
 
@@ -395,6 +429,49 @@ class MissingInformation(Contract):
     required_for: list[Text] = Field(min_length=1)
 
 
+def derive_answerability_values(
+    required_support: list[SupportKind],
+    *,
+    public_guidance_supported: bool,
+    personal_record_supported: bool,
+    personal_constraints_present: bool,
+    graph_relationship_supported: bool,
+    relevant_conflict_ids: list[str],
+    relevant_missing_fields: list[str],
+    blocking_reasons: list[RuntimeBlocker],
+) -> dict[str, Any]:
+    """Derive the only coherent answerability state from trusted observations."""
+
+    support = {
+        "public_guidance": public_guidance_supported,
+        "personal_record": personal_record_supported,
+        "personal_constraint": personal_constraints_present,
+        "graph_relationship": graph_relationship_supported,
+    }
+    satisfied = [kind for kind in required_support if support[kind]]
+    missing = [kind for kind in required_support if not support[kind]]
+    if relevant_conflict_ids or relevant_missing_fields:
+        state: SupportState = "clarification_required"
+    elif not missing:
+        state = "fully_supported"
+    elif satisfied:
+        state = "partially_supported"
+    else:
+        state = "unsupported"
+    generation_allowed = (
+        state == "fully_supported"
+        and not blocking_reasons
+        and not relevant_conflict_ids
+        and not relevant_missing_fields
+    )
+    return {
+        "satisfied_support": satisfied,
+        "missing_support": missing,
+        "support_state": state,
+        "ordinary_generation_allowed": generation_allowed,
+    }
+
+
 class AnswerabilityAssessment(Contract):
     policy_id: Text
     purpose: RetrievalPurpose
@@ -409,18 +486,28 @@ class AnswerabilityAssessment(Contract):
     missing_support: list[SupportKind] = Field(default_factory=list)
     relevant_conflict_ids: list[str] = Field(default_factory=list)
     relevant_missing_fields: list[Text] = Field(default_factory=list)
-    blocking_reasons: list[Text] = Field(default_factory=list)
+    blocking_reasons: list[RuntimeBlocker] = Field(default_factory=list)
 
     @model_validator(mode="after")
-    def generation_matches_support(self) -> Self:
-        if self.ordinary_generation_allowed != (
-            self.support_state == "fully_supported" and not self.blocking_reasons
-        ):
-            raise ValueError("ordinary generation requires full support and no runtime block")
-        if set(self.satisfied_support) & set(self.missing_support):
-            raise ValueError("support cannot be both satisfied and missing")
-        if set(self.satisfied_support) | set(self.missing_support) != set(self.required_support):
-            raise ValueError("every required support kind needs a decision")
+    def generation_matches_derived_support(self) -> Self:
+        expected = derive_answerability_values(
+            self.required_support,
+            public_guidance_supported=self.public_guidance_supported,
+            personal_record_supported=self.personal_record_supported,
+            personal_constraints_present=self.personal_constraints_present,
+            graph_relationship_supported=self.graph_relationship_supported,
+            relevant_conflict_ids=self.relevant_conflict_ids,
+            relevant_missing_fields=self.relevant_missing_fields,
+            blocking_reasons=self.blocking_reasons,
+        )
+        observed = {
+            "satisfied_support": self.satisfied_support,
+            "missing_support": self.missing_support,
+            "support_state": self.support_state,
+            "ordinary_generation_allowed": self.ordinary_generation_allowed,
+        }
+        if observed != expected:
+            raise ValueError("answerability fields must equal their canonical derivation")
         return self
 
 
@@ -500,6 +587,10 @@ class GraphPath(Contract):
             raise ValueError("graph path nodes and edges do not match depth")
         if len({node.node_id for node in self.nodes}) != len(self.nodes):
             raise ValueError("graph path cannot contain a cycle")
+        for index, edge in enumerate(self.edges):
+            if (edge.from_node_id != self.nodes[index].node_id or
+                    edge.to_node_id != self.nodes[index + 1].node_id):
+                raise ValueError("graph edge must connect adjacent declared nodes")
         return self
 
 
@@ -546,14 +637,24 @@ class RetrievalComponentResult(Contract):
     retries: int = Field(default=0, ge=0, le=1)
     failure: RetrievalFailure | None = None
 
+    @model_validator(mode="after")
+    def status_and_failure_agree(self) -> Self:
+        if self.status == "failed" and self.failure is None:
+            raise ValueError("failed retrieval component requires a failure")
+        if self.status in {"ok", "skipped"} and self.failure is not None:
+            raise ValueError("successful or skipped component cannot carry a failure")
+        if (self.status == "degraded" and self.failure is None
+                and self.rejected_by_filters == 0):
+            raise ValueError("degraded component requires a failure or filtered results")
+        if (self.failure is not None and self.failure.component is not None
+                and self.failure.component != self.component):
+            raise ValueError("retrieval failure belongs to a different component")
+        return self
+
 
 class AbstentionState(Contract):
     should_abstain: bool
-    reason: Literal[
-        "none", "no_eligible_evidence", "no_approved_public_content",
-        "database_unavailable", "retrieval_timeout", "unresolved_conflict",
-        "missing_information", "partial_support",
-    ] = "none"
+    reason: AbstentionReason = "none"
     detail: str = ""
 
     @model_validator(mode="after")
@@ -576,6 +677,112 @@ class WeeklyProfileCandidate(Contract):
     fixture_only: bool = False
 
 
+def normalize_retrieval_query(value: str) -> str:
+    return " ".join(value.casefold().split())
+
+
+def ranked_candidate_digest(candidates: list[RankedRetrievalCandidate]) -> str:
+    payload = [item.candidate_id for item in candidates]
+    raw = json.dumps(payload, separators=(",", ":"))
+    return sha256(raw.encode("utf-8")).hexdigest()
+
+
+def derive_abstention_reason(
+    answerability: AnswerabilityAssessment, corpus_mode: CorpusMode,
+) -> AbstentionReason:
+    blockers = set(answerability.blocking_reasons)
+    if "database_unavailable" in blockers:
+        return "database_unavailable"
+    if "retrieval_timeout" in blockers:
+        return "retrieval_timeout"
+    if answerability.relevant_conflict_ids:
+        return "unresolved_conflict"
+    if answerability.relevant_missing_fields:
+        return "missing_information"
+    if answerability.support_state == "fully_supported":
+        return "none"
+    if answerability.support_state == "partially_supported":
+        return "partial_support"
+    if ("public_guidance" in answerability.required_support
+            and not answerability.public_guidance_supported
+            and corpus_mode == "no_public_release"):
+        return "no_approved_public_content"
+    return "no_eligible_evidence"
+
+
+def derive_packet_inventory(
+    *,
+    confirmed_facts: list[PersonalFactCandidate],
+    personal_passages: list[PersonalPassageCandidate],
+    medications: list[MedicationRecord],
+    symptoms: list[SymptomRecord],
+    appointments: list[AppointmentSnapshot],
+    plan_states: list[PlanStateSnapshot],
+    open_questions: list[ClarificationQuestion],
+    public_passages: list[PublicEvidenceCandidate],
+    weekly_profile: WeeklyProfileCandidate | None,
+    unresolved_conflicts: list[UnresolvedConflict],
+    missing_information: list[MissingInformation],
+) -> dict[str, Any]:
+    evidence_ids = sorted({item.evidence_id for item in public_passages})
+    source_ids = sorted({item.source_id for item in public_passages})
+    spans = (
+        [span for item in public_passages for span in item.spans]
+        + [item.span for item in personal_passages]
+    )
+    citations = sorted(set(
+        evidence_ids
+        + [f"personal-passage:{item.chunk_id}" for item in personal_passages]
+        + [f"personal-fact:{item.fact_id}" for item in confirmed_facts]
+        + [f"medication-record:{item.medication_id}" for item in medications]
+        + [f"appointment:{item.appointment_id}" for item in appointments]
+    ))
+    claims: list[AllowedClaimType] = []
+    if (confirmed_facts or personal_passages or appointments
+            or plan_states or open_questions):
+        claims.append("confirmed_personal_record")
+    if medications:
+        claims.append("record_only_medication")
+    if symptoms:
+        claims.append("evaluation_only_symptom_record")
+    if public_passages:
+        claims.append("approved_guideline_paraphrase")
+    if weekly_profile is not None:
+        claims.append("published_weekly_profile")
+    if unresolved_conflicts or missing_information:
+        claims.append("clarification_required")
+    corpus_mode: CorpusMode = (
+        "controlled_fixture"
+        if any(item.provenance.fixture_only for item in public_passages)
+        or (weekly_profile is not None and weekly_profile.fixture_only)
+        else "production_release"
+        if public_passages or weekly_profile is not None
+        else "no_public_release"
+    )
+    return {
+        "evidence_ids": evidence_ids,
+        "source_ids": source_ids,
+        "exact_spans": spans,
+        "required_citations": citations,
+        "allowed_claim_types": claims,
+        "corpus_mode": corpus_mode,
+    }
+
+
+def _journey_covers(container: JourneyPosition, target: JourneyPosition) -> bool:
+    if container.stage != target.stage or container.unit != target.unit:
+        return False
+    if target.unit == "none":
+        return True
+    return (container.start is not None and target.start is not None
+            and container.end is not None and target.end is not None
+            and container.start <= target.start <= target.end <= container.end)
+
+
+def _span_hash_is_valid(span: SourceSpan) -> bool:
+    return sha256(span.exact_text.encode("utf-8")).hexdigest() == span.text_sha256
+
+
 class EvidencePacket(Contract):
     schema_version: Literal["5.0.0"] = RETRIEVAL_SCHEMA_VERSION
     request_id: UUID
@@ -585,6 +792,7 @@ class EvidencePacket(Contract):
     domain: Domain
     journey: JourneyPosition
     jurisdiction: Text
+    evidence_lanes: list[EvidenceLane] = Field(min_length=1)
     retrieval_policy: EvidenceRequirementPolicy
     trusted_state: TrustedRetrievalState
     answerability: AnswerabilityAssessment
@@ -607,15 +815,11 @@ class EvidencePacket(Contract):
     provenance_versions: dict[str, str] = Field(default_factory=dict)
     missing_information: list[MissingInformation] = Field(default_factory=list)
     unresolved_conflicts: list[UnresolvedConflict] = Field(default_factory=list)
-    allowed_claim_types: list[Literal[
-        "confirmed_personal_record", "record_only_medication",
-        "approved_guideline_paraphrase", "published_weekly_profile",
-        "clarification_required", "evaluation_only_symptom_record",
-    ]] = Field(default_factory=list)
+    allowed_claim_types: list[AllowedClaimType] = Field(default_factory=list)
     required_citations: list[Text] = Field(default_factory=list)
     component_results: list[RetrievalComponentResult]
     failures: list[RetrievalFailure] = Field(default_factory=list)
-    corpus_mode: Literal["production_release", "controlled_fixture", "no_public_release"]
+    corpus_mode: CorpusMode
     abstention: AbstentionState
 
     @model_validator(mode="after")
@@ -629,26 +833,156 @@ class EvidencePacket(Contract):
             raise ValueError("packet journey must equal trusted effective journey")
         if self.domain != policy.domain:
             raise ValueError("packet domain and retrieval policy domain disagree")
+        if self.jurisdiction != self.jurisdiction.upper():
+            raise ValueError("packet jurisdiction must be canonical uppercase")
+        if len(set(self.evidence_lanes)) != len(self.evidence_lanes):
+            raise ValueError("packet evidence lanes must be unique")
         if (answer.policy_id != policy.policy_id or
                 answer.purpose != policy.purpose or
                 answer.required_support != policy.required_support):
             raise ValueError("packet policy and answerability contract disagree")
-        if self.abstention.should_abstain == answer.ordinary_generation_allowed:
-            raise ValueError("abstention must be inverse of ordinary generation permission")
-        if answer.support_state != "fully_supported" and not self.abstention.should_abstain:
-            raise ValueError("incomplete support requires abstention")
-        if (answer.support_state == "fully_supported" and
-                not answer.blocking_reasons and
-                not answer.relevant_conflict_ids and
-                not answer.relevant_missing_fields and
-                self.abstention.should_abstain):
-            raise ValueError("fully supported unblocked evidence must not abstain")
+
         conflict_ids = [str(item.conflict_id) for item in self.unresolved_conflicts]
         missing_fields = [item.field for item in self.missing_information]
         if answer.relevant_conflict_ids != conflict_ids:
             raise ValueError("packet conflicts and answerability conflicts disagree")
         if answer.relevant_missing_fields != missing_fields:
             raise ValueError("packet missing information and answerability disagree")
+        expected_reason = derive_abstention_reason(answer, self.corpus_mode)
+        if (self.abstention.reason != expected_reason or
+                self.abstention.should_abstain != (expected_reason != "none")):
+            raise ValueError("packet abstention must equal its canonical derivation")
+
+        expected = derive_packet_inventory(
+            confirmed_facts=self.confirmed_personal_facts,
+            personal_passages=self.permitted_personal_passages,
+            medications=self.medication_records, symptoms=self.symptom_records,
+            appointments=self.appointments, plan_states=self.plan_states,
+            open_questions=self.open_questions,
+            public_passages=self.approved_guideline_passages,
+            weekly_profile=self.weekly_profile,
+            unresolved_conflicts=self.unresolved_conflicts,
+            missing_information=self.missing_information,
+        )
+        for field, value in expected.items():
+            if getattr(self, field) != value:
+                raise ValueError(f"packet {field} does not match selected evidence")
+
+        ranked_ids = [item.candidate_id for item in self.ranked_candidates]
+        selected = {item.candidate_id: "public_evidence"
+                    for item in self.approved_guideline_passages}
+        selected.update({item.candidate_id: "personal_passage"
+                         for item in self.permitted_personal_passages})
+        if len(selected) != (len(self.approved_guideline_passages)
+                             + len(self.permitted_personal_passages)):
+            raise ValueError("selected candidate IDs must be unique")
+        if ranked_ids != list(dict.fromkeys(ranked_ids)) or set(ranked_ids) != set(selected):
+            raise ValueError("ranked candidates must equal selected candidates")
+        if [item.rank for item in self.ranked_candidates] != list(range(1, len(ranked_ids) + 1)):
+            raise ValueError("ranked candidate ranks must be contiguous and ordered")
+        ranked_by_id = {item.candidate_id: item for item in self.ranked_candidates}
+        for item in self.ranked_candidates:
+            if item.candidate_kind != selected[item.candidate_id]:
+                raise ValueError("ranked candidate kind contradicts selected candidate")
+            if item.stable_tie_breaker != item.candidate_id:
+                raise ValueError("stable tie breaker must equal candidate ID")
+            if (set(item.component_ranks) != set(item.component_scores)
+                    or any(rank < 1 for rank in item.component_ranks.values())):
+                raise ValueError("ranked component score/rank inventories disagree")
+
+        versions = self.provenance_versions
+        if set(versions) != {"schema", "filter", "ranking", "policy", "corpus", "release"}:
+            raise ValueError("packet provenance version inventory is incomplete")
+        if (versions["schema"] != RETRIEVAL_SCHEMA_VERSION or
+                versions["policy"] != policy.policy_version or
+                any(not value for value in versions.values())):
+            raise ValueError("packet provenance versions are inconsistent")
+
+        active = set(self.trusted_state.active_conditions)
+        for item in self.approved_guideline_passages:
+            if (item.domain != self.domain or item.evidence_lane not in self.evidence_lanes
+                    or not _journey_covers(item.journey, self.journey)
+                    or (self.jurisdiction not in {value.upper() for value in item.jurisdictions}
+                        and "GLOBAL" not in {value.upper() for value in item.jurisdictions})
+                    or not set(item.conditions_required).issubset(active)
+                    or bool(set(item.conditions_excluded) & active)
+                    or "display" not in item.allowed_use):
+                raise ValueError("public candidate contradicts packet applicability")
+            ranked = ranked_by_id[item.candidate_id]
+            if (ranked.authority_score != item.authority_score
+                    or ranked.applicability_score != item.applicability_score
+                    or ranked.exact_position_fit != (item.journey.start == item.journey.end)
+                    or ranked.source_version != item.provenance.source_version
+                    or ("public_vector" in ranked.component_ranks
+                        and "embed" not in item.allowed_use)):
+                raise ValueError("public candidate and ranking metadata disagree")
+            if item.provenance.filter_version != versions["filter"]:
+                raise ValueError("public candidate filter version disagrees with packet")
+            if (item.provenance.corpus_version is not None
+                    and item.provenance.corpus_version != versions["corpus"]):
+                raise ValueError("public candidate corpus version disagrees with packet")
+            for span in item.spans:
+                if (span.source_id != item.source_id
+                        or span.evidence_id != item.evidence_id
+                        or not _span_hash_is_valid(span)):
+                    raise ValueError("public source span contradicts its parent candidate")
+        for item in self.permitted_personal_passages:
+            ranked = ranked_by_id[item.candidate_id]
+            if (item.provenance.filter_version != versions["filter"]
+                    or not _span_hash_is_valid(item.span)
+                    or ranked.authority_score != 1.0
+                    or ranked.applicability_score != 1.0
+                    or not ranked.exact_position_fit
+                    or ranked.source_version != item.provenance.source_version):
+                raise ValueError("personal passage provenance or ranking metadata is invalid")
+        if self.weekly_profile is not None:
+            profile = self.weekly_profile
+            jurisdictions = {value.upper() for value in profile.jurisdiction}
+            if (not _journey_covers(profile.journey, self.journey)
+                    or (self.jurisdiction not in jurisdictions and "GLOBAL" not in jurisdictions)
+                    or profile.corpus_version != versions["corpus"]):
+                raise ValueError("weekly profile contradicts packet applicability")
+        if any(path.workspace_id != self.workspace_id for path in self.graph_paths):
+            raise ValueError("graph path belongs to a different workspace")
+
+        component_map = {item.component: item for item in self.component_results}
+        if len(component_map) != len(self.component_results):
+            raise ValueError("retrieval components must be unique")
+        component_failures = [item.failure for item in self.component_results
+                              if item.failure is not None]
+        for failure in component_failures:
+            if failure not in self.failures:
+                raise ValueError("component failure is missing from packet failures")
+        for failure in self.failures:
+            if failure.component is not None:
+                owner = component_map.get(failure.component)
+                if owner is None or owner.failure != failure:
+                    raise ValueError("packet failure contradicts its owning component")
+        exact_failure = component_map.get("exact_sql")
+        database_blocked = bool(
+            exact_failure and exact_failure.failure
+            and exact_failure.failure.code == "database_unavailable"
+        )
+        timeout_failed = any(item.code == "timeout" for item in self.failures)
+        no_public_expected = (
+            "public_guidance" in answer.required_support
+            and not answer.public_guidance_supported
+            and self.corpus_mode == "no_public_release"
+        )
+        no_public_recorded = any(
+            item.code == "no_approved_public_content" for item in self.failures
+        )
+        if any(item.code == "invalid_candidate" for item in self.failures):
+            raise ValueError("malformed candidates must fail closed before packet creation")
+        if database_blocked != ("database_unavailable" in answer.blocking_reasons):
+            raise ValueError("database blocker contradicts exact-state component")
+        if timeout_failed != ("retrieval_timeout" in answer.blocking_reasons):
+            raise ValueError("timeout blocker contradicts packet failures")
+        if no_public_expected != no_public_recorded:
+            raise ValueError("public-release failure state contradicts packet evidence")
+        if (any(item.code == "no_eligible_evidence" for item in self.failures)
+                and expected_reason != "no_eligible_evidence"):
+            raise ValueError("no-eligible-evidence failure contradicts answerability")
         return self
 
 
@@ -659,16 +993,30 @@ class RetrievalTrace(Contract):
     completed_at: datetime
     total_latency_ms: float = Field(ge=0)
     normalized_query: Text
+    jurisdiction: Text
     public_cache_key: Text
     personal_cache_key: Text
     filter_version: Text
     ranking_version: Text
     policy_id: Text
+    policy_version: Text
+    corpus_version: Text
+    release_version: Text
     resolved_state_version: int = Field(ge=1)
     journey_relation: JourneyRelation
     component_results: list[RetrievalComponentResult]
     rejected_candidate_ids: list[Text] = Field(default_factory=list)
     deterministic_order_digest: str = Field(pattern=r"^[a-f0-9]{64}$")
+
+    @model_validator(mode="after")
+    def trace_is_canonical(self) -> Self:
+        if self.completed_at < self.started_at:
+            raise ValueError("retrieval trace completion precedes its start")
+        if self.normalized_query != normalize_retrieval_query(self.normalized_query):
+            raise ValueError("retrieval trace query is not normalized")
+        if self.jurisdiction != self.jurisdiction.upper():
+            raise ValueError("retrieval trace jurisdiction is not canonical uppercase")
+        return self
 
 
 class RetrievalResult(Contract):
@@ -677,14 +1025,31 @@ class RetrievalResult(Contract):
 
     @model_validator(mode="after")
     def packet_and_trace_agree(self) -> Self:
-        if self.packet.request_id != self.trace.request_id:
+        packet = self.packet
+        trace = self.trace
+        if packet.request_id != trace.request_id:
             raise ValueError("packet and trace request IDs disagree")
-        if self.packet.retrieval_policy.policy_id != self.trace.policy_id:
+        if packet.retrieval_policy.policy_id != trace.policy_id:
             raise ValueError("packet and trace policy IDs disagree")
-        if self.packet.trusted_state.journey_relation != self.trace.journey_relation:
+        if packet.retrieval_policy.policy_version != trace.policy_version:
+            raise ValueError("packet and trace policy versions disagree")
+        if packet.trusted_state.journey_relation != trace.journey_relation:
             raise ValueError("packet and trace journey relations disagree")
-        if self.packet.trusted_state.cache_state_version != self.trace.resolved_state_version:
+        if packet.trusted_state.cache_state_version != trace.resolved_state_version:
             raise ValueError("packet and trace state versions disagree")
-        if self.packet.component_results != self.trace.component_results:
+        if packet.component_results != trace.component_results:
             raise ValueError("packet and trace component results disagree")
+        if normalize_retrieval_query(packet.question) != trace.normalized_query:
+            raise ValueError("packet question and trace normalized query disagree")
+        if packet.jurisdiction != trace.jurisdiction:
+            raise ValueError("packet and trace jurisdictions disagree")
+        if ranked_candidate_digest(packet.ranked_candidates) != trace.deterministic_order_digest:
+            raise ValueError("trace deterministic order digest is invalid")
+        versions = packet.provenance_versions
+        if (versions["filter"] != trace.filter_version
+                or versions["ranking"] != trace.ranking_version
+                or versions["policy"] != trace.policy_version
+                or versions["corpus"] != trace.corpus_version
+                or versions["release"] != trace.release_version):
+            raise ValueError("packet provenance and trace versions disagree")
         return self

@@ -19,12 +19,20 @@
     "pinned_pgtap_assertions": 254,
     "stage5_pgtap_assertions": 48,
     "authenticated_stage5_api_checks": 25,
-    "stage5_python_tests": 47,
+    "stage5_python_tests": 56,
     "cache_matrix_cases": 10,
     "policy_rejection_cases": 10,
     "contract_mutation_cases": 17,
     "generic_conflict_cases": 6,
-    "generic_missing_cases": 6
+    "generic_missing_cases": 6,
+    "final_answerability_cases": 23,
+    "trusted_journey_cases": 12,
+    "pairwise_conflict_cases": 36,
+    "pairwise_missing_cases": 36,
+    "packet_inventory_cases": 26,
+    "graph_trace_failure_cases": 26,
+    "valid_policy_packet_cases": 4,
+    "total_rectification_matrix_cases": 212
   },
   "retrieval_gate": {
     "recall_at_5": true,
@@ -89,38 +97,38 @@
     "latency_ms_by_component": {
       "exact_sql": {
         "count": 28,
-        "mean": 0.30875,
-        "max": 0.5435
+        "mean": 0.120418,
+        "max": 0.2393
       },
       "graph": {
         "count": 28,
-        "mean": 0.008607,
-        "max": 0.2041
+        "mean": 0.003379,
+        "max": 0.0798
       },
       "personal_full_text": {
         "count": 28,
-        "mean": 0.128446,
-        "max": 0.2466
+        "mean": 0.055729,
+        "max": 0.1243
       },
       "personal_vector": {
         "count": 28,
-        "mean": 0.117736,
-        "max": 0.2472
+        "mean": 0.050489,
+        "max": 0.0887
       },
       "public_full_text": {
         "count": 28,
-        "mean": 1.129464,
-        "max": 2.8924
+        "mean": 0.450343,
+        "max": 1.0101
       },
       "public_vector": {
         "count": 28,
-        "mean": 0.978954,
-        "max": 3.4964
+        "mean": 0.399661,
+        "max": 0.7642
       },
       "weekly_profile": {
         "count": 28,
-        "mean": 0.002407,
-        "max": 0.0061
+        "mean": 0.001068,
+        "max": 0.0023
       }
     }
   },

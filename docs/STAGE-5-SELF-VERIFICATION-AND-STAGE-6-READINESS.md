@@ -2,10 +2,10 @@
 
 **Verification date:** 12 September 2026
 **Branch:** `feat/stage-1-governed-ingestion`
-**Independently reviewed remote HEAD:** `3991896135eca094bc0ab0462f3e87c615469978`
-**Second-rectification implementation commit:** `467422a62a3db31740a2d631538a73c2f34cc526`
-**Local recommendation:** `READY FOR INDEPENDENT RE-REVIEW`
-**Stage 6 recommendation:** NO-GO until independent review accepts this exact rectification
+**Final consolidated review baseline:** `2a067945986d68f85fba6234b9cb59be90a90eab`
+**Authoritative final evidence:** `STAGE-5-FINAL-CONSOLIDATED-CORRECTION-AND-STAGE-6-GATE.md`
+**Local recommendation:** `READY FOR FINAL REMOTE VERIFICATION`
+**Stage 6 recommendation:** NO-GO until GitHub `validate` and `supabase-integration` pass on the exact pushed correction
 **Public/clinical recommendation:** NO-GO
 
 ## What was verified
@@ -13,6 +13,8 @@
 The attached independent review was checked against the code and reproduced on the exact reviewed remote HEAD before correction. The final local state was then checked against the Stage 5 architecture, all Stage 1–4 gates, database RLS/RPC behavior, both-principal authenticated API behavior and frozen Stage 5 development truth.
 
 No Stage 6 code, agent, answer generation, Streamlit UI, production embedding selection or public deployment was added.
+
+The final consolidated correction is verified by 56/56 focused Stage 5 tests, 232/232 total Python tests, a generated 212/212 adversarial matrix, 254/254 pgTAP assertions and 70/70 authenticated API checks. The linked authoritative report records the new semantic invariants, exact breakdown and remote gate.
 
 ## Root causes and before/after evidence
 
@@ -73,13 +75,13 @@ Graph-off fails the one relationship-required case and graph-on passes 1/1. An e
 | Check | Result |
 |---|---:|
 | Python compile check | passed |
-| Complete Python unit suite | 223/223 passed |
-| Focused Stage 5 unit suite | 47/47 passed |
+| Complete Python unit suite | 232/232 passed |
+| Focused Stage 5 unit suite | 56/56 passed |
 | Content authoring validation | passed: 63 profiles, 0 published, 31 sources, 55 evidence spans, 56 fragments |
 | Content review-ready validation | passed with the same inventory |
 | Content contract evaluation | 64/64 passed |
 | Journey evaluation | 26/26 passed |
-| Stage 1 check | passed: 223 tests, 55 candidates/anchors, 72 governed blocks, 54 review decisions |
+| Stage 1 check | passed: 232 tests, 55 candidates/anchors, 72 governed blocks, 54 review decisions |
 | Stage 2 check | passed |
 | Stage 3 UI smoke | passed; unauthenticated onboarding; 0 network calls |
 | Stage 3 check | passed |
@@ -87,7 +89,7 @@ Graph-off fails the one relationship-required case and graph-on passes 1/1. An e
 | Stage 4 UI smoke | passed; explicit review; 0 preselected items; public feature closed; 0 network calls |
 | Stage 4 full check | passed |
 | Expanded Stage 5 evaluation | 28/28 behaviors/support/journey classifications passed |
-| Second-rectification matrix | 49/49 cases passed across five matrices |
+| Second-rectification matrix | 212/212 cases passed across 12 generated groups |
 | Stage 5 deterministic check | passed; `ready_for_independent_re_review=true`; `ready_for_stage6_engineering=false` |
 | `git diff --check` | passed |
 

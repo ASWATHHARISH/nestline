@@ -25,12 +25,12 @@ from app.schemas.retrieval import (
     MissingInformation,
     PersonalFactCandidate,
     PersonalPassageCandidate,
-    RetrievalPurpose,
+    RetrievalPurpose, RuntimeBlocker,
     RetrievalRequest,
     TrustedRetrievalQuery,
     TrustedRetrievalState,
     UnresolvedConflict,
-    canonical_evidence_policy_values,
+    canonical_evidence_policy_values, derive_answerability_values,
 )
 
 STOP_WORDS = {
@@ -294,7 +294,10 @@ def _conflict_relevant(
     explicitly_conflicted = bool(
         query_tokens & {"conflict", "conflicting", "contradiction", "disagree"}
     )
-    category_match = bool(query_contexts & allowed_contexts)
+    category_match = bool(
+        (query_contexts - {"documents"})
+        & (allowed_contexts - {"documents"})
+    )
     return bool(allowed_contexts) and (
         value_overlap or category_match or explicitly_conflicted
     )
@@ -305,23 +308,37 @@ def _missing_relevant(
     policy: EvidenceRequirementPolicy,
     trusted_state: TrustedRetrievalState,
 ) -> bool:
+    """Match a missing field to its subject, never only to a broad support lane."""
+
     field_tokens = meaningful_tokens(missing.field.replace("_", " "))
-    required_tokens = meaningful_tokens(" ".join(missing.required_for))
-    missing_contexts = _contexts_for_tokens(field_tokens | required_tokens)
+    field_contexts = _contexts_for_tokens(field_tokens)
     query_contexts = _contexts_for_tokens(query_tokens)
     allowed_contexts = set(policy.personal_context_kinds)
-    is_journey_gap = bool(missing_contexts & {"journey"})
+    is_journey_gap = "journey" in field_contexts
     if (
         is_journey_gap
         and "public_guidance" in policy.required_support
         and trusted_state.journey_relation == "unconfirmed_current"
     ):
         return True
-    if query_contexts & missing_contexts & allowed_contexts:
+
+    # `documents` and support labels such as `personal_record` describe a
+    # container/lane, not the missing subject. They cannot make an allergy gap
+    # block an appointment lookup merely because both mention a record.
+    specific_field = field_contexts - {"documents"}
+    specific_query = query_contexts - {"documents"}
+    if specific_field & specific_query & allowed_contexts:
         return True
-    if allowed_contexts & missing_contexts and query_tokens & (field_tokens | required_tokens):
+    generic_field_tokens = {
+        "detail", "details", "information", "missing", "personal",
+        "record", "records", "required",
+    }
+    meaningful_field = field_tokens - generic_field_tokens
+    if meaningful_field and query_tokens & meaningful_field:
         return True
-    return bool(set(policy.required_support) & set(missing.required_for))
+    global_markers = {item.casefold().replace("-", "_")
+                      for item in missing.required_for}
+    return bool(global_markers & {"global", "all_requests"})
 
 def minimise_personal_context(
     exact: ExactPersonalContext,
@@ -424,9 +441,9 @@ def assess_answerability(
     weekly_present: bool,
     personal_passage_count: int,
     graph_count: int,
-    blocking_reasons: list[str] | None = None,
+    blocking_reasons: list[RuntimeBlocker] | None = None,
 ) -> AnswerabilityAssessment:
-    """Decide support from evidence relevant to the trusted policy only."""
+    """Decide support through the same derivation enforced by the contract."""
 
     public_supported = bool(public_count or weekly_present)
     personal_supported = bool(
@@ -436,43 +453,28 @@ def assess_answerability(
     )
     constraint_supported = bool(exact.confirmed_facts)
     graph_supported = bool(graph_count)
-    support = {
-        "public_guidance": public_supported,
-        "personal_record": personal_supported,
-        "personal_constraint": constraint_supported,
-        "graph_relationship": graph_supported,
-    }
-    satisfied = [item for item in policy.required_support if support[item]]
-    missing_support = [item for item in policy.required_support if not support[item]]
     relevant_conflicts = [str(item.conflict_id) for item in exact.unresolved_conflicts]
     relevant_missing = [item.field for item in exact.missing_information]
     blockers = blocking_reasons or []
-
-    if relevant_conflicts or relevant_missing:
-        state = "clarification_required"
-        allowed = False
-    elif not missing_support:
-        state = "fully_supported"
-        allowed = not blockers
-    elif satisfied:
-        state = "partially_supported"
-        allowed = False
-    else:
-        state = "unsupported"
-        allowed = False
+    derived = derive_answerability_values(
+        policy.required_support,
+        public_guidance_supported=public_supported,
+        personal_record_supported=personal_supported,
+        personal_constraints_present=constraint_supported,
+        graph_relationship_supported=graph_supported,
+        relevant_conflict_ids=relevant_conflicts,
+        relevant_missing_fields=relevant_missing,
+        blocking_reasons=blockers,
+    )
     return AnswerabilityAssessment(
-        policy_id=policy.policy_id,
-        purpose=policy.purpose,
-        support_state=state,
-        ordinary_generation_allowed=allowed,
+        policy_id=policy.policy_id, purpose=policy.purpose,
         public_guidance_supported=public_supported,
         personal_record_supported=personal_supported,
         personal_constraints_present=constraint_supported,
         graph_relationship_supported=graph_supported,
         required_support=policy.required_support,
-        satisfied_support=satisfied,
-        missing_support=missing_support,
         relevant_conflict_ids=relevant_conflicts,
         relevant_missing_fields=relevant_missing,
         blocking_reasons=blockers,
+        **derived,
     )

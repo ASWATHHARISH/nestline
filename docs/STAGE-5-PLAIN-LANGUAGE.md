@@ -1,8 +1,8 @@
 # Stage 5 in plain language
 
-**Status:** second rectification complete locally; ready for independent re-review
+**Status:** final consolidated semantic correction passes locally; remote GitHub checks pending
 **Stage 6:** not started
-**Git:** reviewed remote HEAD `3991896135eca094bc0ab0462f3e87c615469978`; corrected implementation commit `467422a62a3db31740a2d631538a73c2f34cc526`; check the latest branch run before merge
+**Git:** final consolidated review baseline `2a067945986d68f85fba6234b9cb59be90a90eab`; see `STAGE-5-FINAL-CONSOLIDATED-CORRECTION-AND-STAGE-6-GATE.md`
 
 ## What Stage 5 does
 
@@ -14,6 +14,8 @@ Think of Nestline as a careful librarian. When someone asks a question, Stage 5 
 - exact source spans and provenance for future citations.
 
 It returns an Evidence Packet. It does not write the final health answer, decide whether a symptom is safe, change medication, confirm facts or modify a plan.
+
+The last correction makes the packet act like a sealed checklist: its answerability, journey, evidence list, graph path, trace and failure reason must all tell the same story. The current local evidence is 56/56 focused tests, 232/232 Python tests and 212/212 adversarial cases.
 
 ## How Nestline decides what is enough
 
@@ -83,12 +85,12 @@ A matching unresolved conflict asks for clarification. A matching required missi
 
 ## What the checks proved
 
-- 223/223 Python tests passed.
-- 47/47 focused Stage 5 tests passed.
+- 232/232 Python tests passed.
+- 56/56 focused Stage 5 tests passed.
 - 64/64 content-contract cases passed.
 - 26/26 journey cases passed.
 - 28/28 frozen Stage 5 behavior, support and journey decisions passed.
-- 49/49 second-rectification matrix cases passed.
+- 212/212 second-rectification matrix cases passed.
 - 18/18 expected public evidence items were found in the top five.
 - 18/18 returned public evidence items were correct.
 - 12/12 returned personal facts were expected.

@@ -24,8 +24,9 @@ from app.schemas.retrieval import (
     ExactPersonalContext, GraphPath, PersonalPassageCandidate,
     PublicEvidenceCandidate, RankedRetrievalCandidate, RetrievalComponentResult,
     RetrievalFailure, RetrievalPurpose, RetrievalRequest,
-    RetrievalResult, RetrievalTrace, TrustedRetrievalQuery,
-    WeeklyProfileCandidate,
+    RetrievalResult, RetrievalTrace, RuntimeBlocker, TrustedRetrievalQuery,
+    WeeklyProfileCandidate, derive_abstention_reason, derive_packet_inventory,
+    normalize_retrieval_query, ranked_candidate_digest,
 )
 from app.services.embeddings import EmbeddingProvider
 from app.services.retrieval_policy import (
@@ -51,6 +52,10 @@ class RetrievalDatabaseUnavailable(RuntimeError):
 
 class RetrievalVectorUnavailable(RuntimeError):
     """The vector component is unavailable; text and SQL may still be used."""
+
+
+class RetrievalInvalidCandidate(RuntimeError):
+    """A repository returned a malformed or wrong-lane candidate; fail closed."""
 
 
 @dataclass(frozen=True)
@@ -303,7 +308,9 @@ class PostgrestRetrievalRepository:
 
 
 def normalize_query(value: str) -> str:
-    return " ".join(value.casefold().split())
+    """Backward-compatible alias for the canonical contract normalizer."""
+
+    return normalize_retrieval_query(value)
 
 
 def _tokens(value: str) -> set[str]:
@@ -573,13 +580,17 @@ class RetrievalGateway:
 
     def _filter_hits(self, hits, request, *, public, vector):
         allowed, rejected, seen = [], [], set()
+        expected_type = (PublicEvidenceCandidate if public
+                         else PersonalPassageCandidate)
         for hit in hits:
+            if not isinstance(hit, CandidateHit) or not isinstance(
+                    getattr(hit, "candidate", None), expected_type):
+                raise RetrievalInvalidCandidate(
+                    "repository returned a malformed or wrong-lane candidate"
+                )
             candidate_id = hit.candidate.candidate_id
             valid = (self._public_eligible(hit.candidate, request, vector=vector)
-                     if public and isinstance(hit.candidate, PublicEvidenceCandidate)
-                     else self._personal_eligible(hit.candidate)
-                     if not public and isinstance(hit.candidate, PersonalPassageCandidate)
-                     else False)
+                     if public else self._personal_eligible(hit.candidate))
             if not valid:
                 rejected.append(candidate_id)
             elif candidate_id not in seen:
@@ -692,21 +703,20 @@ class RetrievalGateway:
         personal_key = self.cache.personal_key(resolved_scope, query)
 
         vector: list[float] | None = None
+        vector_unavailable_detail: str | None = None
         if self.embedding_provider is not None:
             try:
                 vector = self.embedding_provider.embed([query.question])[0]
             except Exception:
-                failures.append(RetrievalFailure(
-                    code="vector_unavailable", recoverable=True,
-                    component="public_vector",
-                    detail=("Embedding component unavailable; exact SQL and "
-                            "full text remain active.")))
+                vector_unavailable_detail = (
+                    "Embedding component unavailable; exact SQL and full text "
+                    "remain active."
+                )
         else:
-            failures.append(RetrievalFailure(
-                code="vector_unavailable", recoverable=True,
-                component="public_vector",
-                detail=("No embedding provider configured; exact SQL and full "
-                        "text remain active.")))
+            vector_unavailable_detail = (
+                "No embedding provider configured; exact SQL and full text "
+                "remain active."
+            )
 
         public_needed = (
             "public_guidance" in policy.required_support
@@ -749,8 +759,12 @@ class RetrievalGateway:
 
             tick = perf_counter()
             if vector is None:
-                failure = next(item for item in failures
-                               if item.code == "vector_unavailable")
+                failure = RetrievalFailure(
+                    code="vector_unavailable", recoverable=True,
+                    component="public_vector",
+                    detail=vector_unavailable_detail or "Public vector retrieval unavailable.",
+                )
+                failures.append(failure)
                 components.append(self._component(
                     "public_vector", "degraded", tick, 0, 0,
                     failure=failure))
@@ -879,14 +893,19 @@ class RetrievalGateway:
                         "personal_vector", "degraded", tick, 0, 0,
                         failure=failure))
             else:
-                vector_failure = next(
-                    (item for item in failures
-                     if item.code == "vector_unavailable"), None)
+                personal_failure = None
+                if personal_database_ok:
+                    personal_failure = RetrievalFailure(
+                        code="vector_unavailable", recoverable=True,
+                        component="personal_vector",
+                        detail=(vector_unavailable_detail
+                                or "Personal vector retrieval unavailable."),
+                    )
+                    failures.append(personal_failure)
                 components.append(self._component(
                     "personal_vector",
                     "degraded" if personal_database_ok else "skipped",
-                    tick, 0, 0,
-                    failure=vector_failure if personal_database_ok else None))
+                    tick, 0, 0, failure=personal_failure))
 
             tick = perf_counter()
             graph_requested = (
@@ -978,7 +997,7 @@ class RetrievalGateway:
 
         elapsed_ms = (perf_counter() - clock) * 1000
         timed_out = elapsed_ms > query.timeout_ms
-        blocking_reasons: list[str] = []
+        blocking_reasons: list[RuntimeBlocker] = []
         if not personal_database_ok:
             blocking_reasons.append("database_unavailable")
         if timed_out:
@@ -993,67 +1012,33 @@ class RetrievalGateway:
             len(personal_passages), len(personal_entry.graph_paths),
             blocking_reasons=blocking_reasons)
 
-        if "database_unavailable" in blocking_reasons:
-            abstention = AbstentionState(
-                should_abstain=True, reason="database_unavailable",
-                detail="Trusted personal state could not be established.")
-        elif "retrieval_timeout" in blocking_reasons:
-            abstention = AbstentionState(
-                should_abstain=True, reason="retrieval_timeout",
-                detail="Retrieval exceeded its bounded time budget.")
-        elif exact.unresolved_conflicts:
-            abstention = AbstentionState(
-                should_abstain=True, reason="unresolved_conflict",
-                detail="Relevant conflicting information requires clarification.")
-        elif exact.missing_information:
-            abstention = AbstentionState(
-                should_abstain=True, reason="missing_information",
-                detail="Information required by this question is missing.")
-        elif answerability.support_state == "fully_supported":
-            abstention = AbstentionState(should_abstain=False)
-        elif answerability.support_state == "partially_supported":
-            abstention = AbstentionState(
-                should_abstain=True, reason="partial_support",
-                detail=("Some relevant evidence exists, but required support "
-                        "for a complete answer is missing."))
-        elif requires_public and corpus_mode == "no_public_release":
-            abstention = AbstentionState(
-                should_abstain=True, reason="no_approved_public_content",
-                detail="No eligible approved public evidence supports this question.")
-        else:
-            abstention = AbstentionState(
-                should_abstain=True, reason="no_eligible_evidence",
-                detail="No eligible evidence satisfies this question's policy.")
-
-        allowed_claim_types = []
-        if exact.confirmed_facts:
-            allowed_claim_types.append("confirmed_personal_record")
-        if exact.medications:
-            allowed_claim_types.append("record_only_medication")
-        if exact.symptoms:
-            allowed_claim_types.append("evaluation_only_symptom_record")
-        if public:
-            allowed_claim_types.append("approved_guideline_paraphrase")
-        if public_entry.weekly_profile:
-            allowed_claim_types.append("published_weekly_profile")
-        if exact.unresolved_conflicts or exact.missing_information:
-            allowed_claim_types.append("clarification_required")
-
-        spans = ([span for item in public for span in item.spans]
-                 + [item.span for item in personal_passages])
-        evidence_ids = sorted({item.evidence_id for item in public})
-        source_ids = sorted({item.source_id for item in public})
-        required_citations = sorted(set(
-            evidence_ids
-            + [f"personal-passage:{item.chunk_id}"
-               for item in personal_passages]
-            + [f"personal-fact:{item.fact_id}"
-               for item in exact.confirmed_facts]
-            + [f"medication-record:{item.medication_id}"
-               for item in exact.medications]
-            + [f"appointment:{item.appointment_id}"
-               for item in exact.appointments]
-        ))
+        abstention_reason = derive_abstention_reason(answerability, corpus_mode)
+        abstention_details = {
+            "none": "",
+            "database_unavailable": "Trusted personal state could not be established.",
+            "retrieval_timeout": "Retrieval exceeded its bounded time budget.",
+            "unresolved_conflict": "Relevant conflicting information requires clarification.",
+            "missing_information": "Information required by this question is missing.",
+            "partial_support": ("Some relevant evidence exists, but required support "
+                                "for a complete answer is missing."),
+            "no_approved_public_content": ("No eligible approved public evidence "
+                                           "supports this question."),
+            "no_eligible_evidence": ("No eligible evidence satisfies this question's "
+                                     "policy."),
+        }
+        abstention = AbstentionState(
+            should_abstain=abstention_reason != "none",
+            reason=abstention_reason, detail=abstention_details[abstention_reason],
+        )
+        inventory = derive_packet_inventory(
+            confirmed_facts=exact.confirmed_facts,
+            personal_passages=personal_passages, medications=exact.medications,
+            symptoms=exact.symptoms, appointments=exact.appointments,
+            plan_states=exact.plan_states, open_questions=exact.open_questions,
+            public_passages=public, weekly_profile=public_entry.weekly_profile,
+            unresolved_conflicts=exact.unresolved_conflicts,
+            missing_information=exact.missing_information,
+        )
         packet = EvidencePacket(
             request_id=query.request_id,
             workspace_id=resolved_scope.workspace_id,
@@ -1061,6 +1046,7 @@ class RetrievalGateway:
             question=query.question, domain=query.domain,
             journey=query.journey,
             jurisdiction=query.jurisdiction.upper(),
+            evidence_lanes=query.evidence_lanes,
             retrieval_policy=policy,
             trusted_state=trusted_state,
             answerability=answerability,
@@ -1075,8 +1061,9 @@ class RetrievalGateway:
             approved_guideline_passages=public,
             graph_paths=personal_entry.graph_paths,
             ranked_candidates=ranked,
-            source_ids=source_ids, evidence_ids=evidence_ids,
-            exact_spans=spans,
+            source_ids=inventory["source_ids"],
+            evidence_ids=inventory["evidence_ids"],
+            exact_spans=inventory["exact_spans"],
             provenance_versions={
                 "schema": "5.0.0", "filter": FILTER_VERSION,
                 "ranking": self.ranking_version,
@@ -1085,25 +1072,27 @@ class RetrievalGateway:
                 "release": self.release_version},
             missing_information=exact.missing_information,
             unresolved_conflicts=exact.unresolved_conflicts,
-            allowed_claim_types=allowed_claim_types,
-            required_citations=required_citations,
+            allowed_claim_types=inventory["allowed_claim_types"],
+            required_citations=inventory["required_citations"],
             component_results=components, failures=failures,
-            corpus_mode=corpus_mode, abstention=abstention)
+            corpus_mode=inventory["corpus_mode"], abstention=abstention)
 
         completed_at = datetime.now(timezone.utc)
-        digest = sha256(json.dumps(
-            [item.candidate_id for item in ranked],
-            separators=(",", ":")).encode()).hexdigest()
+        digest = ranked_candidate_digest(ranked)
         trace = RetrievalTrace(
             request_id=query.request_id,
             started_at=started_at, completed_at=completed_at,
             total_latency_ms=(perf_counter() - clock) * 1000,
             normalized_query=normalized,
+            jurisdiction=query.jurisdiction.upper(),
             public_cache_key=public_key,
             personal_cache_key=personal_key,
             filter_version=FILTER_VERSION,
             ranking_version=self.ranking_version,
             policy_id=policy.policy_id,
+            policy_version=policy.policy_version,
+            corpus_version=self.corpus_version,
+            release_version=self.release_version,
             resolved_state_version=resolved_scope.state_version,
             journey_relation=trusted_state.journey_relation,
             component_results=components,
