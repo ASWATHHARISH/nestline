@@ -24,6 +24,26 @@ ComponentName = Literal[
     "personal_full_text", "personal_vector", "graph", "weekly_profile",
 ]
 
+RetrievalPurpose = Literal[
+    "public_guidance", "personal_record_lookup", "causal_explanation",
+    "mixed_personalized_guidance",
+]
+SupportKind = Literal[
+    "public_guidance", "personal_record", "personal_constraint",
+    "graph_relationship",
+]
+PersonalContextKind = Literal[
+    "allergies", "conditions", "restrictions", "medications", "symptoms",
+    "appointments", "plans", "questions", "journey", "documents",
+]
+JourneyRelation = Literal[
+    "current", "explicit_other", "overridden_to_current", "unconfirmed_current",
+]
+SupportState = Literal[
+    "unsupported", "partially_supported", "fully_supported",
+    "clarification_required",
+]
+
 
 class JourneyPosition(Contract):
     stage: Stage
@@ -81,7 +101,6 @@ class RetrievalRequest(Contract):
     evidence_lanes: list[EvidenceLane] = Field(
         default_factory=lambda: ["guideline", "weekly_profile"], min_length=1
     )
-    active_conditions: list[ConditionKey] = Field(default_factory=list)
     include_graph: bool = True
     max_candidates: int = Field(default=5, ge=1, le=20)
     timeout_ms: int = Field(default=2_000, ge=10, le=10_000)
@@ -105,6 +124,55 @@ class AuthenticatedRetrievalScope(Contract):
         if self.care_episode_id != self.workspace_id:
             raise ValueError("owner-only v1 uses the workspace as its care-episode boundary")
         return self
+
+
+class EvidenceRequirementPolicy(Contract):
+    """Trusted server-created policy; it is never part of RetrievalRequest."""
+
+    policy_version: Literal["stage5-answerability-v2"]
+    policy_id: Text
+    purpose: RetrievalPurpose
+    domain: Domain
+    required_support: list[SupportKind] = Field(min_length=1)
+    personal_context_kinds: list[PersonalContextKind] = Field(default_factory=list)
+    trusted_server_created: Literal[True] = True
+
+
+class TrustedRetrievalState(Contract):
+    """Database-derived scope/applicability used before cache or filtering."""
+
+    scope: AuthenticatedRetrievalScope
+    current_journey: JourneyPosition | None = None
+    requested_journey: JourneyPosition
+    effective_journey: JourneyPosition
+    journey_relation: JourneyRelation
+    active_conditions: list[ConditionKey] = Field(default_factory=list)
+    caller_state_version_was_stale: bool
+    cache_state_version: int = Field(ge=1)
+    jurisdiction_source: Literal["request_profile"]
+
+    @model_validator(mode="after")
+    def cache_version_is_server_version(self) -> Self:
+        if self.cache_state_version != self.scope.state_version:
+            raise ValueError("cache state version must come from authenticated scope")
+        return self
+
+
+class TrustedRetrievalQuery(Contract):
+    """Internal query built from user text plus trusted state and policy."""
+
+    request_id: UUID
+    question: Text
+    domain: Domain
+    journey: JourneyPosition
+    jurisdiction: Text
+    evidence_lanes: list[EvidenceLane] = Field(min_length=1)
+    active_conditions: list[ConditionKey] = Field(default_factory=list)
+    include_graph: bool
+    max_candidates: int = Field(ge=1, le=20)
+    timeout_ms: int = Field(ge=10, le=10_000)
+    policy: EvidenceRequirementPolicy
+    trusted_state: TrustedRetrievalState
 
 
 class SourceSpan(Contract):
@@ -262,6 +330,35 @@ class MissingInformation(Contract):
     required_for: list[Text] = Field(min_length=1)
 
 
+class AnswerabilityAssessment(Contract):
+    policy_id: Text
+    purpose: RetrievalPurpose
+    support_state: SupportState
+    ordinary_generation_allowed: bool
+    public_guidance_supported: bool
+    personal_record_supported: bool
+    personal_constraints_present: bool
+    graph_relationship_supported: bool
+    required_support: list[SupportKind] = Field(min_length=1)
+    satisfied_support: list[SupportKind] = Field(default_factory=list)
+    missing_support: list[SupportKind] = Field(default_factory=list)
+    relevant_conflict_ids: list[str] = Field(default_factory=list)
+    relevant_missing_fields: list[Text] = Field(default_factory=list)
+    blocking_reasons: list[Text] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def generation_matches_support(self) -> Self:
+        if self.ordinary_generation_allowed != (
+            self.support_state == "fully_supported" and not self.blocking_reasons
+        ):
+            raise ValueError("ordinary generation requires full support and no runtime block")
+        if set(self.satisfied_support) & set(self.missing_support):
+            raise ValueError("support cannot be both satisfied and missing")
+        if set(self.satisfied_support) | set(self.missing_support) != set(self.required_support):
+            raise ValueError("every required support kind needs a decision")
+        return self
+
+
 class ExactPersonalContext(Contract):
     journey_state: JourneyStateSnapshot | None = None
     confirmed_facts: list[PersonalFactCandidate] = Field(default_factory=list)
@@ -272,6 +369,17 @@ class ExactPersonalContext(Contract):
     open_questions: list[ClarificationQuestion] = Field(default_factory=list)
     unresolved_conflicts: list[UnresolvedConflict] = Field(default_factory=list)
     missing_information: list[MissingInformation] = Field(default_factory=list)
+
+
+class SafetyContextSnapshot(Contract):
+    """Separate future Stage 6 input; never accidental answer support."""
+
+    journey_state: JourneyStateSnapshot | None = None
+    active_restrictions: list[PersonalFactCandidate] = Field(default_factory=list)
+    medications: list[MedicationRecord] = Field(default_factory=list)
+    symptoms: list[SymptomRecord] = Field(default_factory=list)
+    unresolved_conflicts: list[UnresolvedConflict] = Field(default_factory=list)
+    excluded_from_stage5_answerability: Literal[True] = True
 
 
 class GraphPathNode(Contract):
@@ -379,7 +487,7 @@ class AbstentionState(Contract):
     reason: Literal[
         "none", "no_eligible_evidence", "no_approved_public_content",
         "database_unavailable", "retrieval_timeout", "unresolved_conflict",
-        "missing_information",
+        "missing_information", "partial_support",
     ] = "none"
     detail: str = ""
 
@@ -412,6 +520,11 @@ class EvidencePacket(Contract):
     domain: Domain
     journey: JourneyPosition
     jurisdiction: Text
+    retrieval_policy: EvidenceRequirementPolicy
+    trusted_state: TrustedRetrievalState
+    answerability: AnswerabilityAssessment
+    personal_context_minimized: Literal[True] = True
+    safety_context_is_separate: Literal[True] = True
     confirmed_personal_facts: list[PersonalFactCandidate] = Field(default_factory=list)
     permitted_personal_passages: list[PersonalPassageCandidate] = Field(default_factory=list)
     medication_records: list[MedicationRecord] = Field(default_factory=list)
@@ -452,6 +565,9 @@ class RetrievalTrace(Contract):
     personal_cache_key: Text
     filter_version: Text
     ranking_version: Text
+    policy_id: Text
+    resolved_state_version: int = Field(ge=1)
+    journey_relation: JourneyRelation
     component_results: list[RetrievalComponentResult]
     rejected_candidate_ids: list[Text] = Field(default_factory=list)
     deterministic_order_digest: str = Field(pattern=r"^[a-f0-9]{64}$")
@@ -460,9 +576,3 @@ class RetrievalTrace(Contract):
 class RetrievalResult(Contract):
     packet: EvidencePacket
     trace: RetrievalTrace
-
-
-
-
-
-

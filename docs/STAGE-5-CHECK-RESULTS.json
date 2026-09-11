@@ -4,141 +4,157 @@
   "schema_version": "5.0.0",
   "fixture_only": true,
   "paid_model_required": false,
-  "ready_for_stage6_engineering": true,
+  "ready_for_independent_re_review": true,
+  "ready_for_stage6_engineering": false,
+  "stage6_gate": "independent Stage 5 re-review is still required",
   "ready_for_public_or_clinical_release": false,
   "verified": {
-    "typed_contracts": 15,
-    "development_cases": 5,
-    "fixture_public_records": 16,
+    "typed_contracts": 20,
+    "development_cases": 26,
+    "fixture_public_records": 20,
     "fixture_personal_fact_records": 5,
     "fixture_graph_paths": 2,
     "tracked_weekly_profiles": 63,
     "published_weekly_profiles": 0,
     "pinned_pgtap_assertions": 254,
     "stage5_pgtap_assertions": 48,
-    "authenticated_stage5_api_checks": 22
+    "authenticated_stage5_api_checks": 25,
+    "stage5_python_tests": 36
   },
   "retrieval_gate": {
-    "expected_public_evidence_retrieved": true,
+    "recall_at_5": true,
+    "citation_precision": true,
     "no_wrong_week": true,
     "no_wrong_jurisdiction": true,
     "no_unapproved_source": true,
     "no_cross_workspace_leakage": true,
     "confirmed_personal_precision": true,
-    "no_conflict_or_proposal_personalization": true,
-    "graph_truth_retrieved": true,
-    "expected_behaviors": true,
-    "graph_ablation_is_honest": true,
-    "ranking_trial_rejected_without_gain": true
+    "no_proposal_personalization": true,
+    "graph_truth": true,
+    "behavior_truth": true,
+    "support_truth": true,
+    "journey_truth": true,
+    "graph_ablation": true,
+    "sql_no_false_graph_claim": true,
+    "ranking_trial_not_adopted": true
   },
   "adopted_metrics": {
-    "cases": 5,
     "recall_at_5": {
-      "hits": 2,
-      "expected": 2,
-      "value": 1.0
+      "value": 1.0,
+      "numerator": 18,
+      "denominator": 18
     },
     "citation_evidence_precision": {
-      "correct": 2,
-      "returned": 10,
-      "value": 0.2
+      "value": 1.0,
+      "numerator": 18,
+      "denominator": 18
     },
-    "wrong_week_retrieval": 0,
-    "wrong_jurisdiction_retrieval": 0,
-    "unapproved_source_retrieval": 0,
-    "cross_workspace_leakage": 0,
+    "wrong_week_retrieval_count": 0,
+    "wrong_jurisdiction_retrieval_count": 0,
+    "unapproved_source_retrieval_count": 0,
+    "cross_workspace_leakage_count": 0,
     "confirmed_personal_fact_precision": {
-      "correct": 8,
-      "returned": 8,
-      "value": 1.0
-    },
-    "confirmed_personal_fact_recall": {
-      "hits": 8,
-      "expected": 8,
-      "value": 1.0
+      "value": 1.0,
+      "numerator": 11,
+      "denominator": 11
     },
     "conflict_proposal_personalization_violations": 0,
     "graph_path_correctness": {
-      "correct": 1,
-      "expected": 1,
-      "unexpected": 0,
-      "value": 1.0
+      "value": 1.0,
+      "numerator": 1,
+      "denominator": 1
     },
     "expected_behavior_accuracy": {
-      "correct": 5,
-      "cases": 5,
-      "value": 1.0
+      "value": 1.0,
+      "numerator": 26,
+      "denominator": 26
     },
-    "forbidden_ids_seen": [],
+    "support_state_accuracy": {
+      "value": 1.0,
+      "numerator": 26,
+      "denominator": 26
+    },
+    "journey_relation_accuracy": {
+      "value": 1.0,
+      "numerator": 26,
+      "denominator": 26
+    },
+    "forbidden_evidence_ids_seen": [],
     "latency_ms_by_component": {
       "exact_sql": {
-        "calls": 5,
-        "mean": 0.3595000001951121,
-        "maximum": 0.5700000037904829
+        "count": 26,
+        "mean": 0.636123,
+        "max": 2.4114
       },
       "graph": {
-        "calls": 5,
-        "mean": 0.07814000127837062,
-        "maximum": 0.221800000872463
+        "count": 26,
+        "mean": 0.016927,
+        "max": 0.2775
       },
       "personal_full_text": {
-        "calls": 5,
-        "mean": 0.13619999954244122,
-        "maximum": 0.17939999816007912
+        "count": 26,
+        "mean": 0.287204,
+        "max": 1.831
       },
       "personal_vector": {
-        "calls": 5,
-        "mean": 0.1389200013363734,
-        "maximum": 0.258400003076531
+        "count": 26,
+        "mean": 0.260358,
+        "max": 1.8547
       },
       "public_full_text": {
-        "calls": 5,
-        "mean": 1.7273600038606673,
-        "maximum": 1.8487000052118674
+        "count": 26,
+        "mean": 2.092035,
+        "max": 7.0026
       },
       "public_vector": {
-        "calls": 5,
-        "mean": 1.5910599991912022,
-        "maximum": 1.8278999996255152
+        "count": 26,
+        "mean": 2.660058,
+        "max": 20.8232
       },
       "weekly_profile": {
-        "calls": 5,
-        "mean": 0.003780001134146005,
-        "maximum": 0.0044000043999403715
+        "count": 26,
+        "mean": 0.004119,
+        "max": 0.0087
       }
     }
   },
   "graph_ablation": {
-    "expected_paths": 1,
-    "disabled_correct": 0,
-    "enabled_correct": 1,
+    "graph_required_case": "S5-GRAPH-ON-001",
+    "with_graph": [
+      "PATH-DOC-RESTRICTION-STALE-PLAN"
+    ],
+    "without_graph": [],
     "adds_required_relationship_information": true,
-    "ranking_trial_adopted": false,
-    "ranking_trial_reason": "No Recall@5 or precision gain on frozen development truth.",
-    "sql_sufficient_case": "S5-SQL-001",
-    "sql_sufficient_case_claims_graph_benefit": false
+    "sql_sufficient_case": "S5-PERSONAL-ALLERGY-001",
+    "sql_answer_same_with_graph_on_and_off": true,
+    "sql_sufficient_case_claims_graph_benefit": false,
+    "ranking_trial_adopted": false
   },
-  "honest_limitation": "The SHA-256 fixture embedding is deterministic but non-semantic and cannot measure production semantic quality; it exists only to verify plumbing, filters, ranking determinism, and provider independence.",
+  "honest_limitation": "Deterministic fixture embeddings and 26 synthetic questions verify control flow, isolation and filters; they do not establish production retrieval quality.",
   "open_gates": [
     {
-      "owner": "qualified clinical and India-localisation reviewers",
-      "gate": "approve public health content and safety material"
+      "owner": "independent reviewer",
+      "gate": "re-review Stage 5 rectification"
+    },
+    {
+      "owner": "clinical and India-localisation reviewers",
+      "gate": "approve health content and safety material"
     },
     {
       "owner": "licence reviewer",
-      "gate": "approve evidence reuse and embedding rights"
+      "gate": "approve reuse and embedding rights"
     },
     {
       "owner": "product reviewer",
-      "gate": "complete rendered UI acceptance and public release decisions"
+      "gate": "complete rendered UI and public release decisions"
     },
     {
-      "owner": "Stage 6 engineering and reviewers",
-      "gate": "implement and review the Safety Gate before symptom interpretation"
+      "owner": "Stage 6 engineering/reviewers",
+      "gate": "implement and review Safety Gate"
     },
     {
       "owner": "platform/product",
-      "gate": "choose and benchmark a production embedding provider before production embeddings"
+      "gate": "benchmark production embedding provider"
     }
   ],
   "errors": []

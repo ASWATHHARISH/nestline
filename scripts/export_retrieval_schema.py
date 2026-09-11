@@ -7,8 +7,10 @@ from pathlib import Path
 
 from app.schemas.retrieval import (
     AbstentionState,
+    AnswerabilityAssessment,
     AuthenticatedRetrievalScope,
     EvidencePacket,
+    EvidenceRequirementPolicy,
     GraphPath,
     MissingInformation,
     PersonalFactCandidate,
@@ -20,6 +22,9 @@ from app.schemas.retrieval import (
     RetrievalRequest,
     RetrievalResult,
     RetrievalTrace,
+    SafetyContextSnapshot,
+    TrustedRetrievalQuery,
+    TrustedRetrievalState,
     UnresolvedConflict,
 )
 
@@ -32,6 +37,11 @@ def build_payload() -> dict:
     models = {
         "retrieval_request": RetrievalRequest,
         "authenticated_scope": AuthenticatedRetrievalScope,
+        "evidence_requirement_policy": EvidenceRequirementPolicy,
+        "trusted_retrieval_state": TrustedRetrievalState,
+        "trusted_retrieval_query": TrustedRetrievalQuery,
+        "answerability_assessment": AnswerabilityAssessment,
+        "safety_context_snapshot": SafetyContextSnapshot,
         "public_evidence_candidate": PublicEvidenceCandidate,
         "personal_fact_candidate": PersonalFactCandidate,
         "personal_passage_candidate": PersonalPassageCandidate,

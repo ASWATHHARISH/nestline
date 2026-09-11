@@ -1,6 +1,6 @@
 # Nestline: what exists, in plain language
 
-Updated 11 September 2026 after the Stage 5 implementation and self-verification.
+Updated 11 September 2026 after the Stage 5 answerability rectification and self-verification.
 This is the current status; earlier entries in the demo log are history.
 
 ## What the project is
@@ -135,7 +135,7 @@ There are also 64 visible software cases in the future evaluation-contract file.
 The local runner checks existing deterministic functions and fixture integrity.
 **Neither count means conversations tested with Grok, GPT or any other AI model.**
 
-Stage 5 adds a frozen five-case synthetic retrieval set. Its local gate passed 5/5 expected behaviors, 254/254 database assertions and 67/67 authenticated API checks. Public Recall@5 is 2/2; public evidence precision is 2/10 and is recorded as an honest limitation. Confirmed personal fact precision and recall are 8/8, the expected graph path is 0/1 without graph and 1/1 with graph, and all prohibited leakage/filter counters are zero. These measurements validate the controlled engineering corpus, not production or clinical quality.
+Stage 5 now has a frozen 26-case synthetic retrieval set. Its local gate passes 26/26 expected behaviors, 254/254 database assertions and 70/70 authenticated API checks. Public Recall@5 and citation/evidence precision are both 18/18; confirmed-personal-fact precision is 11/11; the expected graph path is absent when graph is disabled and 1/1 when enabled. Wrong-week, wrong-country, unapproved-source, cross-workspace and conflict/proposal personalization counters are all zero. These measurements validate the controlled engineering corpus, not production or clinical quality.
 
 Kajal's review explicitly requested the future evaluation contract. It is prepared
 now so later implementations have agreed examples to test against. These 64 cases
@@ -171,7 +171,7 @@ Their safe fallback is sourced development text without a size comparison.
 | 2: Storage | Keep each user's information secure and separate | Independently corrected and deployed: ten migrations, 28 RLS-enabled tables, owner-only episode workspaces, strict journey timing, dependency invalidation, Storage-first deletion and deterministic demo reset. The current 122-assertion two-user suite is pinned and passes on upgrade and clean databases; the historical 141 report is explicitly reconciled. |
 | 3: Onboarding | Confirm details and work out journey timing | Independently exit-audited and deployed through migration 01000: all six timing paths, optional details, conflict choice, backward-episode blocking, atomic confirmed save, database-side arithmetic/conflict checks and relogin persistence. Symptom routing remains draft/evaluation-only until specialist review. |
 | 4: Personal documents | Propose extracted facts and request confirmation | Supervised fictional-demo engineering complete: default-off exact-hash fixture selector, eight canonical documents, controlled OCR, five upload failures, fail-closed identity, full visible provenance, unselected explicit review choices, atomic confirmed state, conflict preservation, typed graph links and stale-plan updates. Migrations 01100/01200 are deployed; 206 local and remote database assertions, 45 authenticated API checks and remote lint pass. Anonymous access is restricted to six published-content reads. Real uploads remain scanner/reviewer gated. |
-| 5: Retrieval | Find the right evidence and personal facts | Locally complete: one typed read-only gateway combines exact SQL, Postgres full-text, pgvector and bounded graph traversal. Authenticated scope, pre-ranking filters, deterministic fusion, isolated caches and explicit failures pass the frozen five-case development gate. Production embedding/provider and public content release remain open. |
+| 5: Retrieval | Find the right evidence and personal facts | Rectified locally and ready for independent re-review: one typed read-only gateway combines exact SQL, Postgres full-text, pgvector and bounded graph traversal. Purpose-aware answerability, database-derived trusted state, relevant-context minimisation, pre-ranking filters, deterministic fusion and isolated caches pass the frozen 26-case development gate. Stage 6 remains blocked pending review acceptance; production embedding/provider and public content release remain open. |
 | 6: Safety | Handle urgent and uncertain requests before normal answers | Draft rule specification and offline cases exist; reviewed live gate is not built. |
 | 7: Agents | Coordinate specialist helpers | Architecture only. |
 | 8: Answer validation | Reject unsupported or conflicting generated answers | Data-integrity checks exist; generated-answer verification is not built. |

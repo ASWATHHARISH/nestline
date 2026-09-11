@@ -1,12 +1,22 @@
 {
-  "schema_version": "stage5-fixture-v1",
+  "schema_version": "stage5-fixture-v2",
   "contains_real_medical_data": false,
   "production_release": false,
-  "active_corpus_version": "stage5-fixture-v1",
+  "active_corpus_version": "stage5-fixture-v2",
   "active_release_id": "55555555-5555-4555-8555-555555555555",
   "workspace_owners": {
     "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa": "11111111-1111-4111-8111-111111111111",
-    "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb": "22222222-2222-4222-8222-222222222222"
+    "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb": "22222222-2222-4222-8222-222222222222",
+    "cccccccc-cccc-4ccc-8ccc-cccccccccccc": "33333333-3333-4333-8333-333333333333",
+    "dddddddd-dddd-4ddd-8ddd-dddddddddddd": "44444444-4444-4444-8444-444444444444",
+    "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee": "55555555-5555-4555-8555-555555555555"
+  },
+  "personal_state_versions": {
+    "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa": 3,
+    "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb": 2,
+    "cccccccc-cccc-4ccc-8ccc-cccccccccccc": 1,
+    "dddddddd-dddd-4ddd-8ddd-dddddddddddd": 1,
+    "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee": 1
   },
   "public_records": [
     {
@@ -15,45 +25,141 @@
       "candidate_status": "published",
       "retired": false,
       "embedding": [
-        0.0196078431372549,
-        -0.23137254901960785,
-        -0.7333333333333333,
-        -0.4980392156862745,
-        0.5843137254901961,
-        -0.6705882352941176,
-        -0.16862745098039217,
-        -0.6392156862745098,
-        -0.43529411764705883,
+        -0.12941176470588237,
+        -0.8980392156862745,
+        0.11372549019607843,
+        -0.6941176470588235,
+        -0.011764705882352941,
+        -0.6470588235294118,
+        0.5764705882352941,
+        0.6941176470588235,
+        0.19215686274509805,
+        0.36470588235294116,
+        -0.07450980392156863,
+        0.984313725490196,
+        -0.30980392156862746,
+        -0.8901960784313725,
+        -0.5137254901960784,
+        0.9921568627450981,
+        -0.050980392156862744,
+        0.5686274509803921,
+        -0.08235294117647059,
+        0.8117647058823529,
+        0.36470588235294116,
+        0.44313725490196076,
         -0.4745098039215686,
-        0.7176470588235294,
-        -0.11372549019607843,
-        -0.6784313725490196,
-        -0.0196078431372549,
-        -0.9215686274509803,
-        0.7019607843137254,
-        0.08235294117647059,
-        -0.6627450980392157,
-        0.08235294117647059,
-        -0.13725490196078433,
-        0.7019607843137254,
-        0.0196078431372549,
-        -0.1843137254901961,
-        0.7019607843137254,
-        0.9058823529411765,
-        -0.9058823529411765,
-        0.9686274509803922,
-        0.8431372549019608,
-        -0.5058823529411764,
-        -0.9450980392156862,
-        0.403921568627451,
-        1.0
+        -0.16862745098039217,
+        -0.23921568627450981,
+        0.11372549019607843,
+        -0.8901960784313725,
+        0.6862745098039216,
+        -0.8509803921568627,
+        -0.6862745098039216,
+        1.0,
+        0.36470588235294116
+      ],
+      "candidate": {
+        "candidate_id": "PUB-JOURNEY-24",
+        "evidence_id": "EV-JOURNEY-24",
+        "source_id": "SRC-PUB-JOURNEY-24",
+        "source_title": "Synthetic source PUB-JOURNEY-24",
+        "text": "Week 24 is the confirmed current pregnancy stage in this controlled fixture.",
+        "evidence_lane": "guideline",
+        "domain": "journey",
+        "journey": {
+          "stage": "pregnancy",
+          "unit": "week",
+          "exact": 24,
+          "range_start": null,
+          "range_end": null
+        },
+        "jurisdictions": [
+          "IN"
+        ],
+        "conditions_required": [],
+        "conditions_excluded": [],
+        "release_status": "published",
+        "source_status": "published",
+        "candidate_status": "published",
+        "allowed_use": [
+          "store",
+          "embed",
+          "display"
+        ],
+        "spans": [
+          {
+            "source_id": "SRC-PUB-JOURNEY-24",
+            "evidence_id": "EV-JOURNEY-24",
+            "source_block_ids": [
+              "BLOCK-PUB-JOURNEY-24"
+            ],
+            "page": 1,
+            "locator": "fixture/PUB-JOURNEY-24",
+            "start_char": 0,
+            "end_char": 76,
+            "exact_text": "Week 24 is the confirmed current pregnancy stage in this controlled fixture.",
+            "text_sha256": "6f0d8e277e2dc9d898ae76fd580e3efe79c875e7aeb8436a618e0ed71328ffae"
+          }
+        ],
+        "authority_score": 0.9,
+        "applicability_score": 1.0,
+        "provenance": {
+          "corpus_version": "stage5-fixture-v2",
+          "release_id": "55555555-5555-4555-8555-555555555555",
+          "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
+          "source_version": "fixture-2.0",
+          "embedding_provider": "TEST_ONLY",
+          "embedding_model": "sha256-test-vector-v1",
+          "filter_version": "stage5-filter-v1",
+          "fixture_only": true
+        }
+      }
+    },
+    {
+      "release_status": "published",
+      "source_status": "published",
+      "candidate_status": "published",
+      "retired": false,
+      "embedding": [
+        0.9607843137254902,
+        -0.9921568627450981,
+        -0.984313725490196,
+        0.8509803921568627,
+        -0.5764705882352941,
+        -0.8980392156862745,
+        -0.16862745098039217,
+        0.615686274509804,
+        -0.9764705882352941,
+        0.8274509803921568,
+        -0.615686274509804,
+        -0.36470588235294116,
+        0.38823529411764707,
+        0.5215686274509804,
+        -0.6470588235294118,
+        -0.9529411764705882,
+        0.6078431372549019,
+        -0.7254901960784313,
+        -0.5215686274509804,
+        0.3568627450980392,
+        0.23137254901960785,
+        0.15294117647058825,
+        -0.8901960784313725,
+        0.5529411764705883,
+        0.592156862745098,
+        0.4745098039215686,
+        0.49019607843137253,
+        -0.7725490196078432,
+        -0.7568627450980392,
+        0.8509803921568627,
+        -0.8431372549019608,
+        0.5843137254901961
       ],
       "candidate": {
         "candidate_id": "PUB-NUT-24",
         "evidence_id": "EV-NUT-24",
         "source_id": "SRC-PUB-NUT-24",
         "source_title": "Synthetic source PUB-NUT-24",
-        "text": "At week 24, include varied protein foods and discuss individual dietary restrictions with a qualified professional.",
+        "text": "At week 24, include varied protein foods and account for confirmed dietary restrictions.",
         "evidence_lane": "guideline",
         "domain": "nutrition",
         "journey": {
@@ -86,18 +192,18 @@
             "page": 1,
             "locator": "fixture/PUB-NUT-24",
             "start_char": 0,
-            "end_char": 115,
-            "exact_text": "At week 24, include varied protein foods and discuss individual dietary restrictions with a qualified professional.",
-            "text_sha256": "82622240ca2a6a2e4843db71297d0ad98a2b8a6ed98268d9f30cfbeb3f07b3ff"
+            "end_char": 88,
+            "exact_text": "At week 24, include varied protein foods and account for confirmed dietary restrictions.",
+            "text_sha256": "fa0102ec360d6ace03e93151b1c22d06cd233dad9d930ec6cbbcbe1d1fec14ca"
           }
         ],
         "authority_score": 0.9,
         "applicability_score": 1.0,
         "provenance": {
-          "corpus_version": "stage5-fixture-v1",
+          "corpus_version": "stage5-fixture-v2",
           "release_id": "55555555-5555-4555-8555-555555555555",
           "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
-          "source_version": "fixture-1.0",
+          "source_version": "fixture-2.0",
           "embedding_provider": "TEST_ONLY",
           "embedding_model": "sha256-test-vector-v1",
           "filter_version": "stage5-filter-v1",
@@ -190,10 +296,10 @@
         "authority_score": 0.9,
         "applicability_score": 1.0,
         "provenance": {
-          "corpus_version": "stage5-fixture-v1",
+          "corpus_version": "stage5-fixture-v2",
           "release_id": "55555555-5555-4555-8555-555555555555",
           "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
-          "source_version": "fixture-1.0",
+          "source_version": "fixture-2.0",
           "embedding_provider": "TEST_ONLY",
           "embedding_model": "sha256-test-vector-v1",
           "filter_version": "stage5-filter-v1",
@@ -207,341 +313,53 @@
       "candidate_status": "published",
       "retired": false,
       "embedding": [
-        0.8509803921568627,
-        0.8666666666666667,
-        -0.21568627450980393,
-        -0.24705882352941178,
-        0.6941176470588235,
-        -0.8274509803921568,
-        0.5137254901960784,
-        0.2549019607843137,
-        0.19215686274509805,
-        0.0196078431372549,
-        -0.9450980392156862,
-        -0.2627450980392157,
-        0.9607843137254902,
-        -0.8431372549019608,
-        -0.7254901960784313,
-        -0.050980392156862744,
-        0.08235294117647059,
-        0.0196078431372549,
-        -0.9058823529411765,
-        0.4666666666666667,
-        -0.3333333333333333,
-        -0.9607843137254902,
-        0.9686274509803922,
-        -0.5843137254901961,
-        0.5137254901960784,
-        -0.20784313725490197,
-        -0.4196078431372549,
-        0.5294117647058824,
-        0.07450980392156863,
-        0.9294117647058824,
-        -0.2235294117647059,
-        0.4117647058823529
-      ],
-      "candidate": {
-        "candidate_id": "PUB-NUT-GENERAL-1",
-        "evidence_id": "EV-NUT-GENERAL-1",
-        "source_id": "SRC-PUB-NUT-GENERAL-1",
-        "source_title": "Synthetic source PUB-NUT-GENERAL-1",
-        "text": "Choose a varied pattern of meals from eligible food groups.",
-        "evidence_lane": "guideline",
-        "domain": "nutrition",
-        "journey": {
-          "stage": "pregnancy",
-          "unit": "week",
-          "exact": null,
-          "range_start": 20,
-          "range_end": 28
-        },
-        "jurisdictions": [
-          "IN"
-        ],
-        "conditions_required": [],
-        "conditions_excluded": [],
-        "release_status": "published",
-        "source_status": "published",
-        "candidate_status": "published",
-        "allowed_use": [
-          "store",
-          "embed",
-          "display"
-        ],
-        "spans": [
-          {
-            "source_id": "SRC-PUB-NUT-GENERAL-1",
-            "evidence_id": "EV-NUT-GENERAL-1",
-            "source_block_ids": [
-              "BLOCK-PUB-NUT-GENERAL-1"
-            ],
-            "page": 1,
-            "locator": "fixture/PUB-NUT-GENERAL-1",
-            "start_char": 0,
-            "end_char": 59,
-            "exact_text": "Choose a varied pattern of meals from eligible food groups.",
-            "text_sha256": "ecee6460d816c1a09882075efa1423798a820cbb5505fb35c1654ac389f663b4"
-          }
-        ],
-        "authority_score": 0.7,
-        "applicability_score": 0.7,
-        "provenance": {
-          "corpus_version": "stage5-fixture-v1",
-          "release_id": "55555555-5555-4555-8555-555555555555",
-          "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
-          "source_version": "fixture-1.0",
-          "embedding_provider": "TEST_ONLY",
-          "embedding_model": "sha256-test-vector-v1",
-          "filter_version": "stage5-filter-v1",
-          "fixture_only": true
-        }
-      }
-    },
-    {
-      "release_status": "published",
-      "source_status": "published",
-      "candidate_status": "published",
-      "retired": false,
-      "embedding": [
-        0.9607843137254902,
-        0.403921568627451,
-        -0.5764705882352941,
-        -0.43529411764705883,
-        -0.6392156862745098,
+        -0.42745098039215684,
+        -0.796078431372549,
+        0.7647058823529411,
+        0.396078431372549,
+        -0.9137254901960784,
+        -0.5686274509803921,
+        0.4745098039215686,
         0.9529411764705882,
-        0.6470588235294118,
-        -0.45098039215686275,
-        0.8274509803921568,
-        0.6784313725490196,
-        0.9372549019607843,
-        -0.9764705882352941,
-        0.45098039215686275,
-        0.0196078431372549,
-        0.27058823529411763,
-        0.788235294117647,
-        0.1450980392156863,
-        0.23921568627450981,
-        0.13725490196078433,
-        -0.29411764705882354,
-        -0.1843137254901961,
-        0.7568627450980392,
-        -0.5450980392156862,
-        -0.6392156862745098,
-        -0.3411764705882353,
-        0.4588235294117647,
-        0.2784313725490196,
-        -0.7254901960784313,
-        0.37254901960784315,
-        -0.8980392156862745,
-        0.403921568627451,
-        -0.8745098039215686
-      ],
-      "candidate": {
-        "candidate_id": "PUB-NUT-DECOY-1",
-        "evidence_id": "EV-NUT-DECOY-1",
-        "source_id": "SRC-PUB-NUT-DECOY-1",
-        "source_title": "Synthetic source PUB-NUT-DECOY-1",
-        "text": "Synthetic general nutrition passage number 1 about hydration and meal variety.",
-        "evidence_lane": "guideline",
-        "domain": "nutrition",
-        "journey": {
-          "stage": "pregnancy",
-          "unit": "week",
-          "exact": null,
-          "range_start": 20,
-          "range_end": 28
-        },
-        "jurisdictions": [
-          "IN"
-        ],
-        "conditions_required": [],
-        "conditions_excluded": [],
-        "release_status": "published",
-        "source_status": "published",
-        "candidate_status": "published",
-        "allowed_use": [
-          "store",
-          "embed",
-          "display"
-        ],
-        "spans": [
-          {
-            "source_id": "SRC-PUB-NUT-DECOY-1",
-            "evidence_id": "EV-NUT-DECOY-1",
-            "source_block_ids": [
-              "BLOCK-PUB-NUT-DECOY-1"
-            ],
-            "page": 1,
-            "locator": "fixture/PUB-NUT-DECOY-1",
-            "start_char": 0,
-            "end_char": 78,
-            "exact_text": "Synthetic general nutrition passage number 1 about hydration and meal variety.",
-            "text_sha256": "fab336482ef9d246e9d6f703b982a2e4929e915a68e03a2e54baa323af0db310"
-          }
-        ],
-        "authority_score": 0.4,
-        "applicability_score": 0.6,
-        "provenance": {
-          "corpus_version": "stage5-fixture-v1",
-          "release_id": "55555555-5555-4555-8555-555555555555",
-          "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
-          "source_version": "fixture-1.0",
-          "embedding_provider": "TEST_ONLY",
-          "embedding_model": "sha256-test-vector-v1",
-          "filter_version": "stage5-filter-v1",
-          "fixture_only": true
-        }
-      }
-    },
-    {
-      "release_status": "published",
-      "source_status": "published",
-      "candidate_status": "published",
-      "retired": false,
-      "embedding": [
-        0.6549019607843137,
-        0.3176470588235294,
+        -0.6941176470588235,
         0.17647058823529413,
-        0.6862745098039216,
-        -0.49019607843137253,
-        0.7333333333333333,
-        -0.29411764705882354,
-        0.5686274509803921,
-        0.30196078431372547,
-        -0.4745098039215686,
-        0.3568627450980392,
-        0.9294117647058824,
-        -0.8274509803921568,
-        -0.23921568627450981,
-        -0.7725490196078432,
-        -0.592156862745098,
-        0.8823529411764706,
-        -0.09019607843137255,
-        -0.3568627450980392,
-        0.5764705882352941,
-        -0.7176470588235294,
-        -0.27058823529411763,
-        -0.9764705882352941,
-        0.15294117647058825,
-        -0.7019607843137254,
-        -0.7490196078431373,
-        0.8117647058823529,
-        -0.03529411764705882,
-        -0.21568627450980393,
-        -0.4588235294117647,
-        0.9058823529411765,
-        0.7333333333333333
-      ],
-      "candidate": {
-        "candidate_id": "PUB-NUT-DECOY-2",
-        "evidence_id": "EV-NUT-DECOY-2",
-        "source_id": "SRC-PUB-NUT-DECOY-2",
-        "source_title": "Synthetic source PUB-NUT-DECOY-2",
-        "text": "Synthetic general nutrition passage number 2 about hydration and meal variety.",
-        "evidence_lane": "guideline",
-        "domain": "nutrition",
-        "journey": {
-          "stage": "pregnancy",
-          "unit": "week",
-          "exact": null,
-          "range_start": 20,
-          "range_end": 28
-        },
-        "jurisdictions": [
-          "IN"
-        ],
-        "conditions_required": [],
-        "conditions_excluded": [],
-        "release_status": "published",
-        "source_status": "published",
-        "candidate_status": "published",
-        "allowed_use": [
-          "store",
-          "embed",
-          "display"
-        ],
-        "spans": [
-          {
-            "source_id": "SRC-PUB-NUT-DECOY-2",
-            "evidence_id": "EV-NUT-DECOY-2",
-            "source_block_ids": [
-              "BLOCK-PUB-NUT-DECOY-2"
-            ],
-            "page": 1,
-            "locator": "fixture/PUB-NUT-DECOY-2",
-            "start_char": 0,
-            "end_char": 78,
-            "exact_text": "Synthetic general nutrition passage number 2 about hydration and meal variety.",
-            "text_sha256": "d3a896d741dd5ac8a643adf616611d34f07452c9245d03932620e77b6445f3dd"
-          }
-        ],
-        "authority_score": 0.4,
-        "applicability_score": 0.6,
-        "provenance": {
-          "corpus_version": "stage5-fixture-v1",
-          "release_id": "55555555-5555-4555-8555-555555555555",
-          "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
-          "source_version": "fixture-1.0",
-          "embedding_provider": "TEST_ONLY",
-          "embedding_model": "sha256-test-vector-v1",
-          "filter_version": "stage5-filter-v1",
-          "fixture_only": true
-        }
-      }
-    },
-    {
-      "release_status": "published",
-      "source_status": "published",
-      "candidate_status": "published",
-      "retired": false,
-      "embedding": [
-        0.42745098039215684,
-        -0.6235294117647059,
-        0.3254901960784314,
-        -0.4196078431372549,
-        0.07450980392156863,
-        0.4117647058823529,
-        0.2784313725490196,
-        0.403921568627451,
-        -0.20784313725490197,
-        0.37254901960784315,
-        -0.5137254901960784,
-        -0.5843137254901961,
-        0.2,
-        -0.34901960784313724,
-        -0.5058823529411764,
-        -0.5372549019607843,
-        -0.8352941176470589,
-        -0.23137254901960785,
-        -0.011764705882352941,
-        0.9764705882352941,
-        -0.1843137254901961,
-        0.7803921568627451,
-        0.9058823529411765,
-        -0.10588235294117647,
-        -0.5450980392156862,
-        -0.5058823529411764,
+        0.7176470588235294,
+        0.6078431372549019,
+        -0.17647058823529413,
         0.9372549019607843,
-        0.3411764705882353,
-        0.5607843137254902,
-        0.6235294117647059,
-        0.8196078431372549,
-        0.19215686274509805
+        0.3803921568627451,
+        0.12156862745098039,
+        -0.29411764705882354,
+        0.8431372549019608,
+        0.12941176470588237,
+        -0.7333333333333333,
+        0.8745098039215686,
+        -0.5372549019607843,
+        0.2235294117647059,
+        -0.9764705882352941,
+        -0.38823529411764707,
+        0.2235294117647059,
+        0.3254901960784314,
+        0.058823529411764705,
+        -0.6,
+        -0.23137254901960785,
+        -0.12941176470588237,
+        -0.8823529411764706
       ],
       "candidate": {
-        "candidate_id": "PUB-NUT-DECOY-3",
-        "evidence_id": "EV-NUT-DECOY-3",
-        "source_id": "SRC-PUB-NUT-DECOY-3",
-        "source_title": "Synthetic source PUB-NUT-DECOY-3",
-        "text": "Synthetic general nutrition passage number 3 about hydration and meal variety.",
+        "candidate_id": "PUB-WELL-24",
+        "evidence_id": "EV-WELL-24",
+        "source_id": "SRC-PUB-WELL-24",
+        "source_title": "Synthetic source PUB-WELL-24",
+        "text": "At week 24, use a repeatable rest and emotional wellbeing routine.",
         "evidence_lane": "guideline",
-        "domain": "nutrition",
+        "domain": "wellbeing",
         "journey": {
           "stage": "pregnancy",
           "unit": "week",
-          "exact": null,
-          "range_start": 20,
-          "range_end": 28
+          "exact": 24,
+          "range_start": null,
+          "range_end": null
         },
         "jurisdictions": [
           "IN"
@@ -558,26 +376,26 @@
         ],
         "spans": [
           {
-            "source_id": "SRC-PUB-NUT-DECOY-3",
-            "evidence_id": "EV-NUT-DECOY-3",
+            "source_id": "SRC-PUB-WELL-24",
+            "evidence_id": "EV-WELL-24",
             "source_block_ids": [
-              "BLOCK-PUB-NUT-DECOY-3"
+              "BLOCK-PUB-WELL-24"
             ],
             "page": 1,
-            "locator": "fixture/PUB-NUT-DECOY-3",
+            "locator": "fixture/PUB-WELL-24",
             "start_char": 0,
-            "end_char": 78,
-            "exact_text": "Synthetic general nutrition passage number 3 about hydration and meal variety.",
-            "text_sha256": "b630a94a89b4a3b365af3e3599533f3b15627efc68e3f3723a3ff7abc7cfe898"
+            "end_char": 66,
+            "exact_text": "At week 24, use a repeatable rest and emotional wellbeing routine.",
+            "text_sha256": "491ae1b20b37bcf92796dbcd69f7b08f5aeb9022ef3b9c034e9ca98733626f0f"
           }
         ],
-        "authority_score": 0.4,
-        "applicability_score": 0.6,
+        "authority_score": 0.9,
+        "applicability_score": 1.0,
         "provenance": {
-          "corpus_version": "stage5-fixture-v1",
+          "corpus_version": "stage5-fixture-v2",
           "release_id": "55555555-5555-4555-8555-555555555555",
           "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
-          "source_version": "fixture-1.0",
+          "source_version": "fixture-2.0",
           "embedding_provider": "TEST_ONLY",
           "embedding_model": "sha256-test-vector-v1",
           "filter_version": "stage5-filter-v1",
@@ -591,154 +409,732 @@
       "candidate_status": "published",
       "retired": false,
       "embedding": [
-        0.3568627450980392,
-        0.8509803921568627,
-        -0.7333333333333333,
-        -0.1450980392156863,
-        0.45098039215686275,
-        0.34901960784313724,
-        -0.3176470588235294,
-        -0.38823529411764707,
-        -0.44313725490196076,
-        -0.23137254901960785,
+        0.8117647058823529,
+        -0.4980392156862745,
+        -0.6862745098039216,
+        0.011764705882352941,
+        0.9450980392156862,
+        0.3254901960784314,
+        -0.36470588235294116,
+        -0.9607843137254902,
+        0.2235294117647059,
+        0.8352941176470589,
+        -0.396078431372549,
+        0.7647058823529411,
+        0.28627450980392155,
+        -0.4823529411764706,
+        0.5372549019607843,
+        -0.12156862745098039,
+        0.36470588235294116,
+        -0.34901960784313724,
+        -0.5843137254901961,
+        0.9764705882352941,
+        0.7098039215686275,
+        0.5058823529411764,
+        0.09803921568627451,
+        0.38823529411764707,
+        -0.43529411764705883,
+        0.23137254901960785,
+        -0.00392156862745098,
         0.5686274509803921,
+        1.0,
+        0.34901960784313724,
+        0.1843137254901961,
+        -0.3176470588235294
+      ],
+      "candidate": {
+        "candidate_id": "PUB-SYM-24",
+        "evidence_id": "EV-SYM-24",
+        "source_id": "SRC-PUB-SYM-24",
+        "source_title": "Synthetic source PUB-SYM-24",
+        "text": "At week 24, record symptoms and use the reviewed safety route rather than inferring safety.",
+        "evidence_lane": "guideline",
+        "domain": "symptoms",
+        "journey": {
+          "stage": "pregnancy",
+          "unit": "week",
+          "exact": 24,
+          "range_start": null,
+          "range_end": null
+        },
+        "jurisdictions": [
+          "IN"
+        ],
+        "conditions_required": [],
+        "conditions_excluded": [],
+        "release_status": "published",
+        "source_status": "published",
+        "candidate_status": "published",
+        "allowed_use": [
+          "store",
+          "embed",
+          "display"
+        ],
+        "spans": [
+          {
+            "source_id": "SRC-PUB-SYM-24",
+            "evidence_id": "EV-SYM-24",
+            "source_block_ids": [
+              "BLOCK-PUB-SYM-24"
+            ],
+            "page": 1,
+            "locator": "fixture/PUB-SYM-24",
+            "start_char": 0,
+            "end_char": 91,
+            "exact_text": "At week 24, record symptoms and use the reviewed safety route rather than inferring safety.",
+            "text_sha256": "e7402881f8a951059cea4de1a442c470ae5335fcdac08cb1489d7fc8ffac9757"
+          }
+        ],
+        "authority_score": 0.9,
+        "applicability_score": 1.0,
+        "provenance": {
+          "corpus_version": "stage5-fixture-v2",
+          "release_id": "55555555-5555-4555-8555-555555555555",
+          "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
+          "source_version": "fixture-2.0",
+          "embedding_provider": "TEST_ONLY",
+          "embedding_model": "sha256-test-vector-v1",
+          "filter_version": "stage5-filter-v1",
+          "fixture_only": true
+        }
+      }
+    },
+    {
+      "release_status": "published",
+      "source_status": "published",
+      "candidate_status": "published",
+      "retired": false,
+      "embedding": [
+        -0.5686274509803921,
+        0.49019607843137253,
+        0.027450980392156862,
+        -0.7098039215686275,
+        0.788235294117647,
+        -0.6862745098039216,
+        0.7098039215686275,
+        -0.6862745098039216,
+        -0.8196078431372549,
+        0.12941176470588237,
+        -0.3803921568627451,
+        -0.8666666666666667,
+        -0.4117647058823529,
+        -0.3254901960784314,
+        -0.6549019607843137,
+        -0.7803921568627451,
+        0.37254901960784315,
+        -0.42745098039215684,
+        -0.4823529411764706,
+        0.07450980392156863,
+        -0.5372549019607843,
+        -0.9607843137254902,
+        -0.027450980392156862,
+        0.027450980392156862,
+        -0.1843137254901961,
+        0.45098039215686275,
+        0.8823529411764706,
+        0.2,
+        0.4666666666666667,
+        0.984313725490196,
+        0.8117647058823529,
+        -0.30196078431372547
+      ],
+      "candidate": {
+        "candidate_id": "PUB-PREP-24",
+        "evidence_id": "EV-PREP-24",
+        "source_id": "SRC-PUB-PREP-24",
+        "source_title": "Synthetic source PUB-PREP-24",
+        "text": "At week 24, prepare questions and records for the next appointment.",
+        "evidence_lane": "guideline",
+        "domain": "preparation",
+        "journey": {
+          "stage": "pregnancy",
+          "unit": "week",
+          "exact": 24,
+          "range_start": null,
+          "range_end": null
+        },
+        "jurisdictions": [
+          "IN"
+        ],
+        "conditions_required": [],
+        "conditions_excluded": [],
+        "release_status": "published",
+        "source_status": "published",
+        "candidate_status": "published",
+        "allowed_use": [
+          "store",
+          "embed",
+          "display"
+        ],
+        "spans": [
+          {
+            "source_id": "SRC-PUB-PREP-24",
+            "evidence_id": "EV-PREP-24",
+            "source_block_ids": [
+              "BLOCK-PUB-PREP-24"
+            ],
+            "page": 1,
+            "locator": "fixture/PUB-PREP-24",
+            "start_char": 0,
+            "end_char": 67,
+            "exact_text": "At week 24, prepare questions and records for the next appointment.",
+            "text_sha256": "37be8325e428da2817904f114b562c1caf4942893b057c8368b9f099bbfde759"
+          }
+        ],
+        "authority_score": 0.9,
+        "applicability_score": 1.0,
+        "provenance": {
+          "corpus_version": "stage5-fixture-v2",
+          "release_id": "55555555-5555-4555-8555-555555555555",
+          "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
+          "source_version": "fixture-2.0",
+          "embedding_provider": "TEST_ONLY",
+          "embedding_model": "sha256-test-vector-v1",
+          "filter_version": "stage5-filter-v1",
+          "fixture_only": true
+        }
+      }
+    },
+    {
+      "release_status": "published",
+      "source_status": "published",
+      "candidate_status": "published",
+      "retired": false,
+      "embedding": [
+        0.8274509803921568,
+        0.2549019607843137,
+        0.06666666666666667,
+        0.796078431372549,
+        0.9686274509803922,
+        0.9921568627450981,
+        -0.8823529411764706,
+        -0.7098039215686275,
+        0.9764705882352941,
+        0.4980392156862745,
+        0.29411764705882354,
+        -0.8745098039215686,
+        -0.38823529411764707,
+        -0.19215686274509805,
         0.7568627450980392,
-        0.7725490196078432,
+        -0.796078431372549,
+        -0.2784313725490196,
+        0.7490196078431373,
+        0.16862745098039217,
+        -0.7176470588235294,
+        -0.19215686274509805,
+        -0.788235294117647,
+        -0.1450980392156863,
+        -0.8588235294117647,
+        -0.5450980392156862,
+        0.5529411764705883,
+        -0.3568627450980392,
+        -0.8901960784313725,
+        -0.6549019607843137,
+        -0.00392156862745098,
+        0.7176470588235294,
+        0.8274509803921568
+      ],
+      "candidate": {
+        "candidate_id": "PUB-FOLLOW-24",
+        "evidence_id": "EV-FOLLOW-24",
+        "source_id": "SRC-PUB-FOLLOW-24",
+        "source_title": "Synthetic source PUB-FOLLOW-24",
+        "text": "At week 24, follow up on saved questions with the care team.",
+        "evidence_lane": "guideline",
+        "domain": "followup",
+        "journey": {
+          "stage": "pregnancy",
+          "unit": "week",
+          "exact": 24,
+          "range_start": null,
+          "range_end": null
+        },
+        "jurisdictions": [
+          "IN"
+        ],
+        "conditions_required": [],
+        "conditions_excluded": [],
+        "release_status": "published",
+        "source_status": "published",
+        "candidate_status": "published",
+        "allowed_use": [
+          "store",
+          "embed",
+          "display"
+        ],
+        "spans": [
+          {
+            "source_id": "SRC-PUB-FOLLOW-24",
+            "evidence_id": "EV-FOLLOW-24",
+            "source_block_ids": [
+              "BLOCK-PUB-FOLLOW-24"
+            ],
+            "page": 1,
+            "locator": "fixture/PUB-FOLLOW-24",
+            "start_char": 0,
+            "end_char": 60,
+            "exact_text": "At week 24, follow up on saved questions with the care team.",
+            "text_sha256": "e9a088e5fbfe0f25fcbfa5104e67e01a5cdf9524671b6d123ac6520e2c7fdbe9"
+          }
+        ],
+        "authority_score": 0.9,
+        "applicability_score": 1.0,
+        "provenance": {
+          "corpus_version": "stage5-fixture-v2",
+          "release_id": "55555555-5555-4555-8555-555555555555",
+          "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
+          "source_version": "fixture-2.0",
+          "embedding_provider": "TEST_ONLY",
+          "embedding_model": "sha256-test-vector-v1",
+          "filter_version": "stage5-filter-v1",
+          "fixture_only": true
+        }
+      }
+    },
+    {
+      "release_status": "published",
+      "source_status": "published",
+      "candidate_status": "published",
+      "retired": false,
+      "embedding": [
+        -0.984313725490196,
+        -0.6784313725490196,
+        0.6313725490196078,
+        0.5843137254901961,
+        -0.8588235294117647,
+        -0.8980392156862745,
+        -0.796078431372549,
+        -0.49019607843137253,
+        -0.15294117647058825,
+        -0.396078431372549,
+        0.4745098039215686,
+        -0.6313725490196078,
+        -0.7803921568627451,
+        0.4980392156862745,
+        -0.44313725490196076,
+        0.23921568627450981,
+        0.7098039215686275,
+        -0.07450980392156863,
+        -0.1843137254901961,
+        0.5607843137254902,
+        -0.24705882352941178,
+        0.5686274509803921,
+        0.5843137254901961,
+        0.23921568627450981,
+        0.9137254901960784,
+        -0.38823529411764707,
+        -0.13725490196078433,
+        -0.44313725490196076,
+        0.8117647058823529,
+        0.027450980392156862,
+        0.00392156862745098,
+        0.8980392156862745
+      ],
+      "candidate": {
+        "candidate_id": "PUB-PREP-30",
+        "evidence_id": "EV-PREP-30",
+        "source_id": "SRC-PUB-PREP-30",
+        "source_title": "Synthetic source PUB-PREP-30",
+        "text": "At week 30, review future appointment preparation topics.",
+        "evidence_lane": "guideline",
+        "domain": "preparation",
+        "journey": {
+          "stage": "pregnancy",
+          "unit": "week",
+          "exact": 30,
+          "range_start": null,
+          "range_end": null
+        },
+        "jurisdictions": [
+          "IN"
+        ],
+        "conditions_required": [],
+        "conditions_excluded": [],
+        "release_status": "published",
+        "source_status": "published",
+        "candidate_status": "published",
+        "allowed_use": [
+          "store",
+          "embed",
+          "display"
+        ],
+        "spans": [
+          {
+            "source_id": "SRC-PUB-PREP-30",
+            "evidence_id": "EV-PREP-30",
+            "source_block_ids": [
+              "BLOCK-PUB-PREP-30"
+            ],
+            "page": 1,
+            "locator": "fixture/PUB-PREP-30",
+            "start_char": 0,
+            "end_char": 57,
+            "exact_text": "At week 30, review future appointment preparation topics.",
+            "text_sha256": "0229d0ca120d1a416c4dbc2f1cbf479eda7668c760c8ca9ef44e6e47e78380f2"
+          }
+        ],
+        "authority_score": 0.9,
+        "applicability_score": 1.0,
+        "provenance": {
+          "corpus_version": "stage5-fixture-v2",
+          "release_id": "55555555-5555-4555-8555-555555555555",
+          "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
+          "source_version": "fixture-2.0",
+          "embedding_provider": "TEST_ONLY",
+          "embedding_model": "sha256-test-vector-v1",
+          "filter_version": "stage5-filter-v1",
+          "fixture_only": true
+        }
+      }
+    },
+    {
+      "release_status": "published",
+      "source_status": "published",
+      "candidate_status": "published",
+      "retired": false,
+      "embedding": [
+        0.10588235294117647,
+        0.1843137254901961,
+        0.6470588235294118,
+        0.9294117647058824,
+        -0.7176470588235294,
+        0.396078431372549,
+        -0.37254901960784315,
+        0.17647058823529413,
+        0.09019607843137255,
+        -0.6862745098039216,
+        -0.9372549019607843,
+        -0.6627450980392157,
+        -0.3333333333333333,
+        -0.9294117647058824,
+        -0.9058823529411765,
+        0.1843137254901961,
+        0.9372549019607843,
+        0.396078431372549,
+        -0.6549019607843137,
+        -0.6784313725490196,
+        -0.20784313725490197,
+        0.027450980392156862,
+        -0.45098039215686275,
+        0.44313725490196076,
+        0.11372549019607843,
+        0.396078431372549,
+        -0.13725490196078433,
+        -0.011764705882352941,
+        0.6392156862745098,
+        0.4745098039215686,
+        0.8431372549019608,
+        -0.9137254901960784
+      ],
+      "candidate": {
+        "candidate_id": "PUB-POSSIBLE",
+        "evidence_id": "EV-POSSIBLE",
+        "source_id": "SRC-PUB-POSSIBLE",
+        "source_title": "Synthetic source PUB-POSSIBLE",
+        "text": "During possible pregnancy, confirm status before using week-specific guidance.",
+        "evidence_lane": "guideline",
+        "domain": "followup",
+        "journey": {
+          "stage": "possible_pregnancy",
+          "unit": "none",
+          "exact": null,
+          "range_start": null,
+          "range_end": null
+        },
+        "jurisdictions": [
+          "IN"
+        ],
+        "conditions_required": [],
+        "conditions_excluded": [],
+        "release_status": "published",
+        "source_status": "published",
+        "candidate_status": "published",
+        "allowed_use": [
+          "store",
+          "embed",
+          "display"
+        ],
+        "spans": [
+          {
+            "source_id": "SRC-PUB-POSSIBLE",
+            "evidence_id": "EV-POSSIBLE",
+            "source_block_ids": [
+              "BLOCK-PUB-POSSIBLE"
+            ],
+            "page": 1,
+            "locator": "fixture/PUB-POSSIBLE",
+            "start_char": 0,
+            "end_char": 78,
+            "exact_text": "During possible pregnancy, confirm status before using week-specific guidance.",
+            "text_sha256": "8d97d2f624b250968b28082b55090c97f7b22c29658346b88eb26e7ed1bceb0b"
+          }
+        ],
+        "authority_score": 0.9,
+        "applicability_score": 1.0,
+        "provenance": {
+          "corpus_version": "stage5-fixture-v2",
+          "release_id": "55555555-5555-4555-8555-555555555555",
+          "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
+          "source_version": "fixture-2.0",
+          "embedding_provider": "TEST_ONLY",
+          "embedding_model": "sha256-test-vector-v1",
+          "filter_version": "stage5-filter-v1",
+          "fixture_only": true
+        }
+      }
+    },
+    {
+      "release_status": "published",
+      "source_status": "published",
+      "candidate_status": "published",
+      "retired": false,
+      "embedding": [
+        -0.44313725490196076,
+        -0.9607843137254902,
+        -0.21568627450980393,
+        0.7333333333333333,
+        -0.4823529411764706,
+        -0.3803921568627451,
+        -0.24705882352941178,
+        0.8352941176470589,
+        0.9607843137254902,
+        0.44313725490196076,
+        -0.6627450980392157,
+        -0.27058823529411763,
+        -0.2,
+        0.12941176470588237,
+        0.6627450980392157,
+        -0.9921568627450981,
+        0.6235294117647059,
+        0.20784313725490197,
+        -0.10588235294117647,
+        0.6549019607843137,
+        0.6078431372549019,
+        0.984313725490196,
+        0.3176470588235294,
+        0.38823529411764707,
+        -0.2784313725490196,
+        0.3803921568627451,
+        -0.5529411764705883,
+        -0.5529411764705883,
+        0.8588235294117647,
+        0.10588235294117647,
+        -0.5529411764705883,
+        0.3803921568627451
+      ],
+      "candidate": {
+        "candidate_id": "PUB-PP-DAY3",
+        "evidence_id": "EV-PP-DAY3",
+        "source_id": "SRC-PUB-PP-DAY3",
+        "source_title": "Synthetic source PUB-PP-DAY3",
+        "text": "At postpartum day 3, prepare follow-up questions and recovery records.",
+        "evidence_lane": "guideline",
+        "domain": "preparation",
+        "journey": {
+          "stage": "postpartum",
+          "unit": "day",
+          "exact": 3,
+          "range_start": null,
+          "range_end": null
+        },
+        "jurisdictions": [
+          "IN"
+        ],
+        "conditions_required": [],
+        "conditions_excluded": [],
+        "release_status": "published",
+        "source_status": "published",
+        "candidate_status": "published",
+        "allowed_use": [
+          "store",
+          "embed",
+          "display"
+        ],
+        "spans": [
+          {
+            "source_id": "SRC-PUB-PP-DAY3",
+            "evidence_id": "EV-PP-DAY3",
+            "source_block_ids": [
+              "BLOCK-PUB-PP-DAY3"
+            ],
+            "page": 1,
+            "locator": "fixture/PUB-PP-DAY3",
+            "start_char": 0,
+            "end_char": 70,
+            "exact_text": "At postpartum day 3, prepare follow-up questions and recovery records.",
+            "text_sha256": "470564dd424f60eafab82b5d6690d401cf9a72d3cdfda8b15cb03939ed8d39b0"
+          }
+        ],
+        "authority_score": 0.9,
+        "applicability_score": 1.0,
+        "provenance": {
+          "corpus_version": "stage5-fixture-v2",
+          "release_id": "55555555-5555-4555-8555-555555555555",
+          "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
+          "source_version": "fixture-2.0",
+          "embedding_provider": "TEST_ONLY",
+          "embedding_model": "sha256-test-vector-v1",
+          "filter_version": "stage5-filter-v1",
+          "fixture_only": true
+        }
+      }
+    },
+    {
+      "release_status": "published",
+      "source_status": "published",
+      "candidate_status": "published",
+      "retired": false,
+      "embedding": [
+        -0.23921568627450981,
+        0.7490196078431373,
+        -0.49019607843137253,
+        0.8352941176470589,
+        0.36470588235294116,
+        -0.12941176470588237,
+        -0.9058823529411765,
+        -0.011764705882352941,
+        -0.21568627450980393,
+        -0.8431372549019608,
+        0.3254901960784314,
+        0.6,
+        0.42745098039215684,
+        -0.19215686274509805,
+        0.9607843137254902,
+        0.23921568627450981,
+        -0.2235294117647059,
+        0.3803921568627451,
+        -0.043137254901960784,
+        -0.9450980392156862,
+        0.6313725490196078,
+        -0.7254901960784313,
+        0.42745098039215684,
+        -0.7254901960784313,
+        -0.9529411764705882,
+        0.7411764705882353,
+        -0.2235294117647059,
+        -0.8117647058823529,
+        -0.42745098039215684,
+        0.29411764705882354,
+        0.8901960784313725,
+        0.13725490196078433
+      ],
+      "candidate": {
+        "candidate_id": "PUB-PP-WEEK6",
+        "evidence_id": "EV-PP-WEEK6",
+        "source_id": "SRC-PUB-PP-WEEK6",
+        "source_title": "Synthetic source PUB-PP-WEEK6",
+        "text": "At postpartum week 6, review wellbeing support and follow-up needs.",
+        "evidence_lane": "guideline",
+        "domain": "wellbeing",
+        "journey": {
+          "stage": "postpartum",
+          "unit": "week",
+          "exact": 6,
+          "range_start": null,
+          "range_end": null
+        },
+        "jurisdictions": [
+          "IN"
+        ],
+        "conditions_required": [],
+        "conditions_excluded": [],
+        "release_status": "published",
+        "source_status": "published",
+        "candidate_status": "published",
+        "allowed_use": [
+          "store",
+          "embed",
+          "display"
+        ],
+        "spans": [
+          {
+            "source_id": "SRC-PUB-PP-WEEK6",
+            "evidence_id": "EV-PP-WEEK6",
+            "source_block_ids": [
+              "BLOCK-PUB-PP-WEEK6"
+            ],
+            "page": 1,
+            "locator": "fixture/PUB-PP-WEEK6",
+            "start_char": 0,
+            "end_char": 67,
+            "exact_text": "At postpartum week 6, review wellbeing support and follow-up needs.",
+            "text_sha256": "61df41eaae6f0c7e6414a9ccb667fa9e63b07a07d023b62306de631849a5f191"
+          }
+        ],
+        "authority_score": 0.9,
+        "applicability_score": 1.0,
+        "provenance": {
+          "corpus_version": "stage5-fixture-v2",
+          "release_id": "55555555-5555-4555-8555-555555555555",
+          "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
+          "source_version": "fixture-2.0",
+          "embedding_provider": "TEST_ONLY",
+          "embedding_model": "sha256-test-vector-v1",
+          "filter_version": "stage5-filter-v1",
+          "fixture_only": true
+        }
+      }
+    },
+    {
+      "release_status": "published",
+      "source_status": "published",
+      "candidate_status": "published",
+      "retired": false,
+      "embedding": [
+        -0.6235294117647059,
+        -0.2627450980392157,
+        0.403921568627451,
+        -1.0,
+        0.9058823529411765,
+        0.9686274509803922,
+        0.8431372549019608,
+        0.49019607843137253,
+        -0.08235294117647059,
+        -0.43529411764705883,
+        0.17647058823529413,
+        0.6470588235294118,
+        -0.5764705882352941,
+        -0.1607843137254902,
+        0.19215686274509805,
+        -0.8352941176470589,
+        -0.20784313725490197,
+        -0.29411764705882354,
+        0.9686274509803922,
+        -0.027450980392156862,
+        -0.3411764705882353,
+        0.06666666666666667,
+        -0.027450980392156862,
+        -0.7725490196078432,
+        0.9764705882352941,
         0.2784313725490196,
         0.7490196078431373,
-        -0.5372549019607843,
-        0.9529411764705882,
-        -0.6,
-        0.38823529411764707,
-        -0.5215686274509804,
-        0.4666666666666667,
-        -0.36470588235294116,
-        -0.2784313725490196,
-        -0.36470588235294116,
-        -0.6627450980392157,
-        0.3803921568627451,
-        0.9294117647058824,
-        0.011764705882352941,
-        0.28627450980392155,
-        0.9137254901960784,
-        -0.803921568627451,
-        -0.24705882352941178
-      ],
-      "candidate": {
-        "candidate_id": "PUB-NUT-DECOY-4",
-        "evidence_id": "EV-NUT-DECOY-4",
-        "source_id": "SRC-PUB-NUT-DECOY-4",
-        "source_title": "Synthetic source PUB-NUT-DECOY-4",
-        "text": "Synthetic general nutrition passage number 4 about hydration and meal variety.",
-        "evidence_lane": "guideline",
-        "domain": "nutrition",
-        "journey": {
-          "stage": "pregnancy",
-          "unit": "week",
-          "exact": null,
-          "range_start": 20,
-          "range_end": 28
-        },
-        "jurisdictions": [
-          "IN"
-        ],
-        "conditions_required": [],
-        "conditions_excluded": [],
-        "release_status": "published",
-        "source_status": "published",
-        "candidate_status": "published",
-        "allowed_use": [
-          "store",
-          "embed",
-          "display"
-        ],
-        "spans": [
-          {
-            "source_id": "SRC-PUB-NUT-DECOY-4",
-            "evidence_id": "EV-NUT-DECOY-4",
-            "source_block_ids": [
-              "BLOCK-PUB-NUT-DECOY-4"
-            ],
-            "page": 1,
-            "locator": "fixture/PUB-NUT-DECOY-4",
-            "start_char": 0,
-            "end_char": 78,
-            "exact_text": "Synthetic general nutrition passage number 4 about hydration and meal variety.",
-            "text_sha256": "adec226db9ac574e4762c8e0e2a3df3bf933b13dbb515c512bb0f681a4f41960"
-          }
-        ],
-        "authority_score": 0.4,
-        "applicability_score": 0.6,
-        "provenance": {
-          "corpus_version": "stage5-fixture-v1",
-          "release_id": "55555555-5555-4555-8555-555555555555",
-          "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
-          "source_version": "fixture-1.0",
-          "embedding_provider": "TEST_ONLY",
-          "embedding_model": "sha256-test-vector-v1",
-          "filter_version": "stage5-filter-v1",
-          "fixture_only": true
-        }
-      }
-    },
-    {
-      "release_status": "published",
-      "source_status": "published",
-      "candidate_status": "published",
-      "retired": false,
-      "embedding": [
-        -0.24705882352941178,
         -0.38823529411764707,
-        0.9529411764705882,
-        0.5137254901960784,
-        0.1450980392156863,
-        -0.07450980392156863,
-        -0.4980392156862745,
-        0.10588235294117647,
-        -0.6784313725490196,
-        0.13725490196078433,
-        0.00392156862745098,
-        -0.788235294117647,
-        0.058823529411764705,
-        -0.7411764705882353,
-        -0.6784313725490196,
-        -0.07450980392156863,
-        0.03529411764705882,
-        -0.396078431372549,
-        0.9607843137254902,
-        0.1607843137254902,
-        -0.5843137254901961,
-        -0.396078431372549,
-        -0.49019607843137253,
-        0.7411764705882353,
-        0.4823529411764706,
-        0.9372549019607843,
-        -0.8274509803921568,
-        -0.5607843137254902,
-        0.6470588235294118,
-        -0.08235294117647059,
-        0.4823529411764706,
-        -0.5215686274509804
+        0.4117647058823529,
+        -0.796078431372549,
+        -0.592156862745098,
+        0.7803921568627451
       ],
       "candidate": {
-        "candidate_id": "PUB-NUT-DECOY-5",
-        "evidence_id": "EV-NUT-DECOY-5",
-        "source_id": "SRC-PUB-NUT-DECOY-5",
-        "source_title": "Synthetic source PUB-NUT-DECOY-5",
-        "text": "Synthetic general nutrition passage number 5 about hydration and meal variety.",
+        "candidate_id": "PUB-COND-POS",
+        "evidence_id": "EV-COND-POS",
+        "source_id": "SRC-PUB-COND-POS",
+        "source_title": "Synthetic source PUB-COND-POS",
+        "text": "A confirmed movement restriction changes applicable movement guidance.",
         "evidence_lane": "guideline",
-        "domain": "nutrition",
+        "domain": "movement",
         "journey": {
           "stage": "pregnancy",
           "unit": "week",
-          "exact": null,
-          "range_start": 20,
-          "range_end": 28
+          "exact": 24,
+          "range_start": null,
+          "range_end": null
         },
         "jurisdictions": [
           "IN"
         ],
-        "conditions_required": [],
+        "conditions_required": [
+          "movement_restriction"
+        ],
         "conditions_excluded": [],
         "release_status": "published",
         "source_status": "published",
@@ -750,26 +1146,26 @@
         ],
         "spans": [
           {
-            "source_id": "SRC-PUB-NUT-DECOY-5",
-            "evidence_id": "EV-NUT-DECOY-5",
+            "source_id": "SRC-PUB-COND-POS",
+            "evidence_id": "EV-COND-POS",
             "source_block_ids": [
-              "BLOCK-PUB-NUT-DECOY-5"
+              "BLOCK-PUB-COND-POS"
             ],
             "page": 1,
-            "locator": "fixture/PUB-NUT-DECOY-5",
+            "locator": "fixture/PUB-COND-POS",
             "start_char": 0,
-            "end_char": 78,
-            "exact_text": "Synthetic general nutrition passage number 5 about hydration and meal variety.",
-            "text_sha256": "604ef9c19276408d2991801b87212976844dfa94354d41debdf71638d275bd3d"
+            "end_char": 70,
+            "exact_text": "A confirmed movement restriction changes applicable movement guidance.",
+            "text_sha256": "305eb300f3fbebbe754896d2366b9815655afb7c54887c1dfca3df4eb41a34e3"
           }
         ],
-        "authority_score": 0.4,
-        "applicability_score": 0.6,
+        "authority_score": 0.9,
+        "applicability_score": 1.0,
         "provenance": {
-          "corpus_version": "stage5-fixture-v1",
+          "corpus_version": "stage5-fixture-v2",
           "release_id": "55555555-5555-4555-8555-555555555555",
           "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
-          "source_version": "fixture-1.0",
+          "source_version": "fixture-2.0",
           "embedding_provider": "TEST_ONLY",
           "embedding_model": "sha256-test-vector-v1",
           "filter_version": "stage5-filter-v1",
@@ -783,154 +1179,60 @@
       "candidate_status": "published",
       "retired": false,
       "embedding": [
-        0.9529411764705882,
+        0.6784313725490196,
+        -0.23137254901960785,
         0.8274509803921568,
-        -0.7411764705882353,
-        -0.44313725490196076,
-        0.9294117647058824,
-        -0.24705882352941178,
-        0.8666666666666667,
-        0.29411764705882354,
-        0.011764705882352941,
-        -0.34901960784313724,
-        0.6392156862745098,
-        0.2784313725490196,
-        0.00392156862745098,
-        0.7333333333333333,
-        -0.3176470588235294,
-        0.3411764705882353,
-        0.8274509803921568,
-        -0.7411764705882353,
-        0.788235294117647,
-        -0.10588235294117647,
-        0.24705882352941178,
-        -0.8666666666666667,
-        -0.8823529411764706,
-        0.9764705882352941,
-        0.24705882352941178,
-        -0.6313725490196078,
-        0.6470588235294118,
-        -0.4196078431372549,
-        0.45098039215686275,
-        0.5294117647058824,
-        0.5058823529411764,
-        0.5215686274509804
-      ],
-      "candidate": {
-        "candidate_id": "PUB-NUT-DECOY-6",
-        "evidence_id": "EV-NUT-DECOY-6",
-        "source_id": "SRC-PUB-NUT-DECOY-6",
-        "source_title": "Synthetic source PUB-NUT-DECOY-6",
-        "text": "Synthetic general nutrition passage number 6 about hydration and meal variety.",
-        "evidence_lane": "guideline",
-        "domain": "nutrition",
-        "journey": {
-          "stage": "pregnancy",
-          "unit": "week",
-          "exact": null,
-          "range_start": 20,
-          "range_end": 28
-        },
-        "jurisdictions": [
-          "IN"
-        ],
-        "conditions_required": [],
-        "conditions_excluded": [],
-        "release_status": "published",
-        "source_status": "published",
-        "candidate_status": "published",
-        "allowed_use": [
-          "store",
-          "embed",
-          "display"
-        ],
-        "spans": [
-          {
-            "source_id": "SRC-PUB-NUT-DECOY-6",
-            "evidence_id": "EV-NUT-DECOY-6",
-            "source_block_ids": [
-              "BLOCK-PUB-NUT-DECOY-6"
-            ],
-            "page": 1,
-            "locator": "fixture/PUB-NUT-DECOY-6",
-            "start_char": 0,
-            "end_char": 78,
-            "exact_text": "Synthetic general nutrition passage number 6 about hydration and meal variety.",
-            "text_sha256": "f9e92147f660eea58153d1a380dd57abe921e4729f110ffc9f2fd24ab9c3c0c2"
-          }
-        ],
-        "authority_score": 0.4,
-        "applicability_score": 0.6,
-        "provenance": {
-          "corpus_version": "stage5-fixture-v1",
-          "release_id": "55555555-5555-4555-8555-555555555555",
-          "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
-          "source_version": "fixture-1.0",
-          "embedding_provider": "TEST_ONLY",
-          "embedding_model": "sha256-test-vector-v1",
-          "filter_version": "stage5-filter-v1",
-          "fixture_only": true
-        }
-      }
-    },
-    {
-      "release_status": "published",
-      "source_status": "published",
-      "candidate_status": "published",
-      "retired": false,
-      "embedding": [
-        0.9450980392156862,
-        0.23137254901960785,
-        0.38823529411764707,
-        -0.29411764705882354,
+        -0.796078431372549,
         -0.6549019607843137,
-        0.8666666666666667,
-        0.8196078431372549,
-        0.9764705882352941,
+        -0.5607843137254902,
+        -0.8823529411764706,
+        0.3333333333333333,
+        0.7019607843137254,
+        0.3176470588235294,
+        -0.403921568627451,
         -0.11372549019607843,
-        -0.11372549019607843,
-        -1.0,
-        -0.8352941176470589,
-        0.403921568627451,
-        -0.050980392156862744,
-        0.3803921568627451,
-        0.5058823529411764,
-        0.9372549019607843,
-        0.49019607843137253,
-        0.5215686274509804,
-        0.8431372549019608,
-        0.8901960784313725,
-        -0.7333333333333333,
-        -0.09019607843137255,
         0.4745098039215686,
-        0.8901960784313725,
-        0.8666666666666667,
+        -0.21568627450980393,
+        0.4117647058823529,
+        -0.050980392156862744,
+        0.8117647058823529,
+        0.2235294117647059,
+        -0.9686274509803922,
         -0.8274509803921568,
-        0.5529411764705883,
-        -0.8352941176470589,
-        0.9215686274509803,
-        0.3568627450980392,
-        0.6235294117647059
+        -0.5294117647058824,
+        0.8980392156862745,
+        0.788235294117647,
+        -0.5215686274509804,
+        -0.38823529411764707,
+        -0.38823529411764707,
+        0.6,
+        -0.4666666666666667,
+        -0.8117647058823529,
+        0.7411764705882353,
+        -0.5058823529411764,
+        0.5372549019607843
       ],
       "candidate": {
-        "candidate_id": "PUB-NUT-DECOY-7",
-        "evidence_id": "EV-NUT-DECOY-7",
-        "source_id": "SRC-PUB-NUT-DECOY-7",
-        "source_title": "Synthetic source PUB-NUT-DECOY-7",
-        "text": "Synthetic general nutrition passage number 7 about hydration and meal variety.",
+        "candidate_id": "DECOY-COND-MISSING",
+        "evidence_id": "EV-DECOY-COND-MISSING",
+        "source_id": "SRC-DECOY-COND-MISSING",
+        "source_title": "Synthetic source DECOY-COND-MISSING",
+        "text": "Requires confirmed exercise clearance.",
         "evidence_lane": "guideline",
-        "domain": "nutrition",
+        "domain": "movement",
         "journey": {
           "stage": "pregnancy",
           "unit": "week",
-          "exact": null,
-          "range_start": 20,
-          "range_end": 28
+          "exact": 24,
+          "range_start": null,
+          "range_end": null
         },
         "jurisdictions": [
           "IN"
         ],
-        "conditions_required": [],
+        "conditions_required": [
+          "exercise_clearance"
+        ],
         "conditions_excluded": [],
         "release_status": "published",
         "source_status": "published",
@@ -942,26 +1244,124 @@
         ],
         "spans": [
           {
-            "source_id": "SRC-PUB-NUT-DECOY-7",
-            "evidence_id": "EV-NUT-DECOY-7",
+            "source_id": "SRC-DECOY-COND-MISSING",
+            "evidence_id": "EV-DECOY-COND-MISSING",
             "source_block_ids": [
-              "BLOCK-PUB-NUT-DECOY-7"
+              "BLOCK-DECOY-COND-MISSING"
             ],
             "page": 1,
-            "locator": "fixture/PUB-NUT-DECOY-7",
+            "locator": "fixture/DECOY-COND-MISSING",
             "start_char": 0,
-            "end_char": 78,
-            "exact_text": "Synthetic general nutrition passage number 7 about hydration and meal variety.",
-            "text_sha256": "f89db15a2ceee8fc71710015b379b0c0f7bec2ebf12274bcf1ee16c615f5adcf"
+            "end_char": 38,
+            "exact_text": "Requires confirmed exercise clearance.",
+            "text_sha256": "d662e91a2c380faad9a84c71bc64b479e79c04163cf2e43d4e4ecc4418de3fc4"
           }
         ],
-        "authority_score": 0.4,
-        "applicability_score": 0.6,
+        "authority_score": 0.9,
+        "applicability_score": 1.0,
         "provenance": {
-          "corpus_version": "stage5-fixture-v1",
+          "corpus_version": "stage5-fixture-v2",
           "release_id": "55555555-5555-4555-8555-555555555555",
           "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
-          "source_version": "fixture-1.0",
+          "source_version": "fixture-2.0",
+          "embedding_provider": "TEST_ONLY",
+          "embedding_model": "sha256-test-vector-v1",
+          "filter_version": "stage5-filter-v1",
+          "fixture_only": true
+        }
+      }
+    },
+    {
+      "release_status": "published",
+      "source_status": "published",
+      "candidate_status": "published",
+      "retired": false,
+      "embedding": [
+        0.9921568627450981,
+        -0.16862745098039217,
+        -0.16862745098039217,
+        -0.5529411764705883,
+        0.6941176470588235,
+        -0.615686274509804,
+        0.38823529411764707,
+        -0.6313725490196078,
+        -0.9607843137254902,
+        0.2,
+        0.8274509803921568,
+        -0.6705882352941176,
+        -0.5372549019607843,
+        0.011764705882352941,
+        -0.9215686274509803,
+        -0.8666666666666667,
+        -0.49019607843137253,
+        0.043137254901960784,
+        0.3254901960784314,
+        0.8117647058823529,
+        -0.10588235294117647,
+        0.984313725490196,
+        -0.7254901960784313,
+        0.3176470588235294,
+        -0.3333333333333333,
+        -0.4117647058823529,
+        -0.8117647058823529,
+        0.27058823529411763,
+        -0.8901960784313725,
+        0.6078431372549019,
+        0.043137254901960784,
+        0.803921568627451
+      ],
+      "candidate": {
+        "candidate_id": "DECOY-COND-EXCLUDED",
+        "evidence_id": "EV-DECOY-COND-EXCLUDED",
+        "source_id": "SRC-DECOY-COND-EXCLUDED",
+        "source_title": "Synthetic source DECOY-COND-EXCLUDED",
+        "text": "Only applies without a movement restriction.",
+        "evidence_lane": "guideline",
+        "domain": "movement",
+        "journey": {
+          "stage": "pregnancy",
+          "unit": "week",
+          "exact": 24,
+          "range_start": null,
+          "range_end": null
+        },
+        "jurisdictions": [
+          "IN"
+        ],
+        "conditions_required": [],
+        "conditions_excluded": [
+          "movement_restriction"
+        ],
+        "release_status": "published",
+        "source_status": "published",
+        "candidate_status": "published",
+        "allowed_use": [
+          "store",
+          "embed",
+          "display"
+        ],
+        "spans": [
+          {
+            "source_id": "SRC-DECOY-COND-EXCLUDED",
+            "evidence_id": "EV-DECOY-COND-EXCLUDED",
+            "source_block_ids": [
+              "BLOCK-DECOY-COND-EXCLUDED"
+            ],
+            "page": 1,
+            "locator": "fixture/DECOY-COND-EXCLUDED",
+            "start_char": 0,
+            "end_char": 44,
+            "exact_text": "Only applies without a movement restriction.",
+            "text_sha256": "fe6a6a39d831b12f0599e92a3b810a114185a9e772fd23a8554b18a20ecd85e6"
+          }
+        ],
+        "authority_score": 0.9,
+        "applicability_score": 1.0,
+        "provenance": {
+          "corpus_version": "stage5-fixture-v2",
+          "release_id": "55555555-5555-4555-8555-555555555555",
+          "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
+          "source_version": "fixture-2.0",
           "embedding_provider": "TEST_ONLY",
           "embedding_model": "sha256-test-vector-v1",
           "filter_version": "stage5-filter-v1",
@@ -1054,10 +1454,10 @@
         "authority_score": 0.9,
         "applicability_score": 1.0,
         "provenance": {
-          "corpus_version": "stage5-fixture-v1",
+          "corpus_version": "stage5-fixture-v2",
           "release_id": "55555555-5555-4555-8555-555555555555",
           "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
-          "source_version": "fixture-1.0",
+          "source_version": "fixture-2.0",
           "embedding_provider": "TEST_ONLY",
           "embedding_model": "sha256-test-vector-v1",
           "filter_version": "stage5-filter-v1",
@@ -1150,10 +1550,10 @@
         "authority_score": 0.9,
         "applicability_score": 1.0,
         "provenance": {
-          "corpus_version": "stage5-fixture-v1",
+          "corpus_version": "stage5-fixture-v2",
           "release_id": "55555555-5555-4555-8555-555555555555",
           "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
-          "source_version": "fixture-1.0",
+          "source_version": "fixture-2.0",
           "embedding_provider": "TEST_ONLY",
           "embedding_model": "sha256-test-vector-v1",
           "filter_version": "stage5-filter-v1",
@@ -1246,10 +1646,10 @@
         "authority_score": 0.9,
         "applicability_score": 1.0,
         "provenance": {
-          "corpus_version": "stage5-fixture-v1",
+          "corpus_version": "stage5-fixture-v2",
           "release_id": "55555555-5555-4555-8555-555555555555",
           "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
-          "source_version": "fixture-1.0",
+          "source_version": "fixture-2.0",
           "embedding_provider": "TEST_ONLY",
           "embedding_model": "sha256-test-vector-v1",
           "filter_version": "stage5-filter-v1",
@@ -1342,10 +1742,10 @@
         "authority_score": 0.9,
         "applicability_score": 1.0,
         "provenance": {
-          "corpus_version": "stage5-fixture-v1",
+          "corpus_version": "stage5-fixture-v2",
           "release_id": "55555555-5555-4555-8555-555555555555",
           "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
-          "source_version": "fixture-1.0",
+          "source_version": "fixture-2.0",
           "embedding_provider": "TEST_ONLY",
           "embedding_model": "sha256-test-vector-v1",
           "filter_version": "stage5-filter-v1",
@@ -1438,10 +1838,10 @@
         "authority_score": 0.9,
         "applicability_score": 1.0,
         "provenance": {
-          "corpus_version": "stage5-fixture-v1",
+          "corpus_version": "stage5-fixture-v2",
           "release_id": "55555555-5555-4555-8555-555555555555",
           "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
-          "source_version": "fixture-1.0",
+          "source_version": "fixture-2.0",
           "embedding_provider": "TEST_ONLY",
           "embedding_model": "sha256-test-vector-v1",
           "filter_version": "stage5-filter-v1",
@@ -1534,10 +1934,10 @@
         "authority_score": 0.9,
         "applicability_score": 1.0,
         "provenance": {
-          "corpus_version": "stage5-fixture-v1",
+          "corpus_version": "stage5-fixture-v2",
           "release_id": "55555555-5555-4555-8555-555555555555",
           "release_fingerprint": "5555555555555555555555555555555555555555555555555555555555555555",
-          "source_version": "fixture-1.0",
+          "source_version": "fixture-2.0",
           "embedding_provider": "TEST_ONLY",
           "embedding_model": "sha256-test-vector-v1",
           "filter_version": "stage5-filter-v1",
@@ -1581,6 +1981,8 @@
         "fact_type": "dietary_restriction",
         "value": {
           "restriction": "avoid high-impact movement",
+          "condition_key": "movement_restriction",
+          "condition_status": "confirmed_present",
           "subject": "Maya (fictional)"
         },
         "source_kind": "human_reviewed",
@@ -1667,20 +2069,6 @@
   ],
   "personal_contexts": {
     "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa": {
-      "journey_state": {
-        "state_id": "c1111111-1111-4111-8111-111111111111",
-        "stage": "pregnancy",
-        "timing_source": "manual_week_day",
-        "gestational_week": 24,
-        "gestational_day": 2,
-        "postpartum_week": null,
-        "postpartum_day": null,
-        "approximate_month_min": null,
-        "approximate_month_max": null,
-        "user_confirmed": true,
-        "has_dating_conflict": false,
-        "version": 3
-      },
       "confirmed_facts": [],
       "medications": [
         {
@@ -1694,7 +2082,7 @@
       "symptoms": [
         {
           "symptom_id": "c3333333-3333-4333-8333-333333333333",
-          "description": "fictional prior symptom record",
+          "description": "fictional prior breathing symptom record",
           "reported_at": "2026-09-11T00:00:00Z",
           "safety_route": "no_match",
           "matched_rule_ids": [],
@@ -1720,39 +2108,136 @@
         }
       ],
       "open_questions": [],
-      "unresolved_conflicts": [],
-      "missing_information": []
-    },
-    "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb": {
-      "journey_state": null,
-      "confirmed_facts": [],
-      "medications": [],
-      "symptoms": [],
-      "appointments": [],
-      "plan_states": [],
-      "open_questions": [],
       "unresolved_conflicts": [
         {
           "conflict_id": "c5555555-5555-4555-8555-555555555555",
-          "fact_type": "medical_history",
+          "fact_type": "dietary_restriction",
           "proposed_values": [
-            "fictional value A",
-            "fictional value B"
+            {
+              "activity": "prenatal yoga allowed"
+            },
+            {
+              "activity": "prenatal yoga paused"
+            }
           ],
           "source_document_ids": [],
           "clarification_question_ids": [],
           "state": "requires_clarification"
         }
       ],
+      "missing_information": [],
+      "journey_state": {
+        "state_id": "c1111111-1111-4111-8111-111111111111",
+        "stage": "pregnancy",
+        "timing_source": "fictional_confirmed_state",
+        "gestational_week": 24,
+        "gestational_day": 2,
+        "postpartum_week": null,
+        "postpartum_day": null,
+        "approximate_month_min": null,
+        "approximate_month_max": null,
+        "user_confirmed": true,
+        "has_dating_conflict": false,
+        "version": 3
+      }
+    },
+    "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb": {
+      "confirmed_facts": [],
+      "medications": [],
+      "symptoms": [],
+      "appointments": [
+        {
+          "appointment_id": "b4444444-4444-4444-8444-444444444444",
+          "scheduled_for": "2026-09-21T09:00:00Z",
+          "appointment_type": "unrelated fictional visit",
+          "status": "confirmed"
+        }
+      ],
+      "plan_states": [],
+      "open_questions": [],
+      "unresolved_conflicts": [],
       "missing_information": [
         {
-          "field": "journey_week",
+          "field": "journey_state",
           "reason": "No confirmed journey timing",
           "required_for": [
-            "week-specific guidance"
+            "public_guidance"
           ]
         }
-      ]
+      ],
+      "journey_state": null
+    },
+    "cccccccc-cccc-4ccc-8ccc-cccccccccccc": {
+      "confirmed_facts": [],
+      "medications": [],
+      "symptoms": [],
+      "appointments": [],
+      "plan_states": [],
+      "open_questions": [],
+      "unresolved_conflicts": [],
+      "missing_information": [],
+      "journey_state": {
+        "state_id": "c6666666-6666-4666-8666-666666666666",
+        "stage": "possible_pregnancy",
+        "timing_source": "fictional_confirmed_state",
+        "gestational_week": null,
+        "gestational_day": null,
+        "postpartum_week": null,
+        "postpartum_day": null,
+        "approximate_month_min": null,
+        "approximate_month_max": null,
+        "user_confirmed": true,
+        "has_dating_conflict": false,
+        "version": 1
+      }
+    },
+    "dddddddd-dddd-4ddd-8ddd-dddddddddddd": {
+      "confirmed_facts": [],
+      "medications": [],
+      "symptoms": [],
+      "appointments": [],
+      "plan_states": [],
+      "open_questions": [],
+      "unresolved_conflicts": [],
+      "missing_information": [],
+      "journey_state": {
+        "state_id": "d6666666-6666-4666-8666-666666666666",
+        "stage": "postpartum",
+        "timing_source": "fictional_confirmed_state",
+        "gestational_week": null,
+        "gestational_day": null,
+        "postpartum_week": null,
+        "postpartum_day": 3,
+        "approximate_month_min": null,
+        "approximate_month_max": null,
+        "user_confirmed": true,
+        "has_dating_conflict": false,
+        "version": 1
+      }
+    },
+    "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee": {
+      "confirmed_facts": [],
+      "medications": [],
+      "symptoms": [],
+      "appointments": [],
+      "plan_states": [],
+      "open_questions": [],
+      "unresolved_conflicts": [],
+      "missing_information": [],
+      "journey_state": {
+        "state_id": "e6666666-6666-4666-8666-666666666666",
+        "stage": "postpartum",
+        "timing_source": "fictional_confirmed_state",
+        "gestational_week": null,
+        "gestational_day": null,
+        "postpartum_week": 6,
+        "postpartum_day": null,
+        "approximate_month_min": null,
+        "approximate_month_max": null,
+        "user_confirmed": true,
+        "has_dating_conflict": false,
+        "version": 1
+      }
     }
   },
   "personal_passages": [
@@ -1812,8 +2297,8 @@
           "text_sha256": "05325ae8265083017f08a30818ff75794a603fd12453e969d7e91d57d158aa56"
         },
         "provenance": {
-          "corpus_version": "personal-state-v1",
-          "source_version": "review-1",
+          "corpus_version": "personal-state-v2",
+          "source_version": "review-2",
           "embedding_provider": "TEST_ONLY",
           "embedding_model": "sha256-test-vector-v1",
           "filter_version": "stage5-filter-v1",
@@ -1877,8 +2362,8 @@
           "text_sha256": "65e3d7b6f99ababd38fa3949bf1a6475c25726bbe45571997854acb0638b685b"
         },
         "provenance": {
-          "corpus_version": "personal-state-v1",
-          "source_version": "review-1",
+          "corpus_version": "personal-state-v2",
+          "source_version": "review-2",
           "embedding_provider": "TEST_ONLY",
           "embedding_model": "sha256-test-vector-v1",
           "filter_version": "stage5-filter-v1",
@@ -1942,8 +2427,8 @@
           "text_sha256": "dfb156ca7b7ebb4f0b72fd93ee1fde0528fa7f16add13be0ccdc62afc97771b3"
         },
         "provenance": {
-          "corpus_version": "personal-state-v1",
-          "source_version": "review-1",
+          "corpus_version": "personal-state-v2",
+          "source_version": "review-2",
           "embedding_provider": "TEST_ONLY",
           "embedding_model": "sha256-test-vector-v1",
           "filter_version": "stage5-filter-v1",

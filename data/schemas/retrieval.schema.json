@@ -122,30 +122,6 @@
           "title": "Evidence Lanes",
           "type": "array"
         },
-        "active_conditions": {
-          "items": {
-            "enum": [
-              "breastfeeding",
-              "early_home_recovery",
-              "professional_care_for_postpartum_depression",
-              "complicated_delivery_or_caesarean",
-              "uncomplicated_delivery",
-              "feels_ready_for_gentle_activity",
-              "exercise_clearance",
-              "movement_restriction",
-              "current_warning_symptom",
-              "home_birth",
-              "facility_birth",
-              "pregnancy_confirmed",
-              "consents_to_wellbeing_activity",
-              "persistent_emotional_concern",
-              "trusted_support_available"
-            ],
-            "type": "string"
-          },
-          "title": "Active Conditions",
-          "type": "array"
-        },
         "include_graph": {
           "default": true,
           "title": "Include Graph",
@@ -225,6 +201,1252 @@
         "authenticated_at"
       ],
       "title": "AuthenticatedRetrievalScope",
+      "type": "object"
+    },
+    "evidence_requirement_policy": {
+      "additionalProperties": false,
+      "description": "Trusted server-created policy; it is never part of RetrievalRequest.",
+      "properties": {
+        "policy_version": {
+          "const": "stage5-answerability-v2",
+          "title": "Policy Version",
+          "type": "string"
+        },
+        "policy_id": {
+          "minLength": 1,
+          "title": "Policy Id",
+          "type": "string"
+        },
+        "purpose": {
+          "enum": [
+            "public_guidance",
+            "personal_record_lookup",
+            "causal_explanation",
+            "mixed_personalized_guidance"
+          ],
+          "title": "Purpose",
+          "type": "string"
+        },
+        "domain": {
+          "enum": [
+            "journey",
+            "nutrition",
+            "movement",
+            "wellbeing",
+            "symptoms",
+            "preparation",
+            "followup"
+          ],
+          "title": "Domain",
+          "type": "string"
+        },
+        "required_support": {
+          "items": {
+            "enum": [
+              "public_guidance",
+              "personal_record",
+              "personal_constraint",
+              "graph_relationship"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Required Support",
+          "type": "array"
+        },
+        "personal_context_kinds": {
+          "items": {
+            "enum": [
+              "allergies",
+              "conditions",
+              "restrictions",
+              "medications",
+              "symptoms",
+              "appointments",
+              "plans",
+              "questions",
+              "journey",
+              "documents"
+            ],
+            "type": "string"
+          },
+          "title": "Personal Context Kinds",
+          "type": "array"
+        },
+        "trusted_server_created": {
+          "const": true,
+          "default": true,
+          "title": "Trusted Server Created",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "policy_version",
+        "policy_id",
+        "purpose",
+        "domain",
+        "required_support"
+      ],
+      "title": "EvidenceRequirementPolicy",
+      "type": "object"
+    },
+    "trusted_retrieval_state": {
+      "$defs": {
+        "AuthenticatedRetrievalScope": {
+          "additionalProperties": false,
+          "description": "Trusted scope resolved from a verified user session by server code.",
+          "properties": {
+            "schema_version": {
+              "const": "5.0.0",
+              "default": "5.0.0",
+              "title": "Schema Version",
+              "type": "string"
+            },
+            "workspace_id": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            },
+            "care_episode_id": {
+              "format": "uuid",
+              "title": "Care Episode Id",
+              "type": "string"
+            },
+            "owner_user_id": {
+              "format": "uuid",
+              "title": "Owner User Id",
+              "type": "string"
+            },
+            "session_subject": {
+              "format": "uuid",
+              "title": "Session Subject",
+              "type": "string"
+            },
+            "state_version": {
+              "minimum": 1,
+              "title": "State Version",
+              "type": "integer"
+            },
+            "authenticated_at": {
+              "format": "date-time",
+              "title": "Authenticated At",
+              "type": "string"
+            }
+          },
+          "required": [
+            "workspace_id",
+            "care_episode_id",
+            "owner_user_id",
+            "session_subject",
+            "state_version",
+            "authenticated_at"
+          ],
+          "title": "AuthenticatedRetrievalScope",
+          "type": "object"
+        },
+        "JourneyPosition": {
+          "additionalProperties": false,
+          "properties": {
+            "stage": {
+              "enum": [
+                "possible_pregnancy",
+                "pregnancy",
+                "postpartum"
+              ],
+              "title": "Stage",
+              "type": "string"
+            },
+            "unit": {
+              "enum": [
+                "none",
+                "week",
+                "day"
+              ],
+              "title": "Unit",
+              "type": "string"
+            },
+            "exact": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Exact"
+            },
+            "range_start": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Range Start"
+            },
+            "range_end": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Range End"
+            }
+          },
+          "required": [
+            "stage",
+            "unit"
+          ],
+          "title": "JourneyPosition",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Database-derived scope/applicability used before cache or filtering.",
+      "properties": {
+        "scope": {
+          "$ref": "#/$defs/AuthenticatedRetrievalScope"
+        },
+        "current_journey": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JourneyPosition"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "requested_journey": {
+          "$ref": "#/$defs/JourneyPosition"
+        },
+        "effective_journey": {
+          "$ref": "#/$defs/JourneyPosition"
+        },
+        "journey_relation": {
+          "enum": [
+            "current",
+            "explicit_other",
+            "overridden_to_current",
+            "unconfirmed_current"
+          ],
+          "title": "Journey Relation",
+          "type": "string"
+        },
+        "active_conditions": {
+          "items": {
+            "enum": [
+              "breastfeeding",
+              "early_home_recovery",
+              "professional_care_for_postpartum_depression",
+              "complicated_delivery_or_caesarean",
+              "uncomplicated_delivery",
+              "feels_ready_for_gentle_activity",
+              "exercise_clearance",
+              "movement_restriction",
+              "current_warning_symptom",
+              "home_birth",
+              "facility_birth",
+              "pregnancy_confirmed",
+              "consents_to_wellbeing_activity",
+              "persistent_emotional_concern",
+              "trusted_support_available"
+            ],
+            "type": "string"
+          },
+          "title": "Active Conditions",
+          "type": "array"
+        },
+        "caller_state_version_was_stale": {
+          "title": "Caller State Version Was Stale",
+          "type": "boolean"
+        },
+        "cache_state_version": {
+          "minimum": 1,
+          "title": "Cache State Version",
+          "type": "integer"
+        },
+        "jurisdiction_source": {
+          "const": "request_profile",
+          "title": "Jurisdiction Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope",
+        "requested_journey",
+        "effective_journey",
+        "journey_relation",
+        "caller_state_version_was_stale",
+        "cache_state_version",
+        "jurisdiction_source"
+      ],
+      "title": "TrustedRetrievalState",
+      "type": "object"
+    },
+    "trusted_retrieval_query": {
+      "$defs": {
+        "AuthenticatedRetrievalScope": {
+          "additionalProperties": false,
+          "description": "Trusted scope resolved from a verified user session by server code.",
+          "properties": {
+            "schema_version": {
+              "const": "5.0.0",
+              "default": "5.0.0",
+              "title": "Schema Version",
+              "type": "string"
+            },
+            "workspace_id": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            },
+            "care_episode_id": {
+              "format": "uuid",
+              "title": "Care Episode Id",
+              "type": "string"
+            },
+            "owner_user_id": {
+              "format": "uuid",
+              "title": "Owner User Id",
+              "type": "string"
+            },
+            "session_subject": {
+              "format": "uuid",
+              "title": "Session Subject",
+              "type": "string"
+            },
+            "state_version": {
+              "minimum": 1,
+              "title": "State Version",
+              "type": "integer"
+            },
+            "authenticated_at": {
+              "format": "date-time",
+              "title": "Authenticated At",
+              "type": "string"
+            }
+          },
+          "required": [
+            "workspace_id",
+            "care_episode_id",
+            "owner_user_id",
+            "session_subject",
+            "state_version",
+            "authenticated_at"
+          ],
+          "title": "AuthenticatedRetrievalScope",
+          "type": "object"
+        },
+        "EvidenceRequirementPolicy": {
+          "additionalProperties": false,
+          "description": "Trusted server-created policy; it is never part of RetrievalRequest.",
+          "properties": {
+            "policy_version": {
+              "const": "stage5-answerability-v2",
+              "title": "Policy Version",
+              "type": "string"
+            },
+            "policy_id": {
+              "minLength": 1,
+              "title": "Policy Id",
+              "type": "string"
+            },
+            "purpose": {
+              "enum": [
+                "public_guidance",
+                "personal_record_lookup",
+                "causal_explanation",
+                "mixed_personalized_guidance"
+              ],
+              "title": "Purpose",
+              "type": "string"
+            },
+            "domain": {
+              "enum": [
+                "journey",
+                "nutrition",
+                "movement",
+                "wellbeing",
+                "symptoms",
+                "preparation",
+                "followup"
+              ],
+              "title": "Domain",
+              "type": "string"
+            },
+            "required_support": {
+              "items": {
+                "enum": [
+                  "public_guidance",
+                  "personal_record",
+                  "personal_constraint",
+                  "graph_relationship"
+                ],
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Required Support",
+              "type": "array"
+            },
+            "personal_context_kinds": {
+              "items": {
+                "enum": [
+                  "allergies",
+                  "conditions",
+                  "restrictions",
+                  "medications",
+                  "symptoms",
+                  "appointments",
+                  "plans",
+                  "questions",
+                  "journey",
+                  "documents"
+                ],
+                "type": "string"
+              },
+              "title": "Personal Context Kinds",
+              "type": "array"
+            },
+            "trusted_server_created": {
+              "const": true,
+              "default": true,
+              "title": "Trusted Server Created",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "policy_version",
+            "policy_id",
+            "purpose",
+            "domain",
+            "required_support"
+          ],
+          "title": "EvidenceRequirementPolicy",
+          "type": "object"
+        },
+        "JourneyPosition": {
+          "additionalProperties": false,
+          "properties": {
+            "stage": {
+              "enum": [
+                "possible_pregnancy",
+                "pregnancy",
+                "postpartum"
+              ],
+              "title": "Stage",
+              "type": "string"
+            },
+            "unit": {
+              "enum": [
+                "none",
+                "week",
+                "day"
+              ],
+              "title": "Unit",
+              "type": "string"
+            },
+            "exact": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Exact"
+            },
+            "range_start": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Range Start"
+            },
+            "range_end": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Range End"
+            }
+          },
+          "required": [
+            "stage",
+            "unit"
+          ],
+          "title": "JourneyPosition",
+          "type": "object"
+        },
+        "TrustedRetrievalState": {
+          "additionalProperties": false,
+          "description": "Database-derived scope/applicability used before cache or filtering.",
+          "properties": {
+            "scope": {
+              "$ref": "#/$defs/AuthenticatedRetrievalScope"
+            },
+            "current_journey": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/JourneyPosition"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "requested_journey": {
+              "$ref": "#/$defs/JourneyPosition"
+            },
+            "effective_journey": {
+              "$ref": "#/$defs/JourneyPosition"
+            },
+            "journey_relation": {
+              "enum": [
+                "current",
+                "explicit_other",
+                "overridden_to_current",
+                "unconfirmed_current"
+              ],
+              "title": "Journey Relation",
+              "type": "string"
+            },
+            "active_conditions": {
+              "items": {
+                "enum": [
+                  "breastfeeding",
+                  "early_home_recovery",
+                  "professional_care_for_postpartum_depression",
+                  "complicated_delivery_or_caesarean",
+                  "uncomplicated_delivery",
+                  "feels_ready_for_gentle_activity",
+                  "exercise_clearance",
+                  "movement_restriction",
+                  "current_warning_symptom",
+                  "home_birth",
+                  "facility_birth",
+                  "pregnancy_confirmed",
+                  "consents_to_wellbeing_activity",
+                  "persistent_emotional_concern",
+                  "trusted_support_available"
+                ],
+                "type": "string"
+              },
+              "title": "Active Conditions",
+              "type": "array"
+            },
+            "caller_state_version_was_stale": {
+              "title": "Caller State Version Was Stale",
+              "type": "boolean"
+            },
+            "cache_state_version": {
+              "minimum": 1,
+              "title": "Cache State Version",
+              "type": "integer"
+            },
+            "jurisdiction_source": {
+              "const": "request_profile",
+              "title": "Jurisdiction Source",
+              "type": "string"
+            }
+          },
+          "required": [
+            "scope",
+            "requested_journey",
+            "effective_journey",
+            "journey_relation",
+            "caller_state_version_was_stale",
+            "cache_state_version",
+            "jurisdiction_source"
+          ],
+          "title": "TrustedRetrievalState",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Internal query built from user text plus trusted state and policy.",
+      "properties": {
+        "request_id": {
+          "format": "uuid",
+          "title": "Request Id",
+          "type": "string"
+        },
+        "question": {
+          "minLength": 1,
+          "title": "Question",
+          "type": "string"
+        },
+        "domain": {
+          "enum": [
+            "journey",
+            "nutrition",
+            "movement",
+            "wellbeing",
+            "symptoms",
+            "preparation",
+            "followup"
+          ],
+          "title": "Domain",
+          "type": "string"
+        },
+        "journey": {
+          "$ref": "#/$defs/JourneyPosition"
+        },
+        "jurisdiction": {
+          "minLength": 1,
+          "title": "Jurisdiction",
+          "type": "string"
+        },
+        "evidence_lanes": {
+          "items": {
+            "enum": [
+              "guideline",
+              "weekly_profile"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Lanes",
+          "type": "array"
+        },
+        "active_conditions": {
+          "items": {
+            "enum": [
+              "breastfeeding",
+              "early_home_recovery",
+              "professional_care_for_postpartum_depression",
+              "complicated_delivery_or_caesarean",
+              "uncomplicated_delivery",
+              "feels_ready_for_gentle_activity",
+              "exercise_clearance",
+              "movement_restriction",
+              "current_warning_symptom",
+              "home_birth",
+              "facility_birth",
+              "pregnancy_confirmed",
+              "consents_to_wellbeing_activity",
+              "persistent_emotional_concern",
+              "trusted_support_available"
+            ],
+            "type": "string"
+          },
+          "title": "Active Conditions",
+          "type": "array"
+        },
+        "include_graph": {
+          "title": "Include Graph",
+          "type": "boolean"
+        },
+        "max_candidates": {
+          "maximum": 20,
+          "minimum": 1,
+          "title": "Max Candidates",
+          "type": "integer"
+        },
+        "timeout_ms": {
+          "maximum": 10000,
+          "minimum": 10,
+          "title": "Timeout Ms",
+          "type": "integer"
+        },
+        "policy": {
+          "$ref": "#/$defs/EvidenceRequirementPolicy"
+        },
+        "trusted_state": {
+          "$ref": "#/$defs/TrustedRetrievalState"
+        }
+      },
+      "required": [
+        "request_id",
+        "question",
+        "domain",
+        "journey",
+        "jurisdiction",
+        "evidence_lanes",
+        "include_graph",
+        "max_candidates",
+        "timeout_ms",
+        "policy",
+        "trusted_state"
+      ],
+      "title": "TrustedRetrievalQuery",
+      "type": "object"
+    },
+    "answerability_assessment": {
+      "additionalProperties": false,
+      "properties": {
+        "policy_id": {
+          "minLength": 1,
+          "title": "Policy Id",
+          "type": "string"
+        },
+        "purpose": {
+          "enum": [
+            "public_guidance",
+            "personal_record_lookup",
+            "causal_explanation",
+            "mixed_personalized_guidance"
+          ],
+          "title": "Purpose",
+          "type": "string"
+        },
+        "support_state": {
+          "enum": [
+            "unsupported",
+            "partially_supported",
+            "fully_supported",
+            "clarification_required"
+          ],
+          "title": "Support State",
+          "type": "string"
+        },
+        "ordinary_generation_allowed": {
+          "title": "Ordinary Generation Allowed",
+          "type": "boolean"
+        },
+        "public_guidance_supported": {
+          "title": "Public Guidance Supported",
+          "type": "boolean"
+        },
+        "personal_record_supported": {
+          "title": "Personal Record Supported",
+          "type": "boolean"
+        },
+        "personal_constraints_present": {
+          "title": "Personal Constraints Present",
+          "type": "boolean"
+        },
+        "graph_relationship_supported": {
+          "title": "Graph Relationship Supported",
+          "type": "boolean"
+        },
+        "required_support": {
+          "items": {
+            "enum": [
+              "public_guidance",
+              "personal_record",
+              "personal_constraint",
+              "graph_relationship"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Required Support",
+          "type": "array"
+        },
+        "satisfied_support": {
+          "items": {
+            "enum": [
+              "public_guidance",
+              "personal_record",
+              "personal_constraint",
+              "graph_relationship"
+            ],
+            "type": "string"
+          },
+          "title": "Satisfied Support",
+          "type": "array"
+        },
+        "missing_support": {
+          "items": {
+            "enum": [
+              "public_guidance",
+              "personal_record",
+              "personal_constraint",
+              "graph_relationship"
+            ],
+            "type": "string"
+          },
+          "title": "Missing Support",
+          "type": "array"
+        },
+        "relevant_conflict_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Relevant Conflict Ids",
+          "type": "array"
+        },
+        "relevant_missing_fields": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Relevant Missing Fields",
+          "type": "array"
+        },
+        "blocking_reasons": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Blocking Reasons",
+          "type": "array"
+        }
+      },
+      "required": [
+        "policy_id",
+        "purpose",
+        "support_state",
+        "ordinary_generation_allowed",
+        "public_guidance_supported",
+        "personal_record_supported",
+        "personal_constraints_present",
+        "graph_relationship_supported",
+        "required_support"
+      ],
+      "title": "AnswerabilityAssessment",
+      "type": "object"
+    },
+    "safety_context_snapshot": {
+      "$defs": {
+        "JourneyStateSnapshot": {
+          "additionalProperties": false,
+          "properties": {
+            "state_id": {
+              "format": "uuid",
+              "title": "State Id",
+              "type": "string"
+            },
+            "stage": {
+              "enum": [
+                "possible_pregnancy",
+                "pregnancy",
+                "postpartum"
+              ],
+              "title": "Stage",
+              "type": "string"
+            },
+            "timing_source": {
+              "minLength": 1,
+              "title": "Timing Source",
+              "type": "string"
+            },
+            "gestational_week": {
+              "anyOf": [
+                {
+                  "maximum": 42,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Gestational Week"
+            },
+            "gestational_day": {
+              "anyOf": [
+                {
+                  "maximum": 6,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Gestational Day"
+            },
+            "postpartum_week": {
+              "anyOf": [
+                {
+                  "maximum": 12,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Postpartum Week"
+            },
+            "postpartum_day": {
+              "anyOf": [
+                {
+                  "maximum": 7,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Postpartum Day"
+            },
+            "approximate_month_min": {
+              "anyOf": [
+                {
+                  "maximum": 10,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Approximate Month Min"
+            },
+            "approximate_month_max": {
+              "anyOf": [
+                {
+                  "maximum": 10,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Approximate Month Max"
+            },
+            "user_confirmed": {
+              "title": "User Confirmed",
+              "type": "boolean"
+            },
+            "has_dating_conflict": {
+              "title": "Has Dating Conflict",
+              "type": "boolean"
+            },
+            "version": {
+              "minimum": 1,
+              "title": "Version",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "state_id",
+            "stage",
+            "timing_source",
+            "user_confirmed",
+            "has_dating_conflict",
+            "version"
+          ],
+          "title": "JourneyStateSnapshot",
+          "type": "object"
+        },
+        "MedicationRecord": {
+          "additionalProperties": false,
+          "properties": {
+            "medication_id": {
+              "format": "uuid",
+              "title": "Medication Id",
+              "type": "string"
+            },
+            "name_as_written": {
+              "minLength": 1,
+              "title": "Name As Written",
+              "type": "string"
+            },
+            "context_text": {
+              "default": "",
+              "title": "Context Text",
+              "type": "string"
+            },
+            "status": {
+              "const": "confirmed",
+              "default": "confirmed",
+              "title": "Status",
+              "type": "string"
+            },
+            "record_only": {
+              "const": true,
+              "default": true,
+              "title": "Record Only",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "medication_id",
+            "name_as_written"
+          ],
+          "title": "MedicationRecord",
+          "type": "object"
+        },
+        "PersonalFactCandidate": {
+          "additionalProperties": false,
+          "properties": {
+            "fact_id": {
+              "format": "uuid",
+              "title": "Fact Id",
+              "type": "string"
+            },
+            "fact_type": {
+              "enum": [
+                "allergy",
+                "dietary_restriction",
+                "medical_history",
+                "medication",
+                "clinician_instruction",
+                "feeding_status",
+                "delivery_history",
+                "other"
+              ],
+              "title": "Fact Type",
+              "type": "string"
+            },
+            "value": {
+              "title": "Value"
+            },
+            "source_kind": {
+              "enum": [
+                "user_reported",
+                "document_extracted",
+                "human_reviewed"
+              ],
+              "title": "Source Kind",
+              "type": "string"
+            },
+            "confirmation_status": {
+              "const": "confirmed",
+              "default": "confirmed",
+              "title": "Confirmation Status",
+              "type": "string"
+            },
+            "record_only": {
+              "default": false,
+              "title": "Record Only",
+              "type": "boolean"
+            },
+            "source_document_id": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Source Document Id"
+            },
+            "source_document_fact_id": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Source Document Fact Id"
+            },
+            "valid_from": {
+              "format": "date-time",
+              "title": "Valid From",
+              "type": "string"
+            },
+            "valid_to": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Valid To"
+            },
+            "provenance": {
+              "additionalProperties": true,
+              "title": "Provenance",
+              "type": "object"
+            }
+          },
+          "required": [
+            "fact_id",
+            "fact_type",
+            "value",
+            "source_kind",
+            "valid_from"
+          ],
+          "title": "PersonalFactCandidate",
+          "type": "object"
+        },
+        "SymptomRecord": {
+          "additionalProperties": false,
+          "properties": {
+            "symptom_id": {
+              "format": "uuid",
+              "title": "Symptom Id",
+              "type": "string"
+            },
+            "description": {
+              "minLength": 1,
+              "title": "Description",
+              "type": "string"
+            },
+            "reported_at": {
+              "format": "date-time",
+              "title": "Reported At",
+              "type": "string"
+            },
+            "safety_route": {
+              "enum": [
+                "urgent",
+                "clarify",
+                "no_match"
+              ],
+              "title": "Safety Route",
+              "type": "string"
+            },
+            "matched_rule_ids": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Matched Rule Ids",
+              "type": "array"
+            },
+            "safety_evaluation_only": {
+              "const": true,
+              "default": true,
+              "title": "Safety Evaluation Only",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "symptom_id",
+            "description",
+            "reported_at",
+            "safety_route"
+          ],
+          "title": "SymptomRecord",
+          "type": "object"
+        },
+        "UnresolvedConflict": {
+          "additionalProperties": false,
+          "properties": {
+            "conflict_id": {
+              "format": "uuid",
+              "title": "Conflict Id",
+              "type": "string"
+            },
+            "fact_type": {
+              "title": "Fact Type",
+              "type": "string"
+            },
+            "proposed_values": {
+              "items": {},
+              "minItems": 1,
+              "title": "Proposed Values",
+              "type": "array"
+            },
+            "source_document_ids": {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "title": "Source Document Ids",
+              "type": "array"
+            },
+            "clarification_question_ids": {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "title": "Clarification Question Ids",
+              "type": "array"
+            },
+            "state": {
+              "const": "requires_clarification",
+              "default": "requires_clarification",
+              "title": "State",
+              "type": "string"
+            }
+          },
+          "required": [
+            "conflict_id",
+            "fact_type",
+            "proposed_values"
+          ],
+          "title": "UnresolvedConflict",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Separate future Stage 6 input; never accidental answer support.",
+      "properties": {
+        "journey_state": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JourneyStateSnapshot"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "active_restrictions": {
+          "items": {
+            "$ref": "#/$defs/PersonalFactCandidate"
+          },
+          "title": "Active Restrictions",
+          "type": "array"
+        },
+        "medications": {
+          "items": {
+            "$ref": "#/$defs/MedicationRecord"
+          },
+          "title": "Medications",
+          "type": "array"
+        },
+        "symptoms": {
+          "items": {
+            "$ref": "#/$defs/SymptomRecord"
+          },
+          "title": "Symptoms",
+          "type": "array"
+        },
+        "unresolved_conflicts": {
+          "items": {
+            "$ref": "#/$defs/UnresolvedConflict"
+          },
+          "title": "Unresolved Conflicts",
+          "type": "array"
+        },
+        "excluded_from_stage5_answerability": {
+          "const": true,
+          "default": true,
+          "title": "Excluded From Stage5 Answerability",
+          "type": "boolean"
+        }
+      },
+      "title": "SafetyContextSnapshot",
       "type": "object"
     },
     "public_evidence_candidate": {
@@ -1505,7 +2727,8 @@
             "database_unavailable",
             "retrieval_timeout",
             "unresolved_conflict",
-            "missing_information"
+            "missing_information",
+            "partial_support"
           ],
           "title": "Reason",
           "type": "string"
@@ -1595,7 +2818,8 @@
                 "database_unavailable",
                 "retrieval_timeout",
                 "unresolved_conflict",
-                "missing_information"
+                "missing_information",
+                "partial_support"
               ],
               "title": "Reason",
               "type": "string"
@@ -1610,6 +2834,132 @@
             "should_abstain"
           ],
           "title": "AbstentionState",
+          "type": "object"
+        },
+        "AnswerabilityAssessment": {
+          "additionalProperties": false,
+          "properties": {
+            "policy_id": {
+              "minLength": 1,
+              "title": "Policy Id",
+              "type": "string"
+            },
+            "purpose": {
+              "enum": [
+                "public_guidance",
+                "personal_record_lookup",
+                "causal_explanation",
+                "mixed_personalized_guidance"
+              ],
+              "title": "Purpose",
+              "type": "string"
+            },
+            "support_state": {
+              "enum": [
+                "unsupported",
+                "partially_supported",
+                "fully_supported",
+                "clarification_required"
+              ],
+              "title": "Support State",
+              "type": "string"
+            },
+            "ordinary_generation_allowed": {
+              "title": "Ordinary Generation Allowed",
+              "type": "boolean"
+            },
+            "public_guidance_supported": {
+              "title": "Public Guidance Supported",
+              "type": "boolean"
+            },
+            "personal_record_supported": {
+              "title": "Personal Record Supported",
+              "type": "boolean"
+            },
+            "personal_constraints_present": {
+              "title": "Personal Constraints Present",
+              "type": "boolean"
+            },
+            "graph_relationship_supported": {
+              "title": "Graph Relationship Supported",
+              "type": "boolean"
+            },
+            "required_support": {
+              "items": {
+                "enum": [
+                  "public_guidance",
+                  "personal_record",
+                  "personal_constraint",
+                  "graph_relationship"
+                ],
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Required Support",
+              "type": "array"
+            },
+            "satisfied_support": {
+              "items": {
+                "enum": [
+                  "public_guidance",
+                  "personal_record",
+                  "personal_constraint",
+                  "graph_relationship"
+                ],
+                "type": "string"
+              },
+              "title": "Satisfied Support",
+              "type": "array"
+            },
+            "missing_support": {
+              "items": {
+                "enum": [
+                  "public_guidance",
+                  "personal_record",
+                  "personal_constraint",
+                  "graph_relationship"
+                ],
+                "type": "string"
+              },
+              "title": "Missing Support",
+              "type": "array"
+            },
+            "relevant_conflict_ids": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Relevant Conflict Ids",
+              "type": "array"
+            },
+            "relevant_missing_fields": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": "Relevant Missing Fields",
+              "type": "array"
+            },
+            "blocking_reasons": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": "Blocking Reasons",
+              "type": "array"
+            }
+          },
+          "required": [
+            "policy_id",
+            "purpose",
+            "support_state",
+            "ordinary_generation_allowed",
+            "public_guidance_supported",
+            "personal_record_supported",
+            "personal_constraints_present",
+            "graph_relationship_supported",
+            "required_support"
+          ],
+          "title": "AnswerabilityAssessment",
           "type": "object"
         },
         "AppointmentSnapshot": {
@@ -1654,6 +3004,58 @@
             "status"
           ],
           "title": "AppointmentSnapshot",
+          "type": "object"
+        },
+        "AuthenticatedRetrievalScope": {
+          "additionalProperties": false,
+          "description": "Trusted scope resolved from a verified user session by server code.",
+          "properties": {
+            "schema_version": {
+              "const": "5.0.0",
+              "default": "5.0.0",
+              "title": "Schema Version",
+              "type": "string"
+            },
+            "workspace_id": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            },
+            "care_episode_id": {
+              "format": "uuid",
+              "title": "Care Episode Id",
+              "type": "string"
+            },
+            "owner_user_id": {
+              "format": "uuid",
+              "title": "Owner User Id",
+              "type": "string"
+            },
+            "session_subject": {
+              "format": "uuid",
+              "title": "Session Subject",
+              "type": "string"
+            },
+            "state_version": {
+              "minimum": 1,
+              "title": "State Version",
+              "type": "integer"
+            },
+            "authenticated_at": {
+              "format": "date-time",
+              "title": "Authenticated At",
+              "type": "string"
+            }
+          },
+          "required": [
+            "workspace_id",
+            "care_episode_id",
+            "owner_user_id",
+            "session_subject",
+            "state_version",
+            "authenticated_at"
+          ],
+          "title": "AuthenticatedRetrievalScope",
           "type": "object"
         },
         "CandidateProvenance": {
@@ -1791,6 +3193,93 @@
             "status"
           ],
           "title": "ClarificationQuestion",
+          "type": "object"
+        },
+        "EvidenceRequirementPolicy": {
+          "additionalProperties": false,
+          "description": "Trusted server-created policy; it is never part of RetrievalRequest.",
+          "properties": {
+            "policy_version": {
+              "const": "stage5-answerability-v2",
+              "title": "Policy Version",
+              "type": "string"
+            },
+            "policy_id": {
+              "minLength": 1,
+              "title": "Policy Id",
+              "type": "string"
+            },
+            "purpose": {
+              "enum": [
+                "public_guidance",
+                "personal_record_lookup",
+                "causal_explanation",
+                "mixed_personalized_guidance"
+              ],
+              "title": "Purpose",
+              "type": "string"
+            },
+            "domain": {
+              "enum": [
+                "journey",
+                "nutrition",
+                "movement",
+                "wellbeing",
+                "symptoms",
+                "preparation",
+                "followup"
+              ],
+              "title": "Domain",
+              "type": "string"
+            },
+            "required_support": {
+              "items": {
+                "enum": [
+                  "public_guidance",
+                  "personal_record",
+                  "personal_constraint",
+                  "graph_relationship"
+                ],
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Required Support",
+              "type": "array"
+            },
+            "personal_context_kinds": {
+              "items": {
+                "enum": [
+                  "allergies",
+                  "conditions",
+                  "restrictions",
+                  "medications",
+                  "symptoms",
+                  "appointments",
+                  "plans",
+                  "questions",
+                  "journey",
+                  "documents"
+                ],
+                "type": "string"
+              },
+              "title": "Personal Context Kinds",
+              "type": "array"
+            },
+            "trusted_server_created": {
+              "const": true,
+              "default": true,
+              "title": "Trusted Server Created",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "policy_version",
+            "policy_id",
+            "purpose",
+            "domain",
+            "required_support"
+          ],
+          "title": "EvidenceRequirementPolicy",
           "type": "object"
         },
         "GraphPath": {
@@ -2857,6 +4346,91 @@
           "title": "SymptomRecord",
           "type": "object"
         },
+        "TrustedRetrievalState": {
+          "additionalProperties": false,
+          "description": "Database-derived scope/applicability used before cache or filtering.",
+          "properties": {
+            "scope": {
+              "$ref": "#/$defs/AuthenticatedRetrievalScope"
+            },
+            "current_journey": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/JourneyPosition"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "requested_journey": {
+              "$ref": "#/$defs/JourneyPosition"
+            },
+            "effective_journey": {
+              "$ref": "#/$defs/JourneyPosition"
+            },
+            "journey_relation": {
+              "enum": [
+                "current",
+                "explicit_other",
+                "overridden_to_current",
+                "unconfirmed_current"
+              ],
+              "title": "Journey Relation",
+              "type": "string"
+            },
+            "active_conditions": {
+              "items": {
+                "enum": [
+                  "breastfeeding",
+                  "early_home_recovery",
+                  "professional_care_for_postpartum_depression",
+                  "complicated_delivery_or_caesarean",
+                  "uncomplicated_delivery",
+                  "feels_ready_for_gentle_activity",
+                  "exercise_clearance",
+                  "movement_restriction",
+                  "current_warning_symptom",
+                  "home_birth",
+                  "facility_birth",
+                  "pregnancy_confirmed",
+                  "consents_to_wellbeing_activity",
+                  "persistent_emotional_concern",
+                  "trusted_support_available"
+                ],
+                "type": "string"
+              },
+              "title": "Active Conditions",
+              "type": "array"
+            },
+            "caller_state_version_was_stale": {
+              "title": "Caller State Version Was Stale",
+              "type": "boolean"
+            },
+            "cache_state_version": {
+              "minimum": 1,
+              "title": "Cache State Version",
+              "type": "integer"
+            },
+            "jurisdiction_source": {
+              "const": "request_profile",
+              "title": "Jurisdiction Source",
+              "type": "string"
+            }
+          },
+          "required": [
+            "scope",
+            "requested_journey",
+            "effective_journey",
+            "journey_relation",
+            "caller_state_version_was_stale",
+            "cache_state_version",
+            "jurisdiction_source"
+          ],
+          "title": "TrustedRetrievalState",
+          "type": "object"
+        },
         "UnresolvedConflict": {
           "additionalProperties": false,
           "properties": {
@@ -3027,6 +4601,27 @@
           "minLength": 1,
           "title": "Jurisdiction",
           "type": "string"
+        },
+        "retrieval_policy": {
+          "$ref": "#/$defs/EvidenceRequirementPolicy"
+        },
+        "trusted_state": {
+          "$ref": "#/$defs/TrustedRetrievalState"
+        },
+        "answerability": {
+          "$ref": "#/$defs/AnswerabilityAssessment"
+        },
+        "personal_context_minimized": {
+          "const": true,
+          "default": true,
+          "title": "Personal Context Minimized",
+          "type": "boolean"
+        },
+        "safety_context_is_separate": {
+          "const": true,
+          "default": true,
+          "title": "Safety Context Is Separate",
+          "type": "boolean"
         },
         "confirmed_personal_facts": {
           "items": {
@@ -3211,6 +4806,9 @@
         "domain",
         "journey",
         "jurisdiction",
+        "retrieval_policy",
+        "trusted_state",
+        "answerability",
         "component_results",
         "corpus_mode",
         "abstention"
@@ -3405,6 +5003,26 @@
           "title": "Ranking Version",
           "type": "string"
         },
+        "policy_id": {
+          "minLength": 1,
+          "title": "Policy Id",
+          "type": "string"
+        },
+        "resolved_state_version": {
+          "minimum": 1,
+          "title": "Resolved State Version",
+          "type": "integer"
+        },
+        "journey_relation": {
+          "enum": [
+            "current",
+            "explicit_other",
+            "overridden_to_current",
+            "unconfirmed_current"
+          ],
+          "title": "Journey Relation",
+          "type": "string"
+        },
         "component_results": {
           "items": {
             "$ref": "#/$defs/RetrievalComponentResult"
@@ -3436,6 +5054,9 @@
         "personal_cache_key",
         "filter_version",
         "ranking_version",
+        "policy_id",
+        "resolved_state_version",
+        "journey_relation",
         "component_results",
         "deterministic_order_digest"
       ],
@@ -3460,7 +5081,8 @@
                 "database_unavailable",
                 "retrieval_timeout",
                 "unresolved_conflict",
-                "missing_information"
+                "missing_information",
+                "partial_support"
               ],
               "title": "Reason",
               "type": "string"
@@ -3475,6 +5097,132 @@
             "should_abstain"
           ],
           "title": "AbstentionState",
+          "type": "object"
+        },
+        "AnswerabilityAssessment": {
+          "additionalProperties": false,
+          "properties": {
+            "policy_id": {
+              "minLength": 1,
+              "title": "Policy Id",
+              "type": "string"
+            },
+            "purpose": {
+              "enum": [
+                "public_guidance",
+                "personal_record_lookup",
+                "causal_explanation",
+                "mixed_personalized_guidance"
+              ],
+              "title": "Purpose",
+              "type": "string"
+            },
+            "support_state": {
+              "enum": [
+                "unsupported",
+                "partially_supported",
+                "fully_supported",
+                "clarification_required"
+              ],
+              "title": "Support State",
+              "type": "string"
+            },
+            "ordinary_generation_allowed": {
+              "title": "Ordinary Generation Allowed",
+              "type": "boolean"
+            },
+            "public_guidance_supported": {
+              "title": "Public Guidance Supported",
+              "type": "boolean"
+            },
+            "personal_record_supported": {
+              "title": "Personal Record Supported",
+              "type": "boolean"
+            },
+            "personal_constraints_present": {
+              "title": "Personal Constraints Present",
+              "type": "boolean"
+            },
+            "graph_relationship_supported": {
+              "title": "Graph Relationship Supported",
+              "type": "boolean"
+            },
+            "required_support": {
+              "items": {
+                "enum": [
+                  "public_guidance",
+                  "personal_record",
+                  "personal_constraint",
+                  "graph_relationship"
+                ],
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Required Support",
+              "type": "array"
+            },
+            "satisfied_support": {
+              "items": {
+                "enum": [
+                  "public_guidance",
+                  "personal_record",
+                  "personal_constraint",
+                  "graph_relationship"
+                ],
+                "type": "string"
+              },
+              "title": "Satisfied Support",
+              "type": "array"
+            },
+            "missing_support": {
+              "items": {
+                "enum": [
+                  "public_guidance",
+                  "personal_record",
+                  "personal_constraint",
+                  "graph_relationship"
+                ],
+                "type": "string"
+              },
+              "title": "Missing Support",
+              "type": "array"
+            },
+            "relevant_conflict_ids": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Relevant Conflict Ids",
+              "type": "array"
+            },
+            "relevant_missing_fields": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": "Relevant Missing Fields",
+              "type": "array"
+            },
+            "blocking_reasons": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": "Blocking Reasons",
+              "type": "array"
+            }
+          },
+          "required": [
+            "policy_id",
+            "purpose",
+            "support_state",
+            "ordinary_generation_allowed",
+            "public_guidance_supported",
+            "personal_record_supported",
+            "personal_constraints_present",
+            "graph_relationship_supported",
+            "required_support"
+          ],
+          "title": "AnswerabilityAssessment",
           "type": "object"
         },
         "AppointmentSnapshot": {
@@ -3519,6 +5267,58 @@
             "status"
           ],
           "title": "AppointmentSnapshot",
+          "type": "object"
+        },
+        "AuthenticatedRetrievalScope": {
+          "additionalProperties": false,
+          "description": "Trusted scope resolved from a verified user session by server code.",
+          "properties": {
+            "schema_version": {
+              "const": "5.0.0",
+              "default": "5.0.0",
+              "title": "Schema Version",
+              "type": "string"
+            },
+            "workspace_id": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            },
+            "care_episode_id": {
+              "format": "uuid",
+              "title": "Care Episode Id",
+              "type": "string"
+            },
+            "owner_user_id": {
+              "format": "uuid",
+              "title": "Owner User Id",
+              "type": "string"
+            },
+            "session_subject": {
+              "format": "uuid",
+              "title": "Session Subject",
+              "type": "string"
+            },
+            "state_version": {
+              "minimum": 1,
+              "title": "State Version",
+              "type": "integer"
+            },
+            "authenticated_at": {
+              "format": "date-time",
+              "title": "Authenticated At",
+              "type": "string"
+            }
+          },
+          "required": [
+            "workspace_id",
+            "care_episode_id",
+            "owner_user_id",
+            "session_subject",
+            "state_version",
+            "authenticated_at"
+          ],
+          "title": "AuthenticatedRetrievalScope",
           "type": "object"
         },
         "CandidateProvenance": {
@@ -3708,6 +5508,27 @@
               "title": "Jurisdiction",
               "type": "string"
             },
+            "retrieval_policy": {
+              "$ref": "#/$defs/EvidenceRequirementPolicy"
+            },
+            "trusted_state": {
+              "$ref": "#/$defs/TrustedRetrievalState"
+            },
+            "answerability": {
+              "$ref": "#/$defs/AnswerabilityAssessment"
+            },
+            "personal_context_minimized": {
+              "const": true,
+              "default": true,
+              "title": "Personal Context Minimized",
+              "type": "boolean"
+            },
+            "safety_context_is_separate": {
+              "const": true,
+              "default": true,
+              "title": "Safety Context Is Separate",
+              "type": "boolean"
+            },
             "confirmed_personal_facts": {
               "items": {
                 "$ref": "#/$defs/PersonalFactCandidate"
@@ -3891,11 +5712,101 @@
             "domain",
             "journey",
             "jurisdiction",
+            "retrieval_policy",
+            "trusted_state",
+            "answerability",
             "component_results",
             "corpus_mode",
             "abstention"
           ],
           "title": "EvidencePacket",
+          "type": "object"
+        },
+        "EvidenceRequirementPolicy": {
+          "additionalProperties": false,
+          "description": "Trusted server-created policy; it is never part of RetrievalRequest.",
+          "properties": {
+            "policy_version": {
+              "const": "stage5-answerability-v2",
+              "title": "Policy Version",
+              "type": "string"
+            },
+            "policy_id": {
+              "minLength": 1,
+              "title": "Policy Id",
+              "type": "string"
+            },
+            "purpose": {
+              "enum": [
+                "public_guidance",
+                "personal_record_lookup",
+                "causal_explanation",
+                "mixed_personalized_guidance"
+              ],
+              "title": "Purpose",
+              "type": "string"
+            },
+            "domain": {
+              "enum": [
+                "journey",
+                "nutrition",
+                "movement",
+                "wellbeing",
+                "symptoms",
+                "preparation",
+                "followup"
+              ],
+              "title": "Domain",
+              "type": "string"
+            },
+            "required_support": {
+              "items": {
+                "enum": [
+                  "public_guidance",
+                  "personal_record",
+                  "personal_constraint",
+                  "graph_relationship"
+                ],
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Required Support",
+              "type": "array"
+            },
+            "personal_context_kinds": {
+              "items": {
+                "enum": [
+                  "allergies",
+                  "conditions",
+                  "restrictions",
+                  "medications",
+                  "symptoms",
+                  "appointments",
+                  "plans",
+                  "questions",
+                  "journey",
+                  "documents"
+                ],
+                "type": "string"
+              },
+              "title": "Personal Context Kinds",
+              "type": "array"
+            },
+            "trusted_server_created": {
+              "const": true,
+              "default": true,
+              "title": "Trusted Server Created",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "policy_version",
+            "policy_id",
+            "purpose",
+            "domain",
+            "required_support"
+          ],
+          "title": "EvidenceRequirementPolicy",
           "type": "object"
         },
         "GraphPath": {
@@ -4874,6 +6785,26 @@
               "title": "Ranking Version",
               "type": "string"
             },
+            "policy_id": {
+              "minLength": 1,
+              "title": "Policy Id",
+              "type": "string"
+            },
+            "resolved_state_version": {
+              "minimum": 1,
+              "title": "Resolved State Version",
+              "type": "integer"
+            },
+            "journey_relation": {
+              "enum": [
+                "current",
+                "explicit_other",
+                "overridden_to_current",
+                "unconfirmed_current"
+              ],
+              "title": "Journey Relation",
+              "type": "string"
+            },
             "component_results": {
               "items": {
                 "$ref": "#/$defs/RetrievalComponentResult"
@@ -4905,6 +6836,9 @@
             "personal_cache_key",
             "filter_version",
             "ranking_version",
+            "policy_id",
+            "resolved_state_version",
+            "journey_relation",
             "component_results",
             "deterministic_order_digest"
           ],
@@ -5051,6 +6985,91 @@
             "safety_route"
           ],
           "title": "SymptomRecord",
+          "type": "object"
+        },
+        "TrustedRetrievalState": {
+          "additionalProperties": false,
+          "description": "Database-derived scope/applicability used before cache or filtering.",
+          "properties": {
+            "scope": {
+              "$ref": "#/$defs/AuthenticatedRetrievalScope"
+            },
+            "current_journey": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/JourneyPosition"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "requested_journey": {
+              "$ref": "#/$defs/JourneyPosition"
+            },
+            "effective_journey": {
+              "$ref": "#/$defs/JourneyPosition"
+            },
+            "journey_relation": {
+              "enum": [
+                "current",
+                "explicit_other",
+                "overridden_to_current",
+                "unconfirmed_current"
+              ],
+              "title": "Journey Relation",
+              "type": "string"
+            },
+            "active_conditions": {
+              "items": {
+                "enum": [
+                  "breastfeeding",
+                  "early_home_recovery",
+                  "professional_care_for_postpartum_depression",
+                  "complicated_delivery_or_caesarean",
+                  "uncomplicated_delivery",
+                  "feels_ready_for_gentle_activity",
+                  "exercise_clearance",
+                  "movement_restriction",
+                  "current_warning_symptom",
+                  "home_birth",
+                  "facility_birth",
+                  "pregnancy_confirmed",
+                  "consents_to_wellbeing_activity",
+                  "persistent_emotional_concern",
+                  "trusted_support_available"
+                ],
+                "type": "string"
+              },
+              "title": "Active Conditions",
+              "type": "array"
+            },
+            "caller_state_version_was_stale": {
+              "title": "Caller State Version Was Stale",
+              "type": "boolean"
+            },
+            "cache_state_version": {
+              "minimum": 1,
+              "title": "Cache State Version",
+              "type": "integer"
+            },
+            "jurisdiction_source": {
+              "const": "request_profile",
+              "title": "Jurisdiction Source",
+              "type": "string"
+            }
+          },
+          "required": [
+            "scope",
+            "requested_journey",
+            "effective_journey",
+            "journey_relation",
+            "caller_state_version_was_stale",
+            "cache_state_version",
+            "jurisdiction_source"
+          ],
+          "title": "TrustedRetrievalState",
           "type": "object"
         },
         "UnresolvedConflict": {

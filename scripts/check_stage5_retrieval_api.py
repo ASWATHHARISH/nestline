@@ -21,6 +21,7 @@ from app.services.embeddings import DeterministicTestEmbeddingProvider
 from app.services.onboarding import SupabaseAuthClient, SupabaseOnboardingGateway
 from app.services.personal_documents import SupabaseDocumentGateway
 from app.services.retrieval import PostgrestRetrievalRepository, RetrievalGateway
+from app.services.retrieval_policy import build_evidence_policy
 from scripts.check_stage2_storage_api import LocalSupabase, _expect_success
 from scripts.check_stage4_document_api import _decisions, _process_fixture
 
@@ -206,7 +207,9 @@ def main() -> int:
             question="Why is my week 24 movement plan stale after the restriction?",
             domain="movement",
             journey=JourneyPosition(stage="pregnancy", unit="week", exact=24),
-            jurisdiction="IN"), retrieval_scope)
+            jurisdiction="IN"), retrieval_scope,
+            policy=build_evidence_policy(
+                "mixed_personalized_guidance", "movement"))
         evidence = set(answer.packet.evidence_ids)
         if f"S5-API-EV-GOOD-{marker}" not in evidence:
             raise AssertionError("expected public evidence was not retrieved")
@@ -218,6 +221,13 @@ def main() -> int:
             raise AssertionError("bounded causal graph path was not retrieved")
         if any(path.depth > 4 for path in answer.packet.graph_paths):
             raise AssertionError("graph traversal exceeded its depth bound")
+        if answer.packet.answerability.support_state != "fully_supported":
+            raise AssertionError("authenticated answerability policy was not satisfied")
+        if answer.trace.resolved_state_version != answer.packet.trusted_state.cache_state_version:
+            raise AssertionError("cache did not use resolved database state version")
+        if answer.packet.retrieval_policy.purpose != "mixed_personalized_guidance":
+            raise AssertionError("trusted retrieval purpose was not preserved")
+        checks += 3
         checks += 5
 
         status, raw = local.request(
@@ -257,7 +267,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
-
-
-

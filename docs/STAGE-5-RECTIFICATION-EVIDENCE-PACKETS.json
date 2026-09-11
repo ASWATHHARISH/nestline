@@ -1,0 +1,480 @@
+{
+  "reviewed_commit": "448eb6d2ab7b4e8cc7db9fc42ce5c523a7fe10a7",
+  "reproduced_before": {
+    "S5-DEFECT-PUBLIC-001": {
+      "public_count": 0,
+      "personal_fact_count": 2,
+      "personal_passage_count": 1,
+      "should_abstain": false,
+      "reason": "none"
+    },
+    "S5-DEFECT-CONFLICT-001": {
+      "public_count": 0,
+      "personal_fact_count": 2,
+      "personal_passage_count": 1,
+      "unresolved_conflict_count": 1,
+      "should_abstain": false,
+      "reason": "none"
+    }
+  },
+  "corrected_after": {
+    "S5-DEFECT-PUBLIC-001": {
+      "schema_version": "5.0.0",
+      "request_id": "0b4d50ae-97a2-4267-8eae-21927a6a6795",
+      "workspace_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+      "care_episode_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+      "question": "What hospital documents and finances should I prepare at week 25?",
+      "domain": "preparation",
+      "journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 25,
+        "range_start": null,
+        "range_end": null
+      },
+      "jurisdiction": "IN",
+      "retrieval_policy": {
+        "policy_version": "stage5-answerability-v2",
+        "policy_id": "stage5-answerability-v2:public_guidance:preparation",
+        "purpose": "public_guidance",
+        "domain": "preparation",
+        "required_support": [
+          "public_guidance"
+        ],
+        "personal_context_kinds": [
+          "appointments",
+          "plans",
+          "questions",
+          "documents"
+        ],
+        "trusted_server_created": true
+      },
+      "trusted_state": {
+        "scope": {
+          "schema_version": "5.0.0",
+          "workspace_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+          "care_episode_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+          "owner_user_id": "11111111-1111-4111-8111-111111111111",
+          "session_subject": "11111111-1111-4111-8111-111111111111",
+          "state_version": 3,
+          "authenticated_at": "2026-09-11T16:18:51.711379Z"
+        },
+        "current_journey": {
+          "stage": "pregnancy",
+          "unit": "week",
+          "exact": 24,
+          "range_start": null,
+          "range_end": null
+        },
+        "requested_journey": {
+          "stage": "pregnancy",
+          "unit": "week",
+          "exact": 25,
+          "range_start": null,
+          "range_end": null
+        },
+        "effective_journey": {
+          "stage": "pregnancy",
+          "unit": "week",
+          "exact": 25,
+          "range_start": null,
+          "range_end": null
+        },
+        "journey_relation": "explicit_other",
+        "active_conditions": [
+          "pregnancy_confirmed"
+        ],
+        "caller_state_version_was_stale": false,
+        "cache_state_version": 3,
+        "jurisdiction_source": "request_profile"
+      },
+      "answerability": {
+        "policy_id": "stage5-answerability-v2:public_guidance:preparation",
+        "purpose": "public_guidance",
+        "support_state": "unsupported",
+        "ordinary_generation_allowed": false,
+        "public_guidance_supported": false,
+        "personal_record_supported": false,
+        "personal_constraints_present": false,
+        "graph_relationship_supported": false,
+        "required_support": [
+          "public_guidance"
+        ],
+        "satisfied_support": [],
+        "missing_support": [
+          "public_guidance"
+        ],
+        "relevant_conflict_ids": [],
+        "relevant_missing_fields": [],
+        "blocking_reasons": []
+      },
+      "personal_context_minimized": true,
+      "safety_context_is_separate": true,
+      "confirmed_personal_facts": [],
+      "permitted_personal_passages": [],
+      "medication_records": [],
+      "symptom_records": [],
+      "appointments": [],
+      "plan_states": [],
+      "open_questions": [],
+      "weekly_profile": null,
+      "approved_guideline_passages": [],
+      "graph_paths": [],
+      "ranked_candidates": [],
+      "source_ids": [],
+      "evidence_ids": [],
+      "exact_spans": [],
+      "provenance_versions": {
+        "schema": "5.0.0",
+        "filter": "stage5-filter-v1",
+        "ranking": "rrf-v1-authority-applicability-tiebreak-v1",
+        "policy": "stage5-answerability-v2",
+        "corpus": "stage5-fixture-v2",
+        "release": "fixture-release-v2"
+      },
+      "missing_information": [],
+      "unresolved_conflicts": [],
+      "allowed_claim_types": [],
+      "required_citations": [],
+      "component_results": [
+        {
+          "component": "exact_sql",
+          "status": "ok",
+          "attempted": 2,
+          "returned": 7,
+          "rejected_by_filters": 0,
+          "latency_ms": 0.6521999966935255,
+          "retries": 0,
+          "failure": null
+        },
+        {
+          "component": "public_full_text",
+          "status": "ok",
+          "attempted": 0,
+          "returned": 0,
+          "rejected_by_filters": 0,
+          "latency_ms": 1.8120999957318418,
+          "retries": 0,
+          "failure": null
+        },
+        {
+          "component": "public_vector",
+          "status": "ok",
+          "attempted": 0,
+          "returned": 0,
+          "rejected_by_filters": 0,
+          "latency_ms": 1.3647999949171208,
+          "retries": 0,
+          "failure": null
+        },
+        {
+          "component": "weekly_profile",
+          "status": "ok",
+          "attempted": 1,
+          "returned": 0,
+          "rejected_by_filters": 0,
+          "latency_ms": 0.006599999323952943,
+          "retries": 0,
+          "failure": null
+        },
+        {
+          "component": "personal_full_text",
+          "status": "ok",
+          "attempted": 0,
+          "returned": 0,
+          "rejected_by_filters": 0,
+          "latency_ms": 0.24990000383695588,
+          "retries": 0,
+          "failure": null
+        },
+        {
+          "component": "personal_vector",
+          "status": "degraded",
+          "attempted": 1,
+          "returned": 0,
+          "rejected_by_filters": 1,
+          "latency_ms": 0.2384000035817735,
+          "retries": 0,
+          "failure": null
+        },
+        {
+          "component": "graph",
+          "status": "skipped",
+          "attempted": 0,
+          "returned": 0,
+          "rejected_by_filters": 0,
+          "latency_ms": 0.0024000037228688598,
+          "retries": 0,
+          "failure": null
+        }
+      ],
+      "failures": [
+        {
+          "code": "no_approved_public_content",
+          "recoverable": false,
+          "component": null,
+          "detail": "No approved public release matched; no public evidence was fabricated."
+        }
+      ],
+      "corpus_mode": "no_public_release",
+      "abstention": {
+        "should_abstain": true,
+        "reason": "no_approved_public_content",
+        "detail": "No eligible approved public evidence supports this question."
+      }
+    },
+    "S5-DEFECT-CONFLICT-001": {
+      "schema_version": "5.0.0",
+      "request_id": "126aba14-6a29-4526-813f-584b481969ec",
+      "workspace_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+      "care_episode_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+      "question": "How should my conflicting prenatal yoga record affect week 25 movement guidance?",
+      "domain": "movement",
+      "journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 25,
+        "range_start": null,
+        "range_end": null
+      },
+      "jurisdiction": "IN",
+      "retrieval_policy": {
+        "policy_version": "stage5-answerability-v2",
+        "policy_id": "stage5-answerability-v2:mixed_personalized_guidance:movement",
+        "purpose": "mixed_personalized_guidance",
+        "domain": "movement",
+        "required_support": [
+          "public_guidance",
+          "personal_constraint"
+        ],
+        "personal_context_kinds": [
+          "conditions",
+          "restrictions",
+          "plans",
+          "documents"
+        ],
+        "trusted_server_created": true
+      },
+      "trusted_state": {
+        "scope": {
+          "schema_version": "5.0.0",
+          "workspace_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+          "care_episode_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+          "owner_user_id": "11111111-1111-4111-8111-111111111111",
+          "session_subject": "11111111-1111-4111-8111-111111111111",
+          "state_version": 3,
+          "authenticated_at": "2026-09-11T16:18:51.753176Z"
+        },
+        "current_journey": {
+          "stage": "pregnancy",
+          "unit": "week",
+          "exact": 24,
+          "range_start": null,
+          "range_end": null
+        },
+        "requested_journey": {
+          "stage": "pregnancy",
+          "unit": "week",
+          "exact": 25,
+          "range_start": null,
+          "range_end": null
+        },
+        "effective_journey": {
+          "stage": "pregnancy",
+          "unit": "week",
+          "exact": 25,
+          "range_start": null,
+          "range_end": null
+        },
+        "journey_relation": "explicit_other",
+        "active_conditions": [
+          "pregnancy_confirmed"
+        ],
+        "caller_state_version_was_stale": false,
+        "cache_state_version": 3,
+        "jurisdiction_source": "request_profile"
+      },
+      "answerability": {
+        "policy_id": "stage5-answerability-v2:mixed_personalized_guidance:movement",
+        "purpose": "mixed_personalized_guidance",
+        "support_state": "clarification_required",
+        "ordinary_generation_allowed": false,
+        "public_guidance_supported": false,
+        "personal_record_supported": true,
+        "personal_constraints_present": true,
+        "graph_relationship_supported": false,
+        "required_support": [
+          "public_guidance",
+          "personal_constraint"
+        ],
+        "satisfied_support": [
+          "personal_constraint"
+        ],
+        "missing_support": [
+          "public_guidance"
+        ],
+        "relevant_conflict_ids": [
+          "c5555555-5555-4555-8555-555555555555"
+        ],
+        "relevant_missing_fields": [],
+        "blocking_reasons": []
+      },
+      "personal_context_minimized": true,
+      "safety_context_is_separate": true,
+      "confirmed_personal_facts": [
+        {
+          "fact_id": "a2222222-2222-4222-8222-222222222222",
+          "fact_type": "dietary_restriction",
+          "value": {
+            "restriction": "avoid high-impact movement",
+            "condition_key": "movement_restriction",
+            "condition_status": "confirmed_present",
+            "subject": "Maya (fictional)"
+          },
+          "source_kind": "human_reviewed",
+          "confirmation_status": "confirmed",
+          "record_only": false,
+          "source_document_id": null,
+          "source_document_fact_id": null,
+          "valid_from": "2026-09-11T00:00:00Z",
+          "valid_to": null,
+          "provenance": {
+            "fixture": "Maya fictional"
+          }
+        }
+      ],
+      "permitted_personal_passages": [],
+      "medication_records": [],
+      "symptom_records": [],
+      "appointments": [],
+      "plan_states": [],
+      "open_questions": [],
+      "weekly_profile": null,
+      "approved_guideline_passages": [],
+      "graph_paths": [],
+      "ranked_candidates": [],
+      "source_ids": [],
+      "evidence_ids": [],
+      "exact_spans": [],
+      "provenance_versions": {
+        "schema": "5.0.0",
+        "filter": "stage5-filter-v1",
+        "ranking": "rrf-v1-authority-applicability-tiebreak-v1",
+        "policy": "stage5-answerability-v2",
+        "corpus": "stage5-fixture-v2",
+        "release": "fixture-release-v2"
+      },
+      "missing_information": [],
+      "unresolved_conflicts": [
+        {
+          "conflict_id": "c5555555-5555-4555-8555-555555555555",
+          "fact_type": "dietary_restriction",
+          "proposed_values": [
+            {
+              "activity": "prenatal yoga allowed"
+            },
+            {
+              "activity": "prenatal yoga paused"
+            }
+          ],
+          "source_document_ids": [],
+          "clarification_question_ids": [],
+          "state": "requires_clarification"
+        }
+      ],
+      "allowed_claim_types": [
+        "confirmed_personal_record",
+        "clarification_required"
+      ],
+      "required_citations": [
+        "personal-fact:a2222222-2222-4222-8222-222222222222"
+      ],
+      "component_results": [
+        {
+          "component": "exact_sql",
+          "status": "ok",
+          "attempted": 2,
+          "returned": 7,
+          "rejected_by_filters": 0,
+          "latency_ms": 0.5539000048884191,
+          "retries": 0,
+          "failure": null
+        },
+        {
+          "component": "public_full_text",
+          "status": "ok",
+          "attempted": 0,
+          "returned": 0,
+          "rejected_by_filters": 0,
+          "latency_ms": 3.6972000016248785,
+          "retries": 0,
+          "failure": null
+        },
+        {
+          "component": "public_vector",
+          "status": "ok",
+          "attempted": 0,
+          "returned": 0,
+          "rejected_by_filters": 0,
+          "latency_ms": 3.6812999969697557,
+          "retries": 0,
+          "failure": null
+        },
+        {
+          "component": "weekly_profile",
+          "status": "ok",
+          "attempted": 1,
+          "returned": 0,
+          "rejected_by_filters": 0,
+          "latency_ms": 0.006199996278155595,
+          "retries": 0,
+          "failure": null
+        },
+        {
+          "component": "personal_full_text",
+          "status": "degraded",
+          "attempted": 1,
+          "returned": 0,
+          "rejected_by_filters": 1,
+          "latency_ms": 0.2706000013859011,
+          "retries": 0,
+          "failure": null
+        },
+        {
+          "component": "personal_vector",
+          "status": "degraded",
+          "attempted": 1,
+          "returned": 0,
+          "rejected_by_filters": 1,
+          "latency_ms": 0.21769999875687063,
+          "retries": 0,
+          "failure": null
+        },
+        {
+          "component": "graph",
+          "status": "skipped",
+          "attempted": 0,
+          "returned": 0,
+          "rejected_by_filters": 0,
+          "latency_ms": 0.0018999999156221747,
+          "retries": 0,
+          "failure": null
+        }
+      ],
+      "failures": [
+        {
+          "code": "no_approved_public_content",
+          "recoverable": false,
+          "component": null,
+          "detail": "No approved public release matched; no public evidence was fabricated."
+        }
+      ],
+      "corpus_mode": "no_public_release",
+      "abstention": {
+        "should_abstain": true,
+        "reason": "unresolved_conflict",
+        "detail": "Relevant conflicting information requires clarification."
+      }
+    }
+  }
+}

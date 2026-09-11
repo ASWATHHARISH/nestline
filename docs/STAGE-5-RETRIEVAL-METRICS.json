@@ -1,988 +1,1228 @@
 {
-  "schema_version": "stage5-retrieval-eval-v1",
-  "dataset": "deterministic synthetic development set; not sealed holdout",
+  "schema_version": "stage5-metrics-v2",
+  "generated_from_frozen_development_truth": true,
   "fixture_only": true,
   "paid_model_required": false,
-  "cases": 5,
-  "experiments": {
-    "01_vector_only": {
-      "cases": 5,
-      "recall_at_5": {
-        "hits": 2,
-        "expected": 2,
-        "value": 1.0
-      },
-      "citation_evidence_precision": {
-        "correct": 2,
-        "returned": 12,
-        "value": 0.16666666666666666
-      },
-      "wrong_week_retrieval": 0,
-      "wrong_jurisdiction_retrieval": 0,
-      "unapproved_source_retrieval": 0,
-      "cross_workspace_leakage": 0,
-      "confirmed_personal_fact_precision": {
-        "correct": 0,
-        "returned": 0,
-        "value": 1.0
-      },
-      "confirmed_personal_fact_recall": {
-        "hits": 0,
-        "expected": 8,
-        "value": 0.0
-      },
-      "conflict_proposal_personalization_violations": 0,
-      "graph_path_correctness": {
-        "correct": 0,
-        "expected": 1,
-        "unexpected": 0,
-        "value": 0.0
-      },
-      "expected_behavior_accuracy": {
-        "correct": 5,
-        "cases": 5,
-        "value": 1.0
-      },
-      "forbidden_ids_seen": [],
-      "latency_ms_by_component": {
-        "public_vector": {
-          "calls": 5,
-          "mean": 2.9957599996123463,
-          "maximum": 7.51029999810271
+  "development_cases": 26,
+  "experiments_in_order": [
+    {
+      "order": 1,
+      "name": "vector_only_same_filters",
+      "metrics": {
+        "recall_at_5": {
+          "value": 1.0,
+          "numerator": 18,
+          "denominator": 18
+        },
+        "citation_evidence_precision": {
+          "value": 0.666667,
+          "numerator": 18,
+          "denominator": 27
+        },
+        "wrong_week_retrieval_count": 0,
+        "wrong_jurisdiction_retrieval_count": 0,
+        "unapproved_source_retrieval_count": 0,
+        "cross_workspace_leakage_count": 0,
+        "confirmed_personal_fact_precision": {
+          "value": 1.0,
+          "numerator": 0,
+          "denominator": 0
+        },
+        "conflict_proposal_personalization_violations": 0,
+        "graph_path_correctness": {
+          "value": 0.0,
+          "numerator": 0,
+          "denominator": 1
+        },
+        "expected_behavior_accuracy": {
+          "value": 0.0,
+          "numerator": 0,
+          "denominator": 26
+        },
+        "support_state_accuracy": {
+          "value": 0.115385,
+          "numerator": 3,
+          "denominator": 26
+        },
+        "journey_relation_accuracy": {
+          "value": 0.0,
+          "numerator": 0,
+          "denominator": 26
+        },
+        "forbidden_evidence_ids_seen": [],
+        "latency_ms_by_component": {
+          "public_vector": {
+            "count": 26,
+            "mean": 2.486192,
+            "max": 4.2572
+          }
         }
       }
     },
-    "02_hybrid_base_rrf": {
-      "cases": 5,
-      "recall_at_5": {
-        "hits": 2,
-        "expected": 2,
-        "value": 1.0
-      },
-      "citation_evidence_precision": {
-        "correct": 2,
-        "returned": 10,
-        "value": 0.2
-      },
-      "wrong_week_retrieval": 0,
-      "wrong_jurisdiction_retrieval": 0,
-      "unapproved_source_retrieval": 0,
-      "cross_workspace_leakage": 0,
-      "confirmed_personal_fact_precision": {
-        "correct": 8,
-        "returned": 8,
-        "value": 1.0
-      },
-      "confirmed_personal_fact_recall": {
-        "hits": 8,
-        "expected": 8,
-        "value": 1.0
-      },
-      "conflict_proposal_personalization_violations": 0,
-      "graph_path_correctness": {
-        "correct": 0,
-        "expected": 1,
-        "unexpected": 0,
-        "value": 0.0
-      },
-      "expected_behavior_accuracy": {
-        "correct": 5,
-        "cases": 5,
-        "value": 1.0
-      },
-      "forbidden_ids_seen": [],
-      "latency_ms_by_component": {
-        "exact_sql": {
-          "calls": 5,
-          "mean": 0.9094000008190051,
-          "maximum": 2.1686000036424957
+    {
+      "order": 2,
+      "name": "hybrid_sql_full_text_vector",
+      "metrics": {
+        "recall_at_5": {
+          "value": 1.0,
+          "numerator": 18,
+          "denominator": 18
         },
-        "graph": {
-          "calls": 5,
-          "mean": 0.0017799990018829703,
-          "maximum": 0.0031999952625483274
+        "citation_evidence_precision": {
+          "value": 1.0,
+          "numerator": 18,
+          "denominator": 18
         },
-        "personal_full_text": {
-          "calls": 5,
-          "mean": 0.2469600018230267,
-          "maximum": 0.3328000020701438
+        "wrong_week_retrieval_count": 0,
+        "wrong_jurisdiction_retrieval_count": 0,
+        "unapproved_source_retrieval_count": 0,
+        "cross_workspace_leakage_count": 0,
+        "confirmed_personal_fact_precision": {
+          "value": 1.0,
+          "numerator": 11,
+          "denominator": 11
         },
-        "personal_vector": {
-          "calls": 5,
-          "mean": 0.16823999758344144,
-          "maximum": 0.27409999893279746
+        "conflict_proposal_personalization_violations": 0,
+        "graph_path_correctness": {
+          "value": 1.0,
+          "numerator": 1,
+          "denominator": 1
         },
-        "public_full_text": {
-          "calls": 5,
-          "mean": 2.1579200023552403,
-          "maximum": 2.475200002663769
+        "expected_behavior_accuracy": {
+          "value": 1.0,
+          "numerator": 26,
+          "denominator": 26
         },
-        "public_vector": {
-          "calls": 5,
-          "mean": 2.276459999848157,
-          "maximum": 2.8514000005088747
+        "support_state_accuracy": {
+          "value": 1.0,
+          "numerator": 26,
+          "denominator": 26
         },
-        "weekly_profile": {
-          "calls": 5,
-          "mean": 0.006000000576023012,
-          "maximum": 0.008000002708286047
+        "journey_relation_accuracy": {
+          "value": 1.0,
+          "numerator": 26,
+          "denominator": 26
+        },
+        "forbidden_evidence_ids_seen": [],
+        "latency_ms_by_component": {
+          "exact_sql": {
+            "count": 26,
+            "mean": 0.537769,
+            "max": 1.0584
+          },
+          "graph": {
+            "count": 26,
+            "mean": 0.017331,
+            "max": 0.4031
+          },
+          "personal_full_text": {
+            "count": 26,
+            "mean": 0.264096,
+            "max": 0.8487
+          },
+          "personal_vector": {
+            "count": 26,
+            "mean": 0.245623,
+            "max": 0.5182
+          },
+          "public_full_text": {
+            "count": 26,
+            "mean": 2.176185,
+            "max": 5.9113
+          },
+          "public_vector": {
+            "count": 26,
+            "mean": 2.142508,
+            "max": 5.1893
+          },
+          "weekly_profile": {
+            "count": 26,
+            "mean": 0.004262,
+            "max": 0.0085
+          }
         }
       }
     },
-    "03_hybrid_one_ranking_improvement": {
-      "cases": 5,
-      "recall_at_5": {
-        "hits": 2,
-        "expected": 2,
-        "value": 1.0
-      },
-      "citation_evidence_precision": {
-        "correct": 2,
-        "returned": 10,
-        "value": 0.2
-      },
-      "wrong_week_retrieval": 0,
-      "wrong_jurisdiction_retrieval": 0,
-      "unapproved_source_retrieval": 0,
-      "cross_workspace_leakage": 0,
-      "confirmed_personal_fact_precision": {
-        "correct": 8,
-        "returned": 8,
-        "value": 1.0
-      },
-      "confirmed_personal_fact_recall": {
-        "hits": 8,
-        "expected": 8,
-        "value": 1.0
-      },
-      "conflict_proposal_personalization_violations": 0,
-      "graph_path_correctness": {
-        "correct": 0,
-        "expected": 1,
-        "unexpected": 0,
-        "value": 0.0
-      },
-      "expected_behavior_accuracy": {
-        "correct": 5,
-        "cases": 5,
-        "value": 1.0
-      },
-      "forbidden_ids_seen": [],
-      "latency_ms_by_component": {
-        "exact_sql": {
-          "calls": 5,
-          "mean": 0.24511999945389107,
-          "maximum": 0.41140000394079834
+    {
+      "order": 3,
+      "name": "single_ranking_trial",
+      "metrics": {
+        "recall_at_5": {
+          "value": 1.0,
+          "numerator": 18,
+          "denominator": 18
         },
-        "graph": {
-          "calls": 5,
-          "mean": 0.0009199997293762863,
-          "maximum": 0.0010000003385357559
+        "citation_evidence_precision": {
+          "value": 1.0,
+          "numerator": 18,
+          "denominator": 18
         },
-        "personal_full_text": {
-          "calls": 5,
-          "mean": 0.10165999847231433,
-          "maximum": 0.1390999968862161
+        "wrong_week_retrieval_count": 0,
+        "wrong_jurisdiction_retrieval_count": 0,
+        "unapproved_source_retrieval_count": 0,
+        "cross_workspace_leakage_count": 0,
+        "confirmed_personal_fact_precision": {
+          "value": 1.0,
+          "numerator": 11,
+          "denominator": 11
         },
-        "personal_vector": {
-          "calls": 5,
-          "mean": 0.08132000075420365,
-          "maximum": 0.11749999976018444
+        "conflict_proposal_personalization_violations": 0,
+        "graph_path_correctness": {
+          "value": 1.0,
+          "numerator": 1,
+          "denominator": 1
         },
-        "public_full_text": {
-          "calls": 5,
-          "mean": 1.103659998625517,
-          "maximum": 1.20009999955073
+        "expected_behavior_accuracy": {
+          "value": 1.0,
+          "numerator": 26,
+          "denominator": 26
         },
-        "public_vector": {
-          "calls": 5,
-          "mean": 1.1125400007585995,
-          "maximum": 1.4634999970439821
+        "support_state_accuracy": {
+          "value": 1.0,
+          "numerator": 26,
+          "denominator": 26
         },
-        "weekly_profile": {
-          "calls": 5,
-          "mean": 0.0029999995604157448,
-          "maximum": 0.0033000032999552786
+        "journey_relation_accuracy": {
+          "value": 1.0,
+          "numerator": 26,
+          "denominator": 26
+        },
+        "forbidden_evidence_ids_seen": [],
+        "latency_ms_by_component": {
+          "exact_sql": {
+            "count": 26,
+            "mean": 0.508631,
+            "max": 0.9727
+          },
+          "graph": {
+            "count": 26,
+            "mean": 0.018412,
+            "max": 0.4357
+          },
+          "personal_full_text": {
+            "count": 26,
+            "mean": 0.219258,
+            "max": 0.5651
+          },
+          "personal_vector": {
+            "count": 26,
+            "mean": 0.191915,
+            "max": 0.2778
+          },
+          "public_full_text": {
+            "count": 26,
+            "mean": 1.784642,
+            "max": 4.5471
+          },
+          "public_vector": {
+            "count": 26,
+            "mean": 1.585885,
+            "max": 3.1336
+          },
+          "weekly_profile": {
+            "count": 26,
+            "mean": 0.003588,
+            "max": 0.0061
+          }
         }
-      }
+      },
+      "adopted": false
     },
-    "04_graph_disabled": {
-      "cases": 5,
-      "recall_at_5": {
-        "hits": 2,
-        "expected": 2,
-        "value": 1.0
-      },
-      "citation_evidence_precision": {
-        "correct": 2,
-        "returned": 10,
-        "value": 0.2
-      },
-      "wrong_week_retrieval": 0,
-      "wrong_jurisdiction_retrieval": 0,
-      "unapproved_source_retrieval": 0,
-      "cross_workspace_leakage": 0,
-      "confirmed_personal_fact_precision": {
-        "correct": 8,
-        "returned": 8,
-        "value": 1.0
-      },
-      "confirmed_personal_fact_recall": {
-        "hits": 8,
-        "expected": 8,
-        "value": 1.0
-      },
-      "conflict_proposal_personalization_violations": 0,
-      "graph_path_correctness": {
-        "correct": 0,
-        "expected": 1,
-        "unexpected": 0,
-        "value": 0.0
-      },
-      "expected_behavior_accuracy": {
-        "correct": 5,
-        "cases": 5,
-        "value": 1.0
-      },
-      "forbidden_ids_seen": [],
-      "latency_ms_by_component": {
-        "exact_sql": {
-          "calls": 5,
-          "mean": 0.2865600006771274,
-          "maximum": 0.3834000017377548
-        },
-        "graph": {
-          "calls": 5,
-          "mean": 0.0010199990356341004,
-          "maximum": 0.0013999961083754897
-        },
-        "personal_full_text": {
-          "calls": 5,
-          "mean": 0.13255999947432429,
-          "maximum": 0.23979999969014898
-        },
-        "personal_vector": {
-          "calls": 5,
-          "mean": 0.09216000034939498,
-          "maximum": 0.16460000188089907
-        },
-        "public_full_text": {
-          "calls": 5,
-          "mean": 1.3385199985350482,
-          "maximum": 1.7322999992757104
-        },
-        "public_vector": {
-          "calls": 5,
-          "mean": 1.0805800004163757,
-          "maximum": 1.1529000039445236
-        },
-        "weekly_profile": {
-          "calls": 5,
-          "mean": 0.003439998545218259,
-          "maximum": 0.004499997885432094
-        }
-      }
+    {
+      "order": 4,
+      "name": "graph_ablation"
+    }
+  ],
+  "adopted_metrics": {
+    "recall_at_5": {
+      "value": 1.0,
+      "numerator": 18,
+      "denominator": 18
     },
-    "04_graph_enabled": {
-      "cases": 5,
-      "recall_at_5": {
-        "hits": 2,
-        "expected": 2,
-        "value": 1.0
+    "citation_evidence_precision": {
+      "value": 1.0,
+      "numerator": 18,
+      "denominator": 18
+    },
+    "wrong_week_retrieval_count": 0,
+    "wrong_jurisdiction_retrieval_count": 0,
+    "unapproved_source_retrieval_count": 0,
+    "cross_workspace_leakage_count": 0,
+    "confirmed_personal_fact_precision": {
+      "value": 1.0,
+      "numerator": 11,
+      "denominator": 11
+    },
+    "conflict_proposal_personalization_violations": 0,
+    "graph_path_correctness": {
+      "value": 1.0,
+      "numerator": 1,
+      "denominator": 1
+    },
+    "expected_behavior_accuracy": {
+      "value": 1.0,
+      "numerator": 26,
+      "denominator": 26
+    },
+    "support_state_accuracy": {
+      "value": 1.0,
+      "numerator": 26,
+      "denominator": 26
+    },
+    "journey_relation_accuracy": {
+      "value": 1.0,
+      "numerator": 26,
+      "denominator": 26
+    },
+    "forbidden_evidence_ids_seen": [],
+    "latency_ms_by_component": {
+      "exact_sql": {
+        "count": 26,
+        "mean": 0.537769,
+        "max": 1.0584
       },
-      "citation_evidence_precision": {
-        "correct": 2,
-        "returned": 10,
-        "value": 0.2
+      "graph": {
+        "count": 26,
+        "mean": 0.017331,
+        "max": 0.4031
       },
-      "wrong_week_retrieval": 0,
-      "wrong_jurisdiction_retrieval": 0,
-      "unapproved_source_retrieval": 0,
-      "cross_workspace_leakage": 0,
-      "confirmed_personal_fact_precision": {
-        "correct": 8,
-        "returned": 8,
-        "value": 1.0
+      "personal_full_text": {
+        "count": 26,
+        "mean": 0.264096,
+        "max": 0.8487
       },
-      "confirmed_personal_fact_recall": {
-        "hits": 8,
-        "expected": 8,
-        "value": 1.0
+      "personal_vector": {
+        "count": 26,
+        "mean": 0.245623,
+        "max": 0.5182
       },
-      "conflict_proposal_personalization_violations": 0,
-      "graph_path_correctness": {
-        "correct": 1,
-        "expected": 1,
-        "unexpected": 0,
-        "value": 1.0
+      "public_full_text": {
+        "count": 26,
+        "mean": 2.176185,
+        "max": 5.9113
       },
-      "expected_behavior_accuracy": {
-        "correct": 5,
-        "cases": 5,
-        "value": 1.0
+      "public_vector": {
+        "count": 26,
+        "mean": 2.142508,
+        "max": 5.1893
       },
-      "forbidden_ids_seen": [],
-      "latency_ms_by_component": {
-        "exact_sql": {
-          "calls": 5,
-          "mean": 0.28469999961089343,
-          "maximum": 0.545299997611437
-        },
-        "graph": {
-          "calls": 5,
-          "mean": 0.058999998145736754,
-          "maximum": 0.15269999857991934
-        },
-        "personal_full_text": {
-          "calls": 5,
-          "mean": 0.10742000013124198,
-          "maximum": 0.14830000145593658
-        },
-        "personal_vector": {
-          "calls": 5,
-          "mean": 0.10233999782940373,
-          "maximum": 0.1795999996829778
-        },
-        "public_full_text": {
-          "calls": 5,
-          "mean": 1.3583200023276731,
-          "maximum": 2.307700000528712
-        },
-        "public_vector": {
-          "calls": 5,
-          "mean": 1.0820600014994852,
-          "maximum": 1.2113999982830137
-        },
-        "weekly_profile": {
-          "calls": 5,
-          "mean": 0.0031199975637719035,
-          "maximum": 0.0031999952625483274
-        }
+      "weekly_profile": {
+        "count": 26,
+        "mean": 0.004262,
+        "max": 0.0085
       }
     }
-  },
-  "observations": {
-    "01_vector_only": [
-      {
-        "case_id": "S5-NUT-001",
-        "public": [
-          "EV-NUT-DECOY-5",
-          "EV-NUT-24",
-          "EV-NUT-DECOY-3",
-          "EV-NUT-DECOY-7",
-          "EV-NUT-DECOY-4"
-        ],
-        "facts": [],
-        "paths": [],
-        "personal_passages": [],
-        "abstained": false,
-        "components": {
-          "public_vector": 7.51029999810271
-        }
-      },
-      {
-        "case_id": "S5-MOVE-001",
-        "public": [
-          "EV-MOVE-24"
-        ],
-        "facts": [],
-        "paths": [],
-        "personal_passages": [],
-        "abstained": false,
-        "components": {
-          "public_vector": 1.7596000034245662
-        }
-      },
-      {
-        "case_id": "S5-SQL-001",
-        "public": [
-          "EV-NUT-GENERAL-1",
-          "EV-NUT-24",
-          "EV-NUT-DECOY-6",
-          "EV-NUT-DECOY-3",
-          "EV-NUT-DECOY-4"
-        ],
-        "facts": [],
-        "paths": [],
-        "personal_passages": [],
-        "abstained": false,
-        "components": {
-          "public_vector": 2.244099996460136
-        }
-      },
-      {
-        "case_id": "S5-GRAPH-001",
-        "public": [
-          "EV-MOVE-24"
-        ],
-        "facts": [],
-        "paths": [],
-        "personal_passages": [],
-        "abstained": false,
-        "components": {
-          "public_vector": 1.9948999979533255
-        }
-      },
-      {
-        "case_id": "S5-ABSTAIN-001",
-        "public": [],
-        "facts": [],
-        "paths": [],
-        "personal_passages": [],
-        "abstained": true,
-        "components": {
-          "public_vector": 1.469900002120994
-        }
-      }
-    ],
-    "02_hybrid_base_rrf": [
-      {
-        "case_id": "S5-NUT-001",
-        "public": [
-          "EV-NUT-24",
-          "EV-NUT-DECOY-5",
-          "EV-NUT-DECOY-3",
-          "EV-NUT-DECOY-7"
-        ],
-        "facts": [
-          "a1111111-1111-4111-8111-111111111111",
-          "a2222222-2222-4222-8222-222222222222"
-        ],
-        "paths": [],
-        "personal_passages": [
-          "personal-b1111111-1111-4111-8111-111111111111"
-        ],
-        "abstained": false,
-        "abstention_reason": "none",
-        "order_digest": "b00251dd942aabe5fd5d13ad3c3221e83eb958131f9964b82e4cb16dd9eec2c6",
-        "components": {
-          "public_full_text": 2.475200002663769,
-          "public_vector": 2.3167999970610254,
-          "weekly_profile": 0.007800001185387373,
-          "exact_sql": 2.1686000036424957,
-          "personal_full_text": 0.3328000020701438,
-          "personal_vector": 0.20349999977042899,
-          "graph": 0.0017999991541728377
-        }
-      },
-      {
-        "case_id": "S5-MOVE-001",
-        "public": [
-          "EV-MOVE-24"
-        ],
-        "facts": [
-          "a1111111-1111-4111-8111-111111111111",
-          "a2222222-2222-4222-8222-222222222222"
-        ],
-        "paths": [],
-        "personal_passages": [
-          "personal-b1111111-1111-4111-8111-111111111111"
-        ],
-        "abstained": false,
-        "abstention_reason": "none",
-        "order_digest": "d1b3874b6d12fb4c5efd2ce4bf7c5acff349ba332a69175392b02fe9debca1e8",
-        "components": {
-          "public_full_text": 2.2443000052589923,
-          "public_vector": 2.374199997575488,
-          "weekly_profile": 0.008000002708286047,
-          "exact_sql": 0.7760000007692724,
-          "personal_full_text": 0.331000002915971,
-          "personal_vector": 0.27409999893279746,
-          "graph": 0.0031999952625483274
-        }
-      },
-      {
-        "case_id": "S5-SQL-001",
-        "public": [
-          "EV-NUT-GENERAL-1",
-          "EV-NUT-24",
-          "EV-NUT-DECOY-6",
-          "EV-NUT-DECOY-3"
-        ],
-        "facts": [
-          "a1111111-1111-4111-8111-111111111111",
-          "a2222222-2222-4222-8222-222222222222"
-        ],
-        "paths": [],
-        "personal_passages": [
-          "personal-b1111111-1111-4111-8111-111111111111"
-        ],
-        "abstained": false,
-        "abstention_reason": "none",
-        "order_digest": "be4c23096110cc3382c649d9ff61f91304b96c34103c36e4a02992ec47bbed3f",
-        "components": {
-          "public_full_text": 2.116099996783305,
-          "public_vector": 2.8514000005088747,
-          "weekly_profile": 0.005399997462518513,
-          "exact_sql": 0.4566999996313825,
-          "personal_full_text": 0.30110000079730526,
-          "personal_vector": 0.17219999426743016,
-          "graph": 0.0014999968698248267
-        }
-      },
-      {
-        "case_id": "S5-GRAPH-001",
-        "public": [
-          "EV-MOVE-24"
-        ],
-        "facts": [
-          "a1111111-1111-4111-8111-111111111111",
-          "a2222222-2222-4222-8222-222222222222"
-        ],
-        "paths": [],
-        "personal_passages": [
-          "personal-b1111111-1111-4111-8111-111111111111"
-        ],
-        "abstained": false,
-        "abstention_reason": "none",
-        "order_digest": "d1b3874b6d12fb4c5efd2ce4bf7c5acff349ba332a69175392b02fe9debca1e8",
-        "components": {
-          "public_full_text": 2.44580000435235,
-          "public_vector": 2.7533000029507093,
-          "weekly_profile": 0.005699999746866524,
-          "exact_sql": 0.6011000004946254,
-          "personal_full_text": 0.22390000231098384,
-          "personal_vector": 0.17269999807467684,
-          "graph": 0.001500004145782441
-        }
-      },
-      {
-        "case_id": "S5-ABSTAIN-001",
-        "public": [],
-        "facts": [],
-        "paths": [],
-        "personal_passages": [],
-        "abstained": true,
-        "abstention_reason": "unresolved_conflict",
-        "order_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-        "components": {
-          "public_full_text": 1.5082000027177855,
-          "public_vector": 1.0866000011446886,
-          "weekly_profile": 0.0031000017770566046,
-          "exact_sql": 0.5445999995572492,
-          "personal_full_text": 0.04600000102072954,
-          "personal_vector": 0.018699996871873736,
-          "graph": 0.0008999995770864189
-        }
-      }
-    ],
-    "03_hybrid_one_ranking_improvement": [
-      {
-        "case_id": "S5-NUT-001",
-        "public": [
-          "EV-NUT-24",
-          "EV-NUT-DECOY-5",
-          "EV-NUT-GENERAL-1",
-          "EV-NUT-DECOY-3"
-        ],
-        "facts": [
-          "a1111111-1111-4111-8111-111111111111",
-          "a2222222-2222-4222-8222-222222222222"
-        ],
-        "paths": [],
-        "personal_passages": [
-          "personal-b1111111-1111-4111-8111-111111111111"
-        ],
-        "abstained": false,
-        "abstention_reason": "none",
-        "order_digest": "24ec9a7bceaa5f96eec375038d79aab8913e4cffbcf58c21d8fb33e89b9b36a1",
-        "components": {
-          "public_full_text": 1.170399998954963,
-          "public_vector": 1.4634999970439821,
-          "weekly_profile": 0.0033000032999552786,
-          "exact_sql": 0.41140000394079834,
-          "personal_full_text": 0.1390999968862161,
-          "personal_vector": 0.11749999976018444,
-          "graph": 0.0010000003385357559
-        }
-      },
-      {
-        "case_id": "S5-MOVE-001",
-        "public": [
-          "EV-MOVE-24"
-        ],
-        "facts": [
-          "a1111111-1111-4111-8111-111111111111",
-          "a2222222-2222-4222-8222-222222222222"
-        ],
-        "paths": [],
-        "personal_passages": [
-          "personal-b1111111-1111-4111-8111-111111111111"
-        ],
-        "abstained": false,
-        "abstention_reason": "none",
-        "order_digest": "d1b3874b6d12fb4c5efd2ce4bf7c5acff349ba332a69175392b02fe9debca1e8",
-        "components": {
-          "public_full_text": 1.0400999963167123,
-          "public_vector": 0.9472000019741245,
-          "weekly_profile": 0.0029999937396496534,
-          "exact_sql": 0.2161999946110882,
-          "personal_full_text": 0.10409999958937988,
-          "personal_vector": 0.09030000364873558,
-          "graph": 0.0008999995770864189
-        }
-      },
-      {
-        "case_id": "S5-SQL-001",
-        "public": [
-          "EV-NUT-24",
-          "EV-NUT-GENERAL-1",
-          "EV-NUT-DECOY-6",
-          "EV-NUT-DECOY-3"
-        ],
-        "facts": [
-          "a1111111-1111-4111-8111-111111111111",
-          "a2222222-2222-4222-8222-222222222222"
-        ],
-        "paths": [],
-        "personal_passages": [
-          "personal-b1111111-1111-4111-8111-111111111111"
-        ],
-        "abstained": false,
-        "abstention_reason": "none",
-        "order_digest": "fdcb60a63a564c858722f0a77d7f84bd23e8af7c85384061d72f00cffda4403b",
-        "components": {
-          "public_full_text": 1.1146999968332238,
-          "public_vector": 1.1398999995435588,
-          "weekly_profile": 0.0029000002541579306,
-          "exact_sql": 0.22729999909643084,
-          "personal_full_text": 0.1148999945144169,
-          "personal_vector": 0.08990000060293823,
-          "graph": 0.0008999995770864189
-        }
-      },
-      {
-        "case_id": "S5-GRAPH-001",
-        "public": [
-          "EV-MOVE-24"
-        ],
-        "facts": [
-          "a1111111-1111-4111-8111-111111111111",
-          "a2222222-2222-4222-8222-222222222222"
-        ],
-        "paths": [],
-        "personal_passages": [
-          "personal-b1111111-1111-4111-8111-111111111111"
-        ],
-        "abstained": false,
-        "abstention_reason": "none",
-        "order_digest": "d1b3874b6d12fb4c5efd2ce4bf7c5acff349ba332a69175392b02fe9debca1e8",
-        "components": {
-          "public_full_text": 1.20009999955073,
-          "public_vector": 1.1446000062278472,
-          "weekly_profile": 0.0031000017770566046,
-          "exact_sql": 0.2554000020609237,
-          "personal_full_text": 0.11660000018309802,
-          "personal_vector": 0.09180000051856041,
-          "graph": 0.0010000003385357559
-        }
-      },
-      {
-        "case_id": "S5-ABSTAIN-001",
-        "public": [],
-        "facts": [],
-        "paths": [],
-        "personal_passages": [],
-        "abstained": true,
-        "abstention_reason": "unresolved_conflict",
-        "order_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-        "components": {
-          "public_full_text": 0.9930000014719553,
-          "public_vector": 0.8674999990034848,
-          "weekly_profile": 0.0026999987312592566,
-          "exact_sql": 0.11529999756021425,
-          "personal_full_text": 0.03360000118846074,
-          "personal_vector": 0.017099999240599573,
-          "graph": 0.0007999988156370819
-        }
-      }
-    ],
-    "04_graph_disabled": [
-      {
-        "case_id": "S5-NUT-001",
-        "public": [
-          "EV-NUT-24",
-          "EV-NUT-DECOY-5",
-          "EV-NUT-DECOY-3",
-          "EV-NUT-DECOY-7"
-        ],
-        "facts": [
-          "a1111111-1111-4111-8111-111111111111",
-          "a2222222-2222-4222-8222-222222222222"
-        ],
-        "paths": [],
-        "personal_passages": [
-          "personal-b1111111-1111-4111-8111-111111111111"
-        ],
-        "abstained": false,
-        "abstention_reason": "none",
-        "order_digest": "b00251dd942aabe5fd5d13ad3c3221e83eb958131f9964b82e4cb16dd9eec2c6",
-        "components": {
-          "public_full_text": 1.3431999977910891,
-          "public_vector": 1.1349999986123294,
-          "weekly_profile": 0.0029999937396496534,
-          "exact_sql": 0.3834000017377548,
-          "personal_full_text": 0.12150000111432746,
-          "personal_vector": 0.0931999966269359,
-          "graph": 0.0008999995770864189
-        }
-      },
-      {
-        "case_id": "S5-MOVE-001",
-        "public": [
-          "EV-MOVE-24"
-        ],
-        "facts": [
-          "a1111111-1111-4111-8111-111111111111",
-          "a2222222-2222-4222-8222-222222222222"
-        ],
-        "paths": [],
-        "personal_passages": [
-          "personal-b1111111-1111-4111-8111-111111111111"
-        ],
-        "abstained": false,
-        "abstention_reason": "none",
-        "order_digest": "d1b3874b6d12fb4c5efd2ce4bf7c5acff349ba332a69175392b02fe9debca1e8",
-        "components": {
-          "public_full_text": 1.7322999992757104,
-          "public_vector": 1.1529000039445236,
-          "weekly_profile": 0.0033999967854470015,
-          "exact_sql": 0.32839999767020345,
-          "personal_full_text": 0.14709999959450215,
-          "personal_vector": 0.09470000077271834,
-          "graph": 0.0011000010999850929
-        }
-      },
-      {
-        "case_id": "S5-SQL-001",
-        "public": [
-          "EV-NUT-GENERAL-1",
-          "EV-NUT-24",
-          "EV-NUT-DECOY-6",
-          "EV-NUT-DECOY-3"
-        ],
-        "facts": [
-          "a1111111-1111-4111-8111-111111111111",
-          "a2222222-2222-4222-8222-222222222222"
-        ],
-        "paths": [],
-        "personal_passages": [
-          "personal-b1111111-1111-4111-8111-111111111111"
-        ],
-        "abstained": false,
-        "abstention_reason": "none",
-        "order_digest": "be4c23096110cc3382c649d9ff61f91304b96c34103c36e4a02992ec47bbed3f",
-        "components": {
-          "public_full_text": 1.1614999966695905,
-          "public_vector": 1.123800000641495,
-          "weekly_profile": 0.0031000017770566046,
-          "exact_sql": 0.36019999970449135,
-          "personal_full_text": 0.23979999969014898,
-          "personal_vector": 0.16460000188089907,
-          "graph": 0.0013999961083754897
-        }
-      },
-      {
-        "case_id": "S5-GRAPH-001",
-        "public": [
-          "EV-MOVE-24"
-        ],
-        "facts": [
-          "a1111111-1111-4111-8111-111111111111",
-          "a2222222-2222-4222-8222-222222222222"
-        ],
-        "paths": [],
-        "personal_passages": [
-          "personal-b1111111-1111-4111-8111-111111111111"
-        ],
-        "abstained": false,
-        "abstention_reason": "none",
-        "order_digest": "d1b3874b6d12fb4c5efd2ce4bf7c5acff349ba332a69175392b02fe9debca1e8",
-        "components": {
-          "public_full_text": 1.0540000002947636,
-          "public_vector": 0.9334999995189719,
-          "weekly_profile": 0.004499997885432094,
-          "exact_sql": 0.23850000434322283,
-          "personal_full_text": 0.11779999476857483,
-          "personal_vector": 0.09100000170292333,
-          "graph": 0.0008999995770864189
-        }
-      },
-      {
-        "case_id": "S5-ABSTAIN-001",
-        "public": [],
-        "facts": [],
-        "paths": [],
-        "personal_passages": [],
-        "abstained": true,
-        "abstention_reason": "unresolved_conflict",
-        "order_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-        "components": {
-          "public_full_text": 1.4015999986440875,
-          "public_vector": 1.0576999993645586,
-          "weekly_profile": 0.0032000025385059416,
-          "exact_sql": 0.12229999992996454,
-          "personal_full_text": 0.036600002204068005,
-          "personal_vector": 0.017300000763498247,
-          "graph": 0.0007999988156370819
-        }
-      }
-    ],
-    "04_graph_enabled": [
-      {
-        "case_id": "S5-NUT-001",
-        "public": [
-          "EV-NUT-24",
-          "EV-NUT-DECOY-5",
-          "EV-NUT-DECOY-3",
-          "EV-NUT-DECOY-7"
-        ],
-        "facts": [
-          "a1111111-1111-4111-8111-111111111111",
-          "a2222222-2222-4222-8222-222222222222"
-        ],
-        "paths": [],
-        "personal_passages": [
-          "personal-b1111111-1111-4111-8111-111111111111"
-        ],
-        "abstained": false,
-        "abstention_reason": "none",
-        "order_digest": "b00251dd942aabe5fd5d13ad3c3221e83eb958131f9964b82e4cb16dd9eec2c6",
-        "components": {
-          "public_full_text": 2.307700000528712,
-          "public_vector": 1.2113999982830137,
-          "weekly_profile": 0.0031000017770566046,
-          "exact_sql": 0.545299997611437,
-          "personal_full_text": 0.14830000145593658,
-          "personal_vector": 0.1795999996829778,
-          "graph": 0.05679999594576657
-        }
-      },
-      {
-        "case_id": "S5-MOVE-001",
-        "public": [
-          "EV-MOVE-24"
-        ],
-        "facts": [
-          "a1111111-1111-4111-8111-111111111111",
-          "a2222222-2222-4222-8222-222222222222"
-        ],
-        "paths": [],
-        "personal_passages": [
-          "personal-b1111111-1111-4111-8111-111111111111"
-        ],
-        "abstained": false,
-        "abstention_reason": "none",
-        "order_digest": "d1b3874b6d12fb4c5efd2ce4bf7c5acff349ba332a69175392b02fe9debca1e8",
-        "components": {
-          "public_full_text": 1.0771000015665777,
-          "public_vector": 0.9524000051897019,
-          "weekly_profile": 0.0030000010156072676,
-          "exact_sql": 0.2592000018921681,
-          "personal_full_text": 0.11480000102892518,
-          "personal_vector": 0.09159999899566174,
-          "graph": 0.0318000020342879
-        }
-      },
-      {
-        "case_id": "S5-SQL-001",
-        "public": [
-          "EV-NUT-GENERAL-1",
-          "EV-NUT-24",
-          "EV-NUT-DECOY-6",
-          "EV-NUT-DECOY-3"
-        ],
-        "facts": [
-          "a1111111-1111-4111-8111-111111111111",
-          "a2222222-2222-4222-8222-222222222222"
-        ],
-        "paths": [],
-        "personal_passages": [
-          "personal-b1111111-1111-4111-8111-111111111111"
-        ],
-        "abstained": false,
-        "abstention_reason": "none",
-        "order_digest": "be4c23096110cc3382c649d9ff61f91304b96c34103c36e4a02992ec47bbed3f",
-        "components": {
-          "public_full_text": 1.124400005210191,
-          "public_vector": 1.1617999989539385,
-          "weekly_profile": 0.0030999945010989904,
-          "exact_sql": 0.2412999965599738,
-          "personal_full_text": 0.1199000034830533,
-          "personal_vector": 0.11390000145183876,
-          "graph": 0.03029999788850546
-        }
-      },
-      {
-        "case_id": "S5-GRAPH-001",
-        "public": [
-          "EV-MOVE-24"
-        ],
-        "facts": [
-          "a1111111-1111-4111-8111-111111111111",
-          "a2222222-2222-4222-8222-222222222222"
-        ],
-        "paths": [
-          "PATH-DOC-RESTRICTION-STALE-PLAN"
-        ],
-        "personal_passages": [
-          "personal-b1111111-1111-4111-8111-111111111111"
-        ],
-        "abstained": false,
-        "abstention_reason": "none",
-        "order_digest": "d1b3874b6d12fb4c5efd2ce4bf7c5acff349ba332a69175392b02fe9debca1e8",
-        "components": {
-          "public_full_text": 1.2534999987110496,
-          "public_vector": 1.0598000008030795,
-          "weekly_profile": 0.0031999952625483274,
-          "exact_sql": 0.25630000163801014,
-          "personal_full_text": 0.11799999629147351,
-          "personal_vector": 0.10909999400610104,
-          "graph": 0.15269999857991934
-        }
-      },
-      {
-        "case_id": "S5-ABSTAIN-001",
-        "public": [],
-        "facts": [],
-        "paths": [],
-        "personal_passages": [],
-        "abstained": true,
-        "abstention_reason": "unresolved_conflict",
-        "order_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-        "components": {
-          "public_full_text": 1.0289000056218356,
-          "public_vector": 1.0249000042676926,
-          "weekly_profile": 0.0031999952625483274,
-          "exact_sql": 0.12140000035287812,
-          "personal_full_text": 0.03609999839682132,
-          "personal_vector": 0.017499995010439306,
-          "graph": 0.023399996280204505
-        }
-      }
-    ]
   },
   "graph_ablation": {
-    "expected_paths": 1,
-    "disabled_correct": 0,
-    "enabled_correct": 1,
+    "graph_required_case": "S5-GRAPH-ON-001",
+    "with_graph": [
+      "PATH-DOC-RESTRICTION-STALE-PLAN"
+    ],
+    "without_graph": [],
     "adds_required_relationship_information": true,
-    "ranking_trial_adopted": false,
-    "ranking_trial_reason": "No Recall@5 or precision gain on frozen development truth.",
-    "sql_sufficient_case": "S5-SQL-001",
-    "sql_sufficient_case_claims_graph_benefit": false
+    "sql_sufficient_case": "S5-PERSONAL-ALLERGY-001",
+    "sql_answer_same_with_graph_on_and_off": true,
+    "sql_sufficient_case_claims_graph_benefit": false,
+    "ranking_trial_adopted": false
   },
-  "honest_limitation": "The SHA-256 fixture embedding is deterministic but non-semantic and cannot measure production semantic quality; it exists only to verify plumbing, filters, ranking determinism, and provider independence.",
-  "comparison": {
-    "vector_recall": {
-      "hits": 2,
-      "expected": 2,
-      "value": 1.0
+  "honest_limitation": "Deterministic fixture embeddings and 26 synthetic questions verify control flow, isolation and filters; they do not establish production retrieval quality.",
+  "observations": [
+    {
+      "case_id": "S5-DEFECT-PUBLIC-001",
+      "public": [],
+      "facts": [],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": true,
+      "abstention_reason": "no_approved_public_content",
+      "support_state": "unsupported",
+      "journey_relation": "explicit_other",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 25,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "components": {
+        "exact_sql": 0.6521999966935255,
+        "public_full_text": 1.8120999957318418,
+        "public_vector": 1.3647999949171208,
+        "weekly_profile": 0.006599999323952943,
+        "personal_full_text": 0.24990000383695588,
+        "personal_vector": 0.2384000035817735,
+        "graph": 0.0024000037228688598
+      }
     },
-    "hybrid_recall": {
-      "hits": 2,
-      "expected": 2,
-      "value": 1.0
+    {
+      "case_id": "S5-IRRELEVANT-VECTOR-001",
+      "public": [],
+      "facts": [],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": true,
+      "abstention_reason": "no_approved_public_content",
+      "support_state": "unsupported",
+      "journey_relation": "explicit_other",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 25,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "components": {
+        "exact_sql": 0.512699996761512,
+        "public_full_text": 2.1885999958612956,
+        "public_vector": 2.5943000000552274,
+        "weekly_profile": 0.008499999239575118,
+        "personal_full_text": 0.2271999983349815,
+        "personal_vector": 0.2423999976599589,
+        "graph": 0.0022999956854619086
+      }
+    },
+    {
+      "case_id": "S5-PERSONAL-ALLERGY-001",
+      "public": [],
+      "facts": [
+        "a1111111-1111-4111-8111-111111111111"
+      ],
+      "paths": [],
+      "personal_passages": [
+        "personal-b1111111-1111-4111-8111-111111111111"
+      ],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "7b311fc0df7b08b81824d1d4194b5f83de4d3e541a7b0f8d9a5a998b8e1ada83",
+      "components": {
+        "exact_sql": 0.5034999994677491,
+        "public_full_text": 0.0,
+        "public_vector": 0.0,
+        "weekly_profile": 0.0,
+        "personal_full_text": 0.4186000005574897,
+        "personal_vector": 0.21430000197142363,
+        "graph": 0.0012999953469261527
+      }
+    },
+    {
+      "case_id": "S5-MIXED-PARTIAL-001",
+      "public": [],
+      "facts": [
+        "a1111111-1111-4111-8111-111111111111"
+      ],
+      "paths": [],
+      "personal_passages": [
+        "personal-b1111111-1111-4111-8111-111111111111"
+      ],
+      "abstained": true,
+      "abstention_reason": "partial_support",
+      "support_state": "partially_supported",
+      "journey_relation": "explicit_other",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 25,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "7b311fc0df7b08b81824d1d4194b5f83de4d3e541a7b0f8d9a5a998b8e1ada83",
+      "components": {
+        "exact_sql": 0.47089999861782417,
+        "public_full_text": 1.5764999989187345,
+        "public_vector": 2.611399999295827,
+        "weekly_profile": 0.005199995939619839,
+        "personal_full_text": 0.2587999988463707,
+        "personal_vector": 0.2151000007870607,
+        "graph": 0.0017999991541728377
+      }
+    },
+    {
+      "case_id": "S5-DEFECT-CONFLICT-001",
+      "public": [],
+      "facts": [
+        "a2222222-2222-4222-8222-222222222222"
+      ],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": true,
+      "abstention_reason": "unresolved_conflict",
+      "support_state": "clarification_required",
+      "journey_relation": "explicit_other",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 25,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [
+        "c5555555-5555-4555-8555-555555555555"
+      ],
+      "missing": [],
+      "order_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "components": {
+        "exact_sql": 0.5539000048884191,
+        "public_full_text": 3.6972000016248785,
+        "public_vector": 3.6812999969697557,
+        "weekly_profile": 0.006199996278155595,
+        "personal_full_text": 0.2706000013859011,
+        "personal_vector": 0.21769999875687063,
+        "graph": 0.0018999999156221747
+      }
+    },
+    {
+      "case_id": "S5-MISSING-001",
+      "public": [],
+      "facts": [],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": true,
+      "abstention_reason": "missing_information",
+      "support_state": "clarification_required",
+      "journey_relation": "unconfirmed_current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 2,
+      "conflicts": [],
+      "missing": [
+        "journey_state"
+      ],
+      "order_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "components": {
+        "exact_sql": 0.3066000062972307,
+        "public_full_text": 0.0,
+        "public_vector": 0.0,
+        "weekly_profile": 0.0,
+        "personal_full_text": 0.1142999972216785,
+        "personal_vector": 0.0351999988197349,
+        "graph": 0.0016999983927235007
+      }
+    },
+    {
+      "case_id": "S5-CONFLICT-IRRELEVANT-001",
+      "public": [
+        "EV-NUT-24"
+      ],
+      "facts": [
+        "a1111111-1111-4111-8111-111111111111"
+      ],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "b011065b918f403f5c194eb18a3a9e38fa5b133f5b1c701a46971c5189da6226",
+      "components": {
+        "exact_sql": 1.0583999974187464,
+        "public_full_text": 3.7805999963893555,
+        "public_vector": 4.128799999307375,
+        "weekly_profile": 0.007199996616691351,
+        "personal_full_text": 0.35539999953471124,
+        "personal_vector": 0.34830000367946923,
+        "graph": 0.0017999991541728377
+      }
+    },
+    {
+      "case_id": "S5-GRAPH-ON-001",
+      "public": [],
+      "facts": [
+        "a2222222-2222-4222-8222-222222222222"
+      ],
+      "paths": [
+        "PATH-DOC-RESTRICTION-STALE-PLAN"
+      ],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "components": {
+        "exact_sql": 0.5633000037050806,
+        "public_full_text": 0.0,
+        "public_vector": 0.0,
+        "weekly_profile": 0.0,
+        "personal_full_text": 0.301199994282797,
+        "personal_vector": 0.4134999981033616,
+        "graph": 0.4030999989481643
+      }
+    },
+    {
+      "case_id": "S5-GRAPH-OFF-001",
+      "public": [],
+      "facts": [
+        "a2222222-2222-4222-8222-222222222222"
+      ],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": true,
+      "abstention_reason": "no_eligible_evidence",
+      "support_state": "unsupported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "components": {
+        "exact_sql": 0.6394999945769086,
+        "public_full_text": 0.0,
+        "public_vector": 0.0,
+        "weekly_profile": 0.0,
+        "personal_full_text": 0.8487000013701618,
+        "personal_vector": 0.5182000022614375,
+        "graph": 0.0020000006770715117
+      }
+    },
+    {
+      "case_id": "S5-COND-POS-001",
+      "public": [
+        "EV-COND-POS",
+        "EV-MOVE-24"
+      ],
+      "facts": [
+        "a2222222-2222-4222-8222-222222222222"
+      ],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "f4b9ed053725f96e9a6473207b31b87aed199af0ae1b3da8019151bd950deede",
+      "components": {
+        "exact_sql": 0.6860999928903766,
+        "public_full_text": 4.131099994992837,
+        "public_vector": 5.189299998164643,
+        "weekly_profile": 0.005599998985417187,
+        "personal_full_text": 0.447300000814721,
+        "personal_vector": 0.35650000063469633,
+        "graph": 0.0020999941625632346
+      }
+    },
+    {
+      "case_id": "S5-COND-MISSING-001",
+      "public": [
+        "EV-MOVE-24",
+        "EV-COND-POS"
+      ],
+      "facts": [
+        "a2222222-2222-4222-8222-222222222222"
+      ],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "f5c061b8245fd1960594c9a1d0f6c2a2dcec70665de81be55bd7ddd227143a56",
+      "components": {
+        "exact_sql": 0.571299999137409,
+        "public_full_text": 2.464400000462774,
+        "public_vector": 3.3306999976048246,
+        "weekly_profile": 0.005399997462518513,
+        "personal_full_text": 0.33229999826289713,
+        "personal_vector": 0.2548000047681853,
+        "graph": 0.0021000014385208488
+      }
+    },
+    {
+      "case_id": "S5-COND-EXCLUDE-001",
+      "public": [
+        "EV-COND-POS",
+        "EV-MOVE-24"
+      ],
+      "facts": [
+        "a2222222-2222-4222-8222-222222222222"
+      ],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "f4b9ed053725f96e9a6473207b31b87aed199af0ae1b3da8019151bd950deede",
+      "components": {
+        "exact_sql": 0.4917999976896681,
+        "public_full_text": 2.5311999997938983,
+        "public_vector": 2.7321000015945174,
+        "weekly_profile": 0.005599998985417187,
+        "personal_full_text": 0.3502999970805831,
+        "personal_vector": 0.28219999512657523,
+        "graph": 0.0017999991541728377
+      }
+    },
+    {
+      "case_id": "S5-CURRENT-MISMATCH-001",
+      "public": [
+        "EV-NUT-24"
+      ],
+      "facts": [
+        "a1111111-1111-4111-8111-111111111111"
+      ],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "overridden_to_current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "b011065b918f403f5c194eb18a3a9e38fa5b133f5b1c701a46971c5189da6226",
+      "components": {
+        "exact_sql": 0.5454999991343357,
+        "public_full_text": 2.333700002054684,
+        "public_vector": 1.2540000025182962,
+        "weekly_profile": 0.0035999983083456755,
+        "personal_full_text": 0.11689999519148842,
+        "personal_vector": 0.12679999781539664,
+        "graph": 0.001400003384333104
+      }
+    },
+    {
+      "case_id": "S5-FUTURE-WEEK-001",
+      "public": [
+        "EV-PREP-30"
+      ],
+      "facts": [],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "explicit_other",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 30,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "cd6fce7d499cb28aef9a55715fbf6b9492dcfdcd9a767c255586aa3e141bc659",
+      "components": {
+        "exact_sql": 0.5352000007405877,
+        "public_full_text": 2.6557999954093248,
+        "public_vector": 2.6877999989665113,
+        "weekly_profile": 0.004900000931229442,
+        "personal_full_text": 0.24400000256719068,
+        "personal_vector": 0.23530000180471689,
+        "graph": 0.0020000006770715117
+      }
+    },
+    {
+      "case_id": "S5-STALE-VERSION-001",
+      "public": [
+        "EV-NUT-24"
+      ],
+      "facts": [
+        "a1111111-1111-4111-8111-111111111111"
+      ],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": true,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "b011065b918f403f5c194eb18a3a9e38fa5b133f5b1c701a46971c5189da6226",
+      "components": {
+        "exact_sql": 0.47989999438868836,
+        "public_full_text": 3.0583999978262,
+        "public_vector": 2.6108999954885803,
+        "weekly_profile": 0.0040000013541430235,
+        "personal_full_text": 0.16999999934341758,
+        "personal_vector": 0.14350000128615648,
+        "graph": 0.0020000006770715117
+      }
+    },
+    {
+      "case_id": "S5-POSSIBLE-001",
+      "public": [
+        "EV-POSSIBLE"
+      ],
+      "facts": [],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "possible_pregnancy",
+        "unit": "none",
+        "exact": null,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 1,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "9edc49ad10e21f6ee6bc80073a6ec85c43a66f71e62bb2583a4207482c68e604",
+      "components": {
+        "exact_sql": 0.2767999976640567,
+        "public_full_text": 5.013800000597257,
+        "public_vector": 3.846499996143393,
+        "weekly_profile": 0.005699999746866524,
+        "personal_full_text": 0.09780000254977494,
+        "personal_vector": 0.23409999994328246,
+        "graph": 0.001900007191579789
+      }
+    },
+    {
+      "case_id": "S5-PP-DAY-001",
+      "public": [
+        "EV-PP-DAY3"
+      ],
+      "facts": [],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "postpartum",
+        "unit": "day",
+        "exact": 3,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 1,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "393c6189db9fe5030084bb9e87d0b7caaa332ca2b3da2ab7afec11ca2f597111",
+      "components": {
+        "exact_sql": 0.2679999961401336,
+        "public_full_text": 5.911300002480857,
+        "public_vector": 2.9924000045866705,
+        "weekly_profile": 0.008000002708286047,
+        "personal_full_text": 0.07840000034775585,
+        "personal_vector": 0.031600000511389226,
+        "graph": 0.001600004907231778
+      }
+    },
+    {
+      "case_id": "S5-PP-WEEK-001",
+      "public": [
+        "EV-PP-WEEK6"
+      ],
+      "facts": [],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "postpartum",
+        "unit": "week",
+        "exact": 6,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 1,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "a766c5706be99c19e76ba60421ab26f651858b578d2cbf04904c29c042fd8178",
+      "components": {
+        "exact_sql": 0.27430000045569614,
+        "public_full_text": 2.573999998276122,
+        "public_vector": 2.4913000015658326,
+        "weekly_profile": 0.005399997462518513,
+        "personal_full_text": 0.07020000339252874,
+        "personal_vector": 0.02989999484270811,
+        "graph": 0.0017999991541728377
+      }
+    },
+    {
+      "case_id": "S5-JOURNEY-001",
+      "public": [
+        "EV-JOURNEY-24"
+      ],
+      "facts": [],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "82029541aaa1edcce2b66d39785b4d3b556976e28d75883374e232e939a7fee8",
+      "components": {
+        "exact_sql": 0.5231999966781586,
+        "public_full_text": 2.8276999946683645,
+        "public_vector": 2.403700003924314,
+        "weekly_profile": 0.006499998562503606,
+        "personal_full_text": 0.24110000231303275,
+        "personal_vector": 0.24389999452978373,
+        "graph": 0.0022999956854619086
+      }
+    },
+    {
+      "case_id": "S5-WELLBEING-001",
+      "public": [
+        "EV-WELL-24"
+      ],
+      "facts": [],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "012a0f6a742652ad018438b1169d35dae09b770e33a94b802bfe2b7cb705daf5",
+      "components": {
+        "exact_sql": 0.5447999938041903,
+        "public_full_text": 2.479600007063709,
+        "public_vector": 3.0536000049323775,
+        "weekly_profile": 0.005399997462518513,
+        "personal_full_text": 0.2170999941881746,
+        "personal_vector": 0.22850000095786527,
+        "graph": 0.0016999983927235007
+      }
+    },
+    {
+      "case_id": "S5-SYMPTOMS-001",
+      "public": [
+        "EV-SYM-24"
+      ],
+      "facts": [],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "c0987fda92fc86175e3610d8988556893fd97c42805ad56fcb03ac94563a278a",
+      "components": {
+        "exact_sql": 0.530999997863546,
+        "public_full_text": 2.4354000051971525,
+        "public_vector": 2.513100000214763,
+        "weekly_profile": 0.005400004738476127,
+        "personal_full_text": 0.19840000459225848,
+        "personal_vector": 0.22799999715061858,
+        "graph": 0.0020000006770715117
+      }
+    },
+    {
+      "case_id": "S5-PREPARATION-001",
+      "public": [
+        "EV-PREP-24"
+      ],
+      "facts": [],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "1c4839eb91aa2851d8f9fe7e6a96cc9a3bfcb7ac542ff1c212b8dac752c60d8c",
+      "components": {
+        "exact_sql": 0.5443999980343506,
+        "public_full_text": 2.522599999792874,
+        "public_vector": 2.5317999970866367,
+        "weekly_profile": 0.005900001269765198,
+        "personal_full_text": 0.20389999554026872,
+        "personal_vector": 0.22509999689646065,
+        "graph": 0.0018999999156221747
+      }
+    },
+    {
+      "case_id": "S5-FOLLOWUP-001",
+      "public": [
+        "EV-FOLLOW-24"
+      ],
+      "facts": [],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "821f8268d4d15bebd70fabab199054b6a650fb6c8ad5dd6bf771615e6749a9c0",
+      "components": {
+        "exact_sql": 0.5807999987155199,
+        "public_full_text": 2.586800001154188,
+        "public_vector": 3.6873999997624196,
+        "weekly_profile": 0.005699999746866524,
+        "personal_full_text": 0.23910000163596123,
+        "personal_vector": 0.3093999985139817,
+        "graph": 0.0020000006770715117
+      }
+    },
+    {
+      "case_id": "S5-MEDICATION-001",
+      "public": [],
+      "facts": [],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "components": {
+        "exact_sql": 0.5754000012530014,
+        "public_full_text": 0.0,
+        "public_vector": 0.0,
+        "weekly_profile": 0.0,
+        "personal_full_text": 0.2936999953817576,
+        "personal_vector": 0.3260000012232922,
+        "graph": 0.0018999999156221747
+      }
+    },
+    {
+      "case_id": "S5-SYMPTOM-RECORD-001",
+      "public": [],
+      "facts": [],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "components": {
+        "exact_sql": 0.5340999996406026,
+        "public_full_text": 0.0,
+        "public_vector": 0.0,
+        "weekly_profile": 0.0,
+        "personal_full_text": 0.265199996647425,
+        "personal_vector": 0.22980000358074903,
+        "graph": 0.0018999999156221747
+      }
+    },
+    {
+      "case_id": "S5-APPOINTMENT-001",
+      "public": [],
+      "facts": [],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "components": {
+        "exact_sql": 0.7583999977214262,
+        "public_full_text": 0.0,
+        "public_vector": 0.0,
+        "weekly_profile": 0.0,
+        "personal_full_text": 0.25610000011511147,
+        "personal_vector": 0.4576999999699183,
+        "graph": 0.0018999999156221747
+      }
     }
-  }
+  ]
 }

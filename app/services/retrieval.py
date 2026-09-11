@@ -23,10 +23,19 @@ from app.schemas.retrieval import (
     AbstentionState, AuthenticatedRetrievalScope, EvidencePacket,
     ExactPersonalContext, GraphPath, PersonalPassageCandidate,
     PublicEvidenceCandidate, RankedRetrievalCandidate, RetrievalComponentResult,
-    RetrievalFailure, RetrievalRequest, RetrievalResult, RetrievalTrace,
+    EvidenceRequirementPolicy, RetrievalFailure, RetrievalRequest,
+    RetrievalResult, RetrievalTrace, TrustedRetrievalQuery,
     WeeklyProfileCandidate,
 )
 from app.services.embeddings import EmbeddingProvider
+from app.services.retrieval_policy import (
+    assess_answerability,
+    build_evidence_policy,
+    build_trusted_query,
+    meaningful_tokens,
+    minimise_personal_context,
+    personal_passage_relevant,
+)
 
 FILTER_VERSION = "stage5-filter-v1"
 BASE_RANKING_VERSION = "rrf-v1-authority-applicability-tiebreak-v1"
@@ -53,19 +62,22 @@ class CandidateHit:
 class RetrievalRepository(Protocol):
     """Read-only persistence boundary used by the single Retrieval Gateway."""
 
+    def authenticated_scope(
+        self, requested_scope: AuthenticatedRetrievalScope,
+    ) -> AuthenticatedRetrievalScope: ...
     def exact_personal_context(self, scope: AuthenticatedRetrievalScope,
                                request: RetrievalRequest) -> ExactPersonalContext: ...
-    def public_full_text(self, request: RetrievalRequest, limit: int) -> list[CandidateHit]: ...
-    def public_vector(self, request: RetrievalRequest, embedding: list[float],
+    def public_full_text(self, request: TrustedRetrievalQuery, limit: int) -> list[CandidateHit]: ...
+    def public_vector(self, request: TrustedRetrievalQuery, embedding: list[float],
                       limit: int) -> list[CandidateHit]: ...
     def personal_full_text(self, scope: AuthenticatedRetrievalScope,
-                           request: RetrievalRequest, limit: int) -> list[CandidateHit]: ...
+                           request: TrustedRetrievalQuery, limit: int) -> list[CandidateHit]: ...
     def personal_vector(self, scope: AuthenticatedRetrievalScope,
-                        request: RetrievalRequest, embedding: list[float],
+                        request: TrustedRetrievalQuery, embedding: list[float],
                         limit: int) -> list[CandidateHit]: ...
-    def weekly_profile(self, request: RetrievalRequest) -> WeeklyProfileCandidate | None: ...
+    def weekly_profile(self, request: TrustedRetrievalQuery) -> WeeklyProfileCandidate | None: ...
     def graph_paths(self, scope: AuthenticatedRetrievalScope,
-                    request: RetrievalRequest, max_depth: int,
+                    request: TrustedRetrievalQuery, max_depth: int,
                     max_paths: int) -> list[GraphPath]: ...
 
 
@@ -99,7 +111,7 @@ class Stage5RetrievalCache:
         raw = json.dumps(payload, sort_keys=True, separators=(",", ":"), default=str)
         return sha256(raw.encode("utf-8")).hexdigest()
 
-    def public_key(self, request: RetrievalRequest, *, corpus_version: str,
+    def public_key(self, request: TrustedRetrievalQuery, *, corpus_version: str,
                    release_version: str, filter_version: str = FILTER_VERSION) -> str:
         return "public:" + self._digest({
             "query": normalize_query(request.question), "domain": request.domain,
@@ -113,7 +125,7 @@ class Stage5RetrievalCache:
         })
 
     def personal_key(self, scope: AuthenticatedRetrievalScope,
-                     request: RetrievalRequest,
+                     request: TrustedRetrievalQuery,
                      *, filter_version: str = FILTER_VERSION) -> str:
         return "personal:" + self._digest({
             "workspace": str(scope.workspace_id),
@@ -196,7 +208,7 @@ class PostgrestRetrievalRepository:
         except json.JSONDecodeError as exc:
             raise RetrievalDatabaseUnavailable(f"{function} returned malformed JSON") from exc
 
-    def _position_payload(self, request: RetrievalRequest) -> dict[str, Any]:
+    def _position_payload(self, request: TrustedRetrievalQuery) -> dict[str, Any]:
         return {"requested_stage": request.journey.stage,
                 "requested_unit": request.journey.unit,
                 "requested_range_start": request.journey.start,
@@ -219,6 +231,21 @@ class PostgrestRetrievalRepository:
             result.append(CandidateHit(model.model_validate_json(json.dumps(row["candidate"])),
                                        float(row["component_score"])))
         return result
+
+    def authenticated_scope(self, requested_scope):
+        value = self._rpc("stage5_authenticated_scope", {
+            "requested_workspace_id": str(requested_scope.workspace_id),
+        })
+        if not isinstance(value, dict):
+            raise RetrievalDatabaseUnavailable(
+                "authenticated scope could not be resolved"
+            )
+        resolved = AuthenticatedRetrievalScope.model_validate_json(json.dumps(value))
+        if resolved.session_subject != requested_scope.session_subject:
+            raise RetrievalDatabaseUnavailable(
+                "authenticated session subject changed during scope resolution"
+            )
+        return resolved
 
     def exact_personal_context(self, scope, request):
         value = self._rpc("stage5_exact_personal_context",
@@ -268,7 +295,7 @@ def normalize_query(value: str) -> str:
 
 
 def _tokens(value: str) -> set[str]:
-    return set(re.findall(r"[a-z0-9]+", normalize_query(value)))
+    return meaningful_tokens(value)
 
 
 def _cosine(left: list[float], right: list[float]) -> float:
@@ -296,7 +323,7 @@ class FixtureRetrievalRepository:
 
     @staticmethod
     def _range_fits(candidate: PublicEvidenceCandidate,
-                    request: RetrievalRequest) -> bool:
+                    request: TrustedRetrievalQuery) -> bool:
         if (candidate.journey.stage != request.journey.stage or
                 candidate.journey.unit != request.journey.unit):
             return False
@@ -307,7 +334,7 @@ class FixtureRetrievalRepository:
                 candidate.journey.start <= request.journey.start and
                 candidate.journey.end >= request.journey.end)
 
-    def _public_candidates(self, request: RetrievalRequest, *, vector: bool):
+    def _public_candidates(self, request: TrustedRetrievalQuery, *, vector: bool):
         result = []
         conditions = set(request.active_conditions)
         for record in self.payload.get("public_records", []):
@@ -337,6 +364,26 @@ class FixtureRetrievalRepository:
                 continue
             result.append((record, candidate))
         return result
+
+    def authenticated_scope(self, requested_scope):
+        self._called("authenticated_scope")
+        workspace_id = str(requested_scope.workspace_id)
+        owner = self.payload.get("workspace_owners", {}).get(workspace_id)
+        if owner is None or owner != str(requested_scope.session_subject):
+            raise RetrievalDatabaseUnavailable(
+                "authenticated session does not own requested workspace"
+            )
+        version = int(
+            self.payload.get("personal_state_versions", {}).get(workspace_id, 1)
+        )
+        return AuthenticatedRetrievalScope(
+            workspace_id=requested_scope.workspace_id,
+            care_episode_id=requested_scope.workspace_id,
+            owner_user_id=UUID(owner),
+            session_subject=UUID(owner),
+            state_version=version,
+            authenticated_at=datetime.now(timezone.utc),
+        )
 
     def exact_personal_context(self, scope, request):
         self._called("exact_sql")
@@ -580,48 +627,100 @@ class RetrievalGateway:
                         exact_fit, source_version) in enumerate(rows[:limit], start=1)]
         return output, candidates
 
-    def retrieve(self, request: RetrievalRequest,
-                 scope: AuthenticatedRetrievalScope) -> RetrievalResult:
+    def retrieve(
+        self,
+        request: RetrievalRequest,
+        scope: AuthenticatedRetrievalScope,
+        *,
+        policy: EvidenceRequirementPolicy | None = None,
+    ) -> RetrievalResult:
+        """Retrieve one evidence packet under a trusted, purpose-specific policy."""
+
+        policy = policy or build_evidence_policy("public_guidance", request.domain)
         started_at, clock = datetime.now(timezone.utc), perf_counter()
         normalized = normalize_query(request.question)
-        public_key = self.cache.public_key(
-            request, corpus_version=self.corpus_version,
-            release_version=self.release_version)
-        personal_key = self.cache.personal_key(scope, request)
-        components, failures, rejected_ids = [], [], []
+        components: list[RetrievalComponentResult] = []
+        failures: list[RetrievalFailure] = []
+        rejected_ids: list[str] = []
 
-        vector = None
+        # Resolve the owner/workspace/state boundary from the authenticated database
+        # before deriving applicability or constructing either cache key.
+        tick = perf_counter()
+        personal_database_ok = True
+        try:
+            resolved_scope = self.repository.authenticated_scope(scope)
+            full_exact = self.repository.exact_personal_context(resolved_scope, request)
+            exact_count = sum((
+                len(full_exact.confirmed_facts), len(full_exact.medications),
+                len(full_exact.symptoms), len(full_exact.appointments),
+                len(full_exact.plan_states), len(full_exact.open_questions),
+                len(full_exact.unresolved_conflicts),
+                len(full_exact.missing_information),
+            ))
+            components.append(self._component(
+                "exact_sql", "ok", tick, 2, exact_count))
+        except RetrievalDatabaseUnavailable:
+            resolved_scope = scope
+            full_exact = ExactPersonalContext()
+            personal_database_ok = False
+            failure = RetrievalFailure(
+                code="database_unavailable", recoverable=True,
+                component="exact_sql",
+                detail=("Authenticated scope or personal state could not be "
+                        "resolved; personalization is unavailable."))
+            failures.append(failure)
+            components.append(self._component(
+                "exact_sql", "failed", tick, 2, 0, failure=failure))
+
+        trusted_state, query = build_trusted_query(
+            request, scope, resolved_scope, full_exact, policy)
+        public_key = self.cache.public_key(
+            query, corpus_version=self.corpus_version,
+            release_version=self.release_version)
+        personal_key = self.cache.personal_key(resolved_scope, query)
+
+        vector: list[float] | None = None
         if self.embedding_provider is not None:
             try:
-                vector = self.embedding_provider.embed([request.question])[0]
+                vector = self.embedding_provider.embed([query.question])[0]
             except Exception:
                 failures.append(RetrievalFailure(
                     code="vector_unavailable", recoverable=True,
                     component="public_vector",
-                    detail="Embedding component unavailable; exact SQL and full text remain active."))
+                    detail=("Embedding component unavailable; exact SQL and "
+                            "full text remain active.")))
         else:
             failures.append(RetrievalFailure(
                 code="vector_unavailable", recoverable=True,
                 component="public_vector",
-                detail="No embedding provider configured; exact SQL and full text remain active."))
+                detail=("No embedding provider configured; exact SQL and full "
+                        "text remain active.")))
 
-        public_entry = self.cache.get_public(public_key)
+        public_needed = (
+            "public_guidance" in policy.required_support
+            and trusted_state.journey_relation != "unconfirmed_current"
+        )
+        public_entry = (
+            self.cache.get_public(public_key)
+            if public_needed else PublicCacheEntry([], [], None)
+        )
         if public_entry is None:
-            public_text, public_vector = [], []
+            public_text: list[CandidateHit] = []
+            public_vector: list[CandidateHit] = []
             tick = perf_counter()
             try:
                 raw = self.repository.public_full_text(
-                    request, request.max_candidates * 2)
+                    query, query.max_candidates * 2)
                 public_text, rejected = self._filter_hits(
-                    raw, request, public=True, vector=False)
+                    raw, query, public=True, vector=False)
                 rejected_ids.extend(rejected)
                 retries = 0
                 if rejected and not public_text:
                     retries = 1
                     raw = self.repository.public_full_text(
-                        request, min(20, request.max_candidates * 4))
+                        query, min(20, query.max_candidates * 4))
                     public_text, second = self._filter_hits(
-                        raw, request, public=True, vector=False)
+                        raw, query, public=True, vector=False)
                     rejected_ids.extend(second)
                 components.append(self._component(
                     "public_full_text", "degraded" if rejected else "ok",
@@ -646,9 +745,9 @@ class RetrievalGateway:
             else:
                 try:
                     raw = self.repository.public_vector(
-                        request, vector, request.max_candidates * 2)
+                        query, vector, query.max_candidates * 2)
                     public_vector, rejected = self._filter_hits(
-                        raw, request, public=True, vector=True)
+                        raw, query, public=True, vector=True)
                     rejected_ids.extend(rejected)
                     components.append(self._component(
                         "public_vector", "degraded" if rejected else "ok",
@@ -658,7 +757,8 @@ class RetrievalGateway:
                     failure = RetrievalFailure(
                         code="vector_unavailable", recoverable=True,
                         component="public_vector",
-                        detail="Public vector retrieval failed; filtered full text remains active.")
+                        detail=("Public vector retrieval failed; filtered full "
+                                "text remains active."))
                     failures.append(failure)
                     components.append(self._component(
                         "public_vector", "degraded", tick, 0, 0,
@@ -666,7 +766,7 @@ class RetrievalGateway:
 
             tick = perf_counter()
             try:
-                profile = self.repository.weekly_profile(request)
+                profile = self.repository.weekly_profile(query)
                 components.append(self._component(
                     "weekly_profile", "ok", tick, 1,
                     1 if profile else 0))
@@ -680,49 +780,42 @@ class RetrievalGateway:
                 components.append(self._component(
                     "weekly_profile", "failed", tick, 1, 0,
                     failure=failure))
-            public_entry = PublicCacheEntry(
-                public_text, public_vector, profile)
+            public_entry = PublicCacheEntry(public_text, public_vector, profile)
             self.cache.put_public(public_key, public_entry)
         else:
             for name, count in (
                 ("public_full_text", len(public_entry.full_text)),
                 ("public_vector", len(public_entry.vector)),
-                ("weekly_profile", int(public_entry.weekly_profile is not None))):
+                ("weekly_profile", int(public_entry.weekly_profile is not None)),
+            ):
                 components.append(RetrievalComponentResult(
                     component=name, status="skipped", attempted=0,
                     returned=count, rejected_by_filters=0, latency_ms=0.0))
 
-        personal_entry = self.cache.get_personal(personal_key, scope)
+        personal_entry = (
+            self.cache.get_personal(personal_key, resolved_scope)
+            if personal_database_ok else None
+        )
         if personal_entry is None:
-            exact = ExactPersonalContext()
-            personal_text, personal_vector, graph_paths = [], [], []
-            tick, personal_database_ok = perf_counter(), True
-            try:
-                exact = self.repository.exact_personal_context(scope, request)
-                exact_count = (len(exact.confirmed_facts) +
-                               len(exact.medications) + len(exact.symptoms) +
-                               len(exact.appointments) + len(exact.plan_states) +
-                               len(exact.open_questions))
-                components.append(self._component(
-                    "exact_sql", "ok", tick, 1, exact_count))
-            except RetrievalDatabaseUnavailable:
-                personal_database_ok = False
-                failure = RetrievalFailure(
-                    code="database_unavailable", recoverable=True,
-                    component="exact_sql",
-                    detail="Personal database retrieval failed; personalization is unavailable.")
-                failures.append(failure)
-                components.append(self._component(
-                    "exact_sql", "failed", tick, 1, 0,
-                    failure=failure))
+            personal_text: list[CandidateHit] = []
+            personal_vector: list[CandidateHit] = []
+            graph_paths: list[GraphPath] = []
 
             tick = perf_counter()
             if personal_database_ok:
                 try:
                     raw = self.repository.personal_full_text(
-                        scope, request, request.max_candidates * 2)
-                    personal_text, rejected = self._filter_hits(
-                        raw, request, public=False, vector=False)
+                        resolved_scope, query, query.max_candidates * 2)
+                    eligible, rejected = self._filter_hits(
+                        raw, query, public=False, vector=False)
+                    personal_text = [hit for hit in eligible
+                                     if personal_passage_relevant(
+                                         hit.candidate, policy, query.question,
+                                         component="personal_full_text")]
+                    relevance_rejected = [
+                        hit.candidate.candidate_id for hit in eligible
+                        if hit not in personal_text]
+                    rejected.extend(relevance_rejected)
                     rejected_ids.extend(rejected)
                     components.append(self._component(
                         "personal_full_text",
@@ -732,7 +825,8 @@ class RetrievalGateway:
                     failure = RetrievalFailure(
                         code="database_unavailable", recoverable=True,
                         component="personal_full_text",
-                        detail="Personal full-text retrieval failed; no passage personalization was used.")
+                        detail=("Personal full-text retrieval failed; no passage "
+                                "personalization was used."))
                     failures.append(failure)
                     components.append(self._component(
                         "personal_full_text", "failed", tick, 0, 0,
@@ -745,9 +839,18 @@ class RetrievalGateway:
             if personal_database_ok and vector is not None:
                 try:
                     raw = self.repository.personal_vector(
-                        scope, request, vector, request.max_candidates * 2)
-                    personal_vector, rejected = self._filter_hits(
-                        raw, request, public=False, vector=True)
+                        resolved_scope, query, vector,
+                        query.max_candidates * 2)
+                    eligible, rejected = self._filter_hits(
+                        raw, query, public=False, vector=True)
+                    personal_vector = [hit for hit in eligible
+                                       if personal_passage_relevant(
+                                           hit.candidate, policy, query.question,
+                                           component="personal_vector")]
+                    relevance_rejected = [
+                        hit.candidate.candidate_id for hit in eligible
+                        if hit not in personal_vector]
+                    rejected.extend(relevance_rejected)
                     rejected_ids.extend(rejected)
                     components.append(self._component(
                         "personal_vector", "degraded" if rejected else "ok",
@@ -757,7 +860,8 @@ class RetrievalGateway:
                     failure = RetrievalFailure(
                         code="vector_unavailable", recoverable=True,
                         component="personal_vector",
-                        detail="Personal vector retrieval failed; exact SQL and full text remain active.")
+                        detail=("Personal vector retrieval failed; exact SQL and "
+                                "full text remain active."))
                     failures.append(failure)
                     components.append(self._component(
                         "personal_vector", "degraded", tick, 0, 0,
@@ -773,10 +877,17 @@ class RetrievalGateway:
                     failure=vector_failure if personal_database_ok else None))
 
             tick = perf_counter()
-            if personal_database_ok and request.include_graph:
+            graph_requested = (
+                personal_database_ok and query.include_graph
+                and policy.purpose in {
+                    "causal_explanation", "mixed_personalized_guidance"
+                }
+            )
+            if graph_requested:
                 try:
                     graph_paths = self.repository.graph_paths(
-                        scope, request, MAX_GRAPH_DEPTH, MAX_GRAPH_PATHS)
+                        resolved_scope, query,
+                        MAX_GRAPH_DEPTH, MAX_GRAPH_PATHS)
                     components.append(self._component(
                         "graph", "ok", tick, len(graph_paths),
                         len(graph_paths)))
@@ -784,7 +895,8 @@ class RetrievalGateway:
                     failure = RetrievalFailure(
                         code="database_unavailable", recoverable=True,
                         component="graph",
-                        detail="Graph traversal failed; no causal path was returned.")
+                        detail=("Graph traversal failed; no causal path was "
+                                "returned."))
                     failures.append(failure)
                     components.append(self._component(
                         "graph", "failed", tick, 0, 0,
@@ -794,77 +906,112 @@ class RetrievalGateway:
                     "graph", "skipped", tick, 0, 0))
 
             personal_entry = PersonalCacheEntry(
-                scope.workspace_id, scope.care_episode_id,
-                scope.state_version, exact, personal_text,
-                personal_vector, graph_paths)
+                resolved_scope.workspace_id, resolved_scope.care_episode_id,
+                resolved_scope.state_version, full_exact,
+                personal_text, personal_vector, graph_paths)
             if personal_database_ok:
                 self.cache.put_personal(personal_key, personal_entry)
         else:
+            full_exact = personal_entry.exact
             for name, count in (
-                ("exact_sql", len(personal_entry.exact.confirmed_facts)),
                 ("personal_full_text", len(personal_entry.full_text)),
                 ("personal_vector", len(personal_entry.vector)),
-                ("graph", len(personal_entry.graph_paths))):
+                ("graph", len(personal_entry.graph_paths)),
+            ):
                 components.append(RetrievalComponentResult(
                     component=name, status="skipped", attempted=0,
                     returned=count, rejected_by_filters=0, latency_ms=0.0))
 
+        exact = minimise_personal_context(
+            full_exact, trusted_state, policy, query.question)
         ranked, candidate_map = self._rank({
             "personal_full_text": personal_entry.full_text,
             "personal_vector": personal_entry.vector,
             "public_full_text": public_entry.full_text,
             "public_vector": public_entry.vector,
-        }, request.max_candidates)
+        }, query.max_candidates)
         chosen_ids = {item.candidate_id for item in ranked}
-        public = [candidate for candidate_id, candidate in candidate_map.items()
-                  if candidate_id in chosen_ids and
-                  isinstance(candidate, PublicEvidenceCandidate)]
+        public = [
+            candidate for candidate_id, candidate in candidate_map.items()
+            if candidate_id in chosen_ids
+            and isinstance(candidate, PublicEvidenceCandidate)
+        ]
         public.sort(key=lambda item: next(
             rank.rank for rank in ranked
             if rank.candidate_id == item.candidate_id))
         personal_passages = [
             candidate for candidate_id, candidate in candidate_map.items()
-            if candidate_id in chosen_ids and
-            isinstance(candidate, PersonalPassageCandidate)]
+            if candidate_id in chosen_ids
+            and isinstance(candidate, PersonalPassageCandidate)
+        ]
         personal_passages.sort(key=lambda item: next(
             rank.rank for rank in ranked
             if rank.candidate_id == item.candidate_id))
 
         corpus_mode = (
             "controlled_fixture"
-            if any(item.provenance.fixture_only for item in public) or
-            (public_entry.weekly_profile is not None and
-             public_entry.weekly_profile.fixture_only)
+            if any(item.provenance.fixture_only for item in public)
+            or (public_entry.weekly_profile is not None
+                and public_entry.weekly_profile.fixture_only)
             else "production_release"
             if public or public_entry.weekly_profile is not None
-            else "no_public_release")
-        if corpus_mode == "no_public_release":
+            else "no_public_release"
+        )
+        requires_public = "public_guidance" in policy.required_support
+        if requires_public and corpus_mode == "no_public_release":
             failures.append(RetrievalFailure(
                 code="no_approved_public_content", recoverable=False,
-                detail="No approved public release matched; no public evidence was fabricated."))
+                detail=("No approved public release matched; no public evidence "
+                        "was fabricated.")))
 
-        exact = personal_entry.exact
-        has_evidence = bool(
-            exact.confirmed_facts or exact.medications or exact.symptoms or
-            exact.appointments or exact.plan_states or personal_passages or
-            public or public_entry.weekly_profile or personal_entry.graph_paths)
-        if not has_evidence and exact.unresolved_conflicts:
+        elapsed_ms = (perf_counter() - clock) * 1000
+        timed_out = elapsed_ms > query.timeout_ms
+        blocking_reasons: list[str] = []
+        if not personal_database_ok:
+            blocking_reasons.append("database_unavailable")
+        if timed_out:
+            blocking_reasons.append("retrieval_timeout")
+            failures.append(RetrievalFailure(
+                code="timeout", recoverable=True,
+                detail=("Retrieval exceeded its bounded time budget; downstream "
+                        "use must abstain.")))
+        answerability = assess_answerability(
+            policy, exact, len(public),
+            public_entry.weekly_profile is not None,
+            len(personal_passages), len(personal_entry.graph_paths),
+            blocking_reasons=blocking_reasons)
+
+        if "database_unavailable" in blocking_reasons:
+            abstention = AbstentionState(
+                should_abstain=True, reason="database_unavailable",
+                detail="Trusted personal state could not be established.")
+        elif "retrieval_timeout" in blocking_reasons:
+            abstention = AbstentionState(
+                should_abstain=True, reason="retrieval_timeout",
+                detail="Retrieval exceeded its bounded time budget.")
+        elif exact.unresolved_conflicts:
             abstention = AbstentionState(
                 should_abstain=True, reason="unresolved_conflict",
-                detail="Conflicting personal information requires clarification.")
-        elif not has_evidence and exact.missing_information:
+                detail="Relevant conflicting information requires clarification.")
+        elif exact.missing_information:
             abstention = AbstentionState(
                 should_abstain=True, reason="missing_information",
-                detail="Required personal information is missing.")
-        elif not has_evidence:
-            reason = ("no_approved_public_content"
-                      if corpus_mode == "no_public_release"
-                      else "no_eligible_evidence")
-            abstention = AbstentionState(
-                should_abstain=True, reason=reason,
-                detail="No eligible evidence survived the retrieval filters.")
-        else:
+                detail="Information required by this question is missing.")
+        elif answerability.support_state == "fully_supported":
             abstention = AbstentionState(should_abstain=False)
+        elif answerability.support_state == "partially_supported":
+            abstention = AbstentionState(
+                should_abstain=True, reason="partial_support",
+                detail=("Some relevant evidence exists, but required support "
+                        "for a complete answer is missing."))
+        elif requires_public and corpus_mode == "no_public_release":
+            abstention = AbstentionState(
+                should_abstain=True, reason="no_approved_public_content",
+                detail="No eligible approved public evidence supports this question.")
+        else:
+            abstention = AbstentionState(
+                should_abstain=True, reason="no_eligible_evidence",
+                detail="No eligible evidence satisfies this question's policy.")
 
         allowed_claim_types = []
         if exact.confirmed_facts:
@@ -877,23 +1024,34 @@ class RetrievalGateway:
             allowed_claim_types.append("approved_guideline_paraphrase")
         if public_entry.weekly_profile:
             allowed_claim_types.append("published_weekly_profile")
-        if exact.unresolved_conflicts:
+        if exact.unresolved_conflicts or exact.missing_information:
             allowed_claim_types.append("clarification_required")
 
-        spans = ([span for item in public for span in item.spans] +
-                 [item.span for item in personal_passages])
+        spans = ([span for item in public for span in item.spans]
+                 + [item.span for item in personal_passages])
         evidence_ids = sorted({item.evidence_id for item in public})
         source_ids = sorted({item.source_id for item in public})
         required_citations = sorted(set(
-            evidence_ids +
-            [f"personal:{item.chunk_id}" for item in personal_passages]))
+            evidence_ids
+            + [f"personal-passage:{item.chunk_id}"
+               for item in personal_passages]
+            + [f"personal-fact:{item.fact_id}"
+               for item in exact.confirmed_facts]
+            + [f"medication-record:{item.medication_id}"
+               for item in exact.medications]
+            + [f"appointment:{item.appointment_id}"
+               for item in exact.appointments]
+        ))
         packet = EvidencePacket(
-            request_id=request.request_id,
-            workspace_id=scope.workspace_id,
-            care_episode_id=scope.care_episode_id,
-            question=request.question, domain=request.domain,
-            journey=request.journey,
-            jurisdiction=request.jurisdiction.upper(),
+            request_id=query.request_id,
+            workspace_id=resolved_scope.workspace_id,
+            care_episode_id=resolved_scope.care_episode_id,
+            question=query.question, domain=query.domain,
+            journey=query.journey,
+            jurisdiction=query.jurisdiction.upper(),
+            retrieval_policy=policy,
+            trusted_state=trusted_state,
+            answerability=answerability,
             confirmed_personal_facts=exact.confirmed_facts,
             permitted_personal_passages=personal_passages,
             medication_records=exact.medications,
@@ -910,6 +1068,7 @@ class RetrievalGateway:
             provenance_versions={
                 "schema": "5.0.0", "filter": FILTER_VERSION,
                 "ranking": self.ranking_version,
+                "policy": policy.policy_version,
                 "corpus": self.corpus_version,
                 "release": self.release_version},
             missing_information=exact.missing_information,
@@ -924,7 +1083,7 @@ class RetrievalGateway:
             [item.candidate_id for item in ranked],
             separators=(",", ":")).encode()).hexdigest()
         trace = RetrievalTrace(
-            request_id=request.request_id,
+            request_id=query.request_id,
             started_at=started_at, completed_at=completed_at,
             total_latency_ms=(perf_counter() - clock) * 1000,
             normalized_query=normalized,
@@ -932,27 +1091,10 @@ class RetrievalGateway:
             personal_cache_key=personal_key,
             filter_version=FILTER_VERSION,
             ranking_version=self.ranking_version,
+            policy_id=policy.policy_id,
+            resolved_state_version=resolved_scope.state_version,
+            journey_relation=trusted_state.journey_relation,
             component_results=components,
             rejected_candidate_ids=sorted(set(rejected_ids)),
             deterministic_order_digest=digest)
-        if trace.total_latency_ms > request.timeout_ms:
-            timeout_failure = RetrievalFailure(
-                code="timeout", recoverable=True,
-                detail="Retrieval exceeded its bounded time budget; downstream use must abstain.")
-            packet.failures.append(timeout_failure)
-            packet.abstention = AbstentionState(
-                should_abstain=True, reason="retrieval_timeout",
-                detail="Retrieval exceeded its bounded time budget.")
         return RetrievalResult(packet=packet, trace=trace)
-
-
-
-
-
-
-
-
-
-
-
-

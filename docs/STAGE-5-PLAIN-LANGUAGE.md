@@ -1,58 +1,91 @@
 # Stage 5 in plain language
 
-Imagine Nestline has one careful librarian.
+**Status:** corrected locally and ready for independent Stage 5 re-review
+**Stage 6:** not started
+**Git:** current HEAD `448eb6d2ab7b4e8cc7db9fc42ce5c523a7fe10a7`; rectification is uncommitted and unpushed
 
-When a mother asks a question, the librarian receives the question and a sealed
-identity card created by the server. The question itself cannot change the identity
-card. This prevents one person from asking for another person's records.
+## What Stage 5 does
 
-The librarian uses four tools:
+Think of Nestline as a careful librarian.
 
-1. The exact-record drawer finds facts that must be exact, such as a confirmed
-   allergy, pregnancy week, appointment date or medication record.
-2. The word finder searches approved passages for the same medical terms.
-3. The meaning finder looks for similar passages with vectors.
-4. The relationship map explains links such as: a document confirmed a restriction,
-   the restriction affected a plan item, and the plan became stale.
+When someone asks a question, Stage 5 collects only the information that is allowed and relevant:
 
-Before ranking anything, a strict guard removes every item from the wrong person,
-week, stage, country, domain, condition, evidence lane, corpus or release. Draft,
-rejected, retired and unapproved content is also removed. A bad item cannot stay in
-the list with a low score.
+- exact personal records from the signed-in person’s workspace;
+- approved public health material for the right journey stage, week, country and topic;
+- related causes and effects from a small, bounded graph;
+- source labels and exact text spans so later stages can cite the evidence.
 
-The remaining passages are combined in the same order every time. The packet shows
-where every passage came from, its exact supporting span, which retrieval tool found
-it, what information is missing and whether Nestline must abstain or ask for
-clarification.
+Stage 5 returns this evidence package. It does not write the final answer and it does not decide whether a symptom is safe.
 
-## What personal information can be used
+## What was wrong
 
-Only confirmed, current facts can personalize retrieval. Proposed, rejected,
-superseded and conflicted facts stay out. A conflict is shown separately so the
-mother can clarify it.
+The first version asked a question that was too simple: “Did I find anything?”
 
-Medication is only repeated as a record. Stage 5 cannot recommend changing it.
-A symptom is only a recorded input for the future Safety Gate. Stage 5 cannot say a
-symptom is safe because no rule matched.
+That meant an unrelated peanut-allergy record could make a hospital-preparation question look supported. It also meant a conflict about prenatal yoga could be hidden because other confirmed facts existed.
 
-## What happens when something fails
+The corrected version asks two questions:
 
-- No eligible approved evidence: Nestline abstains.
-- Missing week or other required information: Nestline says what is missing.
-- Conflicting personal records: Nestline asks for clarification.
-- Vector search fails: exact SQL and full text may continue, and the packet says the
-  result is degraded.
-- Personal database retrieval fails: no personal facts are claimed.
-- The time limit is exceeded: the result is marked recoverable and must abstain.
-- No public release exists: Nestline says so and does not invent content.
+1. What kind of evidence does this question require?
+2. Did we find relevant evidence of every required kind?
 
-## What was tested
+A public-guidance question requires approved public guidance. A question such as “What allergy is in my record?” can use a relevant confirmed personal record and does not need public guidance. A personalised guidance question needs both the right public guidance and the relevant personal constraint. A causal “why did my plan change?” question needs the graph relationship.
 
-Five frozen fictional questions test expected evidence, confirmed personal facts,
-forbidden decoys, clarification and the causal graph. Two real local login sessions
-also prove that one user cannot retrieve the other user's SQL facts, document
-vectors or graph.
+## What happens now
 
-The result is locally ready for engineers to begin Stage 6. It is not ready to give
-public medical guidance because the Safety Gate and the named clinical, India
-localisation, licence and product approvals remain open.
+For each request, Nestline:
+
+1. checks who is signed in;
+2. finds that person’s workspace and care episode on the server;
+3. reads the confirmed current journey and state version from the database;
+4. decides whether the question is about the current week or clearly names another week;
+5. chooses the trusted evidence policy in server code;
+6. retrieves exact records, public text/vector matches and permitted graph paths;
+7. removes wrong-user, wrong-week, wrong-country, draft, rejected, retired and unrelated items;
+8. ranks the eligible evidence in a repeatable order;
+9. reports full support, partial support, no support or clarification needed;
+10. returns citations, provenance, component results and failures.
+
+The question text cannot change the authenticated workspace, confirmed conditions or cache state version.
+
+## The two reported failures
+
+| Question situation | Before | After |
+|---|---|---|
+| No matching public preparation evidence, but unrelated personal records exist | It incorrectly said an answer could continue | It removes unrelated personal data and abstains with `no_approved_public_content` |
+| Prenatal-yoga conflict plus unrelated confirmed information | It incorrectly said an answer could continue | It carries only the relevant restriction/conflict and asks for clarification with `unresolved_conflict` |
+
+The complete before/after packets are saved in `docs/STAGE-5-RECTIFICATION-EVIDENCE-PACKETS.json`.
+
+## Privacy and safety rules kept
+
+- A signed-in user cannot retrieve another user’s facts, vectors, graph paths or cache.
+- Only confirmed personal facts can personalise.
+- Proposed, rejected, superseded and unresolved-conflict facts cannot silently become active truth.
+- A medication can be shown as a record, but Stage 5 never recommends changing it.
+- A symptom stays marked for safety evaluation. “No match” never means “safe.”
+- Generic words such as “record” cannot expose unrelated private passages.
+- Stage 5 reads; it never confirms facts or changes plans.
+- Draft public material stays draft. All 63 weekly profiles remain unpublished.
+
+## What the checks proved
+
+- 212/212 Python tests passed.
+- 36/36 focused Stage 5 tests passed.
+- 64/64 content-contract cases passed.
+- 26/26 journey cases passed.
+- 26/26 frozen Stage 5 behaviors passed.
+- 18/18 expected public evidence items were found in the top five.
+- 18/18 returned public evidence items were correct for the frozen truth.
+- 11/11 returned personal facts were expected.
+- 1/1 required graph path was correct.
+- 254/254 database assertions passed.
+- 70/70 authenticated API checks passed.
+- Wrong week, wrong country, unapproved source, cross-workspace leakage and proposal/conflict personalization counts were all zero.
+- Database lint found zero issues.
+- Every Stage 1–4 gate remained green.
+
+## What this does not prove
+
+The embeddings are repeatable test fixtures, not a chosen production model. The dataset has 26 synthetic development questions and is not a large clinical benchmark. Health content still needs clinical, India-localisation, licence, product and publication approval. Stage 6 still has to build and review the Safety Gate.
+
+Stage 5 should now go to an independent reviewer. Stage 6 should begin only after that reviewer accepts this rectification.

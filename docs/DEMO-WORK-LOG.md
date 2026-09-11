@@ -731,7 +731,7 @@ No GitHub commit, push or pull request was performed.
 
 ### What was implemented
 
-- Added 15 versioned retrieval contracts and a single read-only Retrieval Gateway for exact SQL, Postgres full-text, pgvector, bounded graph traversal and deterministic reciprocal-rank fusion.
+- Added 20 versioned retrieval contracts and a single read-only Retrieval Gateway for exact SQL, Postgres full-text, pgvector, bounded graph traversal and deterministic reciprocal-rank fusion.
 - Bound personal scope to the authenticated owner and care episode. Client text cannot override workspace scope, and ordinary retrieval does not use the service role.
 - Added hard pre-ranking filters for confirmation, release, lane, stage, week/range, jurisdiction, domain, applicability, version, retirement and corpus state.
 - Added separate versioned public and personal caches, state-change invalidation, explicit abstention/conflict/missing/degraded failures, and record-only medication plus safety-evaluation-only symptom handling.
@@ -755,14 +755,25 @@ No GitHub commit, push or pull request was performed.
 
 ### Final local evidence
 
-- 203/203 Python unit tests, 64/64 content contracts and 26/26 journey cases passed.
+- 212/212 Python unit tests, 64/64 content contracts and 26/26 journey cases passed.
 - Stage 1, Stage 2, Stage 3, Stage 4 and Stage 5 checkers passed; both Streamlit smoke tests passed.
-- 254/254 database assertions and 67/67 authenticated API checks passed on upgrade and clean histories; database lint returned zero findings.
-- Frozen Stage 5 behavior passed 5/5. Recall@5 was 2/2; public evidence precision was 2/10; confirmed personal fact precision and recall were 8/8; graph correctness was 0/1 disabled and 1/1 enabled. Every prohibited leakage and decoy counter was zero.
+- 254/254 database assertions and 70/70 authenticated API checks passed on exact Stage 4 upgrade and clean histories; database lint returned zero findings.
+- Frozen Stage 5 behavior passed 26/26. Recall@5 and citation/evidence precision were 18/18; confirmed-personal-fact precision was 11/11; graph correctness was absent when disabled and 1/1 when enabled. Every prohibited leakage and decoy counter was zero.
 - All 63 weekly profiles remain drafts. No real medical data, production embeddings or paid-model credentials were used.
 
 ### What remains open
 
-The deterministic SHA-256 fixture embedding proves interfaces and repeatability, not production semantic quality. The corpus is small and its 2/10 public evidence precision is an explicit limitation. Clinical, India-localisation, licence, product/publication, production embedding-provider, real-upload scanning and Stage 6 Safety Gate reviews remain open with their owners.
+The deterministic SHA-256 fixture embedding proves interfaces, filters and repeatability, not production semantic quality. The 26-case synthetic development corpus is small and does not prove clinical quality. Clinical, India-localisation, licence, product/publication, production embedding-provider, real-upload scanning and Stage 6 Safety Gate reviews remain open with their owners.
 
-**Decision:** local GO for Stage 6 engineering; public/clinical/production NO-GO. The Stage 5 implementation was later authorized and recorded as commit a1f0489cd7b16cf2391cab58b8e558432c4f4bba. Migration deployment remains a separate gated action.
+**Rectified decision:** Stage 5 is ready for independent re-review; Stage 6 remains blocked until that review accepts the answerability correction. Public, clinical and production use remain NO-GO. Current HEAD is 448eb6d2ab7b4e8cc7db9fc42ce5c523a7fe10a7; rectification changes are uncommitted/unpushed and the migration remains undeployed.
+
+### Stage 5 answerability rectification
+
+- Reproduced the unsupported-public-guidance and unresolved-conflict failures on the reviewed commit before changing code.
+- Replaced broad any-evidence truthiness with fixed server-side public, personal-record, mixed-personalized and graph evidence requirements.
+- Established database-derived journey, active-condition and state-version boundaries before filtering and cache lookup.
+- Minimized personal context by purpose, domain and meaningful query subject; final inspection caught and removed an unrelated peanut-allergy passage from the prenatal-yoga conflict packet.
+- Expanded frozen truth from 5 to 26 cases across all seven domains and the required conflict, missing, graph, condition, week, stale-state, possible-pregnancy and postpartum states.
+- Regenerated schemas, metrics, corrected Evidence Packets and the independent-review handoff from repository scripts.
+
+Nothing was pushed, merged or deployed, and Stage 6 was not started.
