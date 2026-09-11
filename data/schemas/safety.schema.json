@@ -1,0 +1,741 @@
+{
+  "stage": 6,
+  "schema_version": "6.0.0",
+  "schemas": {
+    "safety_gate_input": {
+      "additionalProperties": false,
+      "description": "Data accepted by the gate; execution mode is trusted gate configuration.",
+      "properties": {
+        "contract_version": {
+          "const": "6.0.0",
+          "default": "6.0.0",
+          "title": "Contract Version",
+          "type": "string"
+        },
+        "request_id": {
+          "format": "uuid",
+          "title": "Request Id",
+          "type": "string"
+        },
+        "input_channel": {
+          "enum": [
+            "onboarding_symptom",
+            "chat_message",
+            "symptom_check_in",
+            "extracted_document_fact",
+            "plan_generation_input"
+          ],
+          "title": "Input Channel",
+          "type": "string"
+        },
+        "content_origin": {
+          "enum": [
+            "user_text",
+            "untrusted_document",
+            "system_plan_input"
+          ],
+          "title": "Content Origin",
+          "type": "string"
+        },
+        "text": {
+          "maxLength": 10000,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "jurisdiction": {
+          "const": "IN",
+          "default": "IN",
+          "title": "Jurisdiction",
+          "type": "string"
+        },
+        "requested_spec_version": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Requested Spec Version"
+        }
+      },
+      "required": [
+        "input_channel",
+        "content_origin",
+        "text"
+      ],
+      "title": "SafetyGateInput",
+      "type": "object"
+    },
+    "safety_rule_match": {
+      "additionalProperties": false,
+      "properties": {
+        "rule_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "configured_route": {
+          "enum": [
+            "urgent",
+            "clarify"
+          ],
+          "title": "Configured Route",
+          "type": "string"
+        },
+        "matched_text_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Matched Text Sha256",
+          "type": "string"
+        },
+        "start": {
+          "minimum": 0,
+          "title": "Start",
+          "type": "integer"
+        },
+        "end": {
+          "exclusiveMinimum": 0,
+          "title": "End",
+          "type": "integer"
+        },
+        "mention_context": {
+          "enum": [
+            "current_self",
+            "uncertain_self",
+            "negated_self",
+            "historical_self",
+            "hypothetical_self",
+            "quoted_text",
+            "third_person"
+          ],
+          "title": "Mention Context",
+          "type": "string"
+        },
+        "attributed_to_user": {
+          "title": "Attributed To User",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "rule_id",
+        "configured_route",
+        "matched_text_sha256",
+        "start",
+        "end",
+        "mention_context",
+        "attributed_to_user"
+      ],
+      "title": "SafetyRuleMatch",
+      "type": "object"
+    },
+    "clarification_state": {
+      "additionalProperties": false,
+      "properties": {
+        "required": {
+          "title": "Required",
+          "type": "boolean"
+        },
+        "question": {
+          "default": "",
+          "title": "Question",
+          "type": "string"
+        },
+        "reason": {
+          "default": "",
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "required"
+      ],
+      "title": "SafetyClarificationState",
+      "type": "object"
+    },
+    "fixed_safety_message": {
+      "additionalProperties": false,
+      "properties": {
+        "message_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Message Id",
+          "type": "string"
+        },
+        "message_version": {
+          "minLength": 1,
+          "title": "Message Version",
+          "type": "string"
+        },
+        "specification_version": {
+          "minLength": 1,
+          "title": "Specification Version",
+          "type": "string"
+        },
+        "jurisdiction": {
+          "const": "IN",
+          "title": "Jurisdiction",
+          "type": "string"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "text_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Text Sha256",
+          "type": "string"
+        },
+        "help_route_ids": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "title": "Help Route Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "message_id",
+        "message_version",
+        "specification_version",
+        "jurisdiction",
+        "text",
+        "text_sha256"
+      ],
+      "title": "FixedSafetyMessage",
+      "type": "object"
+    },
+    "safety_trace": {
+      "additionalProperties": false,
+      "properties": {
+        "trace_id": {
+          "format": "uuid",
+          "title": "Trace Id",
+          "type": "string"
+        },
+        "request_id": {
+          "format": "uuid",
+          "title": "Request Id",
+          "type": "string"
+        },
+        "contract_version": {
+          "const": "6.0.0",
+          "default": "6.0.0",
+          "title": "Contract Version",
+          "type": "string"
+        },
+        "input_channel": {
+          "enum": [
+            "onboarding_symptom",
+            "chat_message",
+            "symptom_check_in",
+            "extracted_document_fact",
+            "plan_generation_input"
+          ],
+          "title": "Input Channel",
+          "type": "string"
+        },
+        "result_route": {
+          "enum": [
+            "urgent",
+            "needs_clarification",
+            "non_urgent"
+          ],
+          "title": "Result Route",
+          "type": "string"
+        },
+        "matched_rule_ids": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+            "type": "string"
+          },
+          "title": "Matched Rule Ids",
+          "type": "array"
+        },
+        "specification_version": {
+          "minLength": 1,
+          "title": "Specification Version",
+          "type": "string"
+        },
+        "message_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+          "title": "Message Id",
+          "type": "string"
+        },
+        "message_version": {
+          "minLength": 1,
+          "title": "Message Version",
+          "type": "string"
+        },
+        "latency_ms": {
+          "minimum": 0,
+          "title": "Latency Ms",
+          "type": "number"
+        },
+        "generation_call_count": {
+          "const": 0,
+          "default": 0,
+          "title": "Generation Call Count",
+          "type": "integer"
+        },
+        "stop_reason": {
+          "enum": [
+            "urgent_match",
+            "minimum_clarification_required",
+            "context_not_attributed_to_user",
+            "clearly_non_symptom_product_request",
+            "configuration_failure"
+          ],
+          "title": "Stop Reason",
+          "type": "string"
+        },
+        "normalized_input_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Normalized Input Sha256",
+          "type": "string"
+        },
+        "input_character_count": {
+          "maximum": 10000,
+          "minimum": 1,
+          "title": "Input Character Count",
+          "type": "integer"
+        },
+        "raw_input_recorded": {
+          "const": false,
+          "default": false,
+          "title": "Raw Input Recorded",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "request_id",
+        "input_channel",
+        "result_route",
+        "specification_version",
+        "message_id",
+        "message_version",
+        "latency_ms",
+        "stop_reason",
+        "normalized_input_sha256",
+        "input_character_count"
+      ],
+      "title": "SafetyTrace",
+      "type": "object"
+    },
+    "safety_gate_result": {
+      "$defs": {
+        "FixedSafetyMessage": {
+          "additionalProperties": false,
+          "properties": {
+            "message_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Message Id",
+              "type": "string"
+            },
+            "message_version": {
+              "minLength": 1,
+              "title": "Message Version",
+              "type": "string"
+            },
+            "specification_version": {
+              "minLength": 1,
+              "title": "Specification Version",
+              "type": "string"
+            },
+            "jurisdiction": {
+              "const": "IN",
+              "title": "Jurisdiction",
+              "type": "string"
+            },
+            "text": {
+              "minLength": 1,
+              "title": "Text",
+              "type": "string"
+            },
+            "text_sha256": {
+              "pattern": "^[a-f0-9]{64}$",
+              "title": "Text Sha256",
+              "type": "string"
+            },
+            "help_route_ids": {
+              "items": {
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+                "type": "string"
+              },
+              "title": "Help Route Ids",
+              "type": "array"
+            }
+          },
+          "required": [
+            "message_id",
+            "message_version",
+            "specification_version",
+            "jurisdiction",
+            "text",
+            "text_sha256"
+          ],
+          "title": "FixedSafetyMessage",
+          "type": "object"
+        },
+        "SafetyClarificationState": {
+          "additionalProperties": false,
+          "properties": {
+            "required": {
+              "title": "Required",
+              "type": "boolean"
+            },
+            "question": {
+              "default": "",
+              "title": "Question",
+              "type": "string"
+            },
+            "reason": {
+              "default": "",
+              "title": "Reason",
+              "type": "string"
+            }
+          },
+          "required": [
+            "required"
+          ],
+          "title": "SafetyClarificationState",
+          "type": "object"
+        },
+        "SafetyRuleMatch": {
+          "additionalProperties": false,
+          "properties": {
+            "rule_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Rule Id",
+              "type": "string"
+            },
+            "configured_route": {
+              "enum": [
+                "urgent",
+                "clarify"
+              ],
+              "title": "Configured Route",
+              "type": "string"
+            },
+            "matched_text_sha256": {
+              "pattern": "^[a-f0-9]{64}$",
+              "title": "Matched Text Sha256",
+              "type": "string"
+            },
+            "start": {
+              "minimum": 0,
+              "title": "Start",
+              "type": "integer"
+            },
+            "end": {
+              "exclusiveMinimum": 0,
+              "title": "End",
+              "type": "integer"
+            },
+            "mention_context": {
+              "enum": [
+                "current_self",
+                "uncertain_self",
+                "negated_self",
+                "historical_self",
+                "hypothetical_self",
+                "quoted_text",
+                "third_person"
+              ],
+              "title": "Mention Context",
+              "type": "string"
+            },
+            "attributed_to_user": {
+              "title": "Attributed To User",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "rule_id",
+            "configured_route",
+            "matched_text_sha256",
+            "start",
+            "end",
+            "mention_context",
+            "attributed_to_user"
+          ],
+          "title": "SafetyRuleMatch",
+          "type": "object"
+        },
+        "SafetyTrace": {
+          "additionalProperties": false,
+          "properties": {
+            "trace_id": {
+              "format": "uuid",
+              "title": "Trace Id",
+              "type": "string"
+            },
+            "request_id": {
+              "format": "uuid",
+              "title": "Request Id",
+              "type": "string"
+            },
+            "contract_version": {
+              "const": "6.0.0",
+              "default": "6.0.0",
+              "title": "Contract Version",
+              "type": "string"
+            },
+            "input_channel": {
+              "enum": [
+                "onboarding_symptom",
+                "chat_message",
+                "symptom_check_in",
+                "extracted_document_fact",
+                "plan_generation_input"
+              ],
+              "title": "Input Channel",
+              "type": "string"
+            },
+            "result_route": {
+              "enum": [
+                "urgent",
+                "needs_clarification",
+                "non_urgent"
+              ],
+              "title": "Result Route",
+              "type": "string"
+            },
+            "matched_rule_ids": {
+              "items": {
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+                "type": "string"
+              },
+              "title": "Matched Rule Ids",
+              "type": "array"
+            },
+            "specification_version": {
+              "minLength": 1,
+              "title": "Specification Version",
+              "type": "string"
+            },
+            "message_id": {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$",
+              "title": "Message Id",
+              "type": "string"
+            },
+            "message_version": {
+              "minLength": 1,
+              "title": "Message Version",
+              "type": "string"
+            },
+            "latency_ms": {
+              "minimum": 0,
+              "title": "Latency Ms",
+              "type": "number"
+            },
+            "generation_call_count": {
+              "const": 0,
+              "default": 0,
+              "title": "Generation Call Count",
+              "type": "integer"
+            },
+            "stop_reason": {
+              "enum": [
+                "urgent_match",
+                "minimum_clarification_required",
+                "context_not_attributed_to_user",
+                "clearly_non_symptom_product_request",
+                "configuration_failure"
+              ],
+              "title": "Stop Reason",
+              "type": "string"
+            },
+            "normalized_input_sha256": {
+              "pattern": "^[a-f0-9]{64}$",
+              "title": "Normalized Input Sha256",
+              "type": "string"
+            },
+            "input_character_count": {
+              "maximum": 10000,
+              "minimum": 1,
+              "title": "Input Character Count",
+              "type": "integer"
+            },
+            "raw_input_recorded": {
+              "const": false,
+              "default": false,
+              "title": "Raw Input Recorded",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "request_id",
+            "input_channel",
+            "result_route",
+            "specification_version",
+            "message_id",
+            "message_version",
+            "latency_ms",
+            "stop_reason",
+            "normalized_input_sha256",
+            "input_character_count"
+          ],
+          "title": "SafetyTrace",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "contract_version": {
+          "const": "6.0.0",
+          "default": "6.0.0",
+          "title": "Contract Version",
+          "type": "string"
+        },
+        "request_id": {
+          "format": "uuid",
+          "title": "Request Id",
+          "type": "string"
+        },
+        "input_channel": {
+          "enum": [
+            "onboarding_symptom",
+            "chat_message",
+            "symptom_check_in",
+            "extracted_document_fact",
+            "plan_generation_input"
+          ],
+          "title": "Input Channel",
+          "type": "string"
+        },
+        "route": {
+          "enum": [
+            "urgent",
+            "needs_clarification",
+            "non_urgent"
+          ],
+          "title": "Route",
+          "type": "string"
+        },
+        "matched_rules": {
+          "items": {
+            "$ref": "#/$defs/SafetyRuleMatch"
+          },
+          "title": "Matched Rules",
+          "type": "array"
+        },
+        "clarification": {
+          "$ref": "#/$defs/SafetyClarificationState"
+        },
+        "fixed_message": {
+          "$ref": "#/$defs/FixedSafetyMessage"
+        },
+        "ordinary_generation_allowed": {
+          "title": "Ordinary Generation Allowed",
+          "type": "boolean"
+        },
+        "evaluation_only": {
+          "title": "Evaluation Only",
+          "type": "boolean"
+        },
+        "public_routing_eligible": {
+          "title": "Public Routing Eligible",
+          "type": "boolean"
+        },
+        "configuration_failure": {
+          "anyOf": [
+            {
+              "enum": [
+                "missing_specification",
+                "malformed_specification",
+                "unsupported_specification_version",
+                "draft_specification"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Configuration Failure"
+        },
+        "reasons": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Reasons",
+          "type": "array"
+        },
+        "no_medical_safety_claim": {
+          "const": true,
+          "default": true,
+          "title": "No Medical Safety Claim",
+          "type": "boolean"
+        },
+        "trace": {
+          "$ref": "#/$defs/SafetyTrace"
+        }
+      },
+      "required": [
+        "request_id",
+        "input_channel",
+        "route",
+        "clarification",
+        "fixed_message",
+        "ordinary_generation_allowed",
+        "evaluation_only",
+        "public_routing_eligible",
+        "reasons",
+        "trace"
+      ],
+      "title": "SafetyGateResult",
+      "type": "object"
+    },
+    "generation_guard_result": {
+      "additionalProperties": false,
+      "properties": {
+        "request_id": {
+          "format": "uuid",
+          "title": "Request Id",
+          "type": "string"
+        },
+        "route": {
+          "enum": [
+            "urgent",
+            "needs_clarification",
+            "non_urgent"
+          ],
+          "title": "Route",
+          "type": "string"
+        },
+        "generation_called": {
+          "title": "Generation Called",
+          "type": "boolean"
+        },
+        "generation_call_count": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Generation Call Count",
+          "type": "integer"
+        },
+        "blocked_reason": {
+          "default": "",
+          "title": "Blocked Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "request_id",
+        "route",
+        "generation_called",
+        "generation_call_count"
+      ],
+      "title": "SafetyGenerationGuardResult",
+      "type": "object"
+    }
+  }
+}

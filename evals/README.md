@@ -23,3 +23,19 @@ validation. Do not report 64/64 as medical accuracy.
 
 Record changes as a new dataset version; keep the previous file/hash in Git.
 The runner records the dataset SHA-256 in reports/local/contract-evals.json.
+## Stage 6 deterministic Safety Gate development set
+
+`stage6_safety_development.jsonl` is a visible, synthetic English development set
+for the deterministic Stage 6 software contract. It covers every configured urgent
+category, all five entry channels, ambiguity, context, prompt injection, fixed
+messages, configuration failures and trace minimisation. It does not access the
+sealed final holdout and does not establish clinical validity, population
+sensitivity or public-release readiness. The draft rule specification may be used
+only through the explicit evaluation-only path; public runtime remains fail-closed.
+
+Regenerate and evaluate it with:
+
+```text
+python -m scripts.build_stage6_safety_evals
+python -m scripts.run_stage6_safety_evals --write-report
+```

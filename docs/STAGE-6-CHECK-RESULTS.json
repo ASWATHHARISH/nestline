@@ -1,0 +1,39 @@
+{
+  "valid": true,
+  "stage": 6,
+  "schema_version": "6.0.0",
+  "deterministic": true,
+  "paid_model_required": false,
+  "database_migration_required": false,
+  "specification_status": "draft",
+  "public_or_clinical_release_ready": false,
+  "controlled_engineering_stage7_ready": true,
+  "verified": {
+    "typed_contracts": 7,
+    "development_cases": 45,
+    "critical_cases": {
+      "passed": 41,
+      "total": 41
+    },
+    "urgent_zero_generation_calls": {
+      "passed": 25,
+      "total": 25
+    },
+    "zero_unsafe_reassurance": {
+      "passed": 45,
+      "total": 45
+    },
+    "ambiguous_or_failure_cases_stopped": {
+      "passed": 16,
+      "total": 16
+    },
+    "input_channels": 5,
+    "urgent_rule_categories": 10
+  },
+  "limitations": [
+    "Passing results are software-contract evidence, not clinical validation.",
+    "The rule specification remains draft and public/live health routing fails closed.",
+    "The visible English fixture set is small and does not establish population sensitivity."
+  ],
+  "errors": []
+}

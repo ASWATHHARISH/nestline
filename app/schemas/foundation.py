@@ -1,9 +1,10 @@
 """Typed catalogues and review records shared by later agents and offline evals."""
 
 from datetime import date
-from typing import Literal
+import re
+from typing import Literal, Self
 
-from pydantic import Field
+from pydantic import Field, model_validator
 
 from app.schemas.content import Applicability, Checksum, ConditionKey, Contract, Identifier, Text
 
@@ -79,6 +80,24 @@ class SafetyRule(Contract):
     rationale: Text
 
 
+    @model_validator(mode="after")
+    def patterns_compile(self) -> Self:
+        for pattern in self.patterns:
+            try:
+                re.compile(pattern)
+            except re.error as exc:
+                raise ValueError(f"invalid safety-rule pattern for {self.rule_id}") from exc
+        return self
+
+
+class SafetyHelpRoute(Contract):
+    number: Text
+    jurisdiction: Literal["IN"]
+    source_url: str = Field(pattern=r"^https://[^\s]+$")
+    verified_on: date
+    use: str = ""
+
+
 class SafetySpec(Contract):
     version: Text
     status: Literal["draft", "published"]
@@ -87,6 +106,13 @@ class SafetySpec(Contract):
     urgent_message: Text
     clarify_message: Text
     no_match_message: Text
-    help_routes: dict
+    help_routes: dict[Identifier, SafetyHelpRoute]
     rules: list[SafetyRule] = Field(min_length=1)
     limitations: list[Text] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def unique_rule_ids(self) -> Self:
+        rule_ids = [rule.rule_id for rule in self.rules]
+        if len(rule_ids) != len(set(rule_ids)):
+            raise ValueError("safety specification contains duplicate rule IDs")
+        return self

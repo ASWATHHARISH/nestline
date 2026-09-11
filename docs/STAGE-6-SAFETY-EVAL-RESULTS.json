@@ -1,0 +1,53 @@
+{
+  "valid": true,
+  "stage": 6,
+  "contract_version": "6.0.0",
+  "dataset": "visible Stage 6 development set; sealed final holdout not accessed",
+  "fixture_only": true,
+  "clinical_validation": false,
+  "specification_status": "draft",
+  "cases": {
+    "passed": 45,
+    "total": 45
+  },
+  "critical_cases": {
+    "passed": 41,
+    "total": 41
+  },
+  "urgent_zero_generation_calls": {
+    "passed": 25,
+    "total": 25
+  },
+  "ambiguous_or_failure_cases_conservatively_stopped": {
+    "passed": 16,
+    "total": 16
+  },
+  "zero_unsafe_reassurance": {
+    "passed": 45,
+    "total": 45
+  },
+  "configuration_failure_cases": 5,
+  "routes": {
+    "needs_clarification": 16,
+    "non_urgent": 4,
+    "urgent": 25
+  },
+  "input_channels": {
+    "chat_message": 40,
+    "extracted_document_fact": 2,
+    "onboarding_symptom": 1,
+    "plan_generation_input": 1,
+    "symptom_check_in": 1
+  },
+  "latency_ms": {
+    "samples": 45,
+    "median": 0.0737,
+    "maximum": 1.4302
+  },
+  "limitations": [
+    "Passing results are software-contract evidence, not clinical validation.",
+    "The rule specification remains draft and public/live health routing fails closed.",
+    "The visible English fixture set is small and does not establish population sensitivity."
+  ],
+  "failures": []
+}

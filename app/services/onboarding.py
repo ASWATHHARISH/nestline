@@ -27,7 +27,7 @@ from app.schemas.onboarding import (
 )
 from app.schemas.storage import JourneyState
 from app.services.journey import Clock, JourneyResolver, SystemClock
-from app.services.safety_contract import evaluate_safety_contract
+from app.services.safety_gate import SafetyGate, evaluate_onboarding_symptom
 
 
 class OnboardingError(RuntimeError):
@@ -206,24 +206,31 @@ class SupabaseOnboardingGateway:
 
 
 def _prepare_symptom(spec: SafetySpec, description: str, reported_at: datetime) -> PreparedSymptom:
-    result = evaluate_safety_contract(spec, description)
-    evaluation_only = spec.status != "published"
-    route = result["route"]
-    message = result["message"]
-    # Until specialist review publishes S6, an unmatched draft pattern cannot be
-    # treated as routine clearance. It is stored for follow-up as "clarify".
-    if evaluation_only and route == "no_match":
-        route = "clarify"
-        message = spec.clarify_message
+    gate = SafetyGate(
+        spec,
+        mode="evaluation_only" if spec.status == "draft" else "public_runtime",
+    )
+    result = evaluate_onboarding_symptom(gate, description)
     return PreparedSymptom(
         description=description,
         reported_at=reported_at,
-        safety_route=route,
-        matched_rule_ids=result["rule_ids"],
-        safety_message=message,
+        safety_route=result.route,
+        matched_rule_ids=result.trace.matched_rule_ids,
+        safety_message=result.fixed_message.text,
         safety_spec_version=spec.version,
-        safety_evaluation_only=evaluation_only,
+        safety_evaluation_only=result.evaluation_only,
+        safety_trace_id=result.trace.trace_id,
     )
+
+
+def _legacy_storage_route(route: str) -> str:
+    """The sole boundary from canonical Stage 6 routes to the Stage 2 DB enum."""
+
+    return {
+        "urgent": "urgent",
+        "needs_clarification": "clarify",
+        "non_urgent": "no_match",
+    }[route]
 
 
 def prepare_onboarding(
@@ -339,7 +346,7 @@ def build_onboarding_payload(
             {
                 "description": item.description,
                 "reported_at": item.reported_at,
-                "safety_route": item.safety_route,
+                "safety_route": _legacy_storage_route(item.safety_route),
                 "matched_rule_ids": item.matched_rule_ids,
                 "safety_spec_version": item.safety_spec_version,
                 "safety_evaluation_only": item.safety_evaluation_only,

@@ -9,6 +9,7 @@ from uuid import UUID
 from pydantic import Field, TypeAdapter, model_validator
 
 from app.schemas.content import Contract, Stage, Text
+from app.schemas.safety import SafetyRoute
 
 
 TimingSource = Literal[
@@ -162,11 +163,12 @@ class OnboardingDetails(Contract):
 class PreparedSymptom(Contract):
     description: Text
     reported_at: datetime
-    safety_route: Literal["urgent", "clarify", "no_match"]
+    safety_route: SafetyRoute
     matched_rule_ids: list[str] = Field(default_factory=list)
     safety_message: Text
     safety_spec_version: Text
     safety_evaluation_only: bool
+    safety_trace_id: UUID
 
 
 class OnboardingDraft(Contract):

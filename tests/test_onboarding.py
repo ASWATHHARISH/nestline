@@ -105,7 +105,7 @@ class OnboardingTests(unittest.TestCase):
         self.assertTrue(symptom.safety_evaluation_only)
         self.assertEqual(symptom.safety_spec_version, self.spec.version)
 
-    def test_unmatched_draft_symptom_fails_closed_to_clarify(self):
+    def test_unmatched_draft_symptom_uses_canonical_clarification_route(self):
         details = OnboardingDetails(symptoms=[SymptomInput(
             description="A new symptom I cannot categorise",
             reported_at=NOW,
@@ -114,8 +114,10 @@ class OnboardingTests(unittest.TestCase):
             ManualWeekDayTiming(effective_date=TODAY, gestational_week=24),
             details, self.spec, clock=self.clock,
         )
-        self.assertEqual(draft.prepared_symptoms[0].safety_route, "clarify")
+        self.assertEqual(draft.prepared_symptoms[0].safety_route, "needs_clarification")
         self.assertTrue(draft.prepared_symptoms[0].safety_evaluation_only)
+        payload = build_onboarding_payload(uuid4(), "stage6-legacy-route-boundary", draft)
+        self.assertEqual(payload["requested_symptoms"][0]["safety_route"], "clarify")
 
     def test_future_symptom_and_past_next_appointment_are_rejected(self):
         with self.assertRaisesRegex(OnboardingError, "symptom time"):

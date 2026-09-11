@@ -671,8 +671,8 @@
       "safety_route": {
         "enum": [
           "urgent",
-          "clarify",
-          "no_match"
+          "needs_clarification",
+          "non_urgent"
         ],
         "title": "Safety Route",
         "type": "string"
@@ -697,6 +697,11 @@
       "safety_evaluation_only": {
         "title": "Safety Evaluation Only",
         "type": "boolean"
+      },
+      "safety_trace_id": {
+        "format": "uuid",
+        "title": "Safety Trace Id",
+        "type": "string"
       }
     },
     "required": [
@@ -705,7 +710,8 @@
       "safety_route",
       "safety_message",
       "safety_spec_version",
-      "safety_evaluation_only"
+      "safety_evaluation_only",
+      "safety_trace_id"
     ],
     "title": "PreparedSymptom",
     "type": "object"
@@ -1298,8 +1304,8 @@
           "safety_route": {
             "enum": [
               "urgent",
-              "clarify",
-              "no_match"
+              "needs_clarification",
+              "non_urgent"
             ],
             "title": "Safety Route",
             "type": "string"
@@ -1324,6 +1330,11 @@
           "safety_evaluation_only": {
             "title": "Safety Evaluation Only",
             "type": "boolean"
+          },
+          "safety_trace_id": {
+            "format": "uuid",
+            "title": "Safety Trace Id",
+            "type": "string"
           }
         },
         "required": [
@@ -1332,7 +1343,8 @@
           "safety_route",
           "safety_message",
           "safety_spec_version",
-          "safety_evaluation_only"
+          "safety_evaluation_only",
+          "safety_trace_id"
         ],
         "title": "PreparedSymptom",
         "type": "object"
