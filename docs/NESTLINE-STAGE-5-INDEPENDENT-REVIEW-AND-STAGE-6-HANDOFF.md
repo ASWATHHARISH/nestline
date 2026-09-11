@@ -4,7 +4,7 @@
 **Repository:** `kajalchourasia-cmd/nestline`
 **Branch:** `feat/stage-1-governed-ingestion`
 **Independently reviewed remote HEAD:** `3991896135eca094bc0ab0462f3e87c615469978`
-**Corrected commit:** pending; work is intentionally local until Aswath approves a push
+**Corrected implementation commit:** `467422a62a3db31740a2d631538a73c2f34cc526`
 **Engineering verdict:** `READY FOR INDEPENDENT RE-REVIEW` locally
 **Stage 6 verdict:** NO-GO until this exact rectification is accepted
 **Remote publication:** none for this change set
@@ -103,7 +103,7 @@ The vector-only baseline achieved 18/18 recall and 18/27 precision. The adopted 
 
 This rectification adds or changes no migration. Existing migration `20260911001300_stage5_hybrid_retrieval.sql` passed exact Stage 4 upgrade and clean local replay.
 
-Nothing was committed, pushed, merged or deployed. GitHub `validate` and `supabase-integration` cannot run on the corrected code until Aswath authorizes a commit and push, so remote CI remains an explicit gate.
+Implementation commit `467422a62a3db31740a2d631538a73c2f34cc526` is authorized for publication on this review branch. Nothing was merged or deployed. GitHub `validate` and `supabase-integration` must pass on the latest pushed branch head before merge.
 
 ## Limitations
 

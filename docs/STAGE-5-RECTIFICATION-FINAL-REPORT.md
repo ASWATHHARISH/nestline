@@ -4,7 +4,7 @@
 **Repository:** `kajalchourasia-cmd/nestline`
 **Branch:** `feat/stage-1-governed-ingestion`
 **Independently reviewed remote HEAD:** `3991896135eca094bc0ab0462f3e87c615469978`
-**Corrected commit:** pending; local working tree only
+**Corrected implementation commit:** `467422a62a3db31740a2d631538a73c2f34cc526`
 **Verdict:** `READY FOR INDEPENDENT RE-REVIEW`
 
 ## 1. Root cause of each finding
@@ -160,8 +160,8 @@ A relevant unresolved category requires clarification/abstention. An unrelated a
 
 - Branch remains `feat/stage-1-governed-ingestion`.
 - Baseline commit remains `3991896135eca094bc0ab0462f3e87c615469978`.
-- The rectification is uncommitted in the local working tree.
-- Nothing was pushed, merged or deployed.
+- The Stage 5 implementation is committed at `467422a62a3db31740a2d631538a73c2f34cc526`; a documentation-only status commit follows it on the review branch.
+- Publication to the review branch is authorized. Nothing was merged or deployed.
 - No migration was added or modified.
 
 ## 10. Remaining limitations and disagreements
@@ -175,7 +175,7 @@ Remaining limitations:
 - all 63 weekly profiles remain drafts and no production embeddings were created;
 - clinical, India-localisation, licence, product/publication and production-provider reviews remain open;
 - Stage 6 safety routing is absent;
-- GitHub `validate` and `supabase-integration` cannot run on the corrected code until the user authorizes a commit and push.
+- GitHub `validate` and `supabase-integration` must pass on the latest pushed branch head before merge.
 
 ## 11. Final verdict
 

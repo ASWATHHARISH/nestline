@@ -3,7 +3,7 @@
 **Verification date:** 12 September 2026
 **Branch:** `feat/stage-1-governed-ingestion`
 **Independently reviewed remote HEAD:** `3991896135eca094bc0ab0462f3e87c615469978`
-**Second-rectification commit:** pending; work is intentionally local until Aswath approves a push
+**Second-rectification implementation commit:** `467422a62a3db31740a2d631538a73c2f34cc526`
 **Local recommendation:** `READY FOR INDEPENDENT RE-REVIEW`
 **Stage 6 recommendation:** NO-GO until independent review accepts this exact rectification
 **Public/clinical recommendation:** NO-GO
@@ -172,7 +172,7 @@ git diff --check
 
 ## Remote CI status
 
-GitHub `validate` and `supabase-integration` cannot run on the corrected code until a commit is created and pushed. The user explicitly prohibited committing/pushing without approval, so this remains an open remote gate. No claim is made that remote CI has validated the local changes.
+GitHub `validate` and `supabase-integration` must pass on the latest pushed branch head before merge. The live GitHub run is the authority for remote status.
 
 ## Honest limitations and open gates
 
@@ -186,4 +186,4 @@ GitHub `validate` and `supabase-integration` cannot run on the corrected code un
 
 `READY FOR INDEPENDENT RE-REVIEW` locally.
 
-Stage 6 remains NO-GO until this exact change set is independently accepted. Nothing was committed, pushed, merged or deployed.
+Stage 6 remains NO-GO until implementation commit `467422a62a3db31740a2d631538a73c2f34cc526` and its documentation follow-up are independently accepted. Nothing was merged or deployed.

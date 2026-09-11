@@ -3,7 +3,7 @@
 **Updated:** 12 September 2026
 **Branch:** `feat/stage-1-governed-ingestion`
 **Independently reviewed remote HEAD:** `3991896135eca094bc0ab0462f3e87c615469978`
-**Second-rectification commit:** pending; work is intentionally local until Aswath approves a push
+**Second-rectification implementation commit:** `467422a62a3db31740a2d631538a73c2f34cc526`
 **Stage 6 status:** not started
 
 ## Scope
@@ -157,4 +157,4 @@ No environment variable, provider key, paid model or service-role credential was
 
 Deterministic SHA-256 fixture embeddings verify contracts, filtering, cache behavior and repeatability. They do not establish production semantic quality. The 28-case synthetic set is development truth, not a sealed clinical holdout. All 63 weekly profiles remain drafts. Clinical, India-localisation, licence, product/publication and production-provider reviews remain open.
 
-The local implementation is `READY FOR INDEPENDENT RE-REVIEW`. Stage 6 remains blocked until this exact rectification is independently accepted. GitHub checks on a corrected commit remain pending because the work has not been committed or pushed.
+The local implementation is `READY FOR INDEPENDENT RE-REVIEW`. Stage 6 remains blocked until this exact rectification is independently accepted. GitHub checks must pass on the latest pushed branch head before merge.

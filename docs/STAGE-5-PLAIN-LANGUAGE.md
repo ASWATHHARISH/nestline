@@ -2,7 +2,7 @@
 
 **Status:** second rectification complete locally; ready for independent re-review
 **Stage 6:** not started
-**Git:** reviewed remote HEAD `3991896135eca094bc0ab0462f3e87c615469978`; corrected commit and push are pending approval
+**Git:** reviewed remote HEAD `3991896135eca094bc0ab0462f3e87c615469978`; corrected implementation commit `467422a62a3db31740a2d631538a73c2f34cc526`; check the latest branch run before merge
 
 ## What Stage 5 does
 

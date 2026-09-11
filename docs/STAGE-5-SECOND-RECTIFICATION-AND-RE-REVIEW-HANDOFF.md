@@ -4,7 +4,7 @@
 **Repository:** `kajalchourasia-cmd/nestline`
 **Branch:** `feat/stage-1-governed-ingestion`
 **Independently reviewed remote HEAD:** `3991896135eca094bc0ab0462f3e87c615469978`
-**Corrected Git commit:** pending; work is intentionally local until Aswath approves a push
+**Corrected implementation commit:** `467422a62a3db31740a2d631538a73c2f34cc526`
 **Stage 6:** not started
 **Migration deployment:** none
 
@@ -136,7 +136,7 @@ The generated report is `docs/STAGE-5-RECTIFICATION-REGRESSION-MATRIX.json`.
 - All 63 real weekly profiles remain drafts. No draft content is released or embedded for production.
 - Clinical, India-localisation, licence, product/publication and production-provider reviews remain open.
 - Stage 6 Safety Gate behavior is absent.
-- GitHub `validate` and `supabase-integration` cannot run on the corrected commit until Aswath authorizes committing/pushing the local work. This is a sequencing gate, not permission to push.
+- GitHub `validate` and `supabase-integration` must pass on the latest pushed branch head before merge.
 
 ## Current verdict
 
