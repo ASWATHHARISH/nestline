@@ -4,7 +4,7 @@
 **Scope:** typed, read-only retrieval over controlled public and personal fixtures
 **Engineering verdict:** locally complete for Stage 6 engineering
 **Public or clinical release:** blocked by the open gates below
-**Git commit:** PENDING - not committed; awaiting Kajal/Aswath authorization
+**Implementation commit:** a1f0489cd7b16cf2391cab58b8e558432c4f4bba
 
 ## What Stage 5 now does
 

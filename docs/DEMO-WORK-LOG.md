@@ -765,4 +765,4 @@ No GitHub commit, push or pull request was performed.
 
 The deterministic SHA-256 fixture embedding proves interfaces and repeatability, not production semantic quality. The corpus is small and its 2/10 public evidence precision is an explicit limitation. Clinical, India-localisation, licence, product/publication, production embedding-provider, real-upload scanning and Stage 6 Safety Gate reviews remain open with their owners.
 
-**Decision:** local GO for Stage 6 engineering; public/clinical/production NO-GO. The Stage 5 Git commit is pending authorization. Nothing was committed, pushed, merged or deployed.
+**Decision:** local GO for Stage 6 engineering; public/clinical/production NO-GO. The Stage 5 implementation was later authorized and recorded as commit a1f0489cd7b16cf2391cab58b8e558432c4f4bba. Migration deployment remains a separate gated action.

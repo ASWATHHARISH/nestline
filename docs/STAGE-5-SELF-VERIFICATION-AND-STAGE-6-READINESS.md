@@ -2,7 +2,7 @@
 
 **Audit date:** 11 September 2026
 **Auditor:** Codex engineering self-review
-**Git commit:** PENDING - not committed; awaiting Kajal/Aswath authorization
+**Implementation commit:** a1f0489cd7b16cf2391cab58b8e558432c4f4bba
 **Local engineering verdict:** GO for Stage 6 engineering
 **Public/clinical release verdict:** NO-GO
 
@@ -172,4 +172,4 @@ GO for local Stage 6 engineering because the Stage 5 completion gate and all ear
 regressions pass. NO-GO for public, clinical or production use. GitHub CI cannot be
 claimed until the local changes are approved, committed and pushed.
 
-Nothing was committed, pushed, merged or deployed.
+The implementation is committed as a1f0489cd7b16cf2391cab58b8e558432c4f4bba. No migration was deployed; branch publication and remote CI are verified separately.

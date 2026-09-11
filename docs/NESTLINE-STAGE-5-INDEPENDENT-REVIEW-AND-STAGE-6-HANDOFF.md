@@ -3,7 +3,7 @@
 **Prepared:** 11 September 2026
 **Branch:** `feat/stage-1-governed-ingestion`
 **Baseline before Stage 5:** `b57f37b`
-**Stage 5 commit:** PENDING - awaiting Kajal/Aswath authorization
+**Stage 5 implementation commit:** a1f0489cd7b16cf2391cab58b8e558432c4f4bba
 **Scope:** typed hybrid retrieval, permission-safe personalization and bounded PostgreSQL causal graph
 **Engineering verdict:** local Stage 5 completion gate passed
 **Public/clinical verdict:** NO-GO; required human and release gates remain open
@@ -30,7 +30,7 @@ A Stage 5 engineering pass means that the controlled synthetic retrieval pipelin
 | Database verification | 254/254 pgTAP assertions |
 | Authenticated API verification | 67/67 checks; 22 Stage 5 |
 | Paid model required by CI | No |
-| Stage 5 implementation commit | PENDING until the authorized commit is created |
+| Stage 5 implementation commit | a1f0489cd7b16cf2391cab58b8e558432c4f4bba |
 
 ## Decision requested from the reviewer
 
@@ -159,4 +159,4 @@ The exact migration-history commands and per-file pgTAP commands are recorded in
 
 ## Recommendation
 
-**GO** for local Stage 6 engineering after reviewer acceptance of this local change set. **NO-GO** for public, clinical or production use. The Git commit field must remain pending until Kajal/Aswath authorizes a commit, and remote CI can only be claimed after an approved push.
+**GO** for local Stage 6 engineering after reviewer acceptance of this local change set. **NO-GO** for public, clinical or production use. The implementation is fixed at the commit above. Remote CI must pass on the published branch before merge, and migration deployment requires separate approval.

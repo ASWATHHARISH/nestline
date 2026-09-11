@@ -262,7 +262,7 @@ remains blocked until the scanner and human release gates are resolved.
 
 **Exit:** expected evidence IDs appear for test questions; wrong-week/private/unapproved decoys never do. Removing graph expansion in an ablation shows which relationship-dependent behavior changes. Do not claim graph benefit if exact SQL already solves the case equally well.
 
-Completed locally on 11 September 2026. The frozen five-case development set retrieves 2/2 expected public evidence IDs, 8/8 confirmed personal facts and the one expected causal path; all prohibited leakage/filter counters are zero. The implementation exports 15 versioned contracts, and exact upgrade plus clean histories pass 254 pgTAP assertions and 67 authenticated API checks. All 63 weekly profiles remain drafts and no production embeddings were created. The local gate is GO for Stage 6 engineering and remains NO-GO for public use. Commit, push, remote CI and deployment remain pending explicit authorization.
+Completed locally on 11 September 2026. The frozen five-case development set retrieves 2/2 expected public evidence IDs, 8/8 confirmed personal facts and the one expected causal path; all prohibited leakage/filter counters are zero. The implementation exports 15 versioned contracts, and exact upgrade plus clean histories pass 254 pgTAP assertions and 67 authenticated API checks. All 63 weekly profiles remain drafts and no production embeddings were created. The local gate is GO for Stage 6 engineering and remains NO-GO for public use. The implementation is recorded in commit a1f0489cd7b16cf2391cab58b8e558432c4f4bba; remote CI must pass before merge, and the migration remains undeployed.
 
 ### S6 — Safety gate · 4–8 hours
 
