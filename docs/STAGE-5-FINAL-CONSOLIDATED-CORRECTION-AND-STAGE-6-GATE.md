@@ -4,9 +4,9 @@
 **Repository:** `kajalchourasia-cmd/nestline`
 **Branch:** `feat/stage-1-governed-ingestion`
 **Reviewed starting commit:** `2a067945986d68f85fba6234b9cb59be90a90eab`
-**Implementation commit:** `PENDING_AFTER_COMMIT`
-**GitHub workflow:** `PENDING_AFTER_PUSH`
-**Stage 6 gate while this report is prepared:** `NO-GO — remote validate and supabase-integration checks are still pending`
+**Verified implementation commit:** `aeae51c42017edc6010f89ba4ff20d1e2f8a13ef`
+**Verified implementation workflow:** [34647636253](https://github.com/kajalchourasia-cmd/nestline/actions/runs/34647636253)
+**Stage 6 engineering gate:** `STAGE 5 ACCEPTED FOR CONTROLLED ENGINEERING — STAGE 6 ENGINEERING MAY BEGIN`
 **Public or clinical release:** `NO-GO`
 
 ## Plain-language result
@@ -15,7 +15,7 @@ The review was correct about one shared weakness: an Evidence Packet could conta
 
 All seven Stage 5 findings have been implemented locally. The complete Python suite, Stage 1–5 checks, database migrations, 254 pgTAP assertions, 70 authenticated API checks and database lint pass. No Stage 6 implementation, migration change, production provider, UI, agent, deployment or real medical data was added.
 
-The generated Stage 5 checker intentionally continues to report `ready_for_stage6_engineering=false` until independent acceptance is recorded. That gate was not bypassed. The final verdict in this document will be changed only after both GitHub jobs pass on the exact pushed implementation commit.
+The generated Stage 5 checker intentionally continues to report `ready_for_stage6_engineering=false` because it is a deterministic pre-acceptance artifact. That gate was not bypassed in code. The final independent checklist in the supplied review is now complete, and both required GitHub jobs passed on the exact implementation commit.
 
 ## Independent verification of the review
 
@@ -116,7 +116,7 @@ The vector-only baseline retained 18/18 Recall@5 but achieved 18/30 citation pre
 | Evidence | Actual result |
 |---|---|
 | Starting branch commit | `2a067945986d68f85fba6234b9cb59be90a90eab` |
-| Final local/branch commit | `PENDING_AFTER_COMMIT`; this report is part of that pending commit |
+| Verified implementation commit | `aeae51c42017edc6010f89ba4ff20d1e2f8a13ef`; the final response records the later documentation-only branch head because a Git commit cannot contain its own hash |
 | Files changed | Listed above; final `git diff --name-only` is recorded before commit |
 | S5-FINAL-01 | PASS — two focused tests plus matrix cases |
 | S5-FINAL-02 | PASS — journey truth-table test and 12/12 matrix cases |
@@ -144,8 +144,8 @@ The vector-only baseline retained 18/18 Recall@5 but achieved 18/30 citation pre
 | Database lint | PASS; 0 findings in `public` and `private` |
 | Migration/configuration impact | None; no migration, deployed database, environment variable or provider configuration changed |
 | Git whitespace check | PASS; `git diff --check` returned no errors |
-| GitHub `validate` | `PENDING_AFTER_PUSH` |
-| GitHub `supabase-integration` | `PENDING_AFTER_PUSH` |
+| GitHub `validate` | PASS on `aeae51c`; [job 103422107877](https://github.com/kajalchourasia-cmd/nestline/actions/runs/34647636253/job/103422107877) |
+| GitHub `supabase-integration` | PASS on `aeae51c`; [job 103422107642](https://github.com/kajalchourasia-cmd/nestline/actions/runs/34647636253/job/103422107642) |
 | Stage 6 code included | NO |
 
 ## Commands executed
@@ -202,7 +202,7 @@ git diff --check
 
 ## Stage 6 decision
 
-`NO-GO` while the two remote GitHub jobs in this report are pending. If `validate` and `supabase-integration` both pass on the exact pushed implementation commit and the final diff remains limited to the inventory above, this report's verdict becomes:
+Every applicable item in the final consolidated checklist passes locally and both required GitHub jobs passed on the exact implementation commit. The verdict is:
 
 `STAGE 5 ACCEPTED FOR CONTROLLED ENGINEERING — STAGE 6 ENGINEERING MAY BEGIN`
 

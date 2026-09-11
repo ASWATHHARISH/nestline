@@ -1,7 +1,7 @@
 # Stage 5 in plain language
 
-**Status:** final consolidated semantic correction passes locally; remote GitHub checks pending
-**Stage 6:** not started
+**Status:** final consolidated correction accepted for controlled engineering; required GitHub checks passed
+**Stage 6:** may begin as a separate controlled engineering stage; not implemented in this change
 **Git:** final consolidated review baseline `2a067945986d68f85fba6234b9cb59be90a90eab`; see `STAGE-5-FINAL-CONSOLIDATED-CORRECTION-AND-STAGE-6-GATE.md`
 
 ## What Stage 5 does

@@ -4,8 +4,8 @@
 **Branch:** `feat/stage-1-governed-ingestion`
 **Final consolidated review baseline:** `2a067945986d68f85fba6234b9cb59be90a90eab`
 **Authoritative final evidence:** `STAGE-5-FINAL-CONSOLIDATED-CORRECTION-AND-STAGE-6-GATE.md`
-**Local recommendation:** `READY FOR FINAL REMOTE VERIFICATION`
-**Stage 6 recommendation:** NO-GO until GitHub `validate` and `supabase-integration` pass on the exact pushed correction
+**Final recommendation:** `STAGE 5 ACCEPTED FOR CONTROLLED ENGINEERING — STAGE 6 ENGINEERING MAY BEGIN`
+**Stage 6 recommendation:** GO for a separate controlled engineering task; no Stage 6 code is included here
 **Public/clinical recommendation:** NO-GO
 
 ## What was verified

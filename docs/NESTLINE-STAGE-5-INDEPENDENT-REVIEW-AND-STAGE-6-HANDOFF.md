@@ -5,9 +5,9 @@
 **Branch:** `feat/stage-1-governed-ingestion`
 **Final consolidated review baseline:** `2a067945986d68f85fba6234b9cb59be90a90eab`
 **Authoritative evidence:** `STAGE-5-FINAL-CONSOLIDATED-CORRECTION-AND-STAGE-6-GATE.md`
-**Engineering verdict:** `READY FOR FINAL REMOTE VERIFICATION` locally
-**Stage 6 verdict:** NO-GO until both required GitHub jobs pass on the exact pushed correction
-**Remote publication:** none for this change set
+**Engineering verdict:** `STAGE 5 ACCEPTED FOR CONTROLLED ENGINEERING`
+**Stage 6 verdict:** `STAGE 6 ENGINEERING MAY BEGIN` as a separate controlled task
+**Verified implementation:** `aeae51c42017edc6010f89ba4ff20d1e2f8a13ef`; workflow [34647636253](https://github.com/kajalchourasia-cmd/nestline/actions/runs/34647636253); nothing merged or deployed
 
 ## Review decision requested
 
