@@ -1,0 +1,55 @@
+{
+  "schema_version": "stage4-graph-truth-v1",
+  "document_id": "DOC-007",
+  "workspace_key": "DEMO-MAYA",
+  "nodes": [
+    {
+      "key": "document:DOC-007",
+      "type": "Document",
+      "created_when": "extraction_recorded"
+    },
+    {
+      "key": "fact:DOC-007:followup_date",
+      "type": "Appointment",
+      "created_when": "user_confirms_candidate",
+      "source_field": "followup_date"
+    },
+    {
+      "key": "fact:DOC-007:followup_reason",
+      "type": "Question",
+      "created_when": "user_confirms_candidate",
+      "source_field": "followup_reason"
+    },
+    {
+      "key": "fact:DOC-007:task_dedupe_key",
+      "type": "DocumentFact",
+      "created_when": "user_confirms_candidate",
+      "source_field": "task_dedupe_key"
+    }
+  ],
+  "edges": [
+    {
+      "from": "fact:DOC-007:followup_date",
+      "to": "document:DOC-007",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    },
+    {
+      "from": "fact:DOC-007:followup_reason",
+      "to": "document:DOC-007",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    },
+    {
+      "from": "fact:DOC-007:task_dedupe_key",
+      "to": "document:DOC-007",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    }
+  ],
+  "expected_side_effects": [
+    "explicit_save_required",
+    "replay_creates_one_logical_task"
+  ],
+  "proposal_side_effects": []
+}

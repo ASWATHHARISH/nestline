@@ -75,6 +75,31 @@
           "title": "Display Name",
           "type": "string"
         },
+        "demo_session_key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Demo Session Key"
+        },
+        "demo_seed_version": {
+          "anyOf": [
+            {
+              "const": "maya-v1",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Demo Seed Version"
+        },
         "created_at": {
           "format": "date-time",
           "title": "Created At",
@@ -95,6 +120,39 @@
         "updated_at"
       ],
       "title": "Workspace",
+      "type": "object"
+    },
+    "workspace_member": {
+      "additionalProperties": false,
+      "properties": {
+        "workspace_id": {
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        },
+        "user_id": {
+          "format": "uuid",
+          "title": "User Id",
+          "type": "string"
+        },
+        "role": {
+          "const": "owner",
+          "title": "Role",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "workspace_id",
+        "user_id",
+        "role",
+        "created_at"
+      ],
+      "title": "WorkspaceMember",
       "type": "object"
     },
     "journey_state": {
@@ -121,6 +179,7 @@
         },
         "timing_source": {
           "enum": [
+            "user_reported_possible_pregnancy",
             "document_estimated_due_date",
             "user_estimated_due_date",
             "manual_week_day",
@@ -176,7 +235,7 @@
         "postpartum_day": {
           "anyOf": [
             {
-              "maximum": 7,
+              "maximum": 6,
               "minimum": 0,
               "type": "integer"
             },
@@ -257,6 +316,127 @@
           "minimum": 1,
           "title": "Version",
           "type": "integer"
+        },
+        "derived_from_fact_ids": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Derived From Fact Ids",
+          "type": "array"
+        },
+        "effective_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effective Date"
+        },
+        "calculation_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Calculation Date"
+        },
+        "confirmed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confirmed At"
+        },
+        "confirmed_by_user_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confirmed By User Id"
+        },
+        "conflicts_with_state_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Conflicts With State Id"
+        },
+        "dating_difference_days": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Dating Difference Days"
+        },
+        "onboarding_submission_key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Onboarding Submission Key"
+        },
+        "onboarding_payload_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Onboarding Payload Sha256"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
         }
       },
       "required": [
@@ -267,7 +447,9 @@
         "user_confirmed",
         "has_dating_conflict",
         "is_current",
-        "version"
+        "version",
+        "created_at",
+        "updated_at"
       ],
       "title": "JourneyState",
       "type": "object"
@@ -325,9 +507,223 @@
           "title": "Contains Real Medical Data",
           "type": "boolean"
         },
+        "failure_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Failure Code"
+        },
+        "fixture_document_key": {
+          "anyOf": [
+            {
+              "pattern": "^DOC-[0-9]{3}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fixture Document Key"
+        },
+        "scan_status": {
+          "default": "pending",
+          "enum": [
+            "pending",
+            "fixture_verified",
+            "clean",
+            "failed"
+          ],
+          "title": "Scan Status",
+          "type": "string"
+        },
+        "scan_provider": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scan Provider"
+        },
+        "scan_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scan Version"
+        },
+        "scan_completed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scan Completed At"
+        },
+        "document_kind": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Document Kind"
+        },
+        "classification_confidence": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Classification Confidence"
+        },
+        "subject_as_written": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Subject As Written"
+        },
+        "extraction_schema_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Extraction Schema Version"
+        },
+        "extraction_payload_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Extraction Payload Sha256"
+        },
+        "extraction_provider": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Extraction Provider"
+        },
+        "extraction_model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Extraction Model"
+        },
+        "extraction_trace_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Extraction Trace Id"
+        },
+        "review_version": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Review Version",
+          "type": "integer"
+        },
+        "confirmed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confirmed At"
+        },
+        "confirmed_by_user_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confirmed By User Id"
+        },
+        "has_unresolved_conflicts": {
+          "default": false,
+          "title": "Has Unresolved Conflicts",
+          "type": "boolean"
+        },
         "uploaded_at": {
           "format": "date-time",
           "title": "Uploaded At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
           "type": "string"
         }
       },
@@ -341,9 +737,135 @@
         "sha256",
         "status",
         "contains_real_medical_data",
-        "uploaded_at"
+        "uploaded_at",
+        "updated_at"
       ],
       "title": "PrivateDocument",
+      "type": "object"
+    },
+    "document_chunk": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "workspace_id": {
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        },
+        "document_id": {
+          "format": "uuid",
+          "title": "Document Id",
+          "type": "string"
+        },
+        "page": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Page"
+        },
+        "source_span": {
+          "additionalProperties": true,
+          "title": "Source Span",
+          "type": "object"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "text_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Text Sha256",
+          "type": "string"
+        },
+        "embedding_provider": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Embedding Provider"
+        },
+        "embedding_model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Embedding Model"
+        },
+        "embedding_dimensions": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Embedding Dimensions"
+        },
+        "embedding": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Embedding"
+        },
+        "extraction_method": {
+          "default": "embedded_text",
+          "enum": [
+            "embedded_text",
+            "ocr"
+          ],
+          "title": "Extraction Method",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "workspace_id",
+        "document_id",
+        "source_span",
+        "text",
+        "text_sha256",
+        "created_at"
+      ],
+      "title": "DocumentChunk",
       "type": "object"
     },
     "document_fact": {
@@ -401,9 +923,171 @@
             "proposed",
             "confirmed",
             "rejected",
-            "conflict"
+            "conflict",
+            "superseded"
           ],
           "title": "Status",
+          "type": "string"
+        },
+        "confirmed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confirmed At"
+        },
+        "candidate_key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Candidate Key"
+        },
+        "fact_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fact Type"
+        },
+        "source_span": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Span"
+        },
+        "completeness": {
+          "anyOf": [
+            {
+              "enum": [
+                "complete",
+                "partial",
+                "missing",
+                "uncertain"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Completeness"
+        },
+        "disposition": {
+          "anyOf": [
+            {
+              "enum": [
+                "extract_verbatim",
+                "abstain",
+                "manual_review"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Disposition"
+        },
+        "record_only": {
+          "default": false,
+          "title": "Record Only",
+          "type": "boolean"
+        },
+        "source_value_matches": {
+          "default": true,
+          "title": "Source Value Matches",
+          "type": "boolean"
+        },
+        "conflict_document_keys": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Conflict Document Keys",
+          "type": "array"
+        },
+        "edited_value": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Edited Value"
+        },
+        "decided_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Decided At"
+        },
+        "decided_by_user_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Decided By User Id"
+        },
+        "committed_health_fact_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Committed Health Fact Id"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
           "type": "string"
         }
       },
@@ -414,7 +1098,9 @@
         "field_name",
         "value",
         "confidence",
-        "status"
+        "status",
+        "created_at",
+        "updated_at"
       ],
       "title": "DocumentFact",
       "type": "object"
@@ -463,7 +1149,8 @@
             "proposed",
             "confirmed",
             "rejected",
-            "conflict"
+            "conflict",
+            "superseded"
           ],
           "title": "Confirmation Status",
           "type": "string"
@@ -481,6 +1168,41 @@
           "default": null,
           "title": "Source Document Id"
         },
+        "source_document_fact_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Document Fact Id"
+        },
+        "document_review_submission_key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Document Review Submission Key"
+        },
+        "record_only": {
+          "default": false,
+          "title": "Record Only",
+          "type": "boolean"
+        },
+        "provenance": {
+          "additionalProperties": true,
+          "title": "Provenance",
+          "type": "object"
+        },
         "supersedes_fact_id": {
           "anyOf": [
             {
@@ -493,6 +1215,34 @@
           ],
           "default": null,
           "title": "Supersedes Fact Id"
+        },
+        "valid_from": {
+          "format": "date-time",
+          "title": "Valid From",
+          "type": "string"
+        },
+        "valid_to": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Valid To"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
         }
       },
       "required": [
@@ -501,9 +1251,202 @@
         "fact_type",
         "value",
         "source_kind",
-        "confirmation_status"
+        "confirmation_status",
+        "valid_from",
+        "created_at",
+        "updated_at"
       ],
       "title": "HealthFact",
+      "type": "object"
+    },
+    "medication_mention": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "workspace_id": {
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        },
+        "document_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Document Id"
+        },
+        "name_as_written": {
+          "minLength": 1,
+          "title": "Name As Written",
+          "type": "string"
+        },
+        "context_text": {
+          "default": "",
+          "title": "Context Text",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "proposed",
+            "confirmed",
+            "rejected",
+            "conflict",
+            "superseded"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "candidate_key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Candidate Key"
+        },
+        "decided_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Decided At"
+        },
+        "decided_by_user_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Decided By User Id"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "workspace_id",
+        "name_as_written",
+        "status",
+        "created_at"
+      ],
+      "title": "MedicationMention",
+      "type": "object"
+    },
+    "symptom_event": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "workspace_id": {
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        },
+        "description": {
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "reported_at": {
+          "format": "date-time",
+          "title": "Reported At",
+          "type": "string"
+        },
+        "safety_route": {
+          "enum": [
+            "urgent",
+            "clarify",
+            "no_match"
+          ],
+          "title": "Safety Route",
+          "type": "string"
+        },
+        "matched_rule_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Matched Rule Ids",
+          "type": "array"
+        },
+        "user_confirmed": {
+          "title": "User Confirmed",
+          "type": "boolean"
+        },
+        "input_source": {
+          "default": "onboarding",
+          "enum": [
+            "onboarding",
+            "chat",
+            "check_in",
+            "document"
+          ],
+          "title": "Input Source",
+          "type": "string"
+        },
+        "safety_spec_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Safety Spec Version"
+        },
+        "safety_evaluation_only": {
+          "default": true,
+          "title": "Safety Evaluation Only",
+          "type": "boolean"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "workspace_id",
+        "description",
+        "reported_at",
+        "safety_route",
+        "user_confirmed",
+        "created_at"
+      ],
+      "title": "SymptomEvent",
       "type": "object"
     },
     "appointment": {
@@ -532,6 +1475,19 @@
           "default": null,
           "title": "Scheduled For"
         },
+        "scheduled_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scheduled Date"
+        },
         "appointment_type": {
           "default": "",
           "title": "Appointment Type",
@@ -551,14 +1507,124 @@
           ],
           "title": "Status",
           "type": "string"
+        },
+        "source_fact_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Fact Id"
+        },
+        "source_document_fact_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Document Fact Id"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
         }
       },
       "required": [
         "id",
         "workspace_id",
-        "status"
+        "status",
+        "created_at",
+        "updated_at"
       ],
       "title": "Appointment",
+      "type": "object"
+    },
+    "appointment_question": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "workspace_id": {
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        },
+        "appointment_id": {
+          "format": "uuid",
+          "title": "Appointment Id",
+          "type": "string"
+        },
+        "question": {
+          "minLength": 1,
+          "title": "Question",
+          "type": "string"
+        },
+        "source_fact_ids": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Source Fact Ids",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "saved",
+            "asked",
+            "stale",
+            "archived"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "stale_reasons": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Stale Reasons",
+          "type": "array"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "workspace_id",
+        "appointment_id",
+        "question",
+        "status",
+        "created_at",
+        "updated_at"
+      ],
+      "title": "AppointmentQuestion",
       "type": "object"
     },
     "saved_plan": {
@@ -621,6 +1687,16 @@
           ],
           "default": null,
           "title": "User Confirmed At"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
         }
       },
       "required": [
@@ -629,9 +1705,252 @@
         "version",
         "journey_state_id",
         "source_release_id",
-        "status"
+        "status",
+        "created_at",
+        "updated_at"
       ],
       "title": "SavedPlan",
+      "type": "object"
+    },
+    "plan_item": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "workspace_id": {
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        },
+        "plan_id": {
+          "format": "uuid",
+          "title": "Plan Id",
+          "type": "string"
+        },
+        "catalogue_item_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Catalogue Item Id"
+        },
+        "guidance_fragment_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Guidance Fragment Ids",
+          "type": "array"
+        },
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "confirmed_fact_ids": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Confirmed Fact Ids",
+          "type": "array"
+        },
+        "category": {
+          "enum": [
+            "nutrition",
+            "movement",
+            "wellbeing",
+            "preparation",
+            "followup",
+            "consider",
+            "avoid"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "title": {
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "body": {
+          "minLength": 1,
+          "title": "Body",
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "proposed",
+            "confirmed",
+            "stale"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "position": {
+          "minimum": 0,
+          "title": "Position",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "workspace_id",
+        "plan_id",
+        "evidence_ids",
+        "category",
+        "title",
+        "body",
+        "state",
+        "position",
+        "created_at",
+        "updated_at"
+      ],
+      "title": "PlanItem",
+      "type": "object"
+    },
+    "graph_node": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "workspace_id": {
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        },
+        "node_type": {
+          "enum": [
+            "document",
+            "fact",
+            "restriction",
+            "symptom",
+            "appointment",
+            "question",
+            "plan",
+            "plan_item"
+          ],
+          "title": "Node Type",
+          "type": "string"
+        },
+        "entity_id": {
+          "format": "uuid",
+          "title": "Entity Id",
+          "type": "string"
+        },
+        "label": {
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "source_document_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Document Id"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "workspace_id",
+        "node_type",
+        "entity_id",
+        "label",
+        "created_at"
+      ],
+      "title": "GraphNode",
+      "type": "object"
+    },
+    "graph_edge": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "workspace_id": {
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        },
+        "from_node_id": {
+          "format": "uuid",
+          "title": "From Node Id",
+          "type": "string"
+        },
+        "to_node_id": {
+          "format": "uuid",
+          "title": "To Node Id",
+          "type": "string"
+        },
+        "relation": {
+          "enum": [
+            "supports",
+            "IN_WEEK",
+            "EXTRACTED_FROM",
+            "CONFLICTS_WITH",
+            "SUPERSEDES",
+            "CONSTRAINS",
+            "SUPPORTED_BY",
+            "TRIGGERED",
+            "SCHEDULED_FOR",
+            "NEEDS_CLARIFICATION",
+            "REVIEWED_BY"
+          ],
+          "title": "Relation",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "workspace_id",
+        "from_node_id",
+        "to_node_id",
+        "relation",
+        "created_at"
+      ],
+      "title": "GraphEdge",
       "type": "object"
     },
     "human_review_case": {
@@ -667,6 +1986,16 @@
           "title": "Reason",
           "type": "string"
         },
+        "packet": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Packet"
+        },
         "simulated": {
           "default": true,
           "title": "Simulated",
@@ -697,13 +2026,37 @@
           ],
           "default": null,
           "title": "Reviewed At"
+        },
+        "reviewer_label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reviewer Label"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
         }
       },
       "required": [
         "id",
         "workspace_id",
         "state",
-        "reason"
+        "reason",
+        "created_at",
+        "updated_at"
       ],
       "title": "HumanReviewCase",
       "type": "object"
@@ -741,6 +2094,11 @@
           "title": "Idempotency Key",
           "type": "string"
         },
+        "payload": {
+          "additionalProperties": true,
+          "title": "Payload",
+          "type": "object"
+        },
         "scheduled_for": {
           "anyOf": [
             {
@@ -766,6 +2124,34 @@
           ],
           "default": null,
           "title": "Sent At"
+        },
+        "attempt_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Attempt Count",
+          "type": "integer"
+        },
+        "last_error_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Error Code"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
         }
       },
       "required": [
@@ -773,7 +2159,9 @@
         "workspace_id",
         "kind",
         "status",
-        "idempotency_key"
+        "idempotency_key",
+        "created_at",
+        "updated_at"
       ],
       "title": "Notification",
       "type": "object"
@@ -819,12 +2207,18 @@
           "default": "",
           "title": "Langsmith Trace Id",
           "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
         }
       },
       "required": [
         "id",
         "workspace_id",
-        "category"
+        "category",
+        "created_at"
       ],
       "title": "Feedback",
       "type": "object"

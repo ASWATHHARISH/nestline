@@ -1,4 +1,5 @@
 .venv/
+node_modules/
 __pycache__/
 *.py[cod]
 .env
@@ -15,3 +16,4 @@ data/ingestion/artifacts/
 data/ingestion/staging/
 data/ingestion/corpora/
 supabase/.temp/
+supabase/.branches/

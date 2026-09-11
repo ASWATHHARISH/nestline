@@ -1,0 +1,40 @@
+{
+  "valid": true,
+  "migrations": [
+    {
+      "path": "supabase\\migrations\\20260911000900_stage3_onboarding_commit.sql",
+      "sha256": "388933d4661148e34e42cebe6b9984ed858dfbaa84a78cddd680ab7b6fa03531"
+    },
+    {
+      "path": "supabase\\migrations\\20260911001000_stage3_exit_hardening.sql",
+      "sha256": "e5b63e2e5a3b7ce4fb6f14ca8149d50339793761f91162e75bc1cdd5ebc4f2fe"
+    }
+  ],
+  "journey_evaluations": {
+    "total": 26,
+    "passed": 26,
+    "dataset_sha256": "014467ded8a974034f0fcf15e1d39682cdcd16f7dff52e9afb8034dd89353996"
+  },
+  "remote_project": "nestline-dev",
+  "remote_verified_at": "2026-09-11T09:19:12.0342131+05:30",
+  "remote_checks": {
+    "migration_history_rows": 12,
+    "journey_provenance_columns": 8,
+    "symptom_provenance_columns": 4,
+    "onboarding_submission_indexes": 4,
+    "complete_onboarding_functions": 1,
+    "complete_onboarding_authenticated_grants": 1,
+    "journey_direct_mutation_grants": 0,
+    "legacy_journey_mutation_grants": 0,
+    "journey_hardening_constraints": 3,
+    "symptom_hardening_constraints": 1,
+    "journey_transition_triggers": 1,
+    "private_bounds_authenticated_grants": 0,
+    "stage3_pg_tap_assertions": 26,
+    "stage3_exit_hardening_pg_tap_assertions": 12,
+    "stage3_api_checks": 17,
+    "stage3_streamlit_render_checks": 1,
+    "temporary_fixture_rows_remaining": 0
+  },
+  "errors": []
+}

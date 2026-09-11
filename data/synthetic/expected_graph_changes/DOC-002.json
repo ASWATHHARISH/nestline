@@ -1,0 +1,43 @@
+{
+  "schema_version": "stage4-graph-truth-v1",
+  "document_id": "DOC-002",
+  "workspace_key": "DEMO-MAYA",
+  "nodes": [
+    {
+      "key": "document:DOC-002",
+      "type": "Document",
+      "created_when": "extraction_recorded"
+    },
+    {
+      "key": "fact:DOC-002:haemoglobin",
+      "type": "DocumentFact",
+      "created_when": "user_confirms_candidate",
+      "source_field": "haemoglobin"
+    },
+    {
+      "key": "fact:DOC-002:specimen",
+      "type": "DocumentFact",
+      "created_when": "user_confirms_candidate",
+      "source_field": "specimen"
+    }
+  ],
+  "edges": [
+    {
+      "from": "fact:DOC-002:haemoglobin",
+      "to": "document:DOC-002",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    },
+    {
+      "from": "fact:DOC-002:specimen",
+      "to": "document:DOC-002",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    }
+  ],
+  "expected_side_effects": [
+    "do_not_infer_diagnosis",
+    "abstain_reference_range"
+  ],
+  "proposal_side_effects": []
+}

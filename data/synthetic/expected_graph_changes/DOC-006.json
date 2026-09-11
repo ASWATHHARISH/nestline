@@ -1,0 +1,74 @@
+{
+  "schema_version": "stage4-graph-truth-v1",
+  "document_id": "DOC-006",
+  "workspace_key": "DEMO-MAYA",
+  "nodes": [
+    {
+      "key": "document:DOC-006",
+      "type": "Document",
+      "created_when": "extraction_recorded"
+    },
+    {
+      "key": "fact:DOC-006:recorded_instruction",
+      "type": "DocumentFact",
+      "created_when": "user_confirms_candidate",
+      "source_field": "recorded_instruction"
+    },
+    {
+      "key": "fact:DOC-006:conflicts_with",
+      "type": "DocumentFact",
+      "created_when": "user_confirms_candidate",
+      "source_field": "conflicts_with"
+    },
+    {
+      "key": "fact:DOC-006:new_restriction",
+      "type": "Condition",
+      "created_when": "user_confirms_candidate",
+      "source_field": "new_restriction"
+    },
+    {
+      "key": "question:DOC-006:movement-clarification",
+      "type": "Question",
+      "created_when": "user_keeps_conflict"
+    }
+  ],
+  "edges": [
+    {
+      "from": "fact:DOC-006:recorded_instruction",
+      "to": "document:DOC-006",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    },
+    {
+      "from": "fact:DOC-006:conflicts_with",
+      "to": "document:DOC-006",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    },
+    {
+      "from": "fact:DOC-006:new_restriction",
+      "to": "document:DOC-006",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    },
+    {
+      "from": "fact:DOC-006:recorded_instruction",
+      "to": "fact:DOC-005:recorded_instruction",
+      "type": "CONFLICTS_WITH",
+      "created_when": "user_keeps_conflict"
+    },
+    {
+      "from": "question:DOC-006:movement-clarification",
+      "to": "fact:DOC-006:recorded_instruction",
+      "type": "NEEDS_CLARIFICATION",
+      "created_when": "user_keeps_conflict"
+    }
+  ],
+  "expected_side_effects": [
+    "do_not_obey_document_instructions",
+    "retain_both_sources",
+    "prepare_clarification_question",
+    "mark_dependent_plan_stale_after_confirmation"
+  ],
+  "proposal_side_effects": []
+}

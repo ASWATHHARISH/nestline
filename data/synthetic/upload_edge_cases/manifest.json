@@ -1,0 +1,52 @@
+{
+  "schema_version": "stage4-upload-edge-cases-v1",
+  "fictional": true,
+  "cases": [
+    {
+      "id": "locked",
+      "filename": "locked-fictional.pdf",
+      "expected_code": "locked"
+    },
+    {
+      "id": "corrupt",
+      "filename": "corrupt-fictional.pdf",
+      "expected_code": "corrupt"
+    },
+    {
+      "id": "unsupported",
+      "filename": "unsupported-fictional.rtf",
+      "expected_code": "unsupported_format"
+    },
+    {
+      "id": "oversize",
+      "generated_byte_count": 10485761,
+      "expected_code": "oversize",
+      "reason_not_committed": "Avoid adding a 10 MiB test blob to Git history."
+    },
+    {
+      "id": "wrong_person",
+      "filename": "wrong-person-fictional.pdf",
+      "expected_subject": "Maya - fictional demo persona",
+      "subject_as_written": "Other Fictional Person",
+      "expected_code": "wrong_person"
+    }
+  ],
+  "files": [
+    {
+      "filename": "corrupt-fictional.pdf",
+      "sha256": "c180e96d5174d446b4856e61533611cb0ca5a4bd8e44bf5f4ccf088b9d41a2be"
+    },
+    {
+      "filename": "locked-fictional.pdf",
+      "sha256": "9e4448bb0f1fd61168c990b7c271b256316261bfe51f87c6546a7957195dced0"
+    },
+    {
+      "filename": "unsupported-fictional.rtf",
+      "sha256": "1bfb86e5b3bb14a788956e422d46d99b56abaa1726792250cfb82123e0d3cfa2"
+    },
+    {
+      "filename": "wrong-person-fictional.pdf",
+      "sha256": "45f89b41b619a3b5fc12525a3cfcb4beb29be705da0f36802a50eecb5bcd35c8"
+    }
+  ]
+}

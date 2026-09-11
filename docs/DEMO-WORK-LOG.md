@@ -531,3 +531,196 @@ in the worksheet belonged to an older candidate version. We retained the approve
 stable evidence IDs and resolved them to the current canonical tasks/checksums;
 the governed checker rejects the obsolete task IDs. Specialist and final rendered
 UI approvals remain pending.
+
+## Independent Stage 2 correction pass
+
+The independent review found eight real gaps behind the earlier passing static
+checker. The main gaps were unused member roles with equal powers, no repeatable
+clean/upgrade database suite, unvalidated dependency arrays, an unfinished
+Storage-first reset path, ambiguous episode ownership, incomplete journey
+constraints and only ten typed personal records.
+
+Recovery: adopted an owner-only V1 and documented one workspace as one care
+episode; added five normalized dependency tables with transactional stale-state
+updates; made journey stage/timing combinations exact in SQL and Pydantic; added
+all missing typed records; added exact-prefix Storage cleanup plus session-scoped
+`maya-v1` demo reseeding; and added Docker CI for clean and upgrade paths.
+
+While constructing the live suite, we found a further bypass: the broad original
+policy still permitted direct deletion of private document metadata. Recovery:
+removed that policy, revoked direct delete permission and made the owner-checked
+lifecycle functions the only database deletion route after Storage cleanup.
+
+The first pgTAP run exposed a test-harness column-name error; the next reached
+128 successful assertions before a leftover direct Storage cleanup statement hit
+Supabase's own deletion-protection trigger. We corrected the harness instead of
+weakening Storage. The final suite passes all 141 assertions. Both the exact
+five-migration upgrade and a clean ten-migration replay pass with zero database
+lint errors. All five additive corrections were then deployed to `nestline-dev`,
+and read-only remote verification found ten migration rows, all 28 tables under
+RLS, five dependency tables, zero direct document-delete grants and zero fixtures.
+A separate 13-check local Auth/REST/Storage run also proved the actual owner and
+outsider file boundary plus complete temporary-fixture cleanup.
+
+## Stage 3 onboarding and journey resolution
+
+Stage 3 added strict timing inputs, a pure resolver with an injected clock,
+optional onboarding details, a functional Streamlit flow and one atomic confirmed
+Supabase commit. The remote nestline-dev project now ends at migration 00900.
+
+### Day 7 exposed two different meanings of “week”
+
+The chronological resolver correctly maps seven elapsed days to postpartum week 2
+day 0. The existing content selector maps overlay PPD7 to profile PP01. Before
+changing either value, we checked decision 0002: the team had explicitly accepted
+PPD0-PPD7 as an overlay group on PP01. Recovery: kept chronological journey state
+and content grouping as separate concepts, documented both and added a regression
+test for the accepted PPD7/PP01 mapping.
+
+### A passing owner policy still allowed confirmation bypass
+
+The Stage 2 all-actions policy allowed an authenticated owner to update a journey
+row directly. RLS protected users from one another, but this route could bypass
+Stage 3's confirmation provenance. Recovery: migration 00900 changes journey RLS
+to owner read-only access, revokes direct insert/update/delete, revokes the older
+mutation RPC and keeps the security-definer complete_onboarding function as the
+authenticated confirmed-write route. Local and remote checks report zero direct
+and zero legacy mutation grants.
+
+### Database lint found implicit-array cast warnings
+
+The first exact Stage 2-to-Stage 3 upgrade behaved correctly, but database lint
+reported five warnings around empty UUID/text arrays. Recovery: added explicit
+UUID-array and text-array casts. The repeated exact upgrade, clean replay and lint
+then passed with 167 assertions and zero findings.
+
+### The first Streamlit smoke assertion used the wrong accessor
+
+The app rendered, but the test script tried to inspect an AppTest form collection
+that this Streamlit version does not expose. Recovery: assert the rendered title,
+privacy warning, tabs, submit buttons and inputs through supported accessors. The
+repeated smoke check passed without a network request.
+
+### Initial Stage 3 evidence before the exit audit
+
+The 153-test Python regression, 64 existing contract cases, 26 journey cases,
+exact upgrade, clean replay, 13 Storage API checks, 12 onboarding API checks and
+Streamlit render all passed. Relogin restored the confirmed state; another user
+could neither read nor write it; repeated submission created no duplicate; and
+independent fixture queries returned zero. A dry run listed only migration 00900
+before it was deployed. No GitHub commit, push or pull request was performed.
+## Stage 3 independent exit audit and Stage 4 readiness
+
+The initial Stage 3 build passed its stated tests, but the later plan-by-plan audit
+looked for ways a correct UI could still be bypassed. It found that the real API
+persistence check did not store every timing route, backward care-episode
+transitions appeared selectable, and the database trusted client-computed timing
+conflicts and the draft-safety Boolean.
+
+Recovery: expanded the real onboarding matrix from 12 to 17 checks so all six
+input routes persist; marked pregnancy/postpartum regressions noncommittable in
+the resolver, service and UI; and added migration 01000. The migration independently
+recomputes timing bounds, verifies due/delivery arithmetic and conflict provenance,
+requires contiguous versions, blocks episode regression and requires every
+onboarding symptom to remain evaluation-only while the safety file is a draft.
+It also updates demo seeding to preserve confirmation identity and time.
+
+The first full database rerun caught an over-strict confirmation constraint. Fact
+deletion intentionally invalidates a journey while keeping its old confirmation
+audit trail. Recovery: changed the rule to require paired confirmation fields and
+require them for a currently confirmed state, while allowing invalidated history
+to remain attributed. The older deletion test and every new negative test then
+passed. A lint run performed concurrently with pgTAP saw temporary pgTAP functions;
+lint was rerun after the transaction and returned zero findings. CI keeps these
+steps sequential.
+
+Final evidence is 154/154 Python tests, 64/64 contract cases, 26/26 journey cases,
+24/24 focused journey/onboarding tests, and 179/179 database assertions on both an
+exact 00900-to-01000 upgrade and a clean twelve-migration replay. The 13 Storage
+API checks, 17 onboarding API checks and Streamlit smoke render pass. Read-only
+remote inspection confirms 12 migrations, all hardening constraints and trigger,
+zero direct/legacy mutation grants, zero private-helper grants and zero temporary
+fixtures.
+
+The Stage 4 readiness checker validates eight editable texts, eight watermarked
+PDFs, eight extraction-truth files, 33 proposed candidates with provenance, six
+explicit abstentions and one prompt-injection fixture. The noisy/OCR variant,
+typed graph-change truth and upload edge-case fixtures are the first Stage 4 build
+items. Live/public upload remains parked behind a scanning-policy decision and the
+outstanding human review gates.
+
+No GitHub commit, push or pull request was performed during this exit audit.
+
+## Stage 4 personal documents and confirmed state
+
+Stage 4 now implements the full fictional document-to-state slice. Eight
+watermarked records have typed extraction and graph truth, one noisy OCR image has
+frozen expected text, and locked, corrupt, unsupported, oversize and wrong-person
+files exercise the upload boundary. Proposals retain exact page/span provenance;
+medication text remains record-only; missing information abstains. Authenticated
+owners may edit, confirm, reject or preserve a conflict. One versioned idempotent
+transaction creates confirmed facts and graph links, asks clarification questions
+and marks affected movement plans stale. Direct client mutation of proposals,
+derived facts and graph state is closed.
+
+The exact migration upgrade was tested from `01000` with pre-existing confirmed
+document, fact and medication rows. It backfilled the required decision provenance.
+A clean replay through `01100` was tested separately. Each path passed 195 pgTAP
+assertions, 45 authenticated Auth/Storage/PostgREST/RPC checks and database lint
+with zero findings. The complete application suite passed 168 Python tests, 64
+content-contract cases, 26 journey cases and the Stage 3/4 Streamlit renders.
+
+Adding the noisy PNG first broke the release fingerprint because binary images
+were decoded as text. Binary hashing fixed it. The new governed fixtures then
+changed the foundation checksum; a guarded fingerprint-only audit rebind was added
+that refuses any source, evidence, candidate, parser or review-task change. An
+attempt to rebuild from local Stage 1 run artifacts correctly failed because those
+transient files use the earlier ingestion schema. We did not rewrite or invent
+source review. The guarded rebind validated all 14 sources and 54 recorded Kajal
+decisions.
+
+The combined pgTAP runner had previously deadlocked when independent SQL files ran
+in parallel, so CI now runs them sequentially. CI also loads a real legacy fixture
+before migration `01100` and verifies the backfill after it. The global Python
+interpreter lacked PyMuPDF; official local commands use the pinned repository
+virtual environment.
+
+Remote deployment did not occur. Supabase refused the saved scoped access token for
+project `jtmiduftpbvmahbmryki` because the token/account pair lacks the required
+privilege. No remote schema was changed and no GitHub commit, push or pull request
+was performed. A corrected project-scoped database/migration token is required to
+deploy `01100`. Real uploads additionally remain closed until a malware scanner,
+exact model/cost benchmark and the named human reviews are complete.
+
+## Stage 4 remote deployment and API-role recovery
+
+The original remote deployment attempt was correctly stopped when the first scoped
+Supabase token lacked project access. Aswath replaced it with a project-scoped
+token stored only in `.env`. Link and dry-run then succeeded, migration `01100` was
+deployed, and all 195 existing remote pgTAP assertions passed.
+
+The first linked schema comparison exposed a separate issue that the behavior tests
+had not measured: automatic Data API exposure had added 72 anonymous grant changes.
+RLS still prevented a cross-workspace read, but the privilege surface was broader
+than the architecture permits. Migration `01200` now revokes anonymous access to
+all current public tables, sequences and inherited functions, then restores only
+six read-only published-content tables plus published guideline retrieval. It also
+closes anonymous defaults for future `postgres`-owned application objects.
+
+The first clean reset of `01200` failed because it attempted to alter the managed
+`supabase_admin` role's default privileges. That operation is not available to an
+application migration. Recovery: removed the platform-owner operation, kept the
+current-object revocation and scoped future defaults to Nestline's migration owner.
+The next clean install succeeded and the new 11-assertion role test passed.
+
+Final remote evidence: all 14 migrations are present, none are pending, all 206
+pgTAP assertions pass, lint has zero findings, anonymous access is exactly six
+read-only public-content grants, private retrieval is unavailable to anonymous
+users, and zero test fixtures or personal workspaces remain. The publishable-key
+API returned HTTP 200 for public content and HTTP 401 for personal workspaces. The raw CLI diff still
+contains Supabase-managed `service_role` metadata and `public.rls_auto_enable`, plus
+CR/LF-only serialization of nine Nestline functions; application-role drift and
+Nestline-function semantic mismatches are both zero. The secret-free evidence is
+`data/supabase/stage4-remote-verification.json`.
+
+No GitHub commit, push or pull request was performed.

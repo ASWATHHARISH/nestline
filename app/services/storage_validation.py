@@ -151,3 +151,110 @@ def validate_workspace_owner_visibility(path: Path) -> list[str]:
     if "or private.is_workspace_member(id)" not in lowered:
         errors.append("workspace member read access was not preserved")
     return errors
+
+
+def validate_owner_only_episode_boundary(path: Path) -> list[str]:
+    """Check the explicit owner-only and one-workspace-one-episode decision."""
+    lowered = path.read_text(encoding="utf-8").casefold()
+    errors = []
+    required = {
+        "non-owner upgrade guard": "where role <> 'owner'",
+        "owner-only role constraint": "workspace_members_owner_only check (role = 'owner')",
+        "membership mutation grants removed":
+            "revoke insert, update, delete on public.workspace_members from authenticated",
+        "owner identity in access boundary": "workspace.owner_user_id = auth.uid()",
+        "owner role in access boundary": "member.role = 'owner'",
+        "care episode decision": "one private care episode per workspace",
+    }
+    for label, fragment in required.items():
+        if fragment not in lowered:
+            errors.append(f"missing {label}")
+    return errors
+
+
+def validate_journey_state_invariants(path: Path) -> list[str]:
+    """Check strict stage/source combinations at the database boundary."""
+    lowered = path.read_text(encoding="utf-8").casefold()
+    errors = []
+    required = {
+        "possible pregnancy source": "user_reported_possible_pregnancy",
+        "strict timing constraint": "journey_states_stage_timing_check",
+        "pregnancy due date source":
+            "timing_source in ('document_estimated_due_date', 'user_estimated_due_date')",
+        "approximate range source": "timing_source = 'approximate_month_range'",
+        "postpartum delivery source":
+            "timing_source = 'delivery_date' and delivery_date is not null",
+        "postpartum day range": "check (postpartum_day between 0 and 6)",
+    }
+    for label, fragment in required.items():
+        if fragment not in lowered:
+            errors.append(f"missing {label}")
+    return errors
+
+
+def validate_personal_dependency_invalidation(path: Path) -> list[str]:
+    """Check normalized links, graph validation and stale-state transitions."""
+    lowered = path.read_text(encoding="utf-8").casefold()
+    errors = []
+    required = {
+        "journey fact map": "private.journey_state_fact_dependencies",
+        "question fact map": "private.appointment_question_fact_dependencies",
+        "plan fact map": "private.plan_item_fact_dependencies",
+        "plan guidance map": "private.plan_item_guidance_dependencies",
+        "plan evidence map": "private.plan_item_evidence_dependencies",
+        "workspace-scoped fact key":
+            "references public.health_facts(workspace_id, id) on delete restrict",
+        "plan stale transition": "set status = 'stale'",
+        "question stale transition": "set status = 'stale'",
+        "journey conflict transition": "set has_dating_conflict = true",
+        "graph entity validation": "graph_nodes_validate_entity",
+        "storage-first document deletion":
+            "remove the document through the storage api before deleting its database record",
+    }
+    for label, fragment in required.items():
+        if fragment not in lowered:
+            errors.append(f"missing {label}")
+    return errors
+
+
+def validate_versioned_demo_workspaces(path: Path) -> list[str]:
+    """Check per-session, versioned and repeatable fictional workspace seeding."""
+    lowered = path.read_text(encoding="utf-8").casefold()
+    errors = []
+    required = {
+        "session identity": "demo_session_key text",
+        "seed identity": "demo_seed_version text",
+        "owner/session uniqueness": "workspaces_owner_demo_session_key",
+        "versioned seed": "requested_seed_version <> 'maya-v1'",
+        "per-session clone": "public.create_demo_workspace",
+        "reset and reseed": "public.reseed_demo_workspace_state",
+        "existing reset reuse": "public.reset_demo_workspace_state",
+    }
+    for label, fragment in required.items():
+        if fragment not in lowered:
+            errors.append(f"missing {label}")
+    return errors
+
+
+def validate_storage_first_documents(path: Path) -> list[str]:
+    """Check that clients cannot bypass Storage-first document deletion."""
+    lowered = path.read_text(encoding="utf-8").casefold()
+    errors = []
+    required = {
+        "broad document policy removed":
+            'drop policy if exists "workspace members manage private_documents"',
+        "direct document delete revoked":
+            "revoke delete on public.private_documents from authenticated",
+        "owner-checked delete function":
+            "not private.is_workspace_owner(requested_workspace_id)",
+        "storage existence gate":
+            "remove the document through the storage api before deleting its database record",
+        "protected reset rights":
+            "alter function public.reset_demo_workspace_state(uuid, timestamptz) security definer",
+    }
+    for label, fragment in required.items():
+        if fragment not in lowered:
+            errors.append(f"missing {label}")
+    if "create policy" in lowered and "for delete to authenticated" in lowered:
+        errors.append("direct authenticated document delete policy found")
+    return errors

@@ -2,8 +2,8 @@
   "schema_version": "1.0.0",
   "project_ref": "jtmiduftpbvmahbmryki",
   "project_name": "nestline-dev",
-  "verified_at": "2026-09-11T00:16:14+05:30",
-  "method": "supabase_dashboard_sql_editor",
+  "verified_at": "2026-09-11T04:19:34+05:30",
+  "method": "supabase_cli_session_pooler_read_only_query",
   "migrations": [
     {
       "version": "20260910000100",
@@ -29,6 +29,31 @@
       "version": "20260911000300",
       "name": "workspace_owner_visibility",
       "file_sha256": "88c09fc454f659cd897bf450fc48333d0c314d12dcf970b385b51580f71b31d0"
+    },
+    {
+      "version": "20260911000400",
+      "name": "owner_only_episode_boundary",
+      "file_sha256": "10e28911a06de6bb8a8d15edad258b1fa59ba8362f671e0dc587354e57cffb29"
+    },
+    {
+      "version": "20260911000500",
+      "name": "journey_state_invariants",
+      "file_sha256": "98b1fd5ae1055ea9fcf2c908019254c7c4a72af7e76f7682db7d761b6523cdf1"
+    },
+    {
+      "version": "20260911000600",
+      "name": "personal_dependency_invalidation",
+      "file_sha256": "97eecf85b5c13940d7906829dca0b2b7d8f39f998ced2a3d99eb8173f203d15e"
+    },
+    {
+      "version": "20260911000700",
+      "name": "versioned_demo_workspaces",
+      "file_sha256": "0ca70041e0051714e14386add8e93e8d41e932f90db4b4f77681a2323a379d02"
+    },
+    {
+      "version": "20260911000800",
+      "name": "enforce_storage_first_documents",
+      "file_sha256": "56d241d055e1f1d19096f373f823577d96d323f6fafb02bbf291642e300009b3"
     }
   ],
   "checks": {
@@ -36,14 +61,17 @@
     "rls_enabled_tables": 28,
     "private_medical_document_buckets": 1,
     "vector_extension_enabled": 1,
-    "workspace_membership_policies": 4,
+    "workspace_membership_policies": 1,
     "release_bound_foreign_keys": 8,
-    "migration_history_rows": 5,
-    "workspace_lifecycle_functions": 3,
+    "migration_history_rows": 10,
+    "workspace_lifecycle_functions": 6,
     "document_dedup_constraints": 1,
     "workspace_owner_visibility_policies": 1,
-    "transactional_isolation_assertions": 9,
-    "transactional_lifecycle_assertions": 5,
+    "owner_only_membership_constraints": 1,
+    "strict_journey_constraints": 1,
+    "normalized_dependency_tables": 5,
+    "direct_document_delete_grants": 0,
+    "transactional_pg_tap_assertions": 141,
     "temporary_fixture_rows_remaining": 0
   },
   "contains_secrets": false

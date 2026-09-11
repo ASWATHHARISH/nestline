@@ -1,0 +1,67 @@
+{
+  "schema_version": "stage4-graph-truth-v1",
+  "document_id": "DOC-003",
+  "workspace_key": "DEMO-MAYA",
+  "nodes": [
+    {
+      "key": "document:DOC-003",
+      "type": "Document",
+      "created_when": "extraction_recorded"
+    },
+    {
+      "key": "fact:DOC-003:medicine_name",
+      "type": "MedicationMention",
+      "created_when": "user_confirms_candidate",
+      "source_field": "medicine_name"
+    },
+    {
+      "key": "fact:DOC-003:recorded_dose",
+      "type": "MedicationMention",
+      "created_when": "user_confirms_candidate",
+      "source_field": "recorded_dose"
+    },
+    {
+      "key": "fact:DOC-003:recorded_frequency",
+      "type": "MedicationMention",
+      "created_when": "user_confirms_candidate",
+      "source_field": "recorded_frequency"
+    },
+    {
+      "key": "fact:DOC-003:prescriber",
+      "type": "DocumentFact",
+      "created_when": "user_confirms_candidate",
+      "source_field": "prescriber"
+    }
+  ],
+  "edges": [
+    {
+      "from": "fact:DOC-003:medicine_name",
+      "to": "document:DOC-003",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    },
+    {
+      "from": "fact:DOC-003:recorded_dose",
+      "to": "document:DOC-003",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    },
+    {
+      "from": "fact:DOC-003:recorded_frequency",
+      "to": "document:DOC-003",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    },
+    {
+      "from": "fact:DOC-003:prescriber",
+      "to": "document:DOC-003",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    }
+  ],
+  "expected_side_effects": [
+    "record_only_no_prescribing",
+    "abstain_route"
+  ],
+  "proposal_side_effects": []
+}

@@ -1,0 +1,114 @@
+{
+  "schema_version": "stage4-overnight-verification-v2",
+  "verified_at": "2026-09-11T12:16:44.0100105+05:30",
+  "branch": "feat/stage-1-governed-ingestion",
+  "starting_commit": "613b54f",
+  "github_updated": false,
+  "stage4_migrations": [
+    {
+      "file": "20260911001100_stage4_document_confirmation.sql",
+      "sha256": "ae8d9cb2ddf629e4ca359b6a34816db95476e74b48c79b9470b3bc081568f528"
+    },
+    {
+      "file": "20260911001200_stage4_api_role_hardening.sql",
+      "sha256": "c0720cdd99f324a63d4b9c6db1a8f271ca92c1b22fe567b7f64e32253ffb5349"
+    }
+  ],
+  "application": {
+    "python_tests": {
+      "passed": 168,
+      "total": 168
+    },
+    "content_contract_cases": {
+      "passed": 64,
+      "total": 64
+    },
+    "journey_cases": {
+      "passed": 26,
+      "total": 26
+    },
+    "stage4_streamlit_render": "passed",
+    "stage4_streamlit_network_calls": 0,
+    "stage4_check": "passed"
+  },
+  "fixtures": {
+    "canonical_documents": 8,
+    "extraction_candidates": 33,
+    "explicit_abstentions": 6,
+    "typed_graph_truth_files": 8,
+    "typed_graph_nodes": 36,
+    "typed_graph_edges": 29,
+    "controlled_ocr_expected_fields": 5,
+    "upload_edge_cases": [
+      "corrupt",
+      "locked",
+      "oversize",
+      "unsupported",
+      "wrong_person"
+    ]
+  },
+  "database_upgrade": {
+    "from_version": "20260911001000",
+    "to_version": "20260911001200",
+    "legacy_provenance_backfill": "passed",
+    "api_role_hardening": "passed",
+    "pgtap": {
+      "passed": 206,
+      "total": 206
+    },
+    "authenticated_api_checks": {
+      "passed": 45,
+      "total": 45
+    },
+    "lint_findings": 0,
+    "temporary_fixtures_remaining": 0
+  },
+  "database_clean_install": {
+    "migration_count": 14,
+    "pgtap": {
+      "passed": 206,
+      "total": 206
+    },
+    "authenticated_api_checks": {
+      "passed": 45,
+      "total": 45
+    },
+    "lint_findings": 0,
+    "application_schema_semantically_aligned": true,
+    "temporary_fixtures_remaining": 0
+  },
+  "remote_database": {
+    "project_name": "nestline-dev",
+    "project_ref": "jtmiduftpbvmahbmryki",
+    "migration_count": 14,
+    "pending_migrations": 0,
+    "pgtap": {
+      "passed": 206,
+      "total": 206
+    },
+    "lint_findings": 0,
+    "anon_table_grants": 6,
+    "anon_non_public_knowledge_grants": 0,
+    "application_role_drift_statements": 0,
+    "application_function_semantic_mismatches": 0,
+    "temporary_fixtures_remaining": 0,
+    "personal_workspace_rows": 0,
+    "anonymous_public_content_http_status": 200,
+    "anonymous_personal_workspace_http_status": 401,
+    "anonymous_api_boundary_checks": 2
+  },
+  "status": {
+    "stage4_fictional_demo_engineering": "pass",
+    "ready_for_stage5_local_engineering": true,
+    "ready_for_stage5_remote_integration": true,
+    "ready_for_live_or_public_medical_upload": false,
+    "known_unfixed_stage4_code_defects": []
+  },
+  "open_items": [
+    "select exact OpenAI extraction model and cost ceiling, then run the fictional benchmark",
+    "select and configure a deployable malware scanner before real uploads",
+    "complete clinical, India-localisation and final rendered product reviews",
+    "obtain explicit approval before committing or pushing the local work to GitHub"
+  ],
+  "contains_secrets": false
+}

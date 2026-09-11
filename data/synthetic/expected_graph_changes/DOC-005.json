@@ -1,0 +1,44 @@
+{
+  "schema_version": "stage4-graph-truth-v1",
+  "document_id": "DOC-005",
+  "workspace_key": "DEMO-MAYA",
+  "nodes": [
+    {
+      "key": "document:DOC-005",
+      "type": "Document",
+      "created_when": "extraction_recorded"
+    },
+    {
+      "key": "fact:DOC-005:recorded_instruction",
+      "type": "DocumentFact",
+      "created_when": "user_confirms_candidate",
+      "source_field": "recorded_instruction"
+    },
+    {
+      "key": "fact:DOC-005:instruction_scope",
+      "type": "DocumentFact",
+      "created_when": "user_confirms_candidate",
+      "source_field": "instruction_scope"
+    }
+  ],
+  "edges": [
+    {
+      "from": "fact:DOC-005:recorded_instruction",
+      "to": "document:DOC-005",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    },
+    {
+      "from": "fact:DOC-005:instruction_scope",
+      "to": "document:DOC-005",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    }
+  ],
+  "expected_side_effects": [
+    "propose_movement_fact",
+    "retain_scope",
+    "plan_dependency_movement"
+  ],
+  "proposal_side_effects": []
+}

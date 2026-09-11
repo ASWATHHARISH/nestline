@@ -78,7 +78,7 @@ def release_fingerprint(data: Path) -> str:
             if path.is_file():
                 if path.name == "coverage_matrix.csv":
                     continue  # Derived status view is checked against the manifest.
-                if path.suffix == ".pdf":
+                if path.suffix.casefold() in {".pdf", ".png", ".jpg", ".jpeg"}:
                     digest = sha256(path.read_bytes()).hexdigest()
                 else:
                     raw = path.read_text(encoding="utf-8")  # Normalises platform line endings.

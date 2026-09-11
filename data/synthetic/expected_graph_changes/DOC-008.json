@@ -1,0 +1,68 @@
+{
+  "schema_version": "stage4-graph-truth-v1",
+  "document_id": "DOC-008",
+  "workspace_key": "DEMO-MAYA",
+  "nodes": [
+    {
+      "key": "document:DOC-008",
+      "type": "Document",
+      "created_when": "extraction_recorded"
+    },
+    {
+      "key": "fact:DOC-008:delivery_date",
+      "type": "JourneyState",
+      "created_when": "user_confirms_candidate",
+      "source_field": "delivery_date"
+    },
+    {
+      "key": "fact:DOC-008:delivery_setting",
+      "type": "DocumentFact",
+      "created_when": "user_confirms_candidate",
+      "source_field": "delivery_setting"
+    },
+    {
+      "key": "fact:DOC-008:current_journey",
+      "type": "JourneyState",
+      "created_when": "user_confirms_candidate",
+      "source_field": "current_journey"
+    },
+    {
+      "key": "fact:DOC-008:discharge_instruction",
+      "type": "DocumentFact",
+      "created_when": "user_confirms_candidate",
+      "source_field": "discharge_instruction"
+    }
+  ],
+  "edges": [
+    {
+      "from": "fact:DOC-008:delivery_date",
+      "to": "document:DOC-008",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    },
+    {
+      "from": "fact:DOC-008:delivery_setting",
+      "to": "document:DOC-008",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    },
+    {
+      "from": "fact:DOC-008:current_journey",
+      "to": "document:DOC-008",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    },
+    {
+      "from": "fact:DOC-008:discharge_instruction",
+      "to": "document:DOC-008",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    }
+  ],
+  "expected_side_effects": [
+    "propose_episode_transition",
+    "do_not_infer_caesarean_or_breastfeeding",
+    "retain_pregnancy_episode"
+  ],
+  "proposal_side_effects": []
+}

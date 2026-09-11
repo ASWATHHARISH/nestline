@@ -1,0 +1,2 @@
+-- Intentionally empty. Demo workspaces are created per authenticated session
+-- through public.create_demo_workspace after the versioned seed migration.

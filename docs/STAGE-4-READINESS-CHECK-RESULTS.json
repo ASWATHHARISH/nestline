@@ -1,0 +1,44 @@
+{
+  "valid": true,
+  "ready_to_start_stage4": true,
+  "ready_for_live_or_public_upload": false,
+  "verified": {
+    "inventory_documents": 8,
+    "editable_text_documents": 8,
+    "watermarked_pdfs": 8,
+    "extraction_truth_files": 8,
+    "fact_candidates_with_provenance": 33,
+    "explicit_abstentions": 6,
+    "prompt_injection_cases": 1
+  },
+  "stage4_fixture_additions": [
+    {
+      "item": "one controlled noisy/OCR variant with expected extraction truth",
+      "present": true
+    },
+    {
+      "item": "typed node/edge graph-change truth derived from confirmed state transitions",
+      "present": true
+    },
+    {
+      "item": "locked, corrupt, unsupported, oversize and wrong-person upload fixtures",
+      "present": true
+    }
+  ],
+  "stage4_build_items_remaining": [],
+  "parked_release_gates": [
+    {
+      "owner": "product/security/platform decision",
+      "gate": "choose and document upload malware-scanning policy before broader deployment"
+    },
+    {
+      "owner": "qualified clinical and India-localisation reviewers",
+      "gate": "finish required content and safety reviews before live health guidance"
+    },
+    {
+      "owner": "product reviewer",
+      "gate": "complete final rendered UI acceptance before public release"
+    }
+  ],
+  "errors": []
+}

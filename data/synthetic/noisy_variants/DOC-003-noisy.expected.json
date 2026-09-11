@@ -1,0 +1,16 @@
+{
+  "schema_version": "stage4-ocr-truth-v1",
+  "source_document_id": "DOC-003",
+  "fictional": true,
+  "image_sha256": "d1b719e528511b147c3a9e6f92a9670864ee9c68f4ce073b69eb04bedaaa328d",
+  "expected_ocr_text": "FICTIONAL DEMO DATA - NOT A REAL MEDICAL RECORD\nDOC-003 | Recorded medication instruction\nRecorded date: 2026-02-07\nNo real person, hospital, clinician or medicine is represented.\nmedicine_name: DEMO-MED-A (invented non-medicine)\nrecorded_dose: one demo unit\nrecorded_frequency: once daily\nroute: not recorded\nprescriber: SIMULATED REVIEWER - not a real clinician\nAll extracted facts are proposals until a user explicitly confirms them.\nFor software testing only. Never use these invented instructions for care.\n",
+  "expected_fields": [
+    "medicine_name",
+    "recorded_dose",
+    "recorded_frequency",
+    "route",
+    "prescriber"
+  ],
+  "minimum_exact_field_recall": 1.0,
+  "purpose": "controlled low-contrast, blur, rotation and sparse-noise OCR path"
+}

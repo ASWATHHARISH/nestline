@@ -1,0 +1,63 @@
+{
+  "schema_version": "stage4-remote-verification-v1",
+  "project_name": "nestline-dev",
+  "project_ref": "jtmiduftpbvmahbmryki",
+  "database_region": "ap-northeast-2",
+  "verified_at": "2026-09-11T12:16:44.0100105+05:30",
+  "verification_scope": "Deployed Stage 4 schema catalogue, migration parity, transactional pgTAP, lint, application-role drift, normalized function semantics, and fixture cleanup; no personal data and no clinical validation.",
+  "migrations": [
+    {
+      "version": "20260911001100",
+      "name": "stage4_document_confirmation",
+      "file_sha256": "ae8d9cb2ddf629e4ca359b6a34816db95476e74b48c79b9470b3bc081568f528"
+    },
+    {
+      "version": "20260911001200",
+      "name": "stage4_api_role_hardening",
+      "file_sha256": "c0720cdd99f324a63d4b9c6db1a8f271ca92c1b22fe567b7f64e32253ffb5349"
+    }
+  ],
+  "checks": {
+    "migration_history_rows": 14,
+    "pending_migrations": 0,
+    "stage4_document_migration_rows": 1,
+    "stage4_api_hardening_migration_rows": 1,
+    "document_review_commit_tables": 1,
+    "record_extraction_functions": 1,
+    "commit_review_functions": 1,
+    "authenticated_stage4_execute_grants": 2,
+    "direct_candidate_mutation_grants": 0,
+    "anon_table_grants": 6,
+    "anon_non_select_table_grants": 0,
+    "anon_non_public_knowledge_grants": 0,
+    "anon_executable_public_functions": 1,
+    "anon_private_retrieval_execute": 0,
+    "postgres_anonymous_default_acls": 0,
+    "stage2_pg_tap_assertions": 122,
+    "stage3_exit_hardening_pg_tap_assertions": 12,
+    "stage3_onboarding_pg_tap_assertions": 26,
+    "stage4_document_pg_tap_assertions": 35,
+    "stage4_api_role_pg_tap_assertions": 11,
+    "transactional_pg_tap_assertions": 206,
+    "database_lint_findings": 0,
+    "application_role_drift_statements": 0,
+    "application_functions_compared": 9,
+    "application_function_semantic_mismatches": 0,
+    "temporary_fixture_rows_remaining": 0,
+    "remote_personal_workspace_rows": 0,
+    "anonymous_public_content_http_status": 200,
+    "anonymous_personal_workspace_http_status": 401,
+    "anonymous_api_boundary_checks": 2
+  },
+  "raw_schema_diff": {
+    "empty": false,
+    "administrative_service_role_statements": 112,
+    "crlf_only_function_serializations": 9,
+    "supabase_managed_function_differences": [
+      "public.rls_auto_enable()"
+    ],
+    "interpretation": "No anon or authenticated application-role drift remains. The raw CLI diff retains Supabase-managed service-role grants plus serialization/platform-function noise; those are excluded from the application semantic-drift verdict and no generated diff is applied."
+  },
+  "application_schema_semantically_aligned": true,
+  "contains_secrets": false
+}

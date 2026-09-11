@@ -1,0 +1,55 @@
+{
+  "schema_version": "stage4-graph-truth-v1",
+  "document_id": "DOC-004",
+  "workspace_key": "DEMO-MAYA",
+  "nodes": [
+    {
+      "key": "document:DOC-004",
+      "type": "Document",
+      "created_when": "extraction_recorded"
+    },
+    {
+      "key": "fact:DOC-004:pregnancy_week",
+      "type": "JourneyState",
+      "created_when": "user_confirms_candidate",
+      "source_field": "pregnancy_week"
+    },
+    {
+      "key": "fact:DOC-004:estimated_due_date",
+      "type": "JourneyState",
+      "created_when": "user_confirms_candidate",
+      "source_field": "estimated_due_date"
+    },
+    {
+      "key": "fact:DOC-004:followup_date",
+      "type": "Appointment",
+      "created_when": "user_confirms_candidate",
+      "source_field": "followup_date"
+    }
+  ],
+  "edges": [
+    {
+      "from": "fact:DOC-004:pregnancy_week",
+      "to": "document:DOC-004",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    },
+    {
+      "from": "fact:DOC-004:estimated_due_date",
+      "to": "document:DOC-004",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    },
+    {
+      "from": "fact:DOC-004:followup_date",
+      "to": "document:DOC-004",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    }
+  ],
+  "expected_side_effects": [
+    "retain_prior_history",
+    "missing_does_not_remove_allergy"
+  ],
+  "proposal_side_effects": []
+}

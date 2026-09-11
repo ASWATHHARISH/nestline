@@ -651,6 +651,8 @@ flowchart LR
 
 - A personal workspace starts empty.
 - Demo data lives under a separate, visibly fictional workspace.
+- V1 workspaces are owner-only. Collaboration requires a future capability-matrix migration and tests before any non-owner role is enabled.
+- One workspace is one pregnancy-through-postpartum care episode. A later pregnancy uses a new workspace.
 - Every user-owned table has Row Level Security.
 - Every personal vector query includes the authenticated workspace filter at database level.
 - User operations use the user's Supabase access token. Never use the service-role key for ordinary chat/retrieval because it can bypass Row Level Security.
@@ -768,7 +770,11 @@ Text inside a document is untrusted content. “Ignore previous instructions” 
 | `superseded` | Explicitly replaced by newer confirmed information | Historical use only |
 | `human_reviewed` | Reviewer response recorded | Yes, with reviewer identity/status visible |
 
-Every personal object also stores `owner_id`, `workspace_id`, `episode_id`, source/provenance, timestamps, and state version.
+Every personal object stores `workspace_id`. The authenticated owner and care
+episode are derived through that workspace; child tables do not duplicate
+`owner_id` or `episode_id`. Each record stores timestamps, provenance and a state
+version where its workflow needs them. This V1 decision is recorded in
+`docs/decisions/0003-owner-only-workspace-care-episode.md`.
 
 ---
 

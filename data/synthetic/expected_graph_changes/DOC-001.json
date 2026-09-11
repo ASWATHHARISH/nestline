@@ -1,0 +1,90 @@
+{
+  "schema_version": "stage4-graph-truth-v1",
+  "document_id": "DOC-001",
+  "workspace_key": "DEMO-MAYA",
+  "nodes": [
+    {
+      "key": "document:DOC-001",
+      "type": "Document",
+      "created_when": "extraction_recorded"
+    },
+    {
+      "key": "fact:DOC-001:persona",
+      "type": "DocumentFact",
+      "created_when": "user_confirms_candidate",
+      "source_field": "persona"
+    },
+    {
+      "key": "fact:DOC-001:pregnancy_week",
+      "type": "JourneyState",
+      "created_when": "user_confirms_candidate",
+      "source_field": "pregnancy_week"
+    },
+    {
+      "key": "fact:DOC-001:estimated_due_date",
+      "type": "JourneyState",
+      "created_when": "user_confirms_candidate",
+      "source_field": "estimated_due_date"
+    },
+    {
+      "key": "fact:DOC-001:reported_allergy",
+      "type": "Allergy",
+      "created_when": "user_confirms_candidate",
+      "source_field": "reported_allergy"
+    },
+    {
+      "key": "fact:DOC-001:dietary_preference",
+      "type": "DocumentFact",
+      "created_when": "user_confirms_candidate",
+      "source_field": "dietary_preference"
+    },
+    {
+      "key": "fact:DOC-001:workspace",
+      "type": "DocumentFact",
+      "created_when": "user_confirms_candidate",
+      "source_field": "workspace"
+    }
+  ],
+  "edges": [
+    {
+      "from": "fact:DOC-001:persona",
+      "to": "document:DOC-001",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    },
+    {
+      "from": "fact:DOC-001:pregnancy_week",
+      "to": "document:DOC-001",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    },
+    {
+      "from": "fact:DOC-001:estimated_due_date",
+      "to": "document:DOC-001",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    },
+    {
+      "from": "fact:DOC-001:reported_allergy",
+      "to": "document:DOC-001",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    },
+    {
+      "from": "fact:DOC-001:dietary_preference",
+      "to": "document:DOC-001",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    },
+    {
+      "from": "fact:DOC-001:workspace",
+      "to": "document:DOC-001",
+      "type": "EXTRACTED_FROM",
+      "created_when": "user_confirms_candidate"
+    }
+  ],
+  "expected_side_effects": [
+    "all_facts_require_confirmation"
+  ],
+  "proposal_side_effects": []
+}

@@ -1,0 +1,72 @@
+{
+  "valid": true,
+  "stage": 4,
+  "fictional_demo_engineering_complete": true,
+  "ready_for_stage5_engineering": true,
+  "ready_for_live_or_public_medical_upload": false,
+  "remote_project": "nestline-dev",
+  "remote_verified_at": "2026-09-11T12:16:44.0100105+05:30",
+  "remote_checks": {
+    "migration_history_rows": 14,
+    "pending_migrations": 0,
+    "stage4_document_migration_rows": 1,
+    "stage4_api_hardening_migration_rows": 1,
+    "document_review_commit_tables": 1,
+    "record_extraction_functions": 1,
+    "commit_review_functions": 1,
+    "authenticated_stage4_execute_grants": 2,
+    "direct_candidate_mutation_grants": 0,
+    "anon_table_grants": 6,
+    "anon_non_select_table_grants": 0,
+    "anon_non_public_knowledge_grants": 0,
+    "anon_executable_public_functions": 1,
+    "anon_private_retrieval_execute": 0,
+    "postgres_anonymous_default_acls": 0,
+    "stage2_pg_tap_assertions": 122,
+    "stage3_exit_hardening_pg_tap_assertions": 12,
+    "stage3_onboarding_pg_tap_assertions": 26,
+    "stage4_document_pg_tap_assertions": 35,
+    "stage4_api_role_pg_tap_assertions": 11,
+    "transactional_pg_tap_assertions": 206,
+    "database_lint_findings": 0,
+    "application_role_drift_statements": 0,
+    "application_functions_compared": 9,
+    "application_function_semantic_mismatches": 0,
+    "temporary_fixture_rows_remaining": 0,
+    "remote_personal_workspace_rows": 0,
+    "anonymous_public_content_http_status": 200,
+    "anonymous_personal_workspace_http_status": 401,
+    "anonymous_api_boundary_checks": 2
+  },
+  "verified": {
+    "canonical_documents": 8,
+    "typed_graph_truth_files": 8,
+    "typed_graph_nodes": 36,
+    "typed_graph_edges": 29,
+    "controlled_ocr_expected_fields": 5,
+    "upload_edge_cases": [
+      "corrupt",
+      "locked",
+      "oversize",
+      "unsupported",
+      "wrong_person"
+    ],
+    "migration_sha256": "ae8d9cb2ddf629e4ca359b6a34816db95476e74b48c79b9470b3bc081568f528",
+    "api_role_hardening_sha256": "c0720cdd99f324a63d4b9c6db1a8f271ca92c1b22fe567b7f64e32253ffb5349"
+  },
+  "implemented_boundaries": [
+    "format, size, signature, lock, corruption, wrong-person and scan validation",
+    "exact page/span candidate provenance and record-only medication text",
+    "proposal-only extraction with explicit edit, confirm, reject, conflict and supersede actions",
+    "atomic idempotent versioned commit with graph updates and movement-plan invalidation",
+    "owner-only derived-state mutation and duplicate upload deduplication",
+    "optional tool-free, store-disabled OpenAI Structured Outputs adapter"
+  ],
+  "parked_release_gates": [
+    "deployable malware scanner for real medical documents",
+    "exact OpenAI extraction model and cost ceiling followed by live fictional benchmark",
+    "qualified clinical and India-localisation approval",
+    "final rendered product acceptance"
+  ],
+  "errors": []
+}

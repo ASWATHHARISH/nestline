@@ -193,31 +193,59 @@ or public corpus were created.
 - [x] Create/reset per-session demo workspaces. Personal Mode begins empty; Storage objects must be deleted through the Storage API before database reset.
 - [x] Implement version checks, idempotency keys, atomic state updates and deletion of derived artifacts.
 
-Completed 11 September 2026 in the `nestline-dev` Supabase project. Five tracked
-migrations create 28 RLS-enabled tables, private Storage, pgvector, release-bound
-provenance and workspace lifecycle functions. A rolled-back two-principal test
-passed nine SQL/vector/graph/Storage/mutation assertions; a second transaction
-passed workspace creation, atomic version, stale-update, document-deduplication
-and reset checks. Secret-free hashes/counts are tracked in
-`data/supabase/remote-verification.json`.
+Completed and independently corrected on 11 September 2026 in the `nestline-dev`
+Supabase project. Ten tracked migrations create 28 RLS-enabled tables, private
+Storage, pgvector, release-bound provenance, owner-only workspaces, strict journey
+states, normalized dependency invalidation and versioned per-session demo reset.
+The Docker/pgTAP suite passes 141 assertions against both a five-migration upgrade
+and a clean installation. It covers all 16 personal tables, vectors, Storage,
+cross-workspace references, graph cleanup and three repeatable resets. Secret-free
+remote hashes/counts are tracked in `data/supabase/remote-verification.json`.
+A separate 13-check local Auth/REST/Storage run proves owner file operations,
+outsider denial, Storage-first deletion and full temporary-fixture cleanup.
 
 **Exit:** authenticated A cannot read/search/download/mutate B's SQL, vectors, graph or files. A demo reset cannot affect another session. Migrations and seed/reset commands work on a clean test database. Deletion tests verify removal or explicit invalidation of every dependent item.
 
 ### S3 — Onboarding and journey resolution · 3–5 hours
 
-- [ ] Implement due date, manual week/day, month range, delivery date and postpartum-week inputs using deterministic functions with a testable clock.
-- [ ] Preserve effective date, timing provenance, conflicts and user confirmation. Month input remains a range.
-- [ ] Connect onboarding symptoms to S6 and store timestamped events.
+- [x] Implement due date, manual week/day, month range, delivery date and postpartum-week inputs using deterministic functions with a testable clock.
+- [x] Preserve effective date, timing provenance, conflicts and user confirmation. Month input remains a range.
+- [x] Connect onboarding symptoms to S6 and store timestamped events.
+
+Completed, independently exit-audited and deployed on 11 September 2026. The
+Streamlit flow includes the privacy boundary, authentication, Personal Empty/
+Fictional Demo workspaces, all timing inputs, optional allergies/history/
+restrictions/symptoms/appointments, calculation review and explicit confirmation.
+Migration 00900 commits the whole submission atomically; migration 01000 makes the
+database independently recompute timing/conflict provenance, enforce due/delivery
+arithmetic, reject backward care-episode transitions and preserve the draft-safety
+marker.
+
+Verification: 26/26 frozen date/conflict cases, 24/24 focused journey/onboarding
+unit tests, 179/179 database assertions on both exact 00900 upgrade and clean
+replay, 17/17 real Auth/PostgREST onboarding checks covering all six timing paths,
+one Streamlit render check, zero database lint findings and zero fixtures. The
+remote nestline-dev catalog has 12 migrations and no direct or legacy journey
+mutation grants. The Stage 6 rule file is still a draft, so symptom results remain
+evaluation-only until specialist review.
 
 **Exit:** golden date cases include rollover, boundaries, invalid/future dates, disagreeing timing and postpartum transition. Refresh/relogin preserves confirmed state. No model call calculates dates or silently resolves a conflict.
 
 ### S4 — Documents and confirmed state · 9–15 hours
 
-- [ ] Create the canonical eight fictional documents, editable text, watermarked PDFs, expected extraction JSON, expected graph changes and one controlled noisy variant.
-- [ ] Enforce allowed format/size and handle locked, corrupt, unsupported and wrong-person fixtures explicitly. Resolve the upload scanning policy before any broader deployment.
-- [ ] Extract typed candidate facts with page/span provenance; preserve medication instructions as documented text without treatment advice.
-- [ ] Implement edit/confirm/reject and conflicted/superseded states. An extraction proposal is never an active confirmed fact.
-- [ ] Commit updates once, reject stale versions and trigger plan dependency checks.
+Stage 4 fictional-demo engineering is complete and independently self-verified on
+11 September 2026. It includes the controlled noisy/OCR variant, typed graph truth,
+upload edge cases, private proposal/confirmation flow and protected state commit.
+Migrations `01100` and `01200` are deployed to `nestline-dev`; 206 local and remote
+pgTAP assertions pass, no migration is pending, remote lint is clean, and anonymous
+access is restricted to the six reviewed public-content reads. Live/public upload
+remains blocked until the scanner and human release gates are resolved.
+
+- [x] Create the canonical eight fictional documents, editable text, watermarked PDFs, expected extraction JSON, expected graph changes and one controlled noisy variant.
+- [x] Enforce allowed format/size and handle locked, corrupt, unsupported and wrong-person fixtures explicitly. The real-file path fails closed until a deployable scanner is configured.
+- [x] Extract typed candidate facts with page/span provenance; preserve medication instructions as documented text without treatment advice.
+- [x] Implement edit/confirm/reject and conflicted/superseded states. An extraction proposal is never an active confirmed fact.
+- [x] Commit updates once, reject stale versions and trigger plan dependency checks.
 
 **Exit:** prompt-injected document text cannot change tools or policy; a dose transcription error is visible for confirmation; duplicate upload/confirmation produces one logical update; conflicts preserve both sources.
 

@@ -7,7 +7,12 @@ from pathlib import Path
 
 from app.schemas.storage import STAGE2_TABLES, USER_OWNED_TABLES
 from app.services.storage_validation import (validate_stage2_migration,
+                                             validate_journey_state_invariants,
+                                             validate_owner_only_episode_boundary,
+                                             validate_personal_dependency_invalidation,
                                              validate_release_provenance_migration,
+                                             validate_storage_first_documents,
+                                             validate_versioned_demo_workspaces,
                                              validate_workspace_lifecycle_migration,
                                              validate_workspace_owner_visibility,
                                              validate_workspace_membership_hardening)
@@ -18,7 +23,25 @@ HARDENING_MIGRATION = ROOT / "supabase/migrations/20260910000200_protect_workspa
 PROVENANCE_MIGRATION = ROOT / "supabase/migrations/20260911000100_bind_public_release_provenance.sql"
 LIFECYCLE_MIGRATION = ROOT / "supabase/migrations/20260911000200_workspace_lifecycle.sql"
 OWNER_VISIBILITY_MIGRATION = ROOT / "supabase/migrations/20260911000300_workspace_owner_visibility.sql"
+OWNER_ONLY_MIGRATION = ROOT / "supabase/migrations/20260911000400_owner_only_episode_boundary.sql"
+JOURNEY_INVARIANTS_MIGRATION = ROOT / "supabase/migrations/20260911000500_journey_state_invariants.sql"
+DEPENDENCY_MIGRATION = ROOT / "supabase/migrations/20260911000600_personal_dependency_invalidation.sql"
+DEMO_WORKSPACES_MIGRATION = ROOT / "supabase/migrations/20260911000700_versioned_demo_workspaces.sql"
+STORAGE_FIRST_MIGRATION = ROOT / "supabase/migrations/20260911000800_enforce_storage_first_documents.sql"
 REMOTE_EVIDENCE = ROOT / "data/supabase/remote-verification.json"
+
+MIGRATIONS = (
+    MIGRATION,
+    HARDENING_MIGRATION,
+    PROVENANCE_MIGRATION,
+    LIFECYCLE_MIGRATION,
+    OWNER_VISIBILITY_MIGRATION,
+    OWNER_ONLY_MIGRATION,
+    JOURNEY_INVARIANTS_MIGRATION,
+    DEPENDENCY_MIGRATION,
+    DEMO_WORKSPACES_MIGRATION,
+    STORAGE_FIRST_MIGRATION,
+)
 
 
 def _remote_evidence_errors(payload: dict) -> list[str]:
@@ -28,14 +51,17 @@ def _remote_evidence_errors(payload: dict) -> list[str]:
         "rls_enabled_tables": len(STAGE2_TABLES),
         "private_medical_document_buckets": 1,
         "vector_extension_enabled": 1,
-        "workspace_membership_policies": 4,
+        "workspace_membership_policies": 1,
         "release_bound_foreign_keys": 8,
-        "migration_history_rows": 5,
-        "workspace_lifecycle_functions": 3,
+        "migration_history_rows": 10,
+        "workspace_lifecycle_functions": 6,
         "document_dedup_constraints": 1,
         "workspace_owner_visibility_policies": 1,
-        "transactional_isolation_assertions": 9,
-        "transactional_lifecycle_assertions": 5,
+        "owner_only_membership_constraints": 1,
+        "strict_journey_constraints": 1,
+        "normalized_dependency_tables": 5,
+        "direct_document_delete_grants": 0,
+        "transactional_pg_tap_assertions": 141,
         "temporary_fixture_rows_remaining": 0,
     }
     if payload.get("checks") != expected_checks:
@@ -43,8 +69,7 @@ def _remote_evidence_errors(payload: dict) -> list[str]:
     if payload.get("contains_secrets") is not False:
         errors.append("remote verification record must explicitly be secret-free")
     tracked = {item.get("version"): item for item in payload.get("migrations", [])}
-    for path in (MIGRATION, HARDENING_MIGRATION, PROVENANCE_MIGRATION,
-                 LIFECYCLE_MIGRATION, OWNER_VISIBILITY_MIGRATION):
+    for path in MIGRATIONS:
         version, name = path.stem.split("_", 1)
         item = tracked.get(version)
         # Git may check the same SQL out with LF or CRLF. Hash canonical text so
@@ -65,6 +90,11 @@ def main(argv=None) -> int:
     errors.extend(validate_release_provenance_migration(PROVENANCE_MIGRATION))
     errors.extend(validate_workspace_lifecycle_migration(LIFECYCLE_MIGRATION))
     errors.extend(validate_workspace_owner_visibility(OWNER_VISIBILITY_MIGRATION))
+    errors.extend(validate_owner_only_episode_boundary(OWNER_ONLY_MIGRATION))
+    errors.extend(validate_journey_state_invariants(JOURNEY_INVARIANTS_MIGRATION))
+    errors.extend(validate_personal_dependency_invalidation(DEPENDENCY_MIGRATION))
+    errors.extend(validate_versioned_demo_workspaces(DEMO_WORKSPACES_MIGRATION))
+    errors.extend(validate_storage_first_documents(STORAGE_FIRST_MIGRATION))
     remote = json.loads(REMOTE_EVIDENCE.read_text(encoding="utf-8"))
     errors.extend(_remote_evidence_errors(remote))
     schema = json.loads((ROOT / "data/schemas/storage.schema.json").read_text(encoding="utf-8"))
@@ -74,11 +104,7 @@ def main(argv=None) -> int:
         errors.append("exported workspace-owned table list is stale")
     result = {
         "valid": not errors,
-        "migrations": [str(MIGRATION.relative_to(ROOT)),
-                       str(HARDENING_MIGRATION.relative_to(ROOT)),
-                       str(PROVENANCE_MIGRATION.relative_to(ROOT)),
-                       str(LIFECYCLE_MIGRATION.relative_to(ROOT)),
-                       str(OWNER_VISIBILITY_MIGRATION.relative_to(ROOT))],
+        "migrations": [str(path.relative_to(ROOT)) for path in MIGRATIONS],
         "tables": len(STAGE2_TABLES),
         "workspace_owned_tables": len(USER_OWNED_TABLES),
         "remote_project": remote["project_name"],

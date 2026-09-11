@@ -1,112 +1,114 @@
 # Stage 2 — Supabase storage and workspace isolation
 
-Updated 11 September 2026. This is the technical source of truth for the Stage 2 storage foundation.
+Updated 11 September 2026 after the independent review correction pass. This is
+the technical source of truth for Stage 2.
 
 ## Outcome
 
-The Stage 2 database foundation is implemented, migrated to the `nestline-dev`
-Supabase project and recorded in Supabase migration history. It contains 28
-tables, Row Level Security on all 28 tables, a private `medical-documents`
-bucket, dimension-neutral pgvector columns and bounded public/private vector
-functions. The database currently contains no real medical data and no
-published health corpus.
+Stage 2 is implemented and deployed to the `nestline-dev` Supabase project. Ten
+ordered migrations create 28 tables, enable Row Level Security on all 28, create
+the private `medical-documents` bucket, add dimension-neutral pgvector columns,
+and enforce authenticated workspace lifecycle operations. The remote database
+contains no real medical data, published health corpus, production embeddings or
+Stage 2 test fixtures.
 
-A transactional two-principal test exercised SQL rows, private vectors, graph
-nodes, Storage object access and a cross-workspace update. All nine assertions
-passed: user A saw A's records, user B saw zero A records, and B changed zero A
-rows. A separate lifecycle transaction proved authenticated workspace creation,
-atomic journey versions, stale-update rejection, document-hash deduplication and
-demo reset. Every fictional test user and row was rolled back.
+The capstone uses an explicit owner-only model. One workspace represents one
+pregnancy-through-postpartum care episode. A later pregnancy begins in a new
+workspace. Ownership is derived from `workspaces.owner_user_id`; child rows do not
+duplicate an `owner_id` or `episode_id`. The decision and future collaboration
+boundary are recorded in `docs/decisions/0003-owner-only-workspace-care-episode.md`.
 
 ## Stored data
 
 | Area | Tables | Access rule |
 |---|---|---|
-| Workspace and membership | `workspaces`, `workspace_members` | Authenticated owner/member only |
-| Governed public knowledge | `content_releases`, `public_sources`, `source_artifacts`, `source_blocks`, `ingestion_runs`, `evidence_review_tasks`, `evidence_review_decisions`, `weekly_profiles`, `guidance_fragments`, `guideline_chunks` | API clients can read only explicitly published release data; ingestion/review internals are admin-only |
-| Journey and private records | `journey_states`, `private_documents`, `document_chunks`, `document_facts`, `health_facts`, `medication_mentions`, `symptom_events`, `appointments`, `appointment_questions` | Database checks authenticated workspace membership |
-| Plans and continuity | `plans`, `plan_items`, `graph_nodes`, `graph_edges` | Same workspace boundary; cross-workspace child references are rejected |
-| Review and operation state | `human_review_cases`, `notifications`, `feedback` | Same workspace boundary; notifications have workspace-scoped idempotency keys |
+| Workspace and owner | `workspaces`, `workspace_members` | One authenticated owner; non-owner roles are rejected |
+| Governed public knowledge | `content_releases`, `public_sources`, `source_artifacts`, `source_blocks`, `ingestion_runs`, `evidence_review_tasks`, `evidence_review_decisions`, `weekly_profiles`, `guidance_fragments`, `guideline_chunks` | API clients read only published release data; ingestion/review internals remain administrative |
+| Journey and private records | `journey_states`, `private_documents`, `document_chunks`, `document_facts`, `health_facts`, `medication_mentions`, `symptom_events`, `appointments`, `appointment_questions` | Database derives access from the authenticated workspace owner |
+| Plans and continuity | `plans`, `plan_items`, `graph_nodes`, `graph_edges` | Same owner boundary; cross-workspace parent references are rejected |
+| Review and operation state | `human_review_cases`, `notifications`, `feedback` | Same owner boundary; notifications use workspace-scoped idempotency keys |
 
-## Security and correctness controls
+## Independent-review corrections
 
-- The client uses the authenticated Supabase user. Ordinary reads and writes do
-  not need a service-role key.
-- Workspace ownership comes from `auth.uid()`. A client cannot nominate a
-  different owner through `create_workspace`.
-- Owner membership cannot be inserted, rewritten or removed through the client
-  membership policies. Non-owner membership changes remain owner-controlled.
-- Public source, artifact, block, ingestion-run, review-task and review-decision
-  relationships use composite release keys. A stable ID from one corpus release
-  cannot silently point into another release.
-- Every one of the 16 user-owned tables has a membership policy. Public knowledge
-  has separate published-only policies; source artifacts and ingestion/review
-  tables have no anon/authenticated grant.
-- The private Storage bucket accepts PDF, PNG and JPEG objects up to 10 MB. Its
-  first path segment must be a workspace UUID visible to the signed-in user.
-- Deleting a private document cascades to its document chunks, extracted facts,
-  document-sourced facts/medication mentions and document graph nodes/edges.
-- Duplicate document bytes are blocked per workspace by `(workspace_id, sha256)`.
-- Journey updates use `replace_current_journey_state`, which locks the workspace,
-  checks the expected current version and atomically creates exactly one new
-  current version. A stale caller receives a serialization error.
-- `reset_demo_workspace_state` works only for the authenticated owner of a
-  fictional demo workspace and checks the workspace timestamp. It refuses to
-  proceed while Storage objects remain, because files must first be deleted via
-  the Storage API rather than by removing database metadata directly.
-- Plans cannot become saved/active until `user_confirmed_at` exists.
-- Vector dimensions remain unset until the team chooses the exact embedding
-  provider/model. No HNSW/IVFFlat index is created for an unknown dimension.
-- Private vector search takes an explicit workspace and checks membership inside
-  the database. Public vector search filters published release/status, journey
-  scope, jurisdiction and vector dimension, and caps results at 20.
+1. Non-owner membership is disabled. The database rejects `editor`, `reviewer`
+   and `viewer` rows instead of giving misleading labels identical powers.
+2. CI starts Supabase in Docker and tests both an upgrade from migration five and
+   a clean installation from zero.
+3. Five private dependency tables validate fact, public-guidance and evidence
+   relationships. Deleting or superseding a current health fact makes dependent
+   plans, plan items and appointment questions stale, forces journey
+   reconfirmation and removes its graph node in one transaction.
+4. `reset_seeded_demo_workspace` lists and deletes the exact Storage prefix before
+   invoking the database reseed. Storage failure prevents the database reset.
+5. Demo workspaces are session-scoped, use the versioned `maya-v1` seed, and are
+   idempotent for the same owner/session key.
+6. Journey-stage checks now define each allowed timing-source combination,
+   including unresolved possible pregnancy, manual week/day, due-date-derived,
+   approximate month, delivery-date and postpartum week/day input.
+7. Typed application contracts cover all 16 personal tables plus workspace and
+   owner membership.
+8. Direct `DELETE` permission on `private_documents` is revoked. The owner-checked
+   deletion function succeeds only after the corresponding Storage object is gone.
 
 ## Migrations
 
-1. `20260910000100_stage2_storage.sql` creates the full schema, policies,
-   Storage bucket and vector functions.
-2. `20260910000200_protect_workspace_owner.sql` protects the immutable owner
-   membership from client mutation.
-3. `20260911000100_bind_public_release_provenance.sql` binds all public
-   ingestion provenance to one content release.
-4. `20260911000200_workspace_lifecycle.sql` adds authenticated workspace
-   creation, atomic journey replacement, safe demo reset and document deduplication.
-5. `20260911000300_workspace_owner_visibility.sql` fixes `INSERT ... RETURNING`
-   for a newly created owner before the membership trigger completes.
+1. `20260910000100_stage2_storage.sql` — base schema, RLS, Storage and vector functions.
+2. `20260910000200_protect_workspace_owner.sql` — protects owner membership.
+3. `20260911000100_bind_public_release_provenance.sql` — binds ingestion records to one release.
+4. `20260911000200_workspace_lifecycle.sql` — workspace creation, journey compare-and-set and reset.
+5. `20260911000300_workspace_owner_visibility.sql` — permits owner visibility during creation.
+6. `20260911000400_owner_only_episode_boundary.sql` — owner-only access and workspace-as-episode rule.
+7. `20260911000500_journey_state_invariants.sql` — strict journey/timing combinations.
+8. `20260911000600_personal_dependency_invalidation.sql` — normalized dependencies and stale transitions.
+9. `20260911000700_versioned_demo_workspaces.sql` — per-session deterministic demo creation/reseed.
+10. `20260911000800_enforce_storage_first_documents.sql` — closes direct metadata-deletion bypass.
 
-All five appear in `supabase_migrations.schema_migrations`. The tracked,
-secret-free evidence file binds each migration filename to its canonical-text
-SHA-256 (UTF-8 with normalised line endings) and records the live check counts.
+All ten appear in remote migration history. The secret-free verification record
+binds each file to its canonical SHA-256 and records the remote schema counts.
 
 ## Verification
 
-Run locally from the repository root:
+The database suite contains 141 pgTAP assertions. It uses two fictional authenticated
+principals and covers policy inventory, owner/non-owner read and update behavior for
+all 16 personal tables, permitted deletes, the protected document exception,
+cross-workspace parent references, private vector retrieval, Storage policies,
+owner-only roles, dependency invalidation, document cascades and three demo resets.
+The transaction rolls back every fixture.
+
+A separate local API check uses two temporary authenticated users to exercise the
+real Auth, REST and Storage endpoints. Its 13 checks cover owner upload, listing,
+reading, updating and deleting; outsider denial; the Storage-first metadata gate;
+and complete fixture cleanup. It never prints credentials, file contents or
+personal data.
+
+Run from the repository root:
 
 ```powershell
-.venv/Scripts/python.exe -m scripts.check_stage2
-.venv/Scripts/python.exe -m unittest tests.test_storage -v
+.venv\Scripts\python.exe -m unittest discover -s tests -v
+.venv\Scripts\python.exe -m scripts.check_stage2
+pnpm exec supabase start
+pnpm exec supabase db reset --local
+pnpm exec supabase test db --local
+pnpm exec supabase db lint --local
 ```
 
-The first command checks all five SQL migrations, exported storage contracts,
-tracked remote counts and the exact migration-file hashes. CI runs it after the
-full Python tests and the Stage 0/1 checks.
+The CI workflow repeats the live suite twice: after upgrading the previously
+deployed five-migration schema and after a clean ten-migration replay.
 
 Review these artifacts:
 
-- `data/supabase/remote-verification.json` — secret-free live deployment proof;
-- `docs/STAGE-2-CHECK-RESULTS.json` — generated check result;
-- `data/schemas/storage.schema.json` — application/storage contracts;
-- `tests/test_storage.py` — static and typed negative tests.
+- `data/supabase/remote-verification.json` — secret-free remote deployment proof;
+- `docs/STAGE-2-CHECK-RESULTS.json` — generated static/remote contract result;
+- `data/schemas/storage.schema.json` — 18 application record contracts;
+- `supabase/tests/stage2_security_and_lifecycle.test.sql` — live database matrix;
+- `scripts/check_stage2_storage_api.py` — local Auth/REST/Storage boundary check;
+- `docs/STAGE-2-INDEPENDENT-REVIEW-RESPONSE.md` — finding-by-finding closure.
 
 ## Stage boundary
 
-Stage 2 supplies secure places and controlled state transitions. Stage 3 will
-connect Supabase Auth to onboarding and calculate journey timing. Stage 4 will
-upload only fictional/demo documents, delete file objects through the Storage
-API before a reset, extract proposed facts and ask the user to confirm them.
-Stage 5 will select an embedding provider, load approved public records and use
-the filtered retrieval functions.
-
-Human approval remains a Stage 0 content-release gate. Therefore public evidence
-tables and embeddings remain empty even though the database is ready to receive
-a future approved release.
+Stage 2 supplies storage, isolation, dependency integrity and repeatable demo
+state. Stage 3 connects Auth to onboarding and calculates journey timing. Stage 4
+uploads fictional documents and implements extraction plus user confirmation.
+Stage 5 selects the embedding model, loads only approved public records and builds
+hybrid retrieval. Human approval remains the Stage 0 release gate, so public health
+content and production embeddings remain unpublished.

@@ -1,0 +1,37 @@
+{
+  "project_name": "nestline-dev",
+  "project_ref": "jtmiduftpbvmahbmryki",
+  "database_region": "ap-northeast-2",
+  "verified_at": "2026-09-11T09:19:12.0342131+05:30",
+  "verification_scope": "Deployed schema catalogue plus local transactional, Auth/PostgREST, Storage, and Streamlit checks; no personal data and no clinical validation.",
+  "migration": {
+    "version": "20260911000900",
+    "name": "stage3_onboarding_commit",
+    "file_sha256": "388933d4661148e34e42cebe6b9984ed858dfbaa84a78cddd680ab7b6fa03531"
+  },
+  "hardening_migration": {
+    "version": "20260911001000",
+    "name": "stage3_exit_hardening",
+    "file_sha256": "e5b63e2e5a3b7ce4fb6f14ca8149d50339793761f91162e75bc1cdd5ebc4f2fe"
+  },
+  "checks": {
+    "migration_history_rows": 12,
+    "journey_provenance_columns": 8,
+    "symptom_provenance_columns": 4,
+    "onboarding_submission_indexes": 4,
+    "complete_onboarding_functions": 1,
+    "complete_onboarding_authenticated_grants": 1,
+    "journey_direct_mutation_grants": 0,
+    "legacy_journey_mutation_grants": 0,
+    "journey_hardening_constraints": 3,
+    "symptom_hardening_constraints": 1,
+    "journey_transition_triggers": 1,
+    "private_bounds_authenticated_grants": 0,
+    "stage3_pg_tap_assertions": 26,
+    "stage3_exit_hardening_pg_tap_assertions": 12,
+    "stage3_api_checks": 17,
+    "stage3_streamlit_render_checks": 1,
+    "temporary_fixture_rows_remaining": 0
+  },
+  "contains_secrets": false
+}

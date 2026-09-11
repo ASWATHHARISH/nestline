@@ -1,0 +1,972 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "source_span": {
+    "additionalProperties": false,
+    "description": "Exact source evidence; coordinates are optional for OCR/text adapters.",
+    "properties": {
+      "page": {
+        "minimum": 1,
+        "title": "Page",
+        "type": "integer"
+      },
+      "exact_text": {
+        "minLength": 1,
+        "title": "Exact Text",
+        "type": "string"
+      },
+      "start": {
+        "minimum": 0,
+        "title": "Start",
+        "type": "integer"
+      },
+      "end": {
+        "exclusiveMinimum": 0,
+        "title": "End",
+        "type": "integer"
+      },
+      "line": {
+        "anyOf": [
+          {
+            "minimum": 1,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Line"
+      },
+      "coordinates": {
+        "items": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        "title": "Coordinates",
+        "type": "array"
+      },
+      "coordinate_system": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Coordinate System"
+      }
+    },
+    "required": [
+      "page",
+      "exact_text",
+      "start",
+      "end"
+    ],
+    "title": "SourceSpan",
+    "type": "object"
+  },
+  "parsed_page": {
+    "additionalProperties": false,
+    "properties": {
+      "page": {
+        "minimum": 1,
+        "title": "Page",
+        "type": "integer"
+      },
+      "text": {
+        "title": "Text",
+        "type": "string"
+      },
+      "extraction_method": {
+        "enum": [
+          "embedded_text",
+          "ocr"
+        ],
+        "title": "Extraction Method",
+        "type": "string"
+      },
+      "text_sha256": {
+        "pattern": "^[a-f0-9]{64}$",
+        "title": "Text Sha256",
+        "type": "string"
+      }
+    },
+    "required": [
+      "page",
+      "text",
+      "extraction_method",
+      "text_sha256"
+    ],
+    "title": "ParsedPage",
+    "type": "object"
+  },
+  "upload_validation": {
+    "additionalProperties": false,
+    "properties": {
+      "original_filename": {
+        "minLength": 1,
+        "title": "Original Filename",
+        "type": "string"
+      },
+      "safe_filename": {
+        "minLength": 1,
+        "title": "Safe Filename",
+        "type": "string"
+      },
+      "media_type": {
+        "enum": [
+          "application/pdf",
+          "image/png",
+          "image/jpeg"
+        ],
+        "title": "Media Type",
+        "type": "string"
+      },
+      "byte_size": {
+        "exclusiveMinimum": 0,
+        "maximum": 10485760,
+        "title": "Byte Size",
+        "type": "integer"
+      },
+      "sha256": {
+        "pattern": "^[a-f0-9]{64}$",
+        "title": "Sha256",
+        "type": "string"
+      },
+      "page_count": {
+        "maximum": 100,
+        "minimum": 1,
+        "title": "Page Count",
+        "type": "integer"
+      },
+      "scan_status": {
+        "enum": [
+          "fixture_verified",
+          "clean"
+        ],
+        "title": "Scan Status",
+        "type": "string"
+      },
+      "scan_provider": {
+        "minLength": 1,
+        "title": "Scan Provider",
+        "type": "string"
+      },
+      "scan_version": {
+        "minLength": 1,
+        "title": "Scan Version",
+        "type": "string"
+      },
+      "expected_subject": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Expected Subject"
+      },
+      "subject_as_written": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Subject As Written"
+      }
+    },
+    "required": [
+      "original_filename",
+      "safe_filename",
+      "media_type",
+      "byte_size",
+      "sha256",
+      "page_count",
+      "scan_status",
+      "scan_provider",
+      "scan_version"
+    ],
+    "title": "UploadValidationResult",
+    "type": "object"
+  },
+  "candidate": {
+    "$defs": {
+      "CandidateFactType": {
+        "enum": [
+          "subject",
+          "journey_timing",
+          "allergy",
+          "condition",
+          "clinician",
+          "medication",
+          "medication_instruction",
+          "restriction",
+          "appointment",
+          "test_result",
+          "follow_up",
+          "other"
+        ],
+        "title": "CandidateFactType",
+        "type": "string"
+      },
+      "SourceSpan": {
+        "additionalProperties": false,
+        "description": "Exact source evidence; coordinates are optional for OCR/text adapters.",
+        "properties": {
+          "page": {
+            "minimum": 1,
+            "title": "Page",
+            "type": "integer"
+          },
+          "exact_text": {
+            "minLength": 1,
+            "title": "Exact Text",
+            "type": "string"
+          },
+          "start": {
+            "minimum": 0,
+            "title": "Start",
+            "type": "integer"
+          },
+          "end": {
+            "exclusiveMinimum": 0,
+            "title": "End",
+            "type": "integer"
+          },
+          "line": {
+            "anyOf": [
+              {
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Line"
+          },
+          "coordinates": {
+            "items": {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            "title": "Coordinates",
+            "type": "array"
+          },
+          "coordinate_system": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Coordinate System"
+          }
+        },
+        "required": [
+          "page",
+          "exact_text",
+          "start",
+          "end"
+        ],
+        "title": "SourceSpan",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "A proposal only. It cannot personalize anything until confirmation.",
+    "properties": {
+      "candidate_key": {
+        "minLength": 1,
+        "title": "Candidate Key",
+        "type": "string"
+      },
+      "field_name": {
+        "minLength": 1,
+        "title": "Field Name",
+        "type": "string"
+      },
+      "fact_type": {
+        "$ref": "#/$defs/CandidateFactType"
+      },
+      "value": {
+        "title": "Value"
+      },
+      "source": {
+        "$ref": "#/$defs/SourceSpan"
+      },
+      "confidence": {
+        "maximum": 1,
+        "minimum": 0,
+        "title": "Confidence",
+        "type": "number"
+      },
+      "completeness": {
+        "enum": [
+          "complete",
+          "partial",
+          "missing",
+          "uncertain"
+        ],
+        "title": "Completeness",
+        "type": "string"
+      },
+      "disposition": {
+        "enum": [
+          "extract_verbatim",
+          "abstain",
+          "manual_review"
+        ],
+        "title": "Disposition",
+        "type": "string"
+      },
+      "status": {
+        "const": "proposed",
+        "default": "proposed",
+        "title": "Status",
+        "type": "string"
+      },
+      "record_only": {
+        "default": false,
+        "title": "Record Only",
+        "type": "boolean"
+      },
+      "source_value_matches": {
+        "default": true,
+        "title": "Source Value Matches",
+        "type": "boolean"
+      },
+      "conflict_document_keys": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Conflict Document Keys",
+        "type": "array"
+      }
+    },
+    "required": [
+      "candidate_key",
+      "field_name",
+      "fact_type",
+      "value",
+      "source",
+      "confidence",
+      "completeness",
+      "disposition"
+    ],
+    "title": "DocumentCandidate",
+    "type": "object"
+  },
+  "extraction_packet": {
+    "$defs": {
+      "CandidateFactType": {
+        "enum": [
+          "subject",
+          "journey_timing",
+          "allergy",
+          "condition",
+          "clinician",
+          "medication",
+          "medication_instruction",
+          "restriction",
+          "appointment",
+          "test_result",
+          "follow_up",
+          "other"
+        ],
+        "title": "CandidateFactType",
+        "type": "string"
+      },
+      "DocumentCandidate": {
+        "additionalProperties": false,
+        "description": "A proposal only. It cannot personalize anything until confirmation.",
+        "properties": {
+          "candidate_key": {
+            "minLength": 1,
+            "title": "Candidate Key",
+            "type": "string"
+          },
+          "field_name": {
+            "minLength": 1,
+            "title": "Field Name",
+            "type": "string"
+          },
+          "fact_type": {
+            "$ref": "#/$defs/CandidateFactType"
+          },
+          "value": {
+            "title": "Value"
+          },
+          "source": {
+            "$ref": "#/$defs/SourceSpan"
+          },
+          "confidence": {
+            "maximum": 1,
+            "minimum": 0,
+            "title": "Confidence",
+            "type": "number"
+          },
+          "completeness": {
+            "enum": [
+              "complete",
+              "partial",
+              "missing",
+              "uncertain"
+            ],
+            "title": "Completeness",
+            "type": "string"
+          },
+          "disposition": {
+            "enum": [
+              "extract_verbatim",
+              "abstain",
+              "manual_review"
+            ],
+            "title": "Disposition",
+            "type": "string"
+          },
+          "status": {
+            "const": "proposed",
+            "default": "proposed",
+            "title": "Status",
+            "type": "string"
+          },
+          "record_only": {
+            "default": false,
+            "title": "Record Only",
+            "type": "boolean"
+          },
+          "source_value_matches": {
+            "default": true,
+            "title": "Source Value Matches",
+            "type": "boolean"
+          },
+          "conflict_document_keys": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Conflict Document Keys",
+            "type": "array"
+          }
+        },
+        "required": [
+          "candidate_key",
+          "field_name",
+          "fact_type",
+          "value",
+          "source",
+          "confidence",
+          "completeness",
+          "disposition"
+        ],
+        "title": "DocumentCandidate",
+        "type": "object"
+      },
+      "DocumentKind": {
+        "enum": [
+          "intake_summary",
+          "lab_report",
+          "medication_note",
+          "visit_summary",
+          "movement_note",
+          "follow_up",
+          "discharge_summary",
+          "other"
+        ],
+        "title": "DocumentKind",
+        "type": "string"
+      },
+      "ExtractionProviderTrace": {
+        "additionalProperties": false,
+        "properties": {
+          "provider": {
+            "minLength": 1,
+            "title": "Provider",
+            "type": "string"
+          },
+          "model": {
+            "minLength": 1,
+            "title": "Model",
+            "type": "string"
+          },
+          "schema_version": {
+            "default": "stage4-document-v1",
+            "minLength": 1,
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "trace_id": {
+            "default": "",
+            "title": "Trace Id",
+            "type": "string"
+          },
+          "latency_ms": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Latency Ms"
+          },
+          "input_tokens": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Input Tokens"
+          },
+          "output_tokens": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Output Tokens"
+          },
+          "estimated_cost_usd": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Estimated Cost Usd"
+          }
+        },
+        "required": [
+          "provider",
+          "model"
+        ],
+        "title": "ExtractionProviderTrace",
+        "type": "object"
+      },
+      "ParsedPage": {
+        "additionalProperties": false,
+        "properties": {
+          "page": {
+            "minimum": 1,
+            "title": "Page",
+            "type": "integer"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "extraction_method": {
+            "enum": [
+              "embedded_text",
+              "ocr"
+            ],
+            "title": "Extraction Method",
+            "type": "string"
+          },
+          "text_sha256": {
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Text Sha256",
+            "type": "string"
+          }
+        },
+        "required": [
+          "page",
+          "text",
+          "extraction_method",
+          "text_sha256"
+        ],
+        "title": "ParsedPage",
+        "type": "object"
+      },
+      "SourceSpan": {
+        "additionalProperties": false,
+        "description": "Exact source evidence; coordinates are optional for OCR/text adapters.",
+        "properties": {
+          "page": {
+            "minimum": 1,
+            "title": "Page",
+            "type": "integer"
+          },
+          "exact_text": {
+            "minLength": 1,
+            "title": "Exact Text",
+            "type": "string"
+          },
+          "start": {
+            "minimum": 0,
+            "title": "Start",
+            "type": "integer"
+          },
+          "end": {
+            "exclusiveMinimum": 0,
+            "title": "End",
+            "type": "integer"
+          },
+          "line": {
+            "anyOf": [
+              {
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Line"
+          },
+          "coordinates": {
+            "items": {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            "title": "Coordinates",
+            "type": "array"
+          },
+          "coordinate_system": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Coordinate System"
+          }
+        },
+        "required": [
+          "page",
+          "exact_text",
+          "start",
+          "end"
+        ],
+        "title": "SourceSpan",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "schema_version": {
+        "const": "stage4-document-v1",
+        "default": "stage4-document-v1",
+        "title": "Schema Version",
+        "type": "string"
+      },
+      "document_sha256": {
+        "pattern": "^[a-f0-9]{64}$",
+        "title": "Document Sha256",
+        "type": "string"
+      },
+      "document_kind": {
+        "$ref": "#/$defs/DocumentKind"
+      },
+      "classification_confidence": {
+        "maximum": 1,
+        "minimum": 0,
+        "title": "Classification Confidence",
+        "type": "number"
+      },
+      "subject_as_written": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Subject As Written"
+      },
+      "fictional": {
+        "title": "Fictional",
+        "type": "boolean"
+      },
+      "pages": {
+        "items": {
+          "$ref": "#/$defs/ParsedPage"
+        },
+        "maxItems": 100,
+        "minItems": 1,
+        "title": "Pages",
+        "type": "array"
+      },
+      "candidates": {
+        "items": {
+          "$ref": "#/$defs/DocumentCandidate"
+        },
+        "maxItems": 100,
+        "title": "Candidates",
+        "type": "array"
+      },
+      "untrusted_instruction_text": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Untrusted Instruction Text",
+        "type": "array"
+      },
+      "provider_trace": {
+        "$ref": "#/$defs/ExtractionProviderTrace"
+      }
+    },
+    "required": [
+      "document_sha256",
+      "document_kind",
+      "classification_confidence",
+      "fictional",
+      "pages",
+      "candidates",
+      "provider_trace"
+    ],
+    "title": "DocumentExtractionPacket",
+    "type": "object"
+  },
+  "confirmation_decision": {
+    "additionalProperties": false,
+    "properties": {
+      "candidate_key": {
+        "minLength": 1,
+        "title": "Candidate Key",
+        "type": "string"
+      },
+      "action": {
+        "enum": [
+          "confirm",
+          "edit_and_confirm",
+          "reject",
+          "keep_conflict",
+          "supersede"
+        ],
+        "title": "Action",
+        "type": "string"
+      },
+      "edited_value": {
+        "anyOf": [
+          {},
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Edited Value"
+      },
+      "supersedes_fact_id": {
+        "anyOf": [
+          {
+            "format": "uuid",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Supersedes Fact Id"
+      }
+    },
+    "required": [
+      "candidate_key",
+      "action"
+    ],
+    "title": "ConfirmationDecision",
+    "type": "object"
+  },
+  "review_request": {
+    "$defs": {
+      "ConfirmationDecision": {
+        "additionalProperties": false,
+        "properties": {
+          "candidate_key": {
+            "minLength": 1,
+            "title": "Candidate Key",
+            "type": "string"
+          },
+          "action": {
+            "enum": [
+              "confirm",
+              "edit_and_confirm",
+              "reject",
+              "keep_conflict",
+              "supersede"
+            ],
+            "title": "Action",
+            "type": "string"
+          },
+          "edited_value": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Edited Value"
+          },
+          "supersedes_fact_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Supersedes Fact Id"
+          }
+        },
+        "required": [
+          "candidate_key",
+          "action"
+        ],
+        "title": "ConfirmationDecision",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "workspace_id": {
+        "format": "uuid",
+        "title": "Workspace Id",
+        "type": "string"
+      },
+      "document_id": {
+        "format": "uuid",
+        "title": "Document Id",
+        "type": "string"
+      },
+      "expected_review_version": {
+        "minimum": 1,
+        "title": "Expected Review Version",
+        "type": "integer"
+      },
+      "submission_key": {
+        "maxLength": 128,
+        "minLength": 16,
+        "title": "Submission Key",
+        "type": "string"
+      },
+      "decisions": {
+        "items": {
+          "$ref": "#/$defs/ConfirmationDecision"
+        },
+        "maxItems": 100,
+        "minItems": 1,
+        "title": "Decisions",
+        "type": "array"
+      }
+    },
+    "required": [
+      "workspace_id",
+      "document_id",
+      "expected_review_version",
+      "submission_key",
+      "decisions"
+    ],
+    "title": "DocumentReviewRequest",
+    "type": "object"
+  },
+  "review_result": {
+    "additionalProperties": false,
+    "properties": {
+      "document_id": {
+        "format": "uuid",
+        "title": "Document Id",
+        "type": "string"
+      },
+      "review_version": {
+        "minimum": 1,
+        "title": "Review Version",
+        "type": "integer"
+      },
+      "confirmed_fact_ids": {
+        "items": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "title": "Confirmed Fact Ids",
+        "type": "array"
+      },
+      "conflict_fact_ids": {
+        "items": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "title": "Conflict Fact Ids",
+        "type": "array"
+      },
+      "rejected_candidate_keys": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Rejected Candidate Keys",
+        "type": "array"
+      },
+      "stale_plan_ids": {
+        "items": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "title": "Stale Plan Ids",
+        "type": "array"
+      },
+      "idempotent_replay": {
+        "title": "Idempotent Replay",
+        "type": "boolean"
+      },
+      "committed_at": {
+        "format": "date-time",
+        "title": "Committed At",
+        "type": "string"
+      }
+    },
+    "required": [
+      "document_id",
+      "review_version",
+      "idempotent_replay",
+      "committed_at"
+    ],
+    "title": "DocumentReviewResult",
+    "type": "object"
+  }
+}

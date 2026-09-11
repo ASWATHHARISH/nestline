@@ -1,0 +1,1501 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "journey_timing_input": {
+    "$defs": {
+      "ApproximateMonthTiming": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "approximate_month",
+            "default": "approximate_month",
+            "title": "Kind",
+            "type": "string"
+          },
+          "effective_date": {
+            "format": "date",
+            "title": "Effective Date",
+            "type": "string"
+          },
+          "pregnancy_month": {
+            "maximum": 9,
+            "minimum": 1,
+            "title": "Pregnancy Month",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "effective_date",
+          "pregnancy_month"
+        ],
+        "title": "ApproximateMonthTiming",
+        "type": "object"
+      },
+      "DeliveryDateTiming": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "delivery_date",
+            "default": "delivery_date",
+            "title": "Kind",
+            "type": "string"
+          },
+          "delivery_date": {
+            "format": "date",
+            "title": "Delivery Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "delivery_date"
+        ],
+        "title": "DeliveryDateTiming",
+        "type": "object"
+      },
+      "EstimatedDueDateTiming": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "estimated_due_date",
+            "default": "estimated_due_date",
+            "title": "Kind",
+            "type": "string"
+          },
+          "effective_date": {
+            "format": "date",
+            "title": "Effective Date",
+            "type": "string"
+          },
+          "estimated_due_date": {
+            "format": "date",
+            "title": "Estimated Due Date",
+            "type": "string"
+          },
+          "provenance": {
+            "default": "user_estimated_due_date",
+            "enum": [
+              "user_estimated_due_date",
+              "document_estimated_due_date"
+            ],
+            "title": "Provenance",
+            "type": "string"
+          },
+          "source_fact_ids": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Source Fact Ids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "effective_date",
+          "estimated_due_date"
+        ],
+        "title": "EstimatedDueDateTiming",
+        "type": "object"
+      },
+      "ManualWeekDayTiming": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "manual_week_day",
+            "default": "manual_week_day",
+            "title": "Kind",
+            "type": "string"
+          },
+          "effective_date": {
+            "format": "date",
+            "title": "Effective Date",
+            "type": "string"
+          },
+          "gestational_week": {
+            "maximum": 42,
+            "minimum": 1,
+            "title": "Gestational Week",
+            "type": "integer"
+          },
+          "gestational_day": {
+            "default": 0,
+            "maximum": 6,
+            "minimum": 0,
+            "title": "Gestational Day",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "effective_date",
+          "gestational_week"
+        ],
+        "title": "ManualWeekDayTiming",
+        "type": "object"
+      },
+      "PossiblePregnancyTiming": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "possible_pregnancy",
+            "default": "possible_pregnancy",
+            "title": "Kind",
+            "type": "string"
+          },
+          "effective_date": {
+            "format": "date",
+            "title": "Effective Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "effective_date"
+        ],
+        "title": "PossiblePregnancyTiming",
+        "type": "object"
+      },
+      "PostpartumWeekTiming": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "postpartum_week",
+            "default": "postpartum_week",
+            "title": "Kind",
+            "type": "string"
+          },
+          "effective_date": {
+            "format": "date",
+            "title": "Effective Date",
+            "type": "string"
+          },
+          "postpartum_week": {
+            "maximum": 12,
+            "minimum": 1,
+            "title": "Postpartum Week",
+            "type": "integer"
+          },
+          "postpartum_day": {
+            "default": 0,
+            "maximum": 6,
+            "minimum": 0,
+            "title": "Postpartum Day",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "effective_date",
+          "postpartum_week"
+        ],
+        "title": "PostpartumWeekTiming",
+        "type": "object"
+      }
+    },
+    "discriminator": {
+      "mapping": {
+        "approximate_month": "#/$defs/ApproximateMonthTiming",
+        "delivery_date": "#/$defs/DeliveryDateTiming",
+        "estimated_due_date": "#/$defs/EstimatedDueDateTiming",
+        "manual_week_day": "#/$defs/ManualWeekDayTiming",
+        "possible_pregnancy": "#/$defs/PossiblePregnancyTiming",
+        "postpartum_week": "#/$defs/PostpartumWeekTiming"
+      },
+      "propertyName": "kind"
+    },
+    "oneOf": [
+      {
+        "$ref": "#/$defs/PossiblePregnancyTiming"
+      },
+      {
+        "$ref": "#/$defs/EstimatedDueDateTiming"
+      },
+      {
+        "$ref": "#/$defs/ManualWeekDayTiming"
+      },
+      {
+        "$ref": "#/$defs/ApproximateMonthTiming"
+      },
+      {
+        "$ref": "#/$defs/DeliveryDateTiming"
+      },
+      {
+        "$ref": "#/$defs/PostpartumWeekTiming"
+      }
+    ]
+  },
+  "journey_resolution": {
+    "additionalProperties": false,
+    "properties": {
+      "stage": {
+        "enum": [
+          "possible_pregnancy",
+          "pregnancy",
+          "postpartum"
+        ],
+        "title": "Stage",
+        "type": "string"
+      },
+      "timing_source": {
+        "enum": [
+          "user_reported_possible_pregnancy",
+          "document_estimated_due_date",
+          "user_estimated_due_date",
+          "manual_week_day",
+          "approximate_month_range",
+          "delivery_date",
+          "postpartum_week"
+        ],
+        "title": "Timing Source",
+        "type": "string"
+      },
+      "effective_date": {
+        "format": "date",
+        "title": "Effective Date",
+        "type": "string"
+      },
+      "calculation_date": {
+        "format": "date",
+        "title": "Calculation Date",
+        "type": "string"
+      },
+      "gestational_week": {
+        "anyOf": [
+          {
+            "maximum": 42,
+            "minimum": 1,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Gestational Week"
+      },
+      "gestational_day": {
+        "anyOf": [
+          {
+            "maximum": 6,
+            "minimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Gestational Day"
+      },
+      "postpartum_week": {
+        "anyOf": [
+          {
+            "maximum": 12,
+            "minimum": 1,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Postpartum Week"
+      },
+      "postpartum_day": {
+        "anyOf": [
+          {
+            "maximum": 6,
+            "minimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Postpartum Day"
+      },
+      "estimated_due_date": {
+        "anyOf": [
+          {
+            "format": "date",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Estimated Due Date"
+      },
+      "delivery_date": {
+        "anyOf": [
+          {
+            "format": "date",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Delivery Date"
+      },
+      "approximate_month_min": {
+        "anyOf": [
+          {
+            "maximum": 9,
+            "minimum": 1,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Approximate Month Min"
+      },
+      "approximate_month_max": {
+        "anyOf": [
+          {
+            "maximum": 9,
+            "minimum": 1,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Approximate Month Max"
+      },
+      "approximate_week_min": {
+        "anyOf": [
+          {
+            "maximum": 42,
+            "minimum": 1,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Approximate Week Min"
+      },
+      "approximate_week_max": {
+        "anyOf": [
+          {
+            "maximum": 42,
+            "minimum": 1,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Approximate Week Max"
+      },
+      "position_day_min": {
+        "anyOf": [
+          {
+            "minimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Position Day Min"
+      },
+      "position_day_max": {
+        "anyOf": [
+          {
+            "minimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Position Day Max"
+      },
+      "source_fact_ids": {
+        "items": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "title": "Source Fact Ids",
+        "type": "array"
+      },
+      "certainty": {
+        "enum": [
+          "unknown",
+          "exact",
+          "approximate"
+        ],
+        "title": "Certainty",
+        "type": "string"
+      },
+      "display_label": {
+        "minLength": 1,
+        "title": "Display Label",
+        "type": "string"
+      },
+      "requires_confirmation": {
+        "default": true,
+        "title": "Requires Confirmation",
+        "type": "boolean"
+      },
+      "early_pregnancy_caution": {
+        "default": false,
+        "title": "Early Pregnancy Caution",
+        "type": "boolean"
+      },
+      "limitations": {
+        "items": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "title": "Limitations",
+        "type": "array"
+      }
+    },
+    "required": [
+      "stage",
+      "timing_source",
+      "effective_date",
+      "calculation_date",
+      "certainty",
+      "display_label"
+    ],
+    "title": "JourneyResolution",
+    "type": "object"
+  },
+  "dating_conflict": {
+    "additionalProperties": false,
+    "properties": {
+      "has_conflict": {
+        "title": "Has Conflict",
+        "type": "boolean"
+      },
+      "reason": {
+        "enum": [
+          "none",
+          "different_exact_day",
+          "outside_approximate_range",
+          "non_overlapping_ranges",
+          "episode_stage_regression"
+        ],
+        "title": "Reason",
+        "type": "string"
+      },
+      "current_state_id": {
+        "anyOf": [
+          {
+            "format": "uuid",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Current State Id"
+      },
+      "current_version": {
+        "default": 0,
+        "minimum": 0,
+        "title": "Current Version",
+        "type": "integer"
+      },
+      "current_display": {
+        "default": "",
+        "title": "Current Display",
+        "type": "string"
+      },
+      "proposed_display": {
+        "default": "",
+        "title": "Proposed Display",
+        "type": "string"
+      },
+      "difference_days": {
+        "anyOf": [
+          {
+            "minimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Difference Days"
+      },
+      "requires_user_choice": {
+        "title": "Requires User Choice",
+        "type": "boolean"
+      },
+      "commit_blocked": {
+        "default": false,
+        "title": "Commit Blocked",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "has_conflict",
+      "reason",
+      "requires_user_choice"
+    ],
+    "title": "DatingConflict",
+    "type": "object"
+  },
+  "onboarding_details": {
+    "$defs": {
+      "AppointmentInput": {
+        "additionalProperties": false,
+        "properties": {
+          "scheduled_for": {
+            "format": "date-time",
+            "title": "Scheduled For",
+            "type": "string"
+          },
+          "appointment_type": {
+            "minLength": 1,
+            "title": "Appointment Type",
+            "type": "string"
+          },
+          "location": {
+            "default": "",
+            "title": "Location",
+            "type": "string"
+          }
+        },
+        "required": [
+          "scheduled_for",
+          "appointment_type"
+        ],
+        "title": "AppointmentInput",
+        "type": "object"
+      },
+      "ReportedFactInput": {
+        "additionalProperties": false,
+        "properties": {
+          "category": {
+            "enum": [
+              "allergy",
+              "medical_history",
+              "dietary_restriction",
+              "movement_restriction",
+              "other_restriction"
+            ],
+            "title": "Category",
+            "type": "string"
+          },
+          "label": {
+            "minLength": 1,
+            "title": "Label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "category",
+          "label"
+        ],
+        "title": "ReportedFactInput",
+        "type": "object"
+      },
+      "SymptomInput": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "minLength": 1,
+            "title": "Description",
+            "type": "string"
+          },
+          "reported_at": {
+            "format": "date-time",
+            "title": "Reported At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "description",
+          "reported_at"
+        ],
+        "title": "SymptomInput",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "facts": {
+        "items": {
+          "$ref": "#/$defs/ReportedFactInput"
+        },
+        "maxItems": 40,
+        "title": "Facts",
+        "type": "array"
+      },
+      "symptoms": {
+        "items": {
+          "$ref": "#/$defs/SymptomInput"
+        },
+        "maxItems": 10,
+        "title": "Symptoms",
+        "type": "array"
+      },
+      "appointments": {
+        "items": {
+          "$ref": "#/$defs/AppointmentInput"
+        },
+        "maxItems": 10,
+        "title": "Appointments",
+        "type": "array"
+      }
+    },
+    "title": "OnboardingDetails",
+    "type": "object"
+  },
+  "prepared_symptom": {
+    "additionalProperties": false,
+    "properties": {
+      "description": {
+        "minLength": 1,
+        "title": "Description",
+        "type": "string"
+      },
+      "reported_at": {
+        "format": "date-time",
+        "title": "Reported At",
+        "type": "string"
+      },
+      "safety_route": {
+        "enum": [
+          "urgent",
+          "clarify",
+          "no_match"
+        ],
+        "title": "Safety Route",
+        "type": "string"
+      },
+      "matched_rule_ids": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Matched Rule Ids",
+        "type": "array"
+      },
+      "safety_message": {
+        "minLength": 1,
+        "title": "Safety Message",
+        "type": "string"
+      },
+      "safety_spec_version": {
+        "minLength": 1,
+        "title": "Safety Spec Version",
+        "type": "string"
+      },
+      "safety_evaluation_only": {
+        "title": "Safety Evaluation Only",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "description",
+      "reported_at",
+      "safety_route",
+      "safety_message",
+      "safety_spec_version",
+      "safety_evaluation_only"
+    ],
+    "title": "PreparedSymptom",
+    "type": "object"
+  },
+  "onboarding_draft": {
+    "$defs": {
+      "AppointmentInput": {
+        "additionalProperties": false,
+        "properties": {
+          "scheduled_for": {
+            "format": "date-time",
+            "title": "Scheduled For",
+            "type": "string"
+          },
+          "appointment_type": {
+            "minLength": 1,
+            "title": "Appointment Type",
+            "type": "string"
+          },
+          "location": {
+            "default": "",
+            "title": "Location",
+            "type": "string"
+          }
+        },
+        "required": [
+          "scheduled_for",
+          "appointment_type"
+        ],
+        "title": "AppointmentInput",
+        "type": "object"
+      },
+      "ApproximateMonthTiming": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "approximate_month",
+            "default": "approximate_month",
+            "title": "Kind",
+            "type": "string"
+          },
+          "effective_date": {
+            "format": "date",
+            "title": "Effective Date",
+            "type": "string"
+          },
+          "pregnancy_month": {
+            "maximum": 9,
+            "minimum": 1,
+            "title": "Pregnancy Month",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "effective_date",
+          "pregnancy_month"
+        ],
+        "title": "ApproximateMonthTiming",
+        "type": "object"
+      },
+      "DatingConflict": {
+        "additionalProperties": false,
+        "properties": {
+          "has_conflict": {
+            "title": "Has Conflict",
+            "type": "boolean"
+          },
+          "reason": {
+            "enum": [
+              "none",
+              "different_exact_day",
+              "outside_approximate_range",
+              "non_overlapping_ranges",
+              "episode_stage_regression"
+            ],
+            "title": "Reason",
+            "type": "string"
+          },
+          "current_state_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Current State Id"
+          },
+          "current_version": {
+            "default": 0,
+            "minimum": 0,
+            "title": "Current Version",
+            "type": "integer"
+          },
+          "current_display": {
+            "default": "",
+            "title": "Current Display",
+            "type": "string"
+          },
+          "proposed_display": {
+            "default": "",
+            "title": "Proposed Display",
+            "type": "string"
+          },
+          "difference_days": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Difference Days"
+          },
+          "requires_user_choice": {
+            "title": "Requires User Choice",
+            "type": "boolean"
+          },
+          "commit_blocked": {
+            "default": false,
+            "title": "Commit Blocked",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "has_conflict",
+          "reason",
+          "requires_user_choice"
+        ],
+        "title": "DatingConflict",
+        "type": "object"
+      },
+      "DeliveryDateTiming": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "delivery_date",
+            "default": "delivery_date",
+            "title": "Kind",
+            "type": "string"
+          },
+          "delivery_date": {
+            "format": "date",
+            "title": "Delivery Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "delivery_date"
+        ],
+        "title": "DeliveryDateTiming",
+        "type": "object"
+      },
+      "EstimatedDueDateTiming": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "estimated_due_date",
+            "default": "estimated_due_date",
+            "title": "Kind",
+            "type": "string"
+          },
+          "effective_date": {
+            "format": "date",
+            "title": "Effective Date",
+            "type": "string"
+          },
+          "estimated_due_date": {
+            "format": "date",
+            "title": "Estimated Due Date",
+            "type": "string"
+          },
+          "provenance": {
+            "default": "user_estimated_due_date",
+            "enum": [
+              "user_estimated_due_date",
+              "document_estimated_due_date"
+            ],
+            "title": "Provenance",
+            "type": "string"
+          },
+          "source_fact_ids": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Source Fact Ids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "effective_date",
+          "estimated_due_date"
+        ],
+        "title": "EstimatedDueDateTiming",
+        "type": "object"
+      },
+      "JourneyResolution": {
+        "additionalProperties": false,
+        "properties": {
+          "stage": {
+            "enum": [
+              "possible_pregnancy",
+              "pregnancy",
+              "postpartum"
+            ],
+            "title": "Stage",
+            "type": "string"
+          },
+          "timing_source": {
+            "enum": [
+              "user_reported_possible_pregnancy",
+              "document_estimated_due_date",
+              "user_estimated_due_date",
+              "manual_week_day",
+              "approximate_month_range",
+              "delivery_date",
+              "postpartum_week"
+            ],
+            "title": "Timing Source",
+            "type": "string"
+          },
+          "effective_date": {
+            "format": "date",
+            "title": "Effective Date",
+            "type": "string"
+          },
+          "calculation_date": {
+            "format": "date",
+            "title": "Calculation Date",
+            "type": "string"
+          },
+          "gestational_week": {
+            "anyOf": [
+              {
+                "maximum": 42,
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Gestational Week"
+          },
+          "gestational_day": {
+            "anyOf": [
+              {
+                "maximum": 6,
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Gestational Day"
+          },
+          "postpartum_week": {
+            "anyOf": [
+              {
+                "maximum": 12,
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Postpartum Week"
+          },
+          "postpartum_day": {
+            "anyOf": [
+              {
+                "maximum": 6,
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Postpartum Day"
+          },
+          "estimated_due_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Estimated Due Date"
+          },
+          "delivery_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Delivery Date"
+          },
+          "approximate_month_min": {
+            "anyOf": [
+              {
+                "maximum": 9,
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Approximate Month Min"
+          },
+          "approximate_month_max": {
+            "anyOf": [
+              {
+                "maximum": 9,
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Approximate Month Max"
+          },
+          "approximate_week_min": {
+            "anyOf": [
+              {
+                "maximum": 42,
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Approximate Week Min"
+          },
+          "approximate_week_max": {
+            "anyOf": [
+              {
+                "maximum": 42,
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Approximate Week Max"
+          },
+          "position_day_min": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Position Day Min"
+          },
+          "position_day_max": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Position Day Max"
+          },
+          "source_fact_ids": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Source Fact Ids",
+            "type": "array"
+          },
+          "certainty": {
+            "enum": [
+              "unknown",
+              "exact",
+              "approximate"
+            ],
+            "title": "Certainty",
+            "type": "string"
+          },
+          "display_label": {
+            "minLength": 1,
+            "title": "Display Label",
+            "type": "string"
+          },
+          "requires_confirmation": {
+            "default": true,
+            "title": "Requires Confirmation",
+            "type": "boolean"
+          },
+          "early_pregnancy_caution": {
+            "default": false,
+            "title": "Early Pregnancy Caution",
+            "type": "boolean"
+          },
+          "limitations": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "title": "Limitations",
+            "type": "array"
+          }
+        },
+        "required": [
+          "stage",
+          "timing_source",
+          "effective_date",
+          "calculation_date",
+          "certainty",
+          "display_label"
+        ],
+        "title": "JourneyResolution",
+        "type": "object"
+      },
+      "ManualWeekDayTiming": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "manual_week_day",
+            "default": "manual_week_day",
+            "title": "Kind",
+            "type": "string"
+          },
+          "effective_date": {
+            "format": "date",
+            "title": "Effective Date",
+            "type": "string"
+          },
+          "gestational_week": {
+            "maximum": 42,
+            "minimum": 1,
+            "title": "Gestational Week",
+            "type": "integer"
+          },
+          "gestational_day": {
+            "default": 0,
+            "maximum": 6,
+            "minimum": 0,
+            "title": "Gestational Day",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "effective_date",
+          "gestational_week"
+        ],
+        "title": "ManualWeekDayTiming",
+        "type": "object"
+      },
+      "OnboardingDetails": {
+        "additionalProperties": false,
+        "properties": {
+          "facts": {
+            "items": {
+              "$ref": "#/$defs/ReportedFactInput"
+            },
+            "maxItems": 40,
+            "title": "Facts",
+            "type": "array"
+          },
+          "symptoms": {
+            "items": {
+              "$ref": "#/$defs/SymptomInput"
+            },
+            "maxItems": 10,
+            "title": "Symptoms",
+            "type": "array"
+          },
+          "appointments": {
+            "items": {
+              "$ref": "#/$defs/AppointmentInput"
+            },
+            "maxItems": 10,
+            "title": "Appointments",
+            "type": "array"
+          }
+        },
+        "title": "OnboardingDetails",
+        "type": "object"
+      },
+      "PossiblePregnancyTiming": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "possible_pregnancy",
+            "default": "possible_pregnancy",
+            "title": "Kind",
+            "type": "string"
+          },
+          "effective_date": {
+            "format": "date",
+            "title": "Effective Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "effective_date"
+        ],
+        "title": "PossiblePregnancyTiming",
+        "type": "object"
+      },
+      "PostpartumWeekTiming": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "postpartum_week",
+            "default": "postpartum_week",
+            "title": "Kind",
+            "type": "string"
+          },
+          "effective_date": {
+            "format": "date",
+            "title": "Effective Date",
+            "type": "string"
+          },
+          "postpartum_week": {
+            "maximum": 12,
+            "minimum": 1,
+            "title": "Postpartum Week",
+            "type": "integer"
+          },
+          "postpartum_day": {
+            "default": 0,
+            "maximum": 6,
+            "minimum": 0,
+            "title": "Postpartum Day",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "effective_date",
+          "postpartum_week"
+        ],
+        "title": "PostpartumWeekTiming",
+        "type": "object"
+      },
+      "PreparedSymptom": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "minLength": 1,
+            "title": "Description",
+            "type": "string"
+          },
+          "reported_at": {
+            "format": "date-time",
+            "title": "Reported At",
+            "type": "string"
+          },
+          "safety_route": {
+            "enum": [
+              "urgent",
+              "clarify",
+              "no_match"
+            ],
+            "title": "Safety Route",
+            "type": "string"
+          },
+          "matched_rule_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Matched Rule Ids",
+            "type": "array"
+          },
+          "safety_message": {
+            "minLength": 1,
+            "title": "Safety Message",
+            "type": "string"
+          },
+          "safety_spec_version": {
+            "minLength": 1,
+            "title": "Safety Spec Version",
+            "type": "string"
+          },
+          "safety_evaluation_only": {
+            "title": "Safety Evaluation Only",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "description",
+          "reported_at",
+          "safety_route",
+          "safety_message",
+          "safety_spec_version",
+          "safety_evaluation_only"
+        ],
+        "title": "PreparedSymptom",
+        "type": "object"
+      },
+      "ReportedFactInput": {
+        "additionalProperties": false,
+        "properties": {
+          "category": {
+            "enum": [
+              "allergy",
+              "medical_history",
+              "dietary_restriction",
+              "movement_restriction",
+              "other_restriction"
+            ],
+            "title": "Category",
+            "type": "string"
+          },
+          "label": {
+            "minLength": 1,
+            "title": "Label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "category",
+          "label"
+        ],
+        "title": "ReportedFactInput",
+        "type": "object"
+      },
+      "SymptomInput": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "minLength": 1,
+            "title": "Description",
+            "type": "string"
+          },
+          "reported_at": {
+            "format": "date-time",
+            "title": "Reported At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "description",
+          "reported_at"
+        ],
+        "title": "SymptomInput",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "timing": {
+        "discriminator": {
+          "mapping": {
+            "approximate_month": "#/$defs/ApproximateMonthTiming",
+            "delivery_date": "#/$defs/DeliveryDateTiming",
+            "estimated_due_date": "#/$defs/EstimatedDueDateTiming",
+            "manual_week_day": "#/$defs/ManualWeekDayTiming",
+            "possible_pregnancy": "#/$defs/PossiblePregnancyTiming",
+            "postpartum_week": "#/$defs/PostpartumWeekTiming"
+          },
+          "propertyName": "kind"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/PossiblePregnancyTiming"
+          },
+          {
+            "$ref": "#/$defs/EstimatedDueDateTiming"
+          },
+          {
+            "$ref": "#/$defs/ManualWeekDayTiming"
+          },
+          {
+            "$ref": "#/$defs/ApproximateMonthTiming"
+          },
+          {
+            "$ref": "#/$defs/DeliveryDateTiming"
+          },
+          {
+            "$ref": "#/$defs/PostpartumWeekTiming"
+          }
+        ],
+        "title": "Timing"
+      },
+      "resolution": {
+        "$ref": "#/$defs/JourneyResolution"
+      },
+      "conflict": {
+        "$ref": "#/$defs/DatingConflict"
+      },
+      "details": {
+        "$ref": "#/$defs/OnboardingDetails"
+      },
+      "prepared_symptoms": {
+        "items": {
+          "$ref": "#/$defs/PreparedSymptom"
+        },
+        "title": "Prepared Symptoms",
+        "type": "array"
+      }
+    },
+    "required": [
+      "timing",
+      "resolution",
+      "conflict",
+      "details"
+    ],
+    "title": "OnboardingDraft",
+    "type": "object"
+  },
+  "onboarding_commit_result": {
+    "additionalProperties": false,
+    "properties": {
+      "journey_state_id": {
+        "format": "uuid",
+        "title": "Journey State Id",
+        "type": "string"
+      },
+      "version": {
+        "minimum": 1,
+        "title": "Version",
+        "type": "integer"
+      },
+      "fact_ids": {
+        "items": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "title": "Fact Ids",
+        "type": "array"
+      },
+      "symptom_event_ids": {
+        "items": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "title": "Symptom Event Ids",
+        "type": "array"
+      },
+      "appointment_ids": {
+        "items": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "title": "Appointment Ids",
+        "type": "array"
+      },
+      "idempotent_replay": {
+        "default": false,
+        "title": "Idempotent Replay",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "journey_state_id",
+      "version"
+    ],
+    "title": "OnboardingCommitResult",
+    "type": "object"
+  }
+}
