@@ -47,6 +47,8 @@
 | `docs/DEMO-WORK-LOG.md` | Failure, recovery and final-evidence record |
 | `docs/STAGE-5-RECTIFICATION-RESPONSE.md` | Marks the first rectification as historical/superseded |
 
+Additional CI repair file: supabase/tests/stage3_onboarding.test.sql aligns its future-date assertion with the application India-date contract.
+
 No migration or environment/configuration file changed.
 
 ## 3. Before-and-after reproductions
@@ -164,6 +166,11 @@ A relevant unresolved category requires clarification/abstention. An unrelated a
 - Publication to the review branch is authorized. Nothing was merged or deployed.
 - No migration was added or modified.
 
+## GitHub check repair
+
+The first pushed run, 34636253179, passed validate but failed supabase-integration in the combined Stage 3 upgrade step. Local reproduction isolated the failure to the Stage 3 future-calculation-date pgTAP assertion. The test used PostgreSQL UTC current_date plus one, while the application validates against Asia/Kolkata. After midnight in India but before midnight UTC, the test value was India’s current date and was correctly accepted, causing the next assertion to see journey version 2.
+
+The test now constructs tomorrow from the Asia/Kolkata date. After correction, both the Stage 3 to current upgrade path and clean replay pass 254/254 pgTAP assertions, 70/70 authenticated API checks and unscoped workflow lint with zero errors.
 ## 10. Remaining limitations and disagreements
 
 No material review finding was rejected. The findings were reproducible and required correction.

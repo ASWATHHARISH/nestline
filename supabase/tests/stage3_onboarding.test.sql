@@ -166,7 +166,10 @@ select is(pg_temp.sqlstate_of($command$
   select public.complete_onboarding(
     '13000000-0000-0000-0000-000000000011', 1,
     'stage3-pgtap-submission-0003', repeat('c', 64),
-    request.journey || jsonb_build_object('calculation_date', (current_date + 1)::text),
+    request.journey || jsonb_build_object(
+      'calculation_date',
+      ((clock_timestamp() at time zone 'Asia/Kolkata')::date + 1)::text
+    ),
     false, null, null, '[]'::jsonb, '[]'::jsonb, '[]'::jsonb
   ) from stage3_request request
 $command$), '22023', 'future calculation date is rejected');

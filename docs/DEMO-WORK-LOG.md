@@ -787,4 +787,6 @@ Final local evidence: 223/223 Python tests, 47/47 focused Stage 5 tests, 64/64 c
 
 A local Supabase reset initially returned while schema initialization was still settling; readiness was checked directly before rerunning the exact upgrade successfully. One API checker was first invoked with system Python and stopped on a missing development package before any API assertion; the project virtual environment passed it 15/15.
 
+The first GitHub run after publication passed validate and failed the combined Supabase step because a Stage 3 future-date test mixed UTC current_date with the application India-date guard at midnight IST. The test clock was aligned to Asia/Kolkata; both upgrade paths and the clean path then passed locally before republishing.
+
 **Decision:** Stage 5 is `READY FOR INDEPENDENT RE-REVIEW` locally. Stage 6 remains blocked. The corrected implementation commit is `467422a62a3db31740a2d631538a73c2f34cc526` and is authorized for publication to the review branch; no migration was deployed.

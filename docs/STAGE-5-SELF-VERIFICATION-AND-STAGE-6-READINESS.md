@@ -135,6 +135,7 @@ Application-schema lint was run only over Nestline `public` and `private` schema
 2. During the exact migration test, Supabase CLI 2.117 on Windows returned from `db reset` while local schema initialization was still settling. The first fixture attempt inserted its Auth row and then met a table that was not ready. The database was reset again, readiness was verified from PostgreSQL, and the exact upgrade passed cleanly.
 3. The first Stage 4 authenticated checker invocation used system Python and stopped at import time because PyMuPDF was absent. It made no API assertion. Rerunning with the project virtual environment passed 15/15; Stage 5 then passed 25/25.
 4. A PowerShell loop exited after three individually successful pgTAP files. The remaining three were run explicitly, and all six total 254/254.
+5. The first pushed GitHub run passed validate but exposed a UTC/India-midnight defect in the Stage 3 future-date test. The test now derives tomorrow from Asia/Kolkata, matching the database guard. Exact Stage 3 upgrade and clean-install paths both pass the complete database/API/lint sequence locally.
 
 ## Exact commands used
 
