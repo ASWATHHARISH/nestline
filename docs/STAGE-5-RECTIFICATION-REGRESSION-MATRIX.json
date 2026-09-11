@@ -1,0 +1,841 @@
+{
+  "schema_version": "stage5-rectification-matrix-v1",
+  "reviewed_commit": "3991896135eca094bc0ab0462f3e87c615469978",
+  "fixture_only": true,
+  "contains_real_medical_data": false,
+  "reproduced_before": {
+    "public_then_causal": {
+      "cached_paths": [],
+      "fresh_paths": [
+        "PATH-DOC-RESTRICTION-STALE-PLAN"
+      ],
+      "equivalent": false
+    },
+    "causal_then_public": {
+      "cached_paths": [
+        "PATH-DOC-RESTRICTION-STALE-PLAN"
+      ],
+      "fresh_paths": [],
+      "equivalent": false
+    },
+    "public_max_1_then_5": {
+      "cached_count": 2,
+      "fresh_count": 5,
+      "equivalent": false
+    },
+    "personal_max_1_then_5": {
+      "cached_count": 2,
+      "fresh_count": 5,
+      "equivalent": false
+    },
+    "fabricated_policy": {
+      "accepted": true,
+      "ordinary_generation_allowed": true,
+      "should_abstain": false
+    },
+    "contradictory_packet": {
+      "accepted": true
+    },
+    "generic_allergy_conflict": {
+      "surfaced": false,
+      "support_state": "fully_supported",
+      "should_abstain": false
+    }
+  },
+  "corrected_after": {
+    "cache_matrix": [
+      {
+        "kind": "policy_order",
+        "first": "public_guidance",
+        "second": "causal_explanation",
+        "keys_separated": true,
+        "cached": {
+          "evidence_ids": [],
+          "personal_fact_ids": [
+            "a2222222-2222-4222-8222-222222222222"
+          ],
+          "personal_passage_ids": [],
+          "graph_path_ids": [
+            "PATH-DOC-RESTRICTION-STALE-PLAN"
+          ],
+          "conflict_ids": [],
+          "missing_fields": [],
+          "answerability": "fully_supported",
+          "ordinary_generation_allowed": true,
+          "should_abstain": false,
+          "abstention_reason": "none",
+          "required_citations": [
+            "personal-fact:a2222222-2222-4222-8222-222222222222"
+          ],
+          "policy_id": "stage5-answerability-v3:causal_explanation:movement",
+          "resolved_state_version": 3
+        },
+        "fresh": {
+          "evidence_ids": [],
+          "personal_fact_ids": [
+            "a2222222-2222-4222-8222-222222222222"
+          ],
+          "personal_passage_ids": [],
+          "graph_path_ids": [
+            "PATH-DOC-RESTRICTION-STALE-PLAN"
+          ],
+          "conflict_ids": [],
+          "missing_fields": [],
+          "answerability": "fully_supported",
+          "ordinary_generation_allowed": true,
+          "should_abstain": false,
+          "abstention_reason": "none",
+          "required_citations": [
+            "personal-fact:a2222222-2222-4222-8222-222222222222"
+          ],
+          "policy_id": "stage5-answerability-v3:causal_explanation:movement",
+          "resolved_state_version": 3
+        },
+        "equivalent": true
+      },
+      {
+        "kind": "policy_order",
+        "first": "causal_explanation",
+        "second": "public_guidance",
+        "keys_separated": true,
+        "cached": {
+          "evidence_ids": [
+            "EV-COND-POS",
+            "EV-MOVE-24"
+          ],
+          "personal_fact_ids": [
+            "a2222222-2222-4222-8222-222222222222"
+          ],
+          "personal_passage_ids": [],
+          "graph_path_ids": [],
+          "conflict_ids": [],
+          "missing_fields": [],
+          "answerability": "fully_supported",
+          "ordinary_generation_allowed": true,
+          "should_abstain": false,
+          "abstention_reason": "none",
+          "required_citations": [
+            "EV-COND-POS",
+            "EV-MOVE-24",
+            "personal-fact:a2222222-2222-4222-8222-222222222222"
+          ],
+          "policy_id": "stage5-answerability-v3:public_guidance:movement",
+          "resolved_state_version": 3
+        },
+        "fresh": {
+          "evidence_ids": [
+            "EV-COND-POS",
+            "EV-MOVE-24"
+          ],
+          "personal_fact_ids": [
+            "a2222222-2222-4222-8222-222222222222"
+          ],
+          "personal_passage_ids": [],
+          "graph_path_ids": [],
+          "conflict_ids": [],
+          "missing_fields": [],
+          "answerability": "fully_supported",
+          "ordinary_generation_allowed": true,
+          "should_abstain": false,
+          "abstention_reason": "none",
+          "required_citations": [
+            "EV-COND-POS",
+            "EV-MOVE-24",
+            "personal-fact:a2222222-2222-4222-8222-222222222222"
+          ],
+          "policy_id": "stage5-answerability-v3:public_guidance:movement",
+          "resolved_state_version": 3
+        },
+        "equivalent": true
+      },
+      {
+        "kind": "policy_order",
+        "first": "personal_record_lookup",
+        "second": "mixed_personalized_guidance",
+        "keys_separated": true,
+        "cached": {
+          "evidence_ids": [
+            "EV-NUT-24"
+          ],
+          "personal_fact_ids": [
+            "a1111111-1111-4111-8111-111111111111"
+          ],
+          "personal_passage_ids": [
+            "personal-b1111111-1111-4111-8111-111111111111"
+          ],
+          "graph_path_ids": [],
+          "conflict_ids": [],
+          "missing_fields": [],
+          "answerability": "fully_supported",
+          "ordinary_generation_allowed": true,
+          "should_abstain": false,
+          "abstention_reason": "none",
+          "required_citations": [
+            "EV-NUT-24",
+            "personal-fact:a1111111-1111-4111-8111-111111111111",
+            "personal-passage:b1111111-1111-4111-8111-111111111111"
+          ],
+          "policy_id": "stage5-answerability-v3:mixed_personalized_guidance:nutrition",
+          "resolved_state_version": 3
+        },
+        "fresh": {
+          "evidence_ids": [
+            "EV-NUT-24"
+          ],
+          "personal_fact_ids": [
+            "a1111111-1111-4111-8111-111111111111"
+          ],
+          "personal_passage_ids": [
+            "personal-b1111111-1111-4111-8111-111111111111"
+          ],
+          "graph_path_ids": [],
+          "conflict_ids": [],
+          "missing_fields": [],
+          "answerability": "fully_supported",
+          "ordinary_generation_allowed": true,
+          "should_abstain": false,
+          "abstention_reason": "none",
+          "required_citations": [
+            "EV-NUT-24",
+            "personal-fact:a1111111-1111-4111-8111-111111111111",
+            "personal-passage:b1111111-1111-4111-8111-111111111111"
+          ],
+          "policy_id": "stage5-answerability-v3:mixed_personalized_guidance:nutrition",
+          "resolved_state_version": 3
+        },
+        "equivalent": true
+      },
+      {
+        "kind": "policy_order",
+        "first": "mixed_personalized_guidance",
+        "second": "personal_record_lookup",
+        "keys_separated": true,
+        "cached": {
+          "evidence_ids": [],
+          "personal_fact_ids": [
+            "a1111111-1111-4111-8111-111111111111"
+          ],
+          "personal_passage_ids": [
+            "personal-b1111111-1111-4111-8111-111111111111"
+          ],
+          "graph_path_ids": [],
+          "conflict_ids": [],
+          "missing_fields": [],
+          "answerability": "fully_supported",
+          "ordinary_generation_allowed": true,
+          "should_abstain": false,
+          "abstention_reason": "none",
+          "required_citations": [
+            "personal-fact:a1111111-1111-4111-8111-111111111111",
+            "personal-passage:b1111111-1111-4111-8111-111111111111"
+          ],
+          "policy_id": "stage5-answerability-v3:personal_record_lookup:nutrition",
+          "resolved_state_version": 3
+        },
+        "fresh": {
+          "evidence_ids": [],
+          "personal_fact_ids": [
+            "a1111111-1111-4111-8111-111111111111"
+          ],
+          "personal_passage_ids": [
+            "personal-b1111111-1111-4111-8111-111111111111"
+          ],
+          "graph_path_ids": [],
+          "conflict_ids": [],
+          "missing_fields": [],
+          "answerability": "fully_supported",
+          "ordinary_generation_allowed": true,
+          "should_abstain": false,
+          "abstention_reason": "none",
+          "required_citations": [
+            "personal-fact:a1111111-1111-4111-8111-111111111111",
+            "personal-passage:b1111111-1111-4111-8111-111111111111"
+          ],
+          "policy_id": "stage5-answerability-v3:personal_record_lookup:nutrition",
+          "resolved_state_version": 3
+        },
+        "equivalent": true
+      },
+      {
+        "kind": "max_candidates",
+        "purpose": "public_guidance",
+        "first": 1,
+        "second": 5,
+        "public_keys_separated": true,
+        "personal_keys_separated": true,
+        "cached": {
+          "evidence_ids": [
+            "EV-NUT-24",
+            "EV-NUT-24-X1",
+            "EV-NUT-24-X2",
+            "EV-NUT-24-X3",
+            "EV-NUT-24-X4"
+          ],
+          "personal_fact_ids": [
+            "a1111111-1111-4111-8111-111111111111"
+          ],
+          "personal_passage_ids": [],
+          "graph_path_ids": [],
+          "conflict_ids": [],
+          "missing_fields": [],
+          "answerability": "fully_supported",
+          "ordinary_generation_allowed": true,
+          "should_abstain": false,
+          "abstention_reason": "none",
+          "required_citations": [
+            "EV-NUT-24",
+            "EV-NUT-24-X1",
+            "EV-NUT-24-X2",
+            "EV-NUT-24-X3",
+            "EV-NUT-24-X4",
+            "personal-fact:a1111111-1111-4111-8111-111111111111"
+          ],
+          "policy_id": "stage5-answerability-v3:public_guidance:nutrition",
+          "resolved_state_version": 3
+        },
+        "fresh": {
+          "evidence_ids": [
+            "EV-NUT-24",
+            "EV-NUT-24-X1",
+            "EV-NUT-24-X2",
+            "EV-NUT-24-X3",
+            "EV-NUT-24-X4"
+          ],
+          "personal_fact_ids": [
+            "a1111111-1111-4111-8111-111111111111"
+          ],
+          "personal_passage_ids": [],
+          "graph_path_ids": [],
+          "conflict_ids": [],
+          "missing_fields": [],
+          "answerability": "fully_supported",
+          "ordinary_generation_allowed": true,
+          "should_abstain": false,
+          "abstention_reason": "none",
+          "required_citations": [
+            "EV-NUT-24",
+            "EV-NUT-24-X1",
+            "EV-NUT-24-X2",
+            "EV-NUT-24-X3",
+            "EV-NUT-24-X4",
+            "personal-fact:a1111111-1111-4111-8111-111111111111"
+          ],
+          "policy_id": "stage5-answerability-v3:public_guidance:nutrition",
+          "resolved_state_version": 3
+        },
+        "equivalent": true
+      },
+      {
+        "kind": "max_candidates",
+        "purpose": "public_guidance",
+        "first": 5,
+        "second": 1,
+        "public_keys_separated": true,
+        "personal_keys_separated": true,
+        "cached": {
+          "evidence_ids": [
+            "EV-NUT-24"
+          ],
+          "personal_fact_ids": [
+            "a1111111-1111-4111-8111-111111111111"
+          ],
+          "personal_passage_ids": [],
+          "graph_path_ids": [],
+          "conflict_ids": [],
+          "missing_fields": [],
+          "answerability": "fully_supported",
+          "ordinary_generation_allowed": true,
+          "should_abstain": false,
+          "abstention_reason": "none",
+          "required_citations": [
+            "EV-NUT-24",
+            "personal-fact:a1111111-1111-4111-8111-111111111111"
+          ],
+          "policy_id": "stage5-answerability-v3:public_guidance:nutrition",
+          "resolved_state_version": 3
+        },
+        "fresh": {
+          "evidence_ids": [
+            "EV-NUT-24"
+          ],
+          "personal_fact_ids": [
+            "a1111111-1111-4111-8111-111111111111"
+          ],
+          "personal_passage_ids": [],
+          "graph_path_ids": [],
+          "conflict_ids": [],
+          "missing_fields": [],
+          "answerability": "fully_supported",
+          "ordinary_generation_allowed": true,
+          "should_abstain": false,
+          "abstention_reason": "none",
+          "required_citations": [
+            "EV-NUT-24",
+            "personal-fact:a1111111-1111-4111-8111-111111111111"
+          ],
+          "policy_id": "stage5-answerability-v3:public_guidance:nutrition",
+          "resolved_state_version": 3
+        },
+        "equivalent": true
+      },
+      {
+        "kind": "max_candidates",
+        "purpose": "personal_record_lookup",
+        "first": 1,
+        "second": 5,
+        "public_keys_separated": true,
+        "personal_keys_separated": true,
+        "cached": {
+          "evidence_ids": [],
+          "personal_fact_ids": [
+            "a1111111-1111-4111-8111-111111111111"
+          ],
+          "personal_passage_ids": [
+            "personal-allergy-extra-1",
+            "personal-allergy-extra-2",
+            "personal-allergy-extra-3",
+            "personal-allergy-extra-4",
+            "personal-b1111111-1111-4111-8111-111111111111"
+          ],
+          "graph_path_ids": [],
+          "conflict_ids": [],
+          "missing_fields": [],
+          "answerability": "fully_supported",
+          "ordinary_generation_allowed": true,
+          "should_abstain": false,
+          "abstention_reason": "none",
+          "required_citations": [
+            "personal-fact:a1111111-1111-4111-8111-111111111111",
+            "personal-passage:b1000001-1111-4111-8111-111111111111",
+            "personal-passage:b1000002-1111-4111-8111-111111111111",
+            "personal-passage:b1000003-1111-4111-8111-111111111111",
+            "personal-passage:b1000004-1111-4111-8111-111111111111",
+            "personal-passage:b1111111-1111-4111-8111-111111111111"
+          ],
+          "policy_id": "stage5-answerability-v3:personal_record_lookup:nutrition",
+          "resolved_state_version": 3
+        },
+        "fresh": {
+          "evidence_ids": [],
+          "personal_fact_ids": [
+            "a1111111-1111-4111-8111-111111111111"
+          ],
+          "personal_passage_ids": [
+            "personal-allergy-extra-1",
+            "personal-allergy-extra-2",
+            "personal-allergy-extra-3",
+            "personal-allergy-extra-4",
+            "personal-b1111111-1111-4111-8111-111111111111"
+          ],
+          "graph_path_ids": [],
+          "conflict_ids": [],
+          "missing_fields": [],
+          "answerability": "fully_supported",
+          "ordinary_generation_allowed": true,
+          "should_abstain": false,
+          "abstention_reason": "none",
+          "required_citations": [
+            "personal-fact:a1111111-1111-4111-8111-111111111111",
+            "personal-passage:b1000001-1111-4111-8111-111111111111",
+            "personal-passage:b1000002-1111-4111-8111-111111111111",
+            "personal-passage:b1000003-1111-4111-8111-111111111111",
+            "personal-passage:b1000004-1111-4111-8111-111111111111",
+            "personal-passage:b1111111-1111-4111-8111-111111111111"
+          ],
+          "policy_id": "stage5-answerability-v3:personal_record_lookup:nutrition",
+          "resolved_state_version": 3
+        },
+        "equivalent": true
+      },
+      {
+        "kind": "max_candidates",
+        "purpose": "personal_record_lookup",
+        "first": 5,
+        "second": 1,
+        "public_keys_separated": true,
+        "personal_keys_separated": true,
+        "cached": {
+          "evidence_ids": [],
+          "personal_fact_ids": [
+            "a1111111-1111-4111-8111-111111111111"
+          ],
+          "personal_passage_ids": [
+            "personal-allergy-extra-1"
+          ],
+          "graph_path_ids": [],
+          "conflict_ids": [],
+          "missing_fields": [],
+          "answerability": "fully_supported",
+          "ordinary_generation_allowed": true,
+          "should_abstain": false,
+          "abstention_reason": "none",
+          "required_citations": [
+            "personal-fact:a1111111-1111-4111-8111-111111111111",
+            "personal-passage:b1000001-1111-4111-8111-111111111111"
+          ],
+          "policy_id": "stage5-answerability-v3:personal_record_lookup:nutrition",
+          "resolved_state_version": 3
+        },
+        "fresh": {
+          "evidence_ids": [],
+          "personal_fact_ids": [
+            "a1111111-1111-4111-8111-111111111111"
+          ],
+          "personal_passage_ids": [
+            "personal-allergy-extra-1"
+          ],
+          "graph_path_ids": [],
+          "conflict_ids": [],
+          "missing_fields": [],
+          "answerability": "fully_supported",
+          "ordinary_generation_allowed": true,
+          "should_abstain": false,
+          "abstention_reason": "none",
+          "required_citations": [
+            "personal-fact:a1111111-1111-4111-8111-111111111111",
+            "personal-passage:b1000001-1111-4111-8111-111111111111"
+          ],
+          "policy_id": "stage5-answerability-v3:personal_record_lookup:nutrition",
+          "resolved_state_version": 3
+        },
+        "equivalent": true
+      },
+      {
+        "kind": "caller_state_version",
+        "first": 3,
+        "second": 999,
+        "same_server_key": true,
+        "resolved_state_version": 3,
+        "equivalent": true
+      },
+      {
+        "kind": "server_state_invalidation",
+        "first": 3,
+        "second": 4,
+        "keys_separated": true,
+        "cached": {
+          "evidence_ids": [
+            "EV-NUT-24"
+          ],
+          "personal_fact_ids": [
+            "a1111111-1111-4111-8111-111111111111"
+          ],
+          "personal_passage_ids": [],
+          "graph_path_ids": [],
+          "conflict_ids": [],
+          "missing_fields": [],
+          "answerability": "fully_supported",
+          "ordinary_generation_allowed": true,
+          "should_abstain": false,
+          "abstention_reason": "none",
+          "required_citations": [
+            "EV-NUT-24",
+            "personal-fact:a1111111-1111-4111-8111-111111111111"
+          ],
+          "policy_id": "stage5-answerability-v3:public_guidance:nutrition",
+          "resolved_state_version": 4
+        },
+        "fresh": {
+          "evidence_ids": [
+            "EV-NUT-24"
+          ],
+          "personal_fact_ids": [
+            "a1111111-1111-4111-8111-111111111111"
+          ],
+          "personal_passage_ids": [],
+          "graph_path_ids": [],
+          "conflict_ids": [],
+          "missing_fields": [],
+          "answerability": "fully_supported",
+          "ordinary_generation_allowed": true,
+          "should_abstain": false,
+          "abstention_reason": "none",
+          "required_citations": [
+            "EV-NUT-24",
+            "personal-fact:a1111111-1111-4111-8111-111111111111"
+          ],
+          "policy_id": "stage5-answerability-v3:public_guidance:nutrition",
+          "resolved_state_version": 4
+        },
+        "equivalent": true
+      }
+    ],
+    "policy_rejections": [
+      {
+        "case": "public_requires_personal",
+        "rejected": true
+      },
+      {
+        "case": "personal_requires_public",
+        "rejected": true
+      },
+      {
+        "case": "causal_without_graph",
+        "rejected": true
+      },
+      {
+        "case": "mixed_missing_constraint",
+        "rejected": true
+      },
+      {
+        "case": "incorrect_domain",
+        "rejected": true
+      },
+      {
+        "case": "fabricated_id",
+        "rejected": true
+      },
+      {
+        "case": "fabricated_version",
+        "rejected": true
+      },
+      {
+        "case": "extra_support",
+        "rejected": true
+      },
+      {
+        "case": "incorrect_context",
+        "rejected": true
+      },
+      {
+        "case": "gateway_rejects_policy_object",
+        "rejected": true,
+        "repository_calls_before_rejection": {}
+      }
+    ],
+    "contract_mutations": [
+      {
+        "contract": "EvidencePacket",
+        "case": "unsupported_without_abstention",
+        "rejected": true
+      },
+      {
+        "contract": "EvidencePacket",
+        "case": "partially_supported_without_abstention",
+        "rejected": true
+      },
+      {
+        "contract": "EvidencePacket",
+        "case": "clarification_required_without_abstention",
+        "rejected": true
+      },
+      {
+        "contract": "EvidencePacket",
+        "case": "generation_and_abstention_both_true",
+        "rejected": true
+      },
+      {
+        "contract": "EvidencePacket",
+        "case": "answerability_policy_id",
+        "rejected": true
+      },
+      {
+        "contract": "EvidencePacket",
+        "case": "answerability_purpose",
+        "rejected": true
+      },
+      {
+        "contract": "EvidencePacket",
+        "case": "answerability_required_support",
+        "rejected": true
+      },
+      {
+        "contract": "EvidencePacket",
+        "case": "packet_domain",
+        "rejected": true
+      },
+      {
+        "contract": "EvidencePacket",
+        "case": "packet_journey",
+        "rejected": true
+      },
+      {
+        "contract": "EvidencePacket",
+        "case": "packet_workspace",
+        "rejected": true
+      },
+      {
+        "contract": "EvidencePacket",
+        "case": "packet_care_episode",
+        "rejected": true
+      },
+      {
+        "contract": "EvidencePacket",
+        "case": "packet_conflict_alignment",
+        "rejected": true
+      },
+      {
+        "contract": "RetrievalResult",
+        "case": "request_id",
+        "rejected": true
+      },
+      {
+        "contract": "RetrievalResult",
+        "case": "policy_id",
+        "rejected": true
+      },
+      {
+        "contract": "RetrievalResult",
+        "case": "journey_relation",
+        "rejected": true
+      },
+      {
+        "contract": "RetrievalResult",
+        "case": "state_version",
+        "rejected": true
+      },
+      {
+        "contract": "RetrievalResult",
+        "case": "component_results",
+        "rejected": true
+      }
+    ],
+    "generic_conflicts": [
+      {
+        "category": "allergy",
+        "expected": "c8000001-7777-4777-8777-777777777777",
+        "observed": [
+          "c8000001-7777-4777-8777-777777777777"
+        ],
+        "support_state": "clarification_required",
+        "abstention_reason": "unresolved_conflict",
+        "passed": true
+      },
+      {
+        "category": "restriction",
+        "expected": "c8000002-7777-4777-8777-777777777777",
+        "observed": [
+          "c8000002-7777-4777-8777-777777777777"
+        ],
+        "support_state": "clarification_required",
+        "abstention_reason": "unresolved_conflict",
+        "passed": true
+      },
+      {
+        "category": "medication",
+        "expected": "c8000003-7777-4777-8777-777777777777",
+        "observed": [
+          "c8000003-7777-4777-8777-777777777777"
+        ],
+        "support_state": "clarification_required",
+        "abstention_reason": "unresolved_conflict",
+        "passed": true
+      },
+      {
+        "category": "condition",
+        "expected": "c8000004-7777-4777-8777-777777777777",
+        "observed": [
+          "c8000004-7777-4777-8777-777777777777"
+        ],
+        "support_state": "clarification_required",
+        "abstention_reason": "unresolved_conflict",
+        "passed": true
+      },
+      {
+        "category": "appointment",
+        "expected": "c8000005-7777-4777-8777-777777777777",
+        "observed": [
+          "c8000005-7777-4777-8777-777777777777"
+        ],
+        "support_state": "clarification_required",
+        "abstention_reason": "unresolved_conflict",
+        "passed": true
+      },
+      {
+        "category": "journey",
+        "expected": "c8000006-7777-4777-8777-777777777777",
+        "observed": [
+          "c8000006-7777-4777-8777-777777777777"
+        ],
+        "support_state": "clarification_required",
+        "abstention_reason": "unresolved_conflict",
+        "passed": true
+      }
+    ],
+    "generic_missing_information": [
+      {
+        "category": "allergy",
+        "expected": "allergy_detail",
+        "observed": [
+          "allergy_detail"
+        ],
+        "support_state": "clarification_required",
+        "abstention_reason": "missing_information",
+        "passed": true
+      },
+      {
+        "category": "restriction",
+        "expected": "dietary_restriction",
+        "observed": [
+          "dietary_restriction"
+        ],
+        "support_state": "clarification_required",
+        "abstention_reason": "missing_information",
+        "passed": true
+      },
+      {
+        "category": "medication",
+        "expected": "medication_list",
+        "observed": [
+          "medication_list"
+        ],
+        "support_state": "clarification_required",
+        "abstention_reason": "missing_information",
+        "passed": true
+      },
+      {
+        "category": "condition",
+        "expected": "medical_condition",
+        "observed": [
+          "medical_condition"
+        ],
+        "support_state": "clarification_required",
+        "abstention_reason": "missing_information",
+        "passed": true
+      },
+      {
+        "category": "appointment",
+        "expected": "appointment_date",
+        "observed": [
+          "appointment_date"
+        ],
+        "support_state": "clarification_required",
+        "abstention_reason": "missing_information",
+        "passed": true
+      },
+      {
+        "category": "journey",
+        "expected": "journey_week",
+        "observed": [
+          "journey_week"
+        ],
+        "support_state": "clarification_required",
+        "abstention_reason": "missing_information",
+        "passed": true
+      }
+    ]
+  },
+  "checks": {
+    "cache_equivalence": {
+      "numerator": 10,
+      "denominator": 10
+    },
+    "policy_rejections": {
+      "numerator": 10,
+      "denominator": 10
+    },
+    "contract_mutation_rejections": {
+      "numerator": 17,
+      "denominator": 17
+    },
+    "generic_conflict_relevance": {
+      "numerator": 6,
+      "denominator": 6
+    },
+    "generic_missing_relevance": {
+      "numerator": 6,
+      "denominator": 6
+    }
+  },
+  "valid": true
+}

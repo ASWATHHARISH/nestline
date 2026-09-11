@@ -10,16 +10,21 @@
   "ready_for_public_or_clinical_release": false,
   "verified": {
     "typed_contracts": 20,
-    "development_cases": 26,
+    "development_cases": 28,
     "fixture_public_records": 20,
-    "fixture_personal_fact_records": 5,
+    "fixture_personal_fact_records": 6,
     "fixture_graph_paths": 2,
     "tracked_weekly_profiles": 63,
     "published_weekly_profiles": 0,
     "pinned_pgtap_assertions": 254,
     "stage5_pgtap_assertions": 48,
     "authenticated_stage5_api_checks": 25,
-    "stage5_python_tests": 36
+    "stage5_python_tests": 47,
+    "cache_matrix_cases": 10,
+    "policy_rejection_cases": 10,
+    "contract_mutation_cases": 17,
+    "generic_conflict_cases": 6,
+    "generic_missing_cases": 6
   },
   "retrieval_gate": {
     "recall_at_5": true,
@@ -36,7 +41,8 @@
     "journey_truth": true,
     "graph_ablation": true,
     "sql_no_false_graph_claim": true,
-    "ranking_trial_not_adopted": true
+    "ranking_trial_not_adopted": true,
+    "rectification_matrix": true
   },
   "adopted_metrics": {
     "recall_at_5": {
@@ -55,8 +61,8 @@
     "cross_workspace_leakage_count": 0,
     "confirmed_personal_fact_precision": {
       "value": 1.0,
-      "numerator": 11,
-      "denominator": 11
+      "numerator": 12,
+      "denominator": 12
     },
     "conflict_proposal_personalization_violations": 0,
     "graph_path_correctness": {
@@ -66,55 +72,55 @@
     },
     "expected_behavior_accuracy": {
       "value": 1.0,
-      "numerator": 26,
-      "denominator": 26
+      "numerator": 28,
+      "denominator": 28
     },
     "support_state_accuracy": {
       "value": 1.0,
-      "numerator": 26,
-      "denominator": 26
+      "numerator": 28,
+      "denominator": 28
     },
     "journey_relation_accuracy": {
       "value": 1.0,
-      "numerator": 26,
-      "denominator": 26
+      "numerator": 28,
+      "denominator": 28
     },
     "forbidden_evidence_ids_seen": [],
     "latency_ms_by_component": {
       "exact_sql": {
-        "count": 26,
-        "mean": 0.481065,
-        "max": 1.1671
+        "count": 28,
+        "mean": 0.30875,
+        "max": 0.5435
       },
       "graph": {
-        "count": 26,
-        "mean": 0.040446,
-        "max": 1.0061
+        "count": 28,
+        "mean": 0.008607,
+        "max": 0.2041
       },
       "personal_full_text": {
-        "count": 26,
-        "mean": 0.23895,
-        "max": 1.1411
+        "count": 28,
+        "mean": 0.128446,
+        "max": 0.2466
       },
       "personal_vector": {
-        "count": 26,
-        "mean": 0.200769,
-        "max": 0.4716
+        "count": 28,
+        "mean": 0.117736,
+        "max": 0.2472
       },
       "public_full_text": {
-        "count": 26,
-        "mean": 1.686196,
-        "max": 4.0212
+        "count": 28,
+        "mean": 1.129464,
+        "max": 2.8924
       },
       "public_vector": {
-        "count": 26,
-        "mean": 1.846735,
-        "max": 8.4517
+        "count": 28,
+        "mean": 0.978954,
+        "max": 3.4964
       },
       "weekly_profile": {
-        "count": 26,
-        "mean": 0.003312,
-        "max": 0.0064
+        "count": 28,
+        "mean": 0.002407,
+        "max": 0.0061
       }
     }
   },
@@ -130,7 +136,7 @@
     "sql_sufficient_case_claims_graph_benefit": false,
     "ranking_trial_adopted": false
   },
-  "honest_limitation": "Deterministic fixture embeddings and 26 synthetic questions verify control flow, isolation and filters; they do not establish production retrieval quality.",
+  "honest_limitation": "Deterministic fixture embeddings and 28 synthetic questions verify control flow, isolation and filters; they do not establish production retrieval quality.",
   "open_gates": [
     {
       "owner": "independent reviewer",

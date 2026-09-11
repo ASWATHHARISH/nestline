@@ -21,7 +21,6 @@ from app.services.embeddings import DeterministicTestEmbeddingProvider
 from app.services.onboarding import SupabaseAuthClient, SupabaseOnboardingGateway
 from app.services.personal_documents import SupabaseDocumentGateway
 from app.services.retrieval import PostgrestRetrievalRepository, RetrievalGateway
-from app.services.retrieval_policy import build_evidence_policy
 from scripts.check_stage2_storage_api import LocalSupabase, _expect_success
 from scripts.check_stage4_document_api import _decisions, _process_fixture
 
@@ -208,8 +207,7 @@ def main() -> int:
             domain="movement",
             journey=JourneyPosition(stage="pregnancy", unit="week", exact=24),
             jurisdiction="IN"), retrieval_scope,
-            policy=build_evidence_policy(
-                "mixed_personalized_guidance", "movement"))
+            purpose="mixed_personalized_guidance")
         evidence = set(answer.packet.evidence_ids)
         if f"S5-API-EV-GOOD-{marker}" not in evidence:
             raise AssertionError("expected public evidence was not retrieved")

@@ -1,5 +1,7 @@
 # Stage 5 rectification response before Stage 6
 
+> **Historical first-rectification record:** This file records the earlier correction at `dcec1f9e`. It is superseded for current status by `STAGE-5-SECOND-RECTIFICATION-AND-RE-REVIEW-HANDOFF.md`, which covers the independent return for changes against `3991896`.
+
 **Prepared:** 11 September 2026
 **Branch:** `feat/stage-1-governed-ingestion`
 **Reviewed baseline:** 448eb6d2ab7b4e8cc7db9fc42ce5c523a7fe10a7

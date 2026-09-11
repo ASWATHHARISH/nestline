@@ -17,11 +17,13 @@ OWNER_B = "22222222-2222-4222-8222-222222222222"
 OWNER_C = "33333333-3333-4333-8333-333333333333"
 OWNER_D = "44444444-4444-4444-8444-444444444444"
 OWNER_E = "55555555-5555-4555-8555-555555555555"
+OWNER_F = "66666666-6666-4666-8666-666666666666"
 WORKSPACE_A = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
 WORKSPACE_B = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"
 WORKSPACE_C = "cccccccc-cccc-4ccc-8ccc-cccccccccccc"
 WORKSPACE_D = "dddddddd-dddd-4ddd-8ddd-dddddddddddd"
 WORKSPACE_E = "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee"
+WORKSPACE_F = "ffffffff-ffff-4fff-8fff-ffffffffffff"
 RELEASE = "55555555-5555-4555-8555-555555555555"
 NOW = "2026-09-11T00:00:00Z"
 
@@ -180,6 +182,12 @@ def build_fixture() -> dict:
         {"restriction": "avoid high-impact movement",
          "condition_key": "movement_restriction",
          "condition_status": "confirmed_present", "subject": "Maya (fictional)"})
+    conflict_restriction_fact = personal_fact(
+        "f2222222-2222-4222-8222-222222222222", "dietary_restriction",
+        {"restriction": "avoid high-impact movement",
+         "condition_key": "movement_restriction",
+         "condition_status": "confirmed_present",
+         "subject": "Riya (fictional)"})
     proposed = personal_fact(
         "a3333333-3333-4333-8333-333333333333", "medical_history",
         {"condition": "unconfirmed fixture proposal"})
@@ -223,14 +231,15 @@ def build_fixture() -> dict:
         "active_release_id": RELEASE,
         "workspace_owners": {WORKSPACE_A: OWNER_A, WORKSPACE_B: OWNER_B,
                              WORKSPACE_C: OWNER_C, WORKSPACE_D: OWNER_D,
-                             WORKSPACE_E: OWNER_E},
+                             WORKSPACE_E: OWNER_E, WORKSPACE_F: OWNER_F},
         "personal_state_versions": {WORKSPACE_A: 3, WORKSPACE_B: 2,
                                     WORKSPACE_C: 1, WORKSPACE_D: 1,
-                                    WORKSPACE_E: 1},
+                                    WORKSPACE_E: 1, WORKSPACE_F: 1},
         "public_records": public,
         "personal_fact_records": [
             {"workspace_id": WORKSPACE_A, "confirmation_status": "confirmed", "superseded": False, "valid_to": None, "candidate": fact_allergy},
             {"workspace_id": WORKSPACE_A, "confirmation_status": "confirmed", "superseded": False, "valid_to": None, "candidate": fact_restriction},
+            {"workspace_id": WORKSPACE_F, "confirmation_status": "confirmed", "superseded": False, "valid_to": None, "candidate": conflict_restriction_fact},
             {"workspace_id": WORKSPACE_A, "confirmation_status": "proposed", "superseded": False, "valid_to": None, "candidate": proposed},
             {"workspace_id": WORKSPACE_A, "confirmation_status": "conflict", "superseded": False, "valid_to": None, "candidate": conflict_fact},
             {"workspace_id": WORKSPACE_A, "confirmation_status": "confirmed", "superseded": True, "valid_to": NOW, "candidate": superseded},
@@ -244,7 +253,6 @@ def build_fixture() -> dict:
                 "symptoms": [{"symptom_id": "c3333333-3333-4333-8333-333333333333", "description": "fictional prior breathing symptom record", "reported_at": NOW, "safety_route": "no_match", "matched_rule_ids": [], "safety_evaluation_only": True}],
                 "appointments": [{"appointment_id": "c4444444-4444-4444-8444-444444444444", "scheduled_for": "2026-09-20T09:00:00Z", "appointment_type": "fictional check-up", "status": "confirmed"}],
                 "plan_states": [{"plan_id": plan, "version": 2, "status": "stale", "stale_reasons": ["confirmed_restriction_changed"]}],
-                "unresolved_conflicts": [{"conflict_id": "c5555555-5555-4555-8555-555555555555", "fact_type": "dietary_restriction", "proposed_values": [{"activity": "prenatal yoga allowed"}, {"activity": "prenatal yoga paused"}], "source_document_ids": [], "clarification_question_ids": [], "state": "requires_clarification"}],
             },
             WORKSPACE_B: {
                 **empty, "journey_state": None,
@@ -254,6 +262,12 @@ def build_fixture() -> dict:
             WORKSPACE_C: {**empty, "journey_state": journey("c6666666-6666-4666-8666-666666666666", "possible_pregnancy")},
             WORKSPACE_D: {**empty, "journey_state": journey("d6666666-6666-4666-8666-666666666666", "postpartum", day=3)},
             WORKSPACE_E: {**empty, "journey_state": journey("e6666666-6666-4666-8666-666666666666", "postpartum", week=6)},
+            WORKSPACE_F: {
+                **empty, "journey_state": journey(
+                    "f6666666-6666-4666-8666-666666666666", "pregnancy",
+                    week=24),
+                "unresolved_conflicts": [{"conflict_id": "c5555555-5555-4555-8555-555555555555", "fact_type": "dietary_restriction", "proposed_values": [{"activity": "prenatal yoga allowed"}, {"activity": "prenatal yoga paused"}], "source_document_ids": [], "clarification_question_ids": [], "state": "requires_clarification"}],
+            },
         },
         "personal_passages": [
             passage(WORKSPACE_A, "b1111111-1111-4111-8111-111111111111", doc, "Maya fictional record states a confirmed peanut allergy."),
@@ -307,12 +321,15 @@ def build_devset() -> list[dict]:
 
     allergy = "a1111111-1111-4111-8111-111111111111"
     restriction = "a2222222-2222-4222-8222-222222222222"
+    conflict_restriction = "f2222222-2222-4222-8222-222222222222"
     return [
         case("S5-DEFECT-PUBLIC-001", "What hospital documents and finances should I prepare at week 25?", "preparation", journey_value=position(exact=25), behavior="abstain", support="unsupported", reason="no_approved_public_content", relation="explicit_other"),
         case("S5-IRRELEVANT-VECTOR-001", "What public preparation guidance applies at week 25?", "preparation", journey_value=position(exact=25), behavior="abstain", support="unsupported", reason="no_approved_public_content", relation="explicit_other"),
         case("S5-PERSONAL-ALLERGY-001", "What allergy is in my confirmed record?", "nutrition", purpose="personal_record_lookup", facts=[allergy], behavior="evidence"),
         case("S5-MIXED-PARTIAL-001", "How should my peanut allergy change week 25 nutrition guidance?", "nutrition", purpose="mixed_personalized_guidance", journey_value=position(exact=25), facts=[allergy], behavior="abstain", support="partially_supported", reason="partial_support", relation="explicit_other"),
-        case("S5-DEFECT-CONFLICT-001", "How should my conflicting prenatal yoga record affect week 25 movement guidance?", "movement", purpose="mixed_personalized_guidance", journey_value=position(exact=25), facts=[restriction], behavior="clarification", support="clarification_required", reason="unresolved_conflict", relation="explicit_other"),
+        case("S5-DEFECT-CONFLICT-001", "How should my conflicting prenatal yoga record affect week 25 movement guidance?", "movement", purpose="mixed_personalized_guidance", journey_value=position(exact=25), workspace=WORKSPACE_F, owner=OWNER_F, facts=[conflict_restriction], behavior="clarification", support="clarification_required", reason="unresolved_conflict", relation="explicit_other"),
+        case("S5-CONFLICT-GENERIC-RESTRICTION-001", "What restrictions are in my record?", "movement", purpose="personal_record_lookup", workspace=WORKSPACE_F, owner=OWNER_F, facts=[conflict_restriction], behavior="clarification", support="clarification_required", reason="unresolved_conflict"),
+        case("S5-MISSING-GENERIC-JOURNEY-001", "What week am I in?", "journey", purpose="personal_record_lookup", workspace=WORKSPACE_B, owner=OWNER_B, behavior="clarification", support="clarification_required", reason="missing_information", relation="unconfirmed_current"),
         case("S5-MISSING-001", "What should I prepare now?", "preparation", workspace=WORKSPACE_B, owner=OWNER_B, behavior="clarification", support="clarification_required", reason="missing_information", relation="unconfirmed_current"),
         case("S5-CONFLICT-IRRELEVANT-001", "What protein foods matter at week 24?", "nutrition", public=["EV-NUT-24"], facts=[allergy]),
         case("S5-GRAPH-ON-001", "Why is my movement plan stale after the restriction?", "movement", purpose="causal_explanation", graph=True, facts=[restriction], paths=["PATH-DOC-RESTRICTION-STALE-PLAN"]),

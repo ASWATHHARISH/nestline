@@ -9,14 +9,16 @@
     "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb": "22222222-2222-4222-8222-222222222222",
     "cccccccc-cccc-4ccc-8ccc-cccccccccccc": "33333333-3333-4333-8333-333333333333",
     "dddddddd-dddd-4ddd-8ddd-dddddddddddd": "44444444-4444-4444-8444-444444444444",
-    "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee": "55555555-5555-4555-8555-555555555555"
+    "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee": "55555555-5555-4555-8555-555555555555",
+    "ffffffff-ffff-4fff-8fff-ffffffffffff": "66666666-6666-4666-8666-666666666666"
   },
   "personal_state_versions": {
     "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa": 3,
     "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb": 2,
     "cccccccc-cccc-4ccc-8ccc-cccccccccccc": 1,
     "dddddddd-dddd-4ddd-8ddd-dddddddddddd": 1,
-    "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee": 1
+    "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee": 1,
+    "ffffffff-ffff-4fff-8fff-ffffffffffff": 1
   },
   "public_records": [
     {
@@ -1998,6 +2000,32 @@
       }
     },
     {
+      "workspace_id": "ffffffff-ffff-4fff-8fff-ffffffffffff",
+      "confirmation_status": "confirmed",
+      "superseded": false,
+      "valid_to": null,
+      "candidate": {
+        "fact_id": "f2222222-2222-4222-8222-222222222222",
+        "fact_type": "dietary_restriction",
+        "value": {
+          "restriction": "avoid high-impact movement",
+          "condition_key": "movement_restriction",
+          "condition_status": "confirmed_present",
+          "subject": "Riya (fictional)"
+        },
+        "source_kind": "human_reviewed",
+        "confirmation_status": "confirmed",
+        "record_only": false,
+        "source_document_id": null,
+        "source_document_fact_id": null,
+        "valid_from": "2026-09-11T00:00:00Z",
+        "valid_to": null,
+        "provenance": {
+          "fixture": "Maya fictional"
+        }
+      }
+    },
+    {
       "workspace_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
       "confirmation_status": "proposed",
       "superseded": false,
@@ -2108,23 +2136,7 @@
         }
       ],
       "open_questions": [],
-      "unresolved_conflicts": [
-        {
-          "conflict_id": "c5555555-5555-4555-8555-555555555555",
-          "fact_type": "dietary_restriction",
-          "proposed_values": [
-            {
-              "activity": "prenatal yoga allowed"
-            },
-            {
-              "activity": "prenatal yoga paused"
-            }
-          ],
-          "source_document_ids": [],
-          "clarification_question_ids": [],
-          "state": "requires_clarification"
-        }
-      ],
+      "unresolved_conflicts": [],
       "missing_information": [],
       "journey_state": {
         "state_id": "c1111111-1111-4111-8111-111111111111",
@@ -2231,6 +2243,46 @@
         "gestational_week": null,
         "gestational_day": null,
         "postpartum_week": 6,
+        "postpartum_day": null,
+        "approximate_month_min": null,
+        "approximate_month_max": null,
+        "user_confirmed": true,
+        "has_dating_conflict": false,
+        "version": 1
+      }
+    },
+    "ffffffff-ffff-4fff-8fff-ffffffffffff": {
+      "confirmed_facts": [],
+      "medications": [],
+      "symptoms": [],
+      "appointments": [],
+      "plan_states": [],
+      "open_questions": [],
+      "unresolved_conflicts": [
+        {
+          "conflict_id": "c5555555-5555-4555-8555-555555555555",
+          "fact_type": "dietary_restriction",
+          "proposed_values": [
+            {
+              "activity": "prenatal yoga allowed"
+            },
+            {
+              "activity": "prenatal yoga paused"
+            }
+          ],
+          "source_document_ids": [],
+          "clarification_question_ids": [],
+          "state": "requires_clarification"
+        }
+      ],
+      "missing_information": [],
+      "journey_state": {
+        "state_id": "f6666666-6666-4666-8666-666666666666",
+        "stage": "pregnancy",
+        "timing_source": "fictional_confirmed_state",
+        "gestational_week": 24,
+        "gestational_day": 2,
+        "postpartum_week": null,
         "postpartum_day": null,
         "approximate_month_min": null,
         "approximate_month_max": null,

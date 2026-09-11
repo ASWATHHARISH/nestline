@@ -205,10 +205,10 @@
     },
     "evidence_requirement_policy": {
       "additionalProperties": false,
-      "description": "Trusted server-created policy; it is never part of RetrievalRequest.",
+      "description": "Canonical server policy; independent policy fields cannot be fabricated.",
       "properties": {
         "policy_version": {
-          "const": "stage5-answerability-v2",
+          "const": "stage5-answerability-v3",
           "title": "Policy Version",
           "type": "string"
         },
@@ -550,10 +550,10 @@
         },
         "EvidenceRequirementPolicy": {
           "additionalProperties": false,
-          "description": "Trusted server-created policy; it is never part of RetrievalRequest.",
+          "description": "Canonical server policy; independent policy fields cannot be fabricated.",
           "properties": {
             "policy_version": {
-              "const": "stage5-answerability-v2",
+              "const": "stage5-answerability-v3",
               "title": "Policy Version",
               "type": "string"
             },
@@ -3197,10 +3197,10 @@
         },
         "EvidenceRequirementPolicy": {
           "additionalProperties": false,
-          "description": "Trusted server-created policy; it is never part of RetrievalRequest.",
+          "description": "Canonical server policy; independent policy fields cannot be fabricated.",
           "properties": {
             "policy_version": {
-              "const": "stage5-answerability-v2",
+              "const": "stage5-answerability-v3",
               "title": "Policy Version",
               "type": "string"
             },
@@ -5724,10 +5724,10 @@
         },
         "EvidenceRequirementPolicy": {
           "additionalProperties": false,
-          "description": "Trusted server-created policy; it is never part of RetrievalRequest.",
+          "description": "Canonical server policy; independent policy fields cannot be fabricated.",
           "properties": {
             "policy_version": {
-              "const": "stage5-answerability-v2",
+              "const": "stage5-answerability-v3",
               "title": "Policy Version",
               "type": "string"
             },

@@ -10,6 +10,7 @@ from pathlib import Path
 from scripts.build_stage5_fixtures import build_devset, build_fixture
 from scripts.export_retrieval_schema import build_payload
 from scripts.run_stage5_retrieval_evals import run as run_retrieval_evals
+from scripts.run_stage5_rectification_matrix import run as run_rectification_matrix
 
 ROOT = Path(__file__).resolve().parents[1]
 REPORT = ROOT / "docs/STAGE-5-CHECK-RESULTS.json"
@@ -17,6 +18,7 @@ MIGRATION = ROOT / "supabase/migrations/20260911001300_stage5_hybrid_retrieval.s
 SCHEMA = ROOT / "data/schemas/retrieval.schema.json"
 FIXTURE = ROOT / "data/synthetic/stage5_retrieval_fixtures.json"
 DEVSET = ROOT / "evals/stage5_retrieval_development.jsonl"
+RECTIFICATION_MATRIX = ROOT / "docs/STAGE-5-RECTIFICATION-REGRESSION-MATRIX.json"
 WEEKLY = ROOT / "data/weekly/weekly_content_manifest.jsonl"
 
 
@@ -48,6 +50,9 @@ def run():
         ROOT / "docs/NESTLINE-STAGE-5-INDEPENDENT-REVIEW-AND-STAGE-6-HANDOFF.md",
         ROOT / "docs/STAGE-5-RECTIFICATION-RESPONSE.md",
         ROOT / "docs/STAGE-5-RECTIFICATION-EVIDENCE-PACKETS.json",
+        ROOT / "scripts/run_stage5_rectification_matrix.py",
+        RECTIFICATION_MATRIX,
+        ROOT / "docs/STAGE-5-SECOND-RECTIFICATION-AND-RE-REVIEW-HANDOFF.md",
     ]
     for path in required_files:
         if not path.is_file():
@@ -82,8 +87,8 @@ def run():
     cases = load_jsonl(DEVSET)
     if cases != build_devset():
         errors.append("tracked frozen development truth is stale")
-    if len(cases) != 26 or len({case["case_id"] for case in cases}) != 26:
-        errors.append("Stage 5 truth must contain 26 unique cases")
+    if len(cases) != 28 or len({case["case_id"] for case in cases}) != 28:
+        errors.append("Stage 5 truth must contain 28 unique cases")
     truth_fields = {
         "purpose", "expected_public_evidence_ids", "expected_personal_fact_ids",
         "expected_graph_path_ids", "forbidden_evidence_ids", "expected_behavior",
@@ -146,6 +151,11 @@ def run():
 
     evaluation = run_retrieval_evals(write_report=False)
     adopted = evaluation["adopted_metrics"]
+    rectification = run_rectification_matrix(write_report=False)
+    if RECTIFICATION_MATRIX.is_file():
+        tracked_matrix = json.loads(RECTIFICATION_MATRIX.read_text(encoding="utf-8"))
+        if tracked_matrix != rectification:
+            errors.append("tracked Stage 5 rectification matrix is stale")
     gates = {
         "recall_at_5": adopted["recall_at_5"]["value"] == 1.0,
         "citation_precision": adopted["citation_evidence_precision"]["value"] == 1.0,
@@ -162,6 +172,7 @@ def run():
         "graph_ablation": evaluation["graph_ablation"]["adds_required_relationship_information"],
         "sql_no_false_graph_claim": evaluation["graph_ablation"]["sql_answer_same_with_graph_on_and_off"],
         "ranking_trial_not_adopted": not evaluation["graph_ablation"]["ranking_trial_adopted"],
+        "rectification_matrix": rectification["valid"],
     }
     errors.extend(f"retrieval gate failed: {name}" for name, passed in gates.items() if not passed)
 
@@ -183,7 +194,12 @@ def run():
             "pinned_pgtap_assertions": sum(pgtap_plans.values()),
             "stage5_pgtap_assertions": pgtap_plans["stage5_hybrid_retrieval.test.sql"],
             "authenticated_stage5_api_checks": 25,
-            "stage5_python_tests": 36,
+            "stage5_python_tests": 47,
+            "cache_matrix_cases": rectification["checks"]["cache_equivalence"]["denominator"],
+            "policy_rejection_cases": rectification["checks"]["policy_rejections"]["denominator"],
+            "contract_mutation_cases": rectification["checks"]["contract_mutation_rejections"]["denominator"],
+            "generic_conflict_cases": rectification["checks"]["generic_conflict_relevance"]["denominator"],
+            "generic_missing_cases": rectification["checks"]["generic_missing_relevance"]["denominator"],
         },
         "retrieval_gate": gates, "adopted_metrics": adopted,
         "graph_ablation": evaluation["graph_ablation"],

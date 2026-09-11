@@ -44,6 +44,50 @@ SupportState = Literal[
     "clarification_required",
 ]
 
+POLICY_VERSION = "stage5-answerability-v3"
+DOMAIN_PERSONAL_CONTEXTS: dict[Domain, tuple[PersonalContextKind, ...]] = {
+    "journey": ("journey", "documents"),
+    "nutrition": ("allergies", "conditions", "restrictions", "documents"),
+    "movement": ("conditions", "restrictions", "plans", "documents"),
+    "wellbeing": ("conditions", "questions", "documents"),
+    "symptoms": ("conditions", "restrictions", "documents"),
+    "preparation": ("appointments", "plans", "questions", "documents"),
+    "followup": ("appointments", "plans", "questions", "documents"),
+}
+
+
+def canonical_evidence_policy_values(
+    purpose: RetrievalPurpose, domain: Domain,
+) -> dict[str, Any]:
+    """Return the only valid Stage 5 policy fields for one trusted purpose."""
+
+    required: dict[RetrievalPurpose, list[SupportKind]] = {
+        "public_guidance": ["public_guidance"],
+        "personal_record_lookup": ["personal_record"],
+        "causal_explanation": ["graph_relationship"],
+        "mixed_personalized_guidance": [
+            "public_guidance", "personal_constraint",
+        ],
+    }
+    contexts = list(DOMAIN_PERSONAL_CONTEXTS[domain])
+    if purpose == "personal_record_lookup":
+        contexts = [
+            "allergies", "conditions", "restrictions", "medications",
+            "symptoms", "appointments", "plans", "questions", "journey",
+            "documents",
+        ]
+    elif purpose == "causal_explanation":
+        contexts = ["restrictions", "plans", "questions", "documents"]
+    return {
+        "policy_version": POLICY_VERSION,
+        "policy_id": f"{POLICY_VERSION}:{purpose}:{domain}",
+        "purpose": purpose,
+        "domain": domain,
+        "required_support": required[purpose],
+        "personal_context_kinds": contexts,
+        "trusted_server_created": True,
+    }
+
 
 class JourneyPosition(Contract):
     stage: Stage
@@ -127,15 +171,26 @@ class AuthenticatedRetrievalScope(Contract):
 
 
 class EvidenceRequirementPolicy(Contract):
-    """Trusted server-created policy; it is never part of RetrievalRequest."""
+    """Canonical server policy; independent policy fields cannot be fabricated."""
 
-    policy_version: Literal["stage5-answerability-v2"]
+    policy_version: Literal["stage5-answerability-v3"]
     policy_id: Text
     purpose: RetrievalPurpose
     domain: Domain
     required_support: list[SupportKind] = Field(min_length=1)
     personal_context_kinds: list[PersonalContextKind] = Field(default_factory=list)
     trusted_server_created: Literal[True] = True
+
+    @model_validator(mode="after")
+    def require_canonical_policy(self) -> Self:
+        expected = canonical_evidence_policy_values(self.purpose, self.domain)
+        observed = self.model_dump(mode="python")
+        if observed != expected:
+            raise ValueError(
+                "retrieval policy fields must exactly match the canonical "
+                "purpose/domain policy"
+            )
+        return self
 
 
 class TrustedRetrievalState(Contract):
@@ -173,6 +228,16 @@ class TrustedRetrievalQuery(Contract):
     timeout_ms: int = Field(ge=10, le=10_000)
     policy: EvidenceRequirementPolicy
     trusted_state: TrustedRetrievalState
+
+    @model_validator(mode="after")
+    def trusted_fields_agree(self) -> Self:
+        if self.domain != self.policy.domain:
+            raise ValueError("trusted query domain and policy domain disagree")
+        if self.journey != self.trusted_state.effective_journey:
+            raise ValueError("trusted query journey must equal effective journey")
+        if self.active_conditions != self.trusted_state.active_conditions:
+            raise ValueError("trusted query conditions must come from trusted state")
+        return self
 
 
 class SourceSpan(Contract):
@@ -553,6 +618,39 @@ class EvidencePacket(Contract):
     corpus_mode: Literal["production_release", "controlled_fixture", "no_public_release"]
     abstention: AbstentionState
 
+    @model_validator(mode="after")
+    def packet_fields_agree(self) -> Self:
+        scope = self.trusted_state.scope
+        policy = self.retrieval_policy
+        answer = self.answerability
+        if self.workspace_id != scope.workspace_id or self.care_episode_id != scope.care_episode_id:
+            raise ValueError("packet workspace/care episode must equal trusted scope")
+        if self.journey != self.trusted_state.effective_journey:
+            raise ValueError("packet journey must equal trusted effective journey")
+        if self.domain != policy.domain:
+            raise ValueError("packet domain and retrieval policy domain disagree")
+        if (answer.policy_id != policy.policy_id or
+                answer.purpose != policy.purpose or
+                answer.required_support != policy.required_support):
+            raise ValueError("packet policy and answerability contract disagree")
+        if self.abstention.should_abstain == answer.ordinary_generation_allowed:
+            raise ValueError("abstention must be inverse of ordinary generation permission")
+        if answer.support_state != "fully_supported" and not self.abstention.should_abstain:
+            raise ValueError("incomplete support requires abstention")
+        if (answer.support_state == "fully_supported" and
+                not answer.blocking_reasons and
+                not answer.relevant_conflict_ids and
+                not answer.relevant_missing_fields and
+                self.abstention.should_abstain):
+            raise ValueError("fully supported unblocked evidence must not abstain")
+        conflict_ids = [str(item.conflict_id) for item in self.unresolved_conflicts]
+        missing_fields = [item.field for item in self.missing_information]
+        if answer.relevant_conflict_ids != conflict_ids:
+            raise ValueError("packet conflicts and answerability conflicts disagree")
+        if answer.relevant_missing_fields != missing_fields:
+            raise ValueError("packet missing information and answerability disagree")
+        return self
+
 
 class RetrievalTrace(Contract):
     schema_version: Literal["5.0.0"] = RETRIEVAL_SCHEMA_VERSION
@@ -576,3 +674,17 @@ class RetrievalTrace(Contract):
 class RetrievalResult(Contract):
     packet: EvidencePacket
     trace: RetrievalTrace
+
+    @model_validator(mode="after")
+    def packet_and_trace_agree(self) -> Self:
+        if self.packet.request_id != self.trace.request_id:
+            raise ValueError("packet and trace request IDs disagree")
+        if self.packet.retrieval_policy.policy_id != self.trace.policy_id:
+            raise ValueError("packet and trace policy IDs disagree")
+        if self.packet.trusted_state.journey_relation != self.trace.journey_relation:
+            raise ValueError("packet and trace journey relations disagree")
+        if self.packet.trusted_state.cache_state_version != self.trace.resolved_state_version:
+            raise ValueError("packet and trace state versions disagree")
+        if self.packet.component_results != self.trace.component_results:
+            raise ValueError("packet and trace component results disagree")
+        return self

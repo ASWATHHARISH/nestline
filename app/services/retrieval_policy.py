@@ -17,6 +17,7 @@ from app.schemas.content import ConditionKey, Domain
 from app.schemas.retrieval import (
     AnswerabilityAssessment,
     AuthenticatedRetrievalScope,
+    DOMAIN_PERSONAL_CONTEXTS,
     EvidenceRequirementPolicy,
     ExactPersonalContext,
     JourneyPosition,
@@ -29,9 +30,9 @@ from app.schemas.retrieval import (
     TrustedRetrievalQuery,
     TrustedRetrievalState,
     UnresolvedConflict,
+    canonical_evidence_policy_values,
 )
 
-POLICY_VERSION = "stage5-answerability-v2"
 STOP_WORDS = {
     "a", "about", "after", "all", "am", "an", "and", "are", "at", "be",
     "can", "do", "for", "from", "give", "how", "i", "in", "is", "it",
@@ -62,15 +63,7 @@ _CONTEXT_TERMS: dict[str, set[str]] = {
     "documents": {"document", "documents", "report", "reports", "record", "records", "file", "files"},
 }
 
-_DOMAIN_CONTEXT: dict[Domain, tuple[str, ...]] = {
-    "journey": ("journey", "documents"),
-    "nutrition": ("allergies", "conditions", "restrictions", "documents"),
-    "movement": ("conditions", "restrictions", "plans", "documents"),
-    "wellbeing": ("conditions", "questions", "documents"),
-    "symptoms": ("conditions", "restrictions", "documents"),
-    "preparation": ("appointments", "plans", "questions", "documents"),
-    "followup": ("appointments", "plans", "questions", "documents"),
-}
+_DOMAIN_CONTEXT = DOMAIN_PERSONAL_CONTEXTS
 
 _FACT_CONTEXT: dict[str, str] = {
     "allergy": "allergies",
@@ -97,25 +90,8 @@ def build_evidence_policy(
 ) -> EvidenceRequirementPolicy:
     """Create one of four fixed policies in trusted application code."""
 
-    required = {
-        "public_guidance": ["public_guidance"],
-        "personal_record_lookup": ["personal_record"],
-        "causal_explanation": ["graph_relationship"],
-        "mixed_personalized_guidance": ["public_guidance", "personal_constraint"],
-    }[purpose]
-    contexts = list(_DOMAIN_CONTEXT[domain])
-    if purpose == "personal_record_lookup":
-        contexts = list(_CONTEXT_TERMS)
-    elif purpose == "causal_explanation":
-        contexts = ["restrictions", "plans", "questions", "documents"]
     return EvidenceRequirementPolicy(
-        policy_version=POLICY_VERSION,
-        policy_id=f"{POLICY_VERSION}:{purpose}:{domain}",
-        purpose=purpose,
-        domain=domain,
-        required_support=required,
-        personal_context_kinds=contexts,
-        trusted_server_created=True,
+        **canonical_evidence_policy_values(purpose, domain)
     )
 
 
@@ -250,6 +226,13 @@ def _query_mentions_context(query_tokens: set[str], context: str) -> bool:
     return bool(query_tokens & _CONTEXT_TERMS[context])
 
 
+def _contexts_for_tokens(tokens: set[str]) -> set[str]:
+    return {
+        context for context, terms in _CONTEXT_TERMS.items()
+        if tokens & terms
+    }
+
+
 def _fact_context(fact: PersonalFactCandidate) -> str:
     if isinstance(fact.value, dict):
         key = fact.value.get("condition_key")
@@ -299,14 +282,22 @@ def _conflict_relevant(
     query_tokens: set[str],
     policy: EvidenceRequirementPolicy,
 ) -> bool:
-    context = _FACT_CONTEXT.get(conflict.fact_type, "documents")
+    type_tokens = meaningful_tokens(conflict.fact_type.replace("_", " "))
     value_tokens = _serialized_tokens(conflict.proposed_values)
+    conflict_contexts = {
+        _FACT_CONTEXT.get(conflict.fact_type, "documents"),
+        *_contexts_for_tokens(type_tokens | value_tokens),
+    }
+    allowed_contexts = conflict_contexts & set(policy.personal_context_kinds)
+    query_contexts = _contexts_for_tokens(query_tokens)
     value_overlap = bool(query_tokens & value_tokens)
     explicitly_conflicted = bool(
         query_tokens & {"conflict", "conflicting", "contradiction", "disagree"}
     )
-    context_matches = context in policy.personal_context_kinds
-    return value_overlap or (explicitly_conflicted and context_matches)
+    category_match = bool(query_contexts & allowed_contexts)
+    return bool(allowed_contexts) and (
+        value_overlap or category_match or explicitly_conflicted
+    )
 
 def _missing_relevant(
     missing: MissingInformation,
@@ -314,15 +305,21 @@ def _missing_relevant(
     policy: EvidenceRequirementPolicy,
     trusted_state: TrustedRetrievalState,
 ) -> bool:
-    field_tokens = meaningful_tokens(missing.field)
+    field_tokens = meaningful_tokens(missing.field.replace("_", " "))
     required_tokens = meaningful_tokens(" ".join(missing.required_for))
-    is_journey_gap = "journey" in missing.field or "week" in missing.field
-    if is_journey_gap:
-        return (
-            "public_guidance" in policy.required_support
-            and trusted_state.journey_relation == "unconfirmed_current"
-        )
-    if query_tokens & (field_tokens | required_tokens):
+    missing_contexts = _contexts_for_tokens(field_tokens | required_tokens)
+    query_contexts = _contexts_for_tokens(query_tokens)
+    allowed_contexts = set(policy.personal_context_kinds)
+    is_journey_gap = bool(missing_contexts & {"journey"})
+    if (
+        is_journey_gap
+        and "public_guidance" in policy.required_support
+        and trusted_state.journey_relation == "unconfirmed_current"
+    ):
+        return True
+    if query_contexts & missing_contexts & allowed_contexts:
+        return True
+    if allowed_contexts & missing_contexts and query_tokens & (field_tokens | required_tokens):
         return True
     return bool(set(policy.required_support) & set(missing.required_for))
 

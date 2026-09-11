@@ -1,91 +1,106 @@
 # Stage 5 in plain language
 
-**Status:** corrected locally and ready for independent Stage 5 re-review
+**Status:** second rectification complete locally; ready for independent re-review
 **Stage 6:** not started
-**Git:** reviewed baseline 448eb6d2ab7b4e8cc7db9fc42ce5c523a7fe10a7; rectification implementation commit dcec1f9e847a64185330ba4406a886bcced688b2 is pushed to the review branch
+**Git:** reviewed remote HEAD `3991896135eca094bc0ab0462f3e87c615469978`; corrected commit and push are pending approval
 
 ## What Stage 5 does
 
-Think of Nestline as a careful librarian.
+Think of Nestline as a careful librarian. When someone asks a question, Stage 5 gathers only the allowed and relevant material:
 
-When someone asks a question, Stage 5 collects only the information that is allowed and relevant:
-
-- exact personal records from the signed-in person’s workspace;
-- approved public health material for the right journey stage, week, country and topic;
+- exact confirmed records from the signed-in person’s workspace;
+- approved public evidence for the right journey stage, week, country and topic;
 - related causes and effects from a small, bounded graph;
-- source labels and exact text spans so later stages can cite the evidence.
+- exact source spans and provenance for future citations.
 
-Stage 5 returns this evidence package. It does not write the final answer and it does not decide whether a symptom is safe.
+It returns an Evidence Packet. It does not write the final health answer, decide whether a symptom is safe, change medication, confirm facts or modify a plan.
 
-## What was wrong
+## How Nestline decides what is enough
 
-The first version asked a question that was too simple: “Did I find anything?”
+The gateway first identifies the question’s trusted purpose:
 
-That meant an unrelated peanut-allergy record could make a hospital-preparation question look supported. It also meant a conflict about prenatal yoga could be hidden because other confirmed facts existed.
+- public guidance needs approved public evidence;
+- a personal-record question needs a relevant confirmed record;
+- personalized guidance needs both public guidance and a relevant personal constraint;
+- a causal “why did this change?” question needs the permitted graph relationship.
 
-The corrected version asks two questions:
+The gateway constructs this policy itself. A caller cannot label public guidance as personal-only or otherwise weaken what evidence is required.
 
-1. What kind of evidence does this question require?
-2. Did we find relevant evidence of every required kind?
+Full support may continue to a later stage. Partial or missing support, a relevant unresolved conflict, database failure or timeout causes abstention or clarification.
 
-A public-guidance question requires approved public guidance. A question such as “What allergy is in my record?” can use a relevant confirmed personal record and does not need public guidance. A personalised guidance question needs both the right public guidance and the relevant personal constraint. A causal “why did my plan change?” question needs the graph relationship.
+## What the second review found
 
-## What happens now
+The earlier rectification fixed two answerability bugs, but five technical gaps remained:
 
-For each request, Nestline:
+1. A public question and a causal question could share the same personal cache entry. The first one run could hide or leak a graph path.
+2. A small result request could cache too few candidates for a later larger request.
+3. A caller could construct an evidence-policy object and claim it was trusted.
+4. Individual fields could be valid even when the Evidence Packet or result contradicted itself.
+5. A generic question such as “What allergies are in my record?” could miss an unresolved allergy conflict because the user did not type “conflict” or name its value.
 
-1. checks who is signed in;
-2. finds that person’s workspace and care episode on the server;
-3. reads the confirmed current journey and state version from the database;
-4. decides whether the question is about the current week or clearly names another week;
-5. chooses the trusted evidence policy in server code;
-6. retrieves exact records, public text/vector matches and permitted graph paths;
-7. removes wrong-user, wrong-week, wrong-country, draft, rejected, retired and unrelated items;
-8. ranks the eligible evidence in a repeatable order;
-9. reports full support, partial support, no support or clarification needed;
-10. returns citations, provenance, component results and failures.
+All five were reproduced on the reviewed commit and corrected.
 
-The question text cannot change the authenticated workspace, confirmed conditions or cache state version.
+## What happens for every request
 
-## The two reported failures
+1. The server checks who is signed in.
+2. It finds that owner’s workspace and care episode.
+3. It reads confirmed journey, conditions, restrictions and state version from the database.
+4. It distinguishes the current week from a clearly requested other week.
+5. It builds the fixed evidence policy from the trusted purpose.
+6. It retrieves exact records, public text/vector matches and permitted graph paths.
+7. It excludes wrong-user, wrong-week, wrong-country, draft, rejected, retired and unrelated material before ranking.
+8. It ranks remaining evidence in a repeatable order.
+9. It checks conflicts, missing information and every required type of support.
+10. It returns a validated packet and trace or abstains.
 
-| Question situation | Before | After |
-|---|---|---|
-| No matching public preparation evidence, but unrelated personal records exist | It incorrectly said an answer could continue | It removes unrelated personal data and abstains with `no_approved_public_content` |
-| Prenatal-yoga conflict plus unrelated confirmed information | It incorrectly said an answer could continue | It carries only the relevant restriction/conflict and asks for clarification with `unresolved_conflict` |
+## Cache correction
 
-The complete before/after packets are saved in `docs/STAGE-5-RECTIFICATION-EVIDENCE-PACKETS.json`.
+Cache identity now includes the policy ID/version/purpose, required support and candidate limit. Personal cache identity also includes the allowed private context, authenticated workspace/care episode and database state version.
 
-## Privacy and safety rules kept
+This means:
 
-- A signed-in user cannot retrieve another user’s facts, vectors, graph paths or cache.
-- Only confirmed personal facts can personalise.
-- Proposed, rejected, superseded and unresolved-conflict facts cannot silently become active truth.
-- A medication can be shown as a record, but Stage 5 never recommends changing it.
-- A symptom stays marked for safety evaluation. “No match” never means “safe.”
-- Generic words such as “record” cannot expose unrelated private passages.
-- Stage 5 reads; it never confirms facts or changes plans.
-- Draft public material stays draft. All 63 weekly profiles remain unpublished.
+- public and causal questions cannot exchange graph results;
+- personal and mixed questions cannot exchange private passages;
+- max-1 and max-5 requests behave like fresh requests in either order;
+- one workspace cannot reuse another workspace’s private result;
+- a confirmed state or release version change invalidates the old result.
+
+## Generic conflict and missing-information correction
+
+Nestline maps normal singular/plural category wording to allergies, restrictions, medications, conditions, appointments and journey timing. Users do not need to know an unresolved value or special system terminology.
+
+A matching unresolved conflict asks for clarification. A matching required missing field is reported. An unrelated appointment conflict does not block an otherwise supported movement question.
+
+## Privacy and safety rules preserved
+
+- Only confirmed personal facts can personalize.
+- Proposed, rejected, superseded and conflicted facts cannot become active context.
+- Medication remains record-only.
+- Symptoms remain safety-evaluation-only; “no match” never means “safe.”
+- Graph traversal is bounded, cycle-safe and workspace-safe.
+- All 63 weekly profiles remain drafts.
+- No production embedding or paid model is needed for deterministic Stage 5 checks.
 
 ## What the checks proved
 
-- 212/212 Python tests passed.
-- 36/36 focused Stage 5 tests passed.
+- 223/223 Python tests passed.
+- 47/47 focused Stage 5 tests passed.
 - 64/64 content-contract cases passed.
 - 26/26 journey cases passed.
-- 26/26 frozen Stage 5 behaviors passed.
+- 28/28 frozen Stage 5 behavior, support and journey decisions passed.
+- 49/49 second-rectification matrix cases passed.
 - 18/18 expected public evidence items were found in the top five.
-- 18/18 returned public evidence items were correct for the frozen truth.
-- 11/11 returned personal facts were expected.
+- 18/18 returned public evidence items were correct.
+- 12/12 returned personal facts were expected.
 - 1/1 required graph path was correct.
 - 254/254 database assertions passed.
 - 70/70 authenticated API checks passed.
-- Wrong week, wrong country, unapproved source, cross-workspace leakage and proposal/conflict personalization counts were all zero.
-- Database lint found zero issues.
+- Wrong-week, wrong-country, unapproved-source, cross-workspace and proposal/conflict personalization counts were zero.
+- Application-schema lint found zero issues.
 - Every Stage 1–4 gate remained green.
 
 ## What this does not prove
 
-The embeddings are repeatable test fixtures, not a chosen production model. The dataset has 26 synthetic development questions and is not a large clinical benchmark. Health content still needs clinical, India-localisation, licence, product and publication approval. Stage 6 still has to build and review the Safety Gate.
+The embeddings are repeatable test fixtures, not a selected production model. Twenty-eight synthetic questions are not a clinical benchmark or sealed final holdout. Clinical, India-localisation, licence, product/publication and production-provider reviews remain open. Stage 6 must still build and independently review the Safety Gate.
 
-Stage 5 should now go to an independent reviewer. Stage 6 should begin only after that reviewer accepts this rectification.
+Stage 5 should now go to an independent reviewer. Stage 6 should begin only after that reviewer accepts this exact local change set.

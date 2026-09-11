@@ -23,7 +23,7 @@ from app.schemas.retrieval import (
     AbstentionState, AuthenticatedRetrievalScope, EvidencePacket,
     ExactPersonalContext, GraphPath, PersonalPassageCandidate,
     PublicEvidenceCandidate, RankedRetrievalCandidate, RetrievalComponentResult,
-    EvidenceRequirementPolicy, RetrievalFailure, RetrievalRequest,
+    RetrievalFailure, RetrievalPurpose, RetrievalRequest,
     RetrievalResult, RetrievalTrace, TrustedRetrievalQuery,
     WeeklyProfileCandidate,
 )
@@ -120,6 +120,11 @@ class Stage5RetrievalCache:
             "jurisdiction": request.jurisdiction.upper(),
             "lanes": sorted(request.evidence_lanes),
             "conditions": sorted(request.active_conditions),
+            "policy_id": request.policy.policy_id,
+            "policy_version": request.policy.policy_version,
+            "purpose": request.policy.purpose,
+            "required_support": request.policy.required_support,
+            "max_candidates": request.max_candidates,
             "corpus_version": corpus_version, "release_version": release_version,
             "filter_version": filter_version,
         })
@@ -134,7 +139,14 @@ class Stage5RetrievalCache:
             "query": normalize_query(request.question), "domain": request.domain,
             "stage": request.journey.stage, "unit": request.journey.unit,
             "start": request.journey.start, "end": request.journey.end,
-            "include_graph": request.include_graph, "filter_version": filter_version,
+            "include_graph": request.include_graph,
+            "policy_id": request.policy.policy_id,
+            "policy_version": request.policy.policy_version,
+            "purpose": request.policy.purpose,
+            "required_support": request.policy.required_support,
+            "personal_context_kinds": request.policy.personal_context_kinds,
+            "max_candidates": request.max_candidates,
+            "filter_version": filter_version,
         })
 
     def get_public(self, key: str) -> PublicCacheEntry | None:
@@ -632,11 +644,11 @@ class RetrievalGateway:
         request: RetrievalRequest,
         scope: AuthenticatedRetrievalScope,
         *,
-        policy: EvidenceRequirementPolicy | None = None,
+        purpose: RetrievalPurpose = "public_guidance",
     ) -> RetrievalResult:
-        """Retrieve one evidence packet under a trusted, purpose-specific policy."""
+        """Retrieve under a trusted purpose; construct its fixed policy internally."""
 
-        policy = policy or build_evidence_policy("public_guidance", request.domain)
+        policy = build_evidence_policy(purpose, request.domain)
         started_at, clock = datetime.now(timezone.utc), perf_counter()
         normalized = normalize_query(request.question)
         components: list[RetrievalComponentResult] = []

@@ -90,8 +90,9 @@ def gateway_run(payload, cases, *, graph_override=None, improvement=False,
             release_version="fixture-release-v2",
             apply_ranking_improvement=improvement)
         request = request_for(case, graph=graph_override)
-        policy = build_evidence_policy(case["purpose"], case["domain"])
-        result = service.retrieve(request, scope_for(case), policy=policy)
+        result = service.retrieve(
+            request, scope_for(case), purpose=case["purpose"]
+        )
         packet = result.packet
         observations.append({
             "case_id": case["case_id"],
@@ -199,7 +200,7 @@ def run(write_report=False):
     on = {row["case_id"]: row for row in graph_on}
     off = {row["case_id"]: row for row in graph_off}
     report = {
-        "schema_version": "stage5-metrics-v2",
+        "schema_version": "stage5-metrics-v3",
         "generated_from_frozen_development_truth": True,
         "fixture_only": True, "paid_model_required": False,
         "development_cases": len(cases),
@@ -220,13 +221,14 @@ def run(write_report=False):
             "sql_sufficient_case_claims_graph_benefit": False,
             "ranking_trial_adopted": False,
         },
-        "honest_limitation": ("Deterministic fixture embeddings and 26 synthetic "
+        "honest_limitation": (f"Deterministic fixture embeddings and {len(cases)} synthetic "
                               "questions verify control flow, isolation and filters; "
                               "they do not establish production retrieval quality."),
         "observations": hybrid,
     }
     evidence = {
-        "reviewed_commit": "448eb6d2ab7b4e8cc7db9fc42ce5c523a7fe10a7",
+        "original_defect_reviewed_commit": "448eb6d2ab7b4e8cc7db9fc42ce5c523a7fe10a7",
+        "cache_policy_reviewed_commit": "3991896135eca094bc0ab0462f3e87c615469978",
         "reproduced_before": {
             "S5-DEFECT-PUBLIC-001": {"public_count": 0, "personal_fact_count": 2, "personal_passage_count": 1, "should_abstain": False, "reason": "none"},
             "S5-DEFECT-CONFLICT-001": {"public_count": 0, "personal_fact_count": 2, "personal_passage_count": 1, "unresolved_conflict_count": 1, "should_abstain": False, "reason": "none"},

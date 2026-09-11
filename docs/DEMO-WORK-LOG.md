@@ -777,3 +777,14 @@ The deterministic SHA-256 fixture embedding proves interfaces, filters and repea
 - Regenerated schemas, metrics, corrected Evidence Packets and the independent-review handoff from repository scripts.
 
 The rectification implementation commit was pushed to the review branch. Nothing was merged or deployed, and Stage 6 was not started.
+### Stage 5 second rectification — 12 September 2026
+
+The independent return-for-changes review was checked against remote HEAD `3991896135eca094bc0ab0462f3e87c615469978`. Every material finding reproduced: cache results depended on public/causal execution order, small candidate limits truncated later large requests, caller-constructed policies could weaken evidence requirements, contradictory packet/result combinations validated, and generic category questions could hide matching conflicts.
+
+Corrections bind policy identity and candidate limit into cache identity, build policies inside the gateway, enforce packet/result cross-field invariants, and use policy-bounded category relevance for conflicts and missing information. The frozen set now has 28 cases. The 10/10 cache, 10/10 policy, 17/17 contract-mutation, 6/6 generic-conflict and 6/6 generic-missing matrices pass.
+
+Final local evidence: 223/223 Python tests, 47/47 focused Stage 5 tests, 64/64 content contracts, 26/26 journey cases, 28/28 retrieval behavior/support/journey decisions, 254/254 pgTAP assertions, 70/70 authenticated API checks, exact Stage 4 upgrade, clean 15-migration replay, zero application-schema lint findings and a clean whitespace check.
+
+A local Supabase reset initially returned while schema initialization was still settling; readiness was checked directly before rerunning the exact upgrade successfully. One API checker was first invoked with system Python and stopped on a missing development package before any API assertion; the project virtual environment passed it 15/15.
+
+**Decision:** Stage 5 is `READY FOR INDEPENDENT RE-REVIEW` locally. Stage 6 remains blocked. The corrected work is uncommitted and unpushed; no migration was deployed.

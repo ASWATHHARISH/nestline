@@ -1,140 +1,184 @@
-# Nestline Stage 5 rectification final report
+# Nestline Stage 5 second-rectification final report
 
-**Prepared:** 11 September 2026
+**Prepared:** 12 September 2026
 **Repository:** `kajalchourasia-cmd/nestline`
 **Branch:** `feat/stage-1-governed-ingestion`
-**Reviewed baseline:** `448eb6d2ab7b4e8cc7db9fc42ce5c523a7fe10a7`
-**Rectification implementation commit:** dcec1f9e847a64185330ba4406a886bcced688b2
-**Recommendation:** Stage 5 ready for independent re-review; Stage 6 remains blocked pending acceptance
+**Independently reviewed remote HEAD:** `3991896135eca094bc0ab0462f3e87c615469978`
+**Corrected commit:** pending; local working tree only
+**Verdict:** `READY FOR INDEPENDENT RE-REVIEW`
 
-## Plain-language root cause
+## 1. Root cause of each finding
 
-The reviewed gateway treated any retrieved information as enough evidence. An unrelated allergy, medication, appointment, plan or private passage could therefore make an unsupported question look answerable. Relevant conflicts and missing information were also checked only after the broad evidence collection was empty.
+1. **Policy cache collision:** the personal cache key described user/state/query identity but omitted retrieval policy identity. Graph eligibility and personal-passage eligibility depend on policy, so whichever purpose populated the cache first changed the later result.
+2. **Candidate-limit collision:** both cache keys omitted `max_candidates`, while the cached component result had already been truncated. A small request could therefore starve a later larger request.
+3. **Mutable evidence policy:** a `trusted_server_created` Boolean was treated as authority even though callers could construct the model and choose inconsistent fields.
+4. **Contradictory contracts:** field-level types were valid, but no model-level invariant required EvidencePacket support, abstention and ordinary-generation fields to agree or required RetrievalResult packet/trace fields to match.
+5. **Generic conflict relevance:** conflict matching relied too heavily on literal question tokens. A user had to know the word “conflict” or the proposed value; a generic category question could miss the unresolved state.
+6. **Generic missing-information relevance:** the same token-only approach was fragile for category wording and singular/plural variants.
 
-The correction first identifies what support the question requires:
+## 2. File-by-file change summary
 
-- public guidance requires eligible approved public evidence;
-- a personal-record lookup requires a relevant confirmed record;
-- mixed personalised guidance requires both public guidance and a relevant confirmed constraint;
-- a causal explanation requires a permitted graph path.
-
-Relevant conflicts, required missing information, database failure and retrieval timeout block ordinary generation even when some unrelated evidence exists.
-
-## Reproduced defects: before and after
-
-| Defect | Reviewed behavior | Corrected behavior |
-|---|---|---|
-| Week-25 hospital preparation question with no matching public evidence but unrelated private data | Public 0, personal facts 2, private passages 1, `should_abstain=false`, reason `none` | Public 0, relevant facts/passages 0/0, support `unsupported`, `should_abstain=true`, reason `no_approved_public_content` |
-| Conflicting prenatal-yoga record plus unrelated confirmed information | Public 0, personal facts 2, private passages 1, conflict 1, `should_abstain=false`, reason `none` | Public 0, relevant constraint 1, unrelated passages 0, relevant conflict 1, support `clarification_required`, `should_abstain=true`, reason `unresolved_conflict` |
-
-Full machine-readable packets are in `docs/STAGE-5-RECTIFICATION-EVIDENCE-PACKETS.json`.
-
-## Implementation changes
-
-| File | Purpose |
+| File | Change |
 |---|---|
-| `app/schemas/retrieval.py` | Twenty versioned contracts for requests, trusted state, evidence policy, candidates, answerability, failures, Evidence Packets and traces |
-| `app/services/retrieval_policy.py` | Fixed server-side policies, database-derived journey/condition/state construction, relevance minimisation and support assessment |
-| `app/services/retrieval.py` | Trusted scope before filters/cache, purpose-aware retrieval and explicit partial/conflict/missing/unsupported behavior |
-| `scripts/build_stage5_fixtures.py` | Controlled multi-journey corpus and frozen 26-case truth |
-| `scripts/run_stage5_retrieval_evals.py` | Vector, hybrid, ranking and graph experiments plus corrected packet generation |
-| `scripts/export_retrieval_schema.py` | Regenerates all Stage 5 schemas |
-| `scripts/check_stage5.py` | Deterministic rectification and independent-review gate |
-| `scripts/check_stage5_retrieval_api.py` | Twenty-five authenticated Stage 5 API checks |
-| `tests/test_retrieval.py` | Thirty-six Stage 5 contract, security, answerability, graph, cache and failure tests |
-| Generated schema, fixture, truth and reports | Regenerated from repository scripts rather than edited to force a pass |
-| Stage 5 and project-status documents | Updated to remove the obsolete five-case metrics and premature Stage 6 GO |
+| `app/schemas/retrieval.py` | Adds canonical policy mapping/version and cross-field validators for policy, trusted query, EvidencePacket and RetrievalResult |
+| `app/services/retrieval.py` | Gateway accepts purpose only; public/personal cache keys bind policy identity and effective candidate limit |
+| `app/services/retrieval_policy.py` | Builds canonical policies and applies typed, policy-bounded category relevance for conflicts and missing information |
+| `tests/test_retrieval.py` | Expands Stage 5 tests to 47, including shared-cache order, limit, policy, mutation and generic-category matrices |
+| `scripts/build_stage5_fixtures.py` | Adds an isolated fictional conflict workspace and two frozen development cases |
+| `scripts/run_stage5_retrieval_evals.py` | Uses the purpose-only gateway and reports the 28-case truth |
+| `scripts/run_stage5_rectification_matrix.py` | New canonical generator for second-review before/after evidence and all requested matrices |
+| `scripts/check_stage5.py` | Enforces regenerated artifacts, 28 cases, 47 tests and the rectification matrix |
+| `scripts/check_stage5_retrieval_api.py` | Uses the purpose-only gateway boundary |
+| `data/schemas/retrieval.schema.json` | Regenerated typed schema |
+| `data/synthetic/stage5_retrieval_fixtures.json` | Regenerated fictional fixture |
+| `evals/stage5_retrieval_development.jsonl` | Regenerated 28-case development truth |
+| `docs/STAGE-5-RETRIEVAL-METRICS.json` | Regenerated metrics |
+| `docs/STAGE-5-CHECK-RESULTS.json` | Regenerated gate result |
+| `docs/STAGE-5-RECTIFICATION-EVIDENCE-PACKETS.json` | Regenerated corrected original-defect packets |
+| `docs/STAGE-5-RECTIFICATION-REGRESSION-MATRIX.json` | New machine-readable second-rectification report |
+| `docs/STAGE-5-IMPLEMENTATION.md` | Current implementation contract |
+| `docs/STAGE-5-SELF-VERIFICATION-AND-STAGE-6-READINESS.md` | Complete verification, recovery and open-gate record |
+| `docs/NESTLINE-STAGE-5-INDEPENDENT-REVIEW-AND-STAGE-6-HANDOFF.md` | Current independent-review checklist |
+| `docs/STAGE-5-SECOND-RECTIFICATION-AND-RE-REVIEW-HANDOFF.md` | Dedicated second-review handoff |
+| `docs/STAGE-5-RECTIFICATION-FINAL-REPORT.md` | This consolidated report |
+| `docs/STAGE-5-PLAIN-LANGUAGE.md` | Updated nontechnical explanation |
+| `docs/NESTLINE-EXECUTION-PLAN.md` | Current Stage 5 gate and counts |
+| `docs/PROJECT-PROGRESS.md` | Current project status |
+| `docs/DEMO-WORK-LOG.md` | Failure, recovery and final-evidence record |
+| `docs/STAGE-5-RECTIFICATION-RESPONSE.md` | Marks the first rectification as historical/superseded |
 
-## Trusted-state and minimisation guarantees
+No migration or environment/configuration file changed.
 
-- Workspace, care episode, owner and state version come from authenticated database scope.
-- Current journey comes from confirmed Journey Resolver state.
-- Active conditions/restrictions come from confirmed facts.
-- Client text cannot override authenticated scope or cache state version.
-- A clearly named other week is distinguished from a silent mismatch with current state.
-- Generic terms such as `record` or `document` cannot expose an unrelated private passage.
-- Medication remains record-only.
-- Symptoms remain safety-evaluation-only and never imply that a situation is safe.
-- Proposed, rejected, superseded and conflicted facts cannot personalise.
-- Broader future safety context is represented separately; Stage 5 does not implement Stage 6.
+## 3. Before-and-after reproductions
 
-## Verification results
+| Reproduction | Before on `3991896` | After |
+|---|---|---|
+| Public→causal, shared cache | causal paths 0; fresh paths 1; cached result unsupported | cached/fresh equivalent; required path present; fully supported |
+| Causal→public, shared cache | public result inherited one graph path; fresh had none | cached/fresh equivalent; public result has no graph path |
+| Public max 1→5 | cached large returned 2 IDs; fresh returned 5 | cached/fresh both return 5 |
+| Personal max 1→5 | cached large returned 2 passages; fresh returned 5 | cached/fresh both return 5 |
+| Fabricated public policy requiring only personal evidence | accepted and allowed ordinary generation for unsupported guidance | rejected before repository access |
+| Unsupported packet with no abstention | accepted by schema | rejected by schema |
+| Generic allergy question with unresolved allergy conflict | conflict hidden; fully supported; no abstention | conflict surfaced; clarification required; abstains |
 
-| Verification | Result |
+## 4. Cache-order and max-candidate matrices
+
+| Case | Result |
 |---|---:|
-| Complete Python suite | 212/212 passed |
-| Focused Stage 5 Python suite | 36/36 passed |
-| Content contracts | 64/64 passed |
-| Journey evaluations | 26/26 passed |
-| Frozen Stage 5 behavior | 26/26 passed |
+| Public→causal | pass |
+| Causal→public | pass |
+| Personal→mixed | pass |
+| Mixed→personal | pass |
+| Public max-1→5 | pass |
+| Public max-5→1 | pass |
+| Personal max-1→5 | pass |
+| Personal max-5→1 | pass |
+| Caller stale version→server version | pass |
+| Server state N→N+1 | pass |
+| **Total** | **10/10** |
+
+## 5. Policy rejection results
+
+Ten of ten inconsistent/fabricated policies were rejected. The matrix mutates policy ID, policy version, purpose/domain combinations, required support and personal-context combinations. It also verifies that the gateway rejects a caller-supplied policy object before repository access.
+
+## 6. Contract-mutation rejection results
+
+Seventeen of seventeen contradictory mutations were rejected:
+
+- 12 EvidencePacket mutations covering support/abstention, ordinary-generation permission, policy, scope, journey, conflict and missing-information alignment;
+- 5 RetrievalResult mutations covering request ID, policy, state version, journey relation and component trace agreement.
+
+## 7. Generic conflict and missing-information results
+
+| Category | Conflict | Missing information |
+|---|---:|---:|
+| Allergies | pass | pass |
+| Restrictions | pass | pass |
+| Medications | pass | pass |
+| Conditions | pass | pass |
+| Appointments | pass | pass |
+| Journey timing | pass | pass |
+| **Total** | **6/6** | **6/6** |
+
+A relevant unresolved category requires clarification/abstention. An unrelated appointment conflict or missing appointment does not block a supported movement request.
+
+## 8. Verification results
+
+### Python, content and stage gates
+
+| Check | Result |
+|---|---:|
+| Compile | pass |
+| Complete Python suite | 223/223 |
+| Focused Stage 5 suite | 47/47 |
+| Content authoring | pass: 63 profiles, 0 published, 31 sources, 55 evidence spans, 56 fragments |
+| Content review-ready | pass with same inventory |
+| Content contracts | 64/64 |
+| Journey evaluations | 26/26 |
+| Stage 1 | pass; includes 223 tests |
+| Stage 2 | pass |
+| Stage 3 UI | pass; 0 network calls |
+| Stage 3 | pass |
+| Stage 4 readiness | pass |
+| Stage 4 UI | pass; 0 network calls |
+| Stage 4 full | pass |
+| Stage 5 behavior/support/journey | 28/28 each |
+| Stage 5 rectification matrix | 49/49 |
+| Stage 5 checker | pass |
+| `git diff --check` | pass |
+
+### Retrieval metrics
+
+| Metric | Result |
+|---|---:|
 | Recall@5 | 18/18 |
 | Citation/evidence precision | 18/18 |
-| Confirmed-personal-fact precision | 11/11 |
-| Support-state accuracy | 26/26 |
-| Journey-relation accuracy | 26/26 |
-| Graph-path correctness | 1/1 |
-| Wrong-week retrieval | 0 |
-| Wrong-jurisdiction retrieval | 0 |
-| Unapproved-source retrieval | 0 |
+| Confirmed-personal-fact precision | 12/12 |
+| Expected behavior | 28/28 |
+| Support classification | 28/28 |
+| Journey relation | 28/28 |
+| Graph path | 1/1 |
+| Wrong-week | 0 |
+| Wrong-jurisdiction | 0 |
+| Unapproved-source | 0 |
 | Cross-workspace leakage | 0 |
 | Conflict/proposal personalization violations | 0 |
-| pgTAP | 254/254 passed |
-| Authenticated API checks | 70/70 passed |
-| Stage 1-4 regression gates | all passed |
-| Nestline public/private schema lint | 0 findings |
-| Git whitespace check | passed |
-| Credential-shaped strings in changed files | 0 |
+| Forbidden evidence IDs | 0 |
 
-### pgTAP accounting
+### Database
 
-- Stage 2 security/lifecycle: 122/122
-- Stage 3 exit hardening: 12/12
-- Stage 3 onboarding: 26/26
-- Stage 4 API role: 11/11
-- Stage 4 document confirmation: 35/35
-- Stage 5 retrieval: 48/48
+| Check | Result |
+|---|---:|
+| Exact Stage 4 → Stage 5 upgrade | pass; synthetic fixture survived/backfilled and was removed |
+| Clean replay | pass; 15/15 migrations including Stage 5 |
+| pgTAP | 254/254 across six files |
+| Authenticated API | 70/70 across Stages 2–5 |
+| Stage 5 authenticated API | 25/25 with two principals |
+| Public/private schema lint | 0 findings |
 
-### Authenticated API accounting
+## 9. Working-tree and commit status
 
-- Stage 2 Storage: 13/13
-- Stage 3 onboarding: 17/17
-- Stage 4 documents: 15/15
-- Stage 5 retrieval: 25/25
+- Branch remains `feat/stage-1-governed-ingestion`.
+- Baseline commit remains `3991896135eca094bc0ab0462f3e87c615469978`.
+- The rectification is uncommitted in the local working tree.
+- Nothing was pushed, merged or deployed.
+- No migration was added or modified.
 
-### Database histories
+## 10. Remaining limitations and disagreements
 
-- Exact Stage 4 to Stage 5 migration: passed.
-- Clean migration replay through Stage 5: passed.
-- No migration was added or modified during rectification.
-- No remote migration was deployed.
+No material review finding was rejected. The findings were reproducible and required correction.
 
-## Experiments
+Remaining limitations:
 
-The vector-only baseline retrieved 18/18 expected public evidence IDs but returned 27 public candidates, giving 18/27 precision. The adopted hybrid returned 18/18 expected IDs with 18/18 precision and 11/11 confirmed-personal-fact precision.
+- deterministic SHA-256 fixture embeddings do not prove production semantic retrieval quality;
+- 28 synthetic development questions are not a sealed clinical holdout;
+- all 63 weekly profiles remain drafts and no production embeddings were created;
+- clinical, India-localisation, licence, product/publication and production-provider reviews remain open;
+- Stage 6 safety routing is absent;
+- GitHub `validate` and `supabase-integration` cannot run on the corrected code until the user authorizes a commit and push.
 
-One ranking adjustment matched the hybrid result but produced no measurable improvement, so it was not adopted.
+## 11. Final verdict
 
-The graph-required case fails without graph support and succeeds 1/1 with graph support. The exact-SQL personal-record case is unchanged with graph enabled or disabled, so no false graph benefit is claimed.
+`READY FOR INDEPENDENT RE-REVIEW`
 
-## Failures and recovery
-
-1. Both reported false-negative abstention defects were reproduced before the fix.
-2. Final packet inspection found an unrelated peanut-allergy passage in the prenatal-yoga conflict packet because both contained the generic word `record`. Generic container terms can no longer establish private-passage relevance, and a regression assertion was added.
-3. Unscoped database lint after pgTAP included third-party `extensions` functions and reported extension-internal findings. The final application lint explicitly checks Nestline's `public` and `private` schemas and returns zero findings.
-4. A Windows document-editing pass introduced mojibake into three existing status files. They were restored from the reviewed commit and the intended status lines were reapplied using explicit UTF-8 I/O. The final scan found no mojibake.
-
-## Remaining limitations and gates
-
-- Deterministic SHA-256 fixture embeddings verify control flow, isolation and filters; they do not establish production semantic quality.
-- Twenty-six synthetic development questions do not prove clinical retrieval quality and are not a sealed final holdout.
-- All 63 weekly profiles remain drafts.
-- Clinical, India-localisation, licence, product/publication and production-embedding reviews remain open.
-- Stage 6 Safety Gate behavior is not implemented.
-- Independent Stage 5 acceptance is required before Stage 6 begins.
-
-## Review recommendation
-
-Stage 5 is ready for independent re-review. It is not approved for Stage 6 engineering until the review is accepted, and it is not ready for public, clinical or production use.
-
-No migration was deployed and no Stage 6 code was added.
-
+This verdict applies to local Stage 5 engineering. Stage 6 remains blocked until this exact change set is independently accepted.
