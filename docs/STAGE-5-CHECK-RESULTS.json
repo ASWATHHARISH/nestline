@@ -1,0 +1,145 @@
+{
+  "valid": true,
+  "stage": 5,
+  "schema_version": "5.0.0",
+  "fixture_only": true,
+  "paid_model_required": false,
+  "ready_for_stage6_engineering": true,
+  "ready_for_public_or_clinical_release": false,
+  "verified": {
+    "typed_contracts": 15,
+    "development_cases": 5,
+    "fixture_public_records": 16,
+    "fixture_personal_fact_records": 5,
+    "fixture_graph_paths": 2,
+    "tracked_weekly_profiles": 63,
+    "published_weekly_profiles": 0,
+    "pinned_pgtap_assertions": 254,
+    "stage5_pgtap_assertions": 48,
+    "authenticated_stage5_api_checks": 22
+  },
+  "retrieval_gate": {
+    "expected_public_evidence_retrieved": true,
+    "no_wrong_week": true,
+    "no_wrong_jurisdiction": true,
+    "no_unapproved_source": true,
+    "no_cross_workspace_leakage": true,
+    "confirmed_personal_precision": true,
+    "no_conflict_or_proposal_personalization": true,
+    "graph_truth_retrieved": true,
+    "expected_behaviors": true,
+    "graph_ablation_is_honest": true,
+    "ranking_trial_rejected_without_gain": true
+  },
+  "adopted_metrics": {
+    "cases": 5,
+    "recall_at_5": {
+      "hits": 2,
+      "expected": 2,
+      "value": 1.0
+    },
+    "citation_evidence_precision": {
+      "correct": 2,
+      "returned": 10,
+      "value": 0.2
+    },
+    "wrong_week_retrieval": 0,
+    "wrong_jurisdiction_retrieval": 0,
+    "unapproved_source_retrieval": 0,
+    "cross_workspace_leakage": 0,
+    "confirmed_personal_fact_precision": {
+      "correct": 8,
+      "returned": 8,
+      "value": 1.0
+    },
+    "confirmed_personal_fact_recall": {
+      "hits": 8,
+      "expected": 8,
+      "value": 1.0
+    },
+    "conflict_proposal_personalization_violations": 0,
+    "graph_path_correctness": {
+      "correct": 1,
+      "expected": 1,
+      "unexpected": 0,
+      "value": 1.0
+    },
+    "expected_behavior_accuracy": {
+      "correct": 5,
+      "cases": 5,
+      "value": 1.0
+    },
+    "forbidden_ids_seen": [],
+    "latency_ms_by_component": {
+      "exact_sql": {
+        "calls": 5,
+        "mean": 0.8514200002537109,
+        "maximum": 1.1412999956519343
+      },
+      "graph": {
+        "calls": 5,
+        "mean": 0.0973800037172623,
+        "maximum": 0.27970000519417226
+      },
+      "personal_full_text": {
+        "calls": 5,
+        "mean": 0.20887999999104068,
+        "maximum": 0.28450000536395237
+      },
+      "personal_vector": {
+        "calls": 5,
+        "mean": 0.17948000167962164,
+        "maximum": 0.2824000039254315
+      },
+      "public_full_text": {
+        "calls": 5,
+        "mean": 2.368360001128167,
+        "maximum": 3.219300000637304
+      },
+      "public_vector": {
+        "calls": 5,
+        "mean": 2.199800002563279,
+        "maximum": 3.270200002589263
+      },
+      "weekly_profile": {
+        "calls": 5,
+        "mean": 0.004739999712910503,
+        "maximum": 0.00549999822396785
+      }
+    }
+  },
+  "graph_ablation": {
+    "expected_paths": 1,
+    "disabled_correct": 0,
+    "enabled_correct": 1,
+    "adds_required_relationship_information": true,
+    "ranking_trial_adopted": false,
+    "ranking_trial_reason": "No Recall@5 or precision gain on frozen development truth.",
+    "sql_sufficient_case": "S5-SQL-001",
+    "sql_sufficient_case_claims_graph_benefit": false
+  },
+  "honest_limitation": "The SHA-256 fixture embedding is deterministic but non-semantic and cannot measure production semantic quality; it exists only to verify plumbing, filters, ranking determinism, and provider independence.",
+  "open_gates": [
+    {
+      "owner": "qualified clinical and India-localisation reviewers",
+      "gate": "approve public health content and safety material"
+    },
+    {
+      "owner": "licence reviewer",
+      "gate": "approve evidence reuse and embedding rights"
+    },
+    {
+      "owner": "product reviewer",
+      "gate": "complete rendered UI acceptance and public release decisions"
+    },
+    {
+      "owner": "Stage 6 engineering and reviewers",
+      "gate": "implement and review the Safety Gate before symptom interpretation"
+    },
+    {
+      "owner": "platform/product",
+      "gate": "choose and benchmark a production embedding provider before production embeddings"
+    }
+  ],
+  "errors": []
+}

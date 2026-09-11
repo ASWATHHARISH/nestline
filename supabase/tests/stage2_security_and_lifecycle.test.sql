@@ -301,8 +301,8 @@ select is(
   (select count(*) from public.match_document_chunks(
     '11000000-0000-0000-0000-000000000001', '[1,0,0]'::extensions.vector, 6
   )),
-  1::bigint,
-  'owner can retrieve an embedded private chunk'
+  0::bigint,
+  'Stage 5 compatibility retrieval excludes an unconfirmed private chunk'
 );
 
 select is(

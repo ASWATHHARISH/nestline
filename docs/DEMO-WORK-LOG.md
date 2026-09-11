@@ -726,3 +726,43 @@ Nestline-function semantic mismatches are both zero. The secret-free evidence is
 `data/supabase/stage4-remote-verification.json`.
 
 No GitHub commit, push or pull request was performed.
+
+## Stage 5 hybrid retrieval and causal graph - 11 September 2026
+
+### What was implemented
+
+- Added 15 versioned retrieval contracts and a single read-only Retrieval Gateway for exact SQL, Postgres full-text, pgvector, bounded graph traversal and deterministic reciprocal-rank fusion.
+- Bound personal scope to the authenticated owner and care episode. Client text cannot override workspace scope, and ordinary retrieval does not use the service role.
+- Added hard pre-ranking filters for confirmation, release, lane, stage, week/range, jurisdiction, domain, applicability, version, retirement and corpus state.
+- Added separate versioned public and personal caches, state-change invalidation, explicit abstention/conflict/missing/degraded failures, and record-only medication plus safety-evaluation-only symptom handling.
+- Added the bounded document-to-restriction/conflict-to-plan-to-stale-plan/question graph path with cycle, depth, count and workspace boundaries.
+- Added five frozen development questions, deterministic fixture embeddings, vector-only/hybrid/ranking-trial/graph-ablation experiments, pgTAP security tests, authenticated API checks and a deterministic CI checker.
+- Added additive migration `20260911001300_stage5_hybrid_retrieval.sql`. It was tested locally from the exact Stage 4 schema, from the deployed Stage 3 route through Stages 4-5, and on a clean replay. It was not deployed.
+
+### What failed and how it was corrected
+
+1. A SQL result alias could not be used in one ordered return query. Ordering by the result ordinal preserved the contract and fixed the migration.
+2. Replacing the original graph uniqueness rule broke the Stage 4 `ON CONFLICT` contract. The original UUID uniqueness was restored and a separate partial public-node identity index was added.
+3. Removing legacy retrieval functions broke earlier database contracts. Strict, permission-safe compatibility wrappers retained the earlier API while the new gateway became the Stage 5 path.
+4. An older Stage 2 test expected an unconfirmed chunk to be visible. The test was corrected to the stronger rule: unconfirmed private chunks are never retrieval candidates.
+5. Canonical graph vocabulary was incomplete. An additive mapping and validator aligned old stored labels with the approved Stage 5 types.
+6. Personal-cache cleanup encountered a foreign-key race during workspace cascade deletion. The invalidation trigger now treats the expected deleted-parent case as cleanup, while retaining other failures.
+7. Graph fixture matching initially required every query term and missed the relationship case. It now requires a meaningful path term while preserving every hard permission and scope filter.
+8. The API fixture initially used a personal mode inconsistent with supervised fixtures. It was changed to a controlled development release and seeded confirmed state.
+9. A public SQL candidate inherited the stored row domain when one passage served several domains. The function now returns the requested filtered domain so ranking and traces cannot mislabel the query lane.
+10. The Stage 5 synthetic corpus changed a broad Stage 0 review fingerprint and made the governed handoff appear stale. The fingerprint boundary now excludes this downstream, non-release fixture, with a regression proving that Stage 5 changes cannot rebind Stage 0 approval evidence.
+11. One evidence-driven score-ranking trial produced no Recall@5 or precision gain. It was recorded and rejected; the simpler deterministic base ranker remains active.
+
+### Final local evidence
+
+- 203/203 Python unit tests, 64/64 content contracts and 26/26 journey cases passed.
+- Stage 1, Stage 2, Stage 3, Stage 4 and Stage 5 checkers passed; both Streamlit smoke tests passed.
+- 254/254 database assertions and 67/67 authenticated API checks passed on upgrade and clean histories; database lint returned zero findings.
+- Frozen Stage 5 behavior passed 5/5. Recall@5 was 2/2; public evidence precision was 2/10; confirmed personal fact precision and recall were 8/8; graph correctness was 0/1 disabled and 1/1 enabled. Every prohibited leakage and decoy counter was zero.
+- All 63 weekly profiles remain drafts. No real medical data, production embeddings or paid-model credentials were used.
+
+### What remains open
+
+The deterministic SHA-256 fixture embedding proves interfaces and repeatability, not production semantic quality. The corpus is small and its 2/10 public evidence precision is an explicit limitation. Clinical, India-localisation, licence, product/publication, production embedding-provider, real-upload scanning and Stage 6 Safety Gate reviews remain open with their owners.
+
+**Decision:** local GO for Stage 6 engineering; public/clinical/production NO-GO. The Stage 5 Git commit is pending authorization. Nothing was committed, pushed, merged or deployed.

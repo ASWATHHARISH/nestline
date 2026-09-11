@@ -1,6 +1,6 @@
 # Nestline: what exists, in plain language
 
-Updated 11 September 2026 after the Stage 4 implementation and self-verification.
+Updated 11 September 2026 after the Stage 5 implementation and self-verification.
 This is the current status; earlier entries in the demo log are history.
 
 ## What the project is
@@ -13,7 +13,7 @@ We are building by stages. Today the working code includes the information
 foundation, governed ingestion, isolated Supabase storage, functional onboarding
 and the fictional private-document proposal/confirmation flow. There is no working
 chat, agent team, live clinically reviewed safety system or weekly recommendation
-dashboard yet. Hybrid retrieval begins in Stage 5.
+dashboard yet. Hybrid retrieval and its bounded causal graph are implemented locally; the reviewed live Safety Gate begins in Stage 6.
 
 ## Stage 0, explained as a library
 
@@ -125,7 +125,7 @@ exact candidate models and cost ceiling are selected.
 
 ### 8. Checks, not an AI evaluation result
 
-There are 175 passing unit tests covering the foundation, governed ingestion,
+There are 203 passing unit tests covering the foundation, governed ingestion,
 storage, workspace lifecycle, journey resolution, onboarding and personal-document
 confirmation. They try valid and invalid data: broken citations, wrong weeks,
 missing conditions, altered source files, parser/OCR failures, duplicate units,
@@ -134,6 +134,8 @@ confirmation, prompt injection, transcription mismatch and unsafe symptom assump
 There are also 64 visible software cases in the future evaluation-contract file.
 The local runner checks existing deterministic functions and fixture integrity.
 **Neither count means conversations tested with Grok, GPT or any other AI model.**
+
+Stage 5 adds a frozen five-case synthetic retrieval set. Its local gate passed 5/5 expected behaviors, 254/254 database assertions and 67/67 authenticated API checks. Public Recall@5 is 2/2; public evidence precision is 2/10 and is recorded as an honest limitation. Confirmed personal fact precision and recall are 8/8, the expected graph path is 0/1 without graph and 1/1 with graph, and all prohibited leakage/filter counters are zero. These measurements validate the controlled engineering corpus, not production or clinical quality.
 
 Kajal's review explicitly requested the future evaluation contract. It is prepared
 now so later implementations have agreed examples to test against. These 64 cases
@@ -169,7 +171,7 @@ Their safe fallback is sourced development text without a size comparison.
 | 2: Storage | Keep each user's information secure and separate | Independently corrected and deployed: ten migrations, 28 RLS-enabled tables, owner-only episode workspaces, strict journey timing, dependency invalidation, Storage-first deletion and deterministic demo reset. The current 122-assertion two-user suite is pinned and passes on upgrade and clean databases; the historical 141 report is explicitly reconciled. |
 | 3: Onboarding | Confirm details and work out journey timing | Independently exit-audited and deployed through migration 01000: all six timing paths, optional details, conflict choice, backward-episode blocking, atomic confirmed save, database-side arithmetic/conflict checks and relogin persistence. Symptom routing remains draft/evaluation-only until specialist review. |
 | 4: Personal documents | Propose extracted facts and request confirmation | Supervised fictional-demo engineering complete: default-off exact-hash fixture selector, eight canonical documents, controlled OCR, five upload failures, fail-closed identity, full visible provenance, unselected explicit review choices, atomic confirmed state, conflict preservation, typed graph links and stale-plan updates. Migrations 01100/01200 are deployed; 206 local and remote database assertions, 45 authenticated API checks and remote lint pass. Anonymous access is restricted to six published-content reads. Real uploads remain scanner/reviewer gated. |
-| 5: Retrieval | Find the right evidence and personal facts | Draft/published/time/country/condition filters exist; SQL/vector/graph retrieval is not built. |
+| 5: Retrieval | Find the right evidence and personal facts | Locally complete: one typed read-only gateway combines exact SQL, Postgres full-text, pgvector and bounded graph traversal. Authenticated scope, pre-ranking filters, deterministic fusion, isolated caches and explicit failures pass the frozen five-case development gate. Production embedding/provider and public content release remain open. |
 | 6: Safety | Handle urgent and uncertain requests before normal answers | Draft rule specification and offline cases exist; reviewed live gate is not built. |
 | 7: Agents | Coordinate specialist helpers | Architecture only. |
 | 8: Answer validation | Reject unsupported or conflicting generated answers | Data-integrity checks exist; generated-answer verification is not built. |
@@ -188,8 +190,7 @@ not a connected working pipeline.
 The architecture also has eight broader phases. Phase 0 scope/scenario/safety
 acceptance remains open. Phase 1 has draft evidence, fixtures and software contracts,
 with clinical/content release still open. Phase 2 has the persistent isolation and
-onboarding core. Phase 3 now has the fictional document-to-confirmed-state slice;
-hybrid retrieval is next. Phases 4-5 agents, safety orchestration and broader state
+onboarding core. Phase 3 now has the fictional document-to-confirmed-state slice and local hybrid retrieval with bounded causal paths. Stage 6 safety is next. Phases 4-5 agents, safety orchestration and broader state
 integration are not implemented. Phase 6 live-model measurement has not run. Phase
 7 submission packaging is not complete.
 

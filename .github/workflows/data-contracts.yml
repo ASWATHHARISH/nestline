@@ -30,12 +30,13 @@ jobs:
       - run: python -m scripts.check_stage4_readiness
       - run: python -m scripts.check_stage4_ui
       - run: python -m scripts.check_stage4
+      - run: python -m scripts.check_stage5
       # Release readiness is intentionally a separate gate: draft shells must
       # remain legal during authoring. Unit tests verify release fails closed.
 
   supabase-integration:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -53,6 +54,12 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Start local Supabase
         run: pnpm exec supabase start
+      - name: Verify exact upgrade from the deployed Stage 4 exit
+        run: |
+          pnpm exec supabase db reset --local --version 20260911001200
+          docker exec -i supabase_db_nestline psql -U postgres -d postgres -v ON_ERROR_STOP=1 < supabase/fixtures/stage5_stage4_upgrade.sql
+          pnpm exec supabase migration up --local
+          docker exec -i supabase_db_nestline psql -U postgres -d postgres -v ON_ERROR_STOP=1 < supabase/fixtures/stage5_stage4_upgrade_check.sql
       - name: Verify exact upgrade from the deployed Stage 3 exit
         run: |
           pnpm exec supabase db reset --local --version 20260911001000
@@ -66,6 +73,7 @@ jobs:
           python -m scripts.check_stage2_storage_api
           python -m scripts.check_stage3_onboarding_api
           python -m scripts.check_stage4_document_api
+          python -m scripts.check_stage5_retrieval_api
           pnpm exec supabase db lint --local
       - name: Verify a clean installation
         run: |
@@ -77,6 +85,7 @@ jobs:
           python -m scripts.check_stage2_storage_api
           python -m scripts.check_stage3_onboarding_api
           python -m scripts.check_stage4_document_api
+          python -m scripts.check_stage5_retrieval_api
           pnpm exec supabase db lint --local
       - name: Stop local Supabase
         if: always()

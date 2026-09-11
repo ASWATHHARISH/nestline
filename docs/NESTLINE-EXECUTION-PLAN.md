@@ -254,13 +254,15 @@ remains blocked until the scanner and human release gates are resolved.
 
 ### S5 — Hybrid retrieval and causal graph · 9–15 hours
 
-- [ ] Build one typed Retrieval Gateway: SQL exact facts, Postgres full-text, pgvector, bounded graph expansion and merged/ranked evidence.
-- [ ] Apply workspace, source approval, stage, week/range, jurisdiction and evidence-lane filters before returning candidates.
-- [ ] Define deterministic rank fusion and reranking inputs; introduce a learned reranker only after a measured retrieval failure warrants it.
-- [ ] Store typed Postgres nodes/edges and bounded traversal; implement document → confirmed restriction → affected plan item → stale plan/question.
-- [ ] Cache public evidence by corpus/filter version only; invalidate state-dependent results on changes. Cache must not mix workspaces.
+- [x] Build one typed Retrieval Gateway: SQL exact facts, Postgres full-text, pgvector, bounded graph expansion and merged/ranked evidence.
+- [x] Apply workspace, source approval, stage, week/range, jurisdiction and evidence-lane filters before returning candidates.
+- [x] Define deterministic rank fusion and reranking inputs; introduce a learned reranker only after a measured retrieval failure warrants it.
+- [x] Store typed Postgres nodes/edges and bounded traversal; implement document → confirmed restriction → affected plan item → stale plan/question.
+- [x] Cache public evidence by corpus/filter version only; invalidate state-dependent results on changes. Cache must not mix workspaces.
 
 **Exit:** expected evidence IDs appear for test questions; wrong-week/private/unapproved decoys never do. Removing graph expansion in an ablation shows which relationship-dependent behavior changes. Do not claim graph benefit if exact SQL already solves the case equally well.
+
+Completed locally on 11 September 2026. The frozen five-case development set retrieves 2/2 expected public evidence IDs, 8/8 confirmed personal facts and the one expected causal path; all prohibited leakage/filter counters are zero. The implementation exports 15 versioned contracts, and exact upgrade plus clean histories pass 254 pgTAP assertions and 67 authenticated API checks. All 63 weekly profiles remain drafts and no production embeddings were created. The local gate is GO for Stage 6 engineering and remains NO-GO for public use. Commit, push, remote CI and deployment remain pending explicit authorization.
 
 ### S6 — Safety gate · 4–8 hours
 

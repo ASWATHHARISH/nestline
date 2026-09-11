@@ -78,6 +78,10 @@ def release_fingerprint(data: Path) -> str:
             if path.is_file():
                 if path.name == "coverage_matrix.csv":
                     continue  # Derived status view is checked against the manifest.
+                if folder == "synthetic" and path.name == "stage5_retrieval_fixtures.json":
+                    # Stage 5 retrieval truth is downstream test evidence, not part
+                    # of the Stage 0 content subject approved by human reviewers.
+                    continue
                 if path.suffix.casefold() in {".pdf", ".png", ".jpg", ".jpeg"}:
                     digest = sha256(path.read_bytes()).hexdigest()
                 else:

@@ -392,12 +392,30 @@ class GraphNode(Contract):
     workspace_id: UUID
     node_type: Literal[
         "document", "fact", "restriction", "symptom",
-        "appointment", "question", "plan", "plan_item",
+        "appointment", "question", "plan", "plan_item", "person",
+        "journey_state", "weekly_profile", "document_fact",
+        "medication_mention", "allergy", "condition", "guideline_evidence",
+        "human_review_case", "symptom_event",
     ]
-    entity_id: UUID
+    entity_id: UUID | None = None
+    entity_release_id: UUID | None = None
+    entity_key: str | None = None
     label: Text
     source_document_id: UUID | None = None
     created_at: datetime
+
+    @model_validator(mode="after")
+    def typed_entity_reference(self):
+        public_type = self.node_type in {"weekly_profile", "guideline_evidence"}
+        if public_type and (self.entity_id is not None or
+                            self.entity_release_id is None or
+                            not (self.entity_key or "").strip()):
+            raise ValueError("public graph nodes require a release and text key")
+        if not public_type and (self.entity_id is None or
+                                self.entity_release_id is not None or
+                                self.entity_key is not None):
+            raise ValueError("personal graph nodes require exactly one UUID entity")
+        return self
 
 
 class GraphEdge(Contract):

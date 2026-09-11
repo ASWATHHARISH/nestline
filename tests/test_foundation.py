@@ -125,6 +125,18 @@ class CorrectionTests(unittest.TestCase):
             path.write_text(json.dumps(row)+"\n", encoding="utf-8")
             self.assertNotEqual(original, release_fingerprint(root))
 
+    def test_stage5_fixture_does_not_invalidate_stage0_review_fingerprint(self):
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "weekly").mkdir()
+            (root / "synthetic").mkdir()
+            (root / "weekly/profiles.jsonl").write_text(
+                json.dumps({"text": "Reviewed content"}) + "\n", encoding="utf-8")
+            original = release_fingerprint(root)
+            (root / "synthetic/stage5_retrieval_fixtures.json").write_text(
+                json.dumps({"fixture_only": True}), encoding="utf-8")
+            self.assertEqual(original, release_fingerprint(root))
+
     def test_food_restrictions_and_unknown_terms_withhold_proposals(self):
         items = {i.item_id:i for i in read_catalogues(DATA)}
         for key, allergies, restrictions, state in [("FOOD-MILK", {"Milk"}, set(), "not_applicable"),

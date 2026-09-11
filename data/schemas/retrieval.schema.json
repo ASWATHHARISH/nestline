@@ -1,0 +1,5195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schema_version": "5.0.0",
+  "schemas": {
+    "retrieval_request": {
+      "$defs": {
+        "JourneyPosition": {
+          "additionalProperties": false,
+          "properties": {
+            "stage": {
+              "enum": [
+                "possible_pregnancy",
+                "pregnancy",
+                "postpartum"
+              ],
+              "title": "Stage",
+              "type": "string"
+            },
+            "unit": {
+              "enum": [
+                "none",
+                "week",
+                "day"
+              ],
+              "title": "Unit",
+              "type": "string"
+            },
+            "exact": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Exact"
+            },
+            "range_start": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Range Start"
+            },
+            "range_end": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Range End"
+            }
+          },
+          "required": [
+            "stage",
+            "unit"
+          ],
+          "title": "JourneyPosition",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "description": "User-controlled retrieval input; workspace scope is intentionally absent.",
+      "properties": {
+        "schema_version": {
+          "const": "5.0.0",
+          "default": "5.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "request_id": {
+          "format": "uuid",
+          "title": "Request Id",
+          "type": "string"
+        },
+        "question": {
+          "minLength": 1,
+          "title": "Question",
+          "type": "string"
+        },
+        "domain": {
+          "enum": [
+            "journey",
+            "nutrition",
+            "movement",
+            "wellbeing",
+            "symptoms",
+            "preparation",
+            "followup"
+          ],
+          "title": "Domain",
+          "type": "string"
+        },
+        "journey": {
+          "$ref": "#/$defs/JourneyPosition"
+        },
+        "jurisdiction": {
+          "minLength": 1,
+          "title": "Jurisdiction",
+          "type": "string"
+        },
+        "evidence_lanes": {
+          "items": {
+            "enum": [
+              "guideline",
+              "weekly_profile"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Lanes",
+          "type": "array"
+        },
+        "active_conditions": {
+          "items": {
+            "enum": [
+              "breastfeeding",
+              "early_home_recovery",
+              "professional_care_for_postpartum_depression",
+              "complicated_delivery_or_caesarean",
+              "uncomplicated_delivery",
+              "feels_ready_for_gentle_activity",
+              "exercise_clearance",
+              "movement_restriction",
+              "current_warning_symptom",
+              "home_birth",
+              "facility_birth",
+              "pregnancy_confirmed",
+              "consents_to_wellbeing_activity",
+              "persistent_emotional_concern",
+              "trusted_support_available"
+            ],
+            "type": "string"
+          },
+          "title": "Active Conditions",
+          "type": "array"
+        },
+        "include_graph": {
+          "default": true,
+          "title": "Include Graph",
+          "type": "boolean"
+        },
+        "max_candidates": {
+          "default": 5,
+          "maximum": 20,
+          "minimum": 1,
+          "title": "Max Candidates",
+          "type": "integer"
+        },
+        "timeout_ms": {
+          "default": 2000,
+          "maximum": 10000,
+          "minimum": 10,
+          "title": "Timeout Ms",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "question",
+        "domain",
+        "journey",
+        "jurisdiction"
+      ],
+      "title": "RetrievalRequest",
+      "type": "object"
+    },
+    "authenticated_scope": {
+      "additionalProperties": false,
+      "description": "Trusted scope resolved from a verified user session by server code.",
+      "properties": {
+        "schema_version": {
+          "const": "5.0.0",
+          "default": "5.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "workspace_id": {
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        },
+        "care_episode_id": {
+          "format": "uuid",
+          "title": "Care Episode Id",
+          "type": "string"
+        },
+        "owner_user_id": {
+          "format": "uuid",
+          "title": "Owner User Id",
+          "type": "string"
+        },
+        "session_subject": {
+          "format": "uuid",
+          "title": "Session Subject",
+          "type": "string"
+        },
+        "state_version": {
+          "minimum": 1,
+          "title": "State Version",
+          "type": "integer"
+        },
+        "authenticated_at": {
+          "format": "date-time",
+          "title": "Authenticated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "workspace_id",
+        "care_episode_id",
+        "owner_user_id",
+        "session_subject",
+        "state_version",
+        "authenticated_at"
+      ],
+      "title": "AuthenticatedRetrievalScope",
+      "type": "object"
+    },
+    "public_evidence_candidate": {
+      "$defs": {
+        "CandidateProvenance": {
+          "additionalProperties": false,
+          "properties": {
+            "corpus_version": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Corpus Version"
+            },
+            "release_id": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Release Id"
+            },
+            "release_fingerprint": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Release Fingerprint"
+            },
+            "source_version": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Source Version"
+            },
+            "embedding_provider": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Embedding Provider"
+            },
+            "embedding_model": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Embedding Model"
+            },
+            "filter_version": {
+              "default": "stage5-filter-v1",
+              "minLength": 1,
+              "title": "Filter Version",
+              "type": "string"
+            },
+            "fixture_only": {
+              "default": false,
+              "title": "Fixture Only",
+              "type": "boolean"
+            }
+          },
+          "title": "CandidateProvenance",
+          "type": "object"
+        },
+        "JourneyPosition": {
+          "additionalProperties": false,
+          "properties": {
+            "stage": {
+              "enum": [
+                "possible_pregnancy",
+                "pregnancy",
+                "postpartum"
+              ],
+              "title": "Stage",
+              "type": "string"
+            },
+            "unit": {
+              "enum": [
+                "none",
+                "week",
+                "day"
+              ],
+              "title": "Unit",
+              "type": "string"
+            },
+            "exact": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Exact"
+            },
+            "range_start": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Range Start"
+            },
+            "range_end": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Range End"
+            }
+          },
+          "required": [
+            "stage",
+            "unit"
+          ],
+          "title": "JourneyPosition",
+          "type": "object"
+        },
+        "SourceSpan": {
+          "additionalProperties": false,
+          "properties": {
+            "source_id": {
+              "minLength": 1,
+              "title": "Source Id",
+              "type": "string"
+            },
+            "evidence_id": {
+              "anyOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Evidence Id"
+            },
+            "source_block_ids": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": "Source Block Ids",
+              "type": "array"
+            },
+            "page": {
+              "anyOf": [
+                {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Page"
+            },
+            "locator": {
+              "default": "",
+              "title": "Locator",
+              "type": "string"
+            },
+            "start_char": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Start Char"
+            },
+            "end_char": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "End Char"
+            },
+            "exact_text": {
+              "minLength": 1,
+              "title": "Exact Text",
+              "type": "string"
+            },
+            "text_sha256": {
+              "pattern": "^[a-f0-9]{64}$",
+              "title": "Text Sha256",
+              "type": "string"
+            }
+          },
+          "required": [
+            "source_id",
+            "exact_text",
+            "text_sha256"
+          ],
+          "title": "SourceSpan",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": {
+          "minLength": 1,
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "evidence_id": {
+          "minLength": 1,
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "source_id": {
+          "minLength": 1,
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_title": {
+          "minLength": 1,
+          "title": "Source Title",
+          "type": "string"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "evidence_lane": {
+          "enum": [
+            "guideline",
+            "weekly_profile"
+          ],
+          "title": "Evidence Lane",
+          "type": "string"
+        },
+        "domain": {
+          "enum": [
+            "journey",
+            "nutrition",
+            "movement",
+            "wellbeing",
+            "symptoms",
+            "preparation",
+            "followup"
+          ],
+          "title": "Domain",
+          "type": "string"
+        },
+        "journey": {
+          "$ref": "#/$defs/JourneyPosition"
+        },
+        "jurisdictions": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Jurisdictions",
+          "type": "array"
+        },
+        "conditions_required": {
+          "items": {
+            "enum": [
+              "breastfeeding",
+              "early_home_recovery",
+              "professional_care_for_postpartum_depression",
+              "complicated_delivery_or_caesarean",
+              "uncomplicated_delivery",
+              "feels_ready_for_gentle_activity",
+              "exercise_clearance",
+              "movement_restriction",
+              "current_warning_symptom",
+              "home_birth",
+              "facility_birth",
+              "pregnancy_confirmed",
+              "consents_to_wellbeing_activity",
+              "persistent_emotional_concern",
+              "trusted_support_available"
+            ],
+            "type": "string"
+          },
+          "title": "Conditions Required",
+          "type": "array"
+        },
+        "conditions_excluded": {
+          "items": {
+            "enum": [
+              "breastfeeding",
+              "early_home_recovery",
+              "professional_care_for_postpartum_depression",
+              "complicated_delivery_or_caesarean",
+              "uncomplicated_delivery",
+              "feels_ready_for_gentle_activity",
+              "exercise_clearance",
+              "movement_restriction",
+              "current_warning_symptom",
+              "home_birth",
+              "facility_birth",
+              "pregnancy_confirmed",
+              "consents_to_wellbeing_activity",
+              "persistent_emotional_concern",
+              "trusted_support_available"
+            ],
+            "type": "string"
+          },
+          "title": "Conditions Excluded",
+          "type": "array"
+        },
+        "release_status": {
+          "const": "published",
+          "default": "published",
+          "title": "Release Status",
+          "type": "string"
+        },
+        "source_status": {
+          "const": "published",
+          "default": "published",
+          "title": "Source Status",
+          "type": "string"
+        },
+        "candidate_status": {
+          "const": "published",
+          "default": "published",
+          "title": "Candidate Status",
+          "type": "string"
+        },
+        "allowed_use": {
+          "items": {
+            "enum": [
+              "store",
+              "embed",
+              "display"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Allowed Use",
+          "type": "array"
+        },
+        "spans": {
+          "items": {
+            "$ref": "#/$defs/SourceSpan"
+          },
+          "minItems": 1,
+          "title": "Spans",
+          "type": "array"
+        },
+        "authority_score": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Authority Score",
+          "type": "number"
+        },
+        "applicability_score": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Applicability Score",
+          "type": "number"
+        },
+        "provenance": {
+          "$ref": "#/$defs/CandidateProvenance"
+        }
+      },
+      "required": [
+        "candidate_id",
+        "evidence_id",
+        "source_id",
+        "source_title",
+        "text",
+        "evidence_lane",
+        "domain",
+        "journey",
+        "jurisdictions",
+        "allowed_use",
+        "spans",
+        "authority_score",
+        "applicability_score",
+        "provenance"
+      ],
+      "title": "PublicEvidenceCandidate",
+      "type": "object"
+    },
+    "personal_fact_candidate": {
+      "additionalProperties": false,
+      "properties": {
+        "fact_id": {
+          "format": "uuid",
+          "title": "Fact Id",
+          "type": "string"
+        },
+        "fact_type": {
+          "enum": [
+            "allergy",
+            "dietary_restriction",
+            "medical_history",
+            "medication",
+            "clinician_instruction",
+            "feeding_status",
+            "delivery_history",
+            "other"
+          ],
+          "title": "Fact Type",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value"
+        },
+        "source_kind": {
+          "enum": [
+            "user_reported",
+            "document_extracted",
+            "human_reviewed"
+          ],
+          "title": "Source Kind",
+          "type": "string"
+        },
+        "confirmation_status": {
+          "const": "confirmed",
+          "default": "confirmed",
+          "title": "Confirmation Status",
+          "type": "string"
+        },
+        "record_only": {
+          "default": false,
+          "title": "Record Only",
+          "type": "boolean"
+        },
+        "source_document_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Document Id"
+        },
+        "source_document_fact_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Document Fact Id"
+        },
+        "valid_from": {
+          "format": "date-time",
+          "title": "Valid From",
+          "type": "string"
+        },
+        "valid_to": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Valid To"
+        },
+        "provenance": {
+          "additionalProperties": true,
+          "title": "Provenance",
+          "type": "object"
+        }
+      },
+      "required": [
+        "fact_id",
+        "fact_type",
+        "value",
+        "source_kind",
+        "valid_from"
+      ],
+      "title": "PersonalFactCandidate",
+      "type": "object"
+    },
+    "personal_passage_candidate": {
+      "$defs": {
+        "CandidateProvenance": {
+          "additionalProperties": false,
+          "properties": {
+            "corpus_version": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Corpus Version"
+            },
+            "release_id": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Release Id"
+            },
+            "release_fingerprint": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Release Fingerprint"
+            },
+            "source_version": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Source Version"
+            },
+            "embedding_provider": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Embedding Provider"
+            },
+            "embedding_model": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Embedding Model"
+            },
+            "filter_version": {
+              "default": "stage5-filter-v1",
+              "minLength": 1,
+              "title": "Filter Version",
+              "type": "string"
+            },
+            "fixture_only": {
+              "default": false,
+              "title": "Fixture Only",
+              "type": "boolean"
+            }
+          },
+          "title": "CandidateProvenance",
+          "type": "object"
+        },
+        "SourceSpan": {
+          "additionalProperties": false,
+          "properties": {
+            "source_id": {
+              "minLength": 1,
+              "title": "Source Id",
+              "type": "string"
+            },
+            "evidence_id": {
+              "anyOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Evidence Id"
+            },
+            "source_block_ids": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": "Source Block Ids",
+              "type": "array"
+            },
+            "page": {
+              "anyOf": [
+                {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Page"
+            },
+            "locator": {
+              "default": "",
+              "title": "Locator",
+              "type": "string"
+            },
+            "start_char": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Start Char"
+            },
+            "end_char": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "End Char"
+            },
+            "exact_text": {
+              "minLength": 1,
+              "title": "Exact Text",
+              "type": "string"
+            },
+            "text_sha256": {
+              "pattern": "^[a-f0-9]{64}$",
+              "title": "Text Sha256",
+              "type": "string"
+            }
+          },
+          "required": [
+            "source_id",
+            "exact_text",
+            "text_sha256"
+          ],
+          "title": "SourceSpan",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": {
+          "minLength": 1,
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "chunk_id": {
+          "format": "uuid",
+          "title": "Chunk Id",
+          "type": "string"
+        },
+        "document_id": {
+          "format": "uuid",
+          "title": "Document Id",
+          "type": "string"
+        },
+        "document_status": {
+          "const": "confirmed",
+          "default": "confirmed",
+          "title": "Document Status",
+          "type": "string"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "span": {
+          "$ref": "#/$defs/SourceSpan"
+        },
+        "provenance": {
+          "$ref": "#/$defs/CandidateProvenance"
+        }
+      },
+      "required": [
+        "candidate_id",
+        "chunk_id",
+        "document_id",
+        "text",
+        "span",
+        "provenance"
+      ],
+      "title": "PersonalPassageCandidate",
+      "type": "object"
+    },
+    "graph_path": {
+      "$defs": {
+        "GraphPathEdge": {
+          "additionalProperties": false,
+          "properties": {
+            "edge_id": {
+              "format": "uuid",
+              "title": "Edge Id",
+              "type": "string"
+            },
+            "relation": {
+              "enum": [
+                "supports",
+                "IN_WEEK",
+                "EXTRACTED_FROM",
+                "CONFLICTS_WITH",
+                "SUPERSEDES",
+                "CONSTRAINS",
+                "SUPPORTED_BY",
+                "TRIGGERED",
+                "SCHEDULED_FOR",
+                "NEEDS_CLARIFICATION",
+                "REVIEWED_BY"
+              ],
+              "title": "Relation",
+              "type": "string"
+            },
+            "from_node_id": {
+              "format": "uuid",
+              "title": "From Node Id",
+              "type": "string"
+            },
+            "to_node_id": {
+              "format": "uuid",
+              "title": "To Node Id",
+              "type": "string"
+            }
+          },
+          "required": [
+            "edge_id",
+            "relation",
+            "from_node_id",
+            "to_node_id"
+          ],
+          "title": "GraphPathEdge",
+          "type": "object"
+        },
+        "GraphPathNode": {
+          "additionalProperties": false,
+          "properties": {
+            "node_id": {
+              "format": "uuid",
+              "title": "Node Id",
+              "type": "string"
+            },
+            "node_type": {
+              "enum": [
+                "document",
+                "fact",
+                "restriction",
+                "symptom",
+                "appointment",
+                "question",
+                "plan",
+                "plan_item",
+                "person",
+                "journey_state",
+                "weekly_profile",
+                "document_fact",
+                "medication_mention",
+                "allergy",
+                "condition",
+                "guideline_evidence",
+                "human_review_case",
+                "symptom_event"
+              ],
+              "title": "Node Type",
+              "type": "string"
+            },
+            "entity_id": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Entity Id"
+            },
+            "entity_release_id": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Entity Release Id"
+            },
+            "entity_key": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Entity Key"
+            },
+            "label": {
+              "minLength": 1,
+              "title": "Label",
+              "type": "string"
+            },
+            "source_document_id": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Source Document Id"
+            }
+          },
+          "required": [
+            "node_id",
+            "node_type",
+            "label"
+          ],
+          "title": "GraphPathNode",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "path_id": {
+          "minLength": 1,
+          "title": "Path Id",
+          "type": "string"
+        },
+        "workspace_id": {
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        },
+        "nodes": {
+          "items": {
+            "$ref": "#/$defs/GraphPathNode"
+          },
+          "maxItems": 9,
+          "minItems": 1,
+          "title": "Nodes",
+          "type": "array"
+        },
+        "edges": {
+          "items": {
+            "$ref": "#/$defs/GraphPathEdge"
+          },
+          "maxItems": 8,
+          "title": "Edges",
+          "type": "array"
+        },
+        "depth": {
+          "maximum": 8,
+          "minimum": 0,
+          "title": "Depth",
+          "type": "integer"
+        },
+        "provenance": {
+          "additionalProperties": true,
+          "title": "Provenance",
+          "type": "object"
+        }
+      },
+      "required": [
+        "path_id",
+        "workspace_id",
+        "nodes",
+        "depth"
+      ],
+      "title": "GraphPath",
+      "type": "object"
+    },
+    "ranked_candidate": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": {
+          "minLength": 1,
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "candidate_kind": {
+          "enum": [
+            "public_evidence",
+            "personal_passage"
+          ],
+          "title": "Candidate Kind",
+          "type": "string"
+        },
+        "rank": {
+          "minimum": 1,
+          "title": "Rank",
+          "type": "integer"
+        },
+        "final_score": {
+          "minimum": 0,
+          "title": "Final Score",
+          "type": "number"
+        },
+        "component_ranks": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Component Ranks",
+          "type": "object"
+        },
+        "component_scores": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Component Scores",
+          "type": "object"
+        },
+        "authority_score": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Authority Score",
+          "type": "number"
+        },
+        "applicability_score": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Applicability Score",
+          "type": "number"
+        },
+        "exact_position_fit": {
+          "title": "Exact Position Fit",
+          "type": "boolean"
+        },
+        "source_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Version"
+        },
+        "stable_tie_breaker": {
+          "minLength": 1,
+          "title": "Stable Tie Breaker",
+          "type": "string"
+        }
+      },
+      "required": [
+        "candidate_id",
+        "candidate_kind",
+        "rank",
+        "final_score",
+        "authority_score",
+        "applicability_score",
+        "exact_position_fit",
+        "stable_tie_breaker"
+      ],
+      "title": "RankedRetrievalCandidate",
+      "type": "object"
+    },
+    "reranker_input": {
+      "$defs": {
+        "RankedRetrievalCandidate": {
+          "additionalProperties": false,
+          "properties": {
+            "candidate_id": {
+              "minLength": 1,
+              "title": "Candidate Id",
+              "type": "string"
+            },
+            "candidate_kind": {
+              "enum": [
+                "public_evidence",
+                "personal_passage"
+              ],
+              "title": "Candidate Kind",
+              "type": "string"
+            },
+            "rank": {
+              "minimum": 1,
+              "title": "Rank",
+              "type": "integer"
+            },
+            "final_score": {
+              "minimum": 0,
+              "title": "Final Score",
+              "type": "number"
+            },
+            "component_ranks": {
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "title": "Component Ranks",
+              "type": "object"
+            },
+            "component_scores": {
+              "additionalProperties": {
+                "type": "number"
+              },
+              "title": "Component Scores",
+              "type": "object"
+            },
+            "authority_score": {
+              "maximum": 1,
+              "minimum": 0,
+              "title": "Authority Score",
+              "type": "number"
+            },
+            "applicability_score": {
+              "maximum": 1,
+              "minimum": 0,
+              "title": "Applicability Score",
+              "type": "number"
+            },
+            "exact_position_fit": {
+              "title": "Exact Position Fit",
+              "type": "boolean"
+            },
+            "source_version": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Source Version"
+            },
+            "stable_tie_breaker": {
+              "minLength": 1,
+              "title": "Stable Tie Breaker",
+              "type": "string"
+            }
+          },
+          "required": [
+            "candidate_id",
+            "candidate_kind",
+            "rank",
+            "final_score",
+            "authority_score",
+            "applicability_score",
+            "exact_position_fit",
+            "stable_tie_breaker"
+          ],
+          "title": "RankedRetrievalCandidate",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "5.0.0",
+          "default": "5.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "request_id": {
+          "format": "uuid",
+          "title": "Request Id",
+          "type": "string"
+        },
+        "question": {
+          "minLength": 1,
+          "title": "Question",
+          "type": "string"
+        },
+        "candidates": {
+          "items": {
+            "$ref": "#/$defs/RankedRetrievalCandidate"
+          },
+          "title": "Candidates",
+          "type": "array"
+        },
+        "learned_reranker_enabled": {
+          "const": false,
+          "default": false,
+          "title": "Learned Reranker Enabled",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "request_id",
+        "question",
+        "candidates"
+      ],
+      "title": "RerankerInput",
+      "type": "object"
+    },
+    "missing_information": {
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "minLength": 1,
+          "title": "Field",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "required_for": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Required For",
+          "type": "array"
+        }
+      },
+      "required": [
+        "field",
+        "reason",
+        "required_for"
+      ],
+      "title": "MissingInformation",
+      "type": "object"
+    },
+    "unresolved_conflict": {
+      "additionalProperties": false,
+      "properties": {
+        "conflict_id": {
+          "format": "uuid",
+          "title": "Conflict Id",
+          "type": "string"
+        },
+        "fact_type": {
+          "title": "Fact Type",
+          "type": "string"
+        },
+        "proposed_values": {
+          "items": {},
+          "minItems": 1,
+          "title": "Proposed Values",
+          "type": "array"
+        },
+        "source_document_ids": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Source Document Ids",
+          "type": "array"
+        },
+        "clarification_question_ids": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Clarification Question Ids",
+          "type": "array"
+        },
+        "state": {
+          "const": "requires_clarification",
+          "default": "requires_clarification",
+          "title": "State",
+          "type": "string"
+        }
+      },
+      "required": [
+        "conflict_id",
+        "fact_type",
+        "proposed_values"
+      ],
+      "title": "UnresolvedConflict",
+      "type": "object"
+    },
+    "abstention": {
+      "additionalProperties": false,
+      "properties": {
+        "should_abstain": {
+          "title": "Should Abstain",
+          "type": "boolean"
+        },
+        "reason": {
+          "default": "none",
+          "enum": [
+            "none",
+            "no_eligible_evidence",
+            "no_approved_public_content",
+            "database_unavailable",
+            "retrieval_timeout",
+            "unresolved_conflict",
+            "missing_information"
+          ],
+          "title": "Reason",
+          "type": "string"
+        },
+        "detail": {
+          "default": "",
+          "title": "Detail",
+          "type": "string"
+        }
+      },
+      "required": [
+        "should_abstain"
+      ],
+      "title": "AbstentionState",
+      "type": "object"
+    },
+    "retrieval_failure": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "database_unavailable",
+            "vector_unavailable",
+            "timeout",
+            "invalid_candidate",
+            "no_eligible_evidence",
+            "no_approved_public_content",
+            "malformed_response"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "recoverable": {
+          "title": "Recoverable",
+          "type": "boolean"
+        },
+        "component": {
+          "anyOf": [
+            {
+              "enum": [
+                "exact_sql",
+                "public_full_text",
+                "public_vector",
+                "personal_full_text",
+                "personal_vector",
+                "graph",
+                "weekly_profile"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Component"
+        },
+        "detail": {
+          "minLength": 1,
+          "title": "Detail",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "recoverable",
+        "detail"
+      ],
+      "title": "RetrievalFailure",
+      "type": "object"
+    },
+    "evidence_packet": {
+      "$defs": {
+        "AbstentionState": {
+          "additionalProperties": false,
+          "properties": {
+            "should_abstain": {
+              "title": "Should Abstain",
+              "type": "boolean"
+            },
+            "reason": {
+              "default": "none",
+              "enum": [
+                "none",
+                "no_eligible_evidence",
+                "no_approved_public_content",
+                "database_unavailable",
+                "retrieval_timeout",
+                "unresolved_conflict",
+                "missing_information"
+              ],
+              "title": "Reason",
+              "type": "string"
+            },
+            "detail": {
+              "default": "",
+              "title": "Detail",
+              "type": "string"
+            }
+          },
+          "required": [
+            "should_abstain"
+          ],
+          "title": "AbstentionState",
+          "type": "object"
+        },
+        "AppointmentSnapshot": {
+          "additionalProperties": false,
+          "properties": {
+            "appointment_id": {
+              "format": "uuid",
+              "title": "Appointment Id",
+              "type": "string"
+            },
+            "scheduled_for": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Scheduled For"
+            },
+            "appointment_type": {
+              "default": "",
+              "title": "Appointment Type",
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "planned",
+                "confirmed",
+                "completed",
+                "cancelled"
+              ],
+              "title": "Status",
+              "type": "string"
+            }
+          },
+          "required": [
+            "appointment_id",
+            "status"
+          ],
+          "title": "AppointmentSnapshot",
+          "type": "object"
+        },
+        "CandidateProvenance": {
+          "additionalProperties": false,
+          "properties": {
+            "corpus_version": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Corpus Version"
+            },
+            "release_id": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Release Id"
+            },
+            "release_fingerprint": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Release Fingerprint"
+            },
+            "source_version": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Source Version"
+            },
+            "embedding_provider": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Embedding Provider"
+            },
+            "embedding_model": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Embedding Model"
+            },
+            "filter_version": {
+              "default": "stage5-filter-v1",
+              "minLength": 1,
+              "title": "Filter Version",
+              "type": "string"
+            },
+            "fixture_only": {
+              "default": false,
+              "title": "Fixture Only",
+              "type": "boolean"
+            }
+          },
+          "title": "CandidateProvenance",
+          "type": "object"
+        },
+        "ClarificationQuestion": {
+          "additionalProperties": false,
+          "properties": {
+            "question_id": {
+              "format": "uuid",
+              "title": "Question Id",
+              "type": "string"
+            },
+            "question": {
+              "minLength": 1,
+              "title": "Question",
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "draft",
+                "saved",
+                "stale"
+              ],
+              "title": "Status",
+              "type": "string"
+            },
+            "source_fact_ids": {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "title": "Source Fact Ids",
+              "type": "array"
+            },
+            "stale_reasons": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Stale Reasons",
+              "type": "array"
+            }
+          },
+          "required": [
+            "question_id",
+            "question",
+            "status"
+          ],
+          "title": "ClarificationQuestion",
+          "type": "object"
+        },
+        "GraphPath": {
+          "additionalProperties": false,
+          "properties": {
+            "path_id": {
+              "minLength": 1,
+              "title": "Path Id",
+              "type": "string"
+            },
+            "workspace_id": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            },
+            "nodes": {
+              "items": {
+                "$ref": "#/$defs/GraphPathNode"
+              },
+              "maxItems": 9,
+              "minItems": 1,
+              "title": "Nodes",
+              "type": "array"
+            },
+            "edges": {
+              "items": {
+                "$ref": "#/$defs/GraphPathEdge"
+              },
+              "maxItems": 8,
+              "title": "Edges",
+              "type": "array"
+            },
+            "depth": {
+              "maximum": 8,
+              "minimum": 0,
+              "title": "Depth",
+              "type": "integer"
+            },
+            "provenance": {
+              "additionalProperties": true,
+              "title": "Provenance",
+              "type": "object"
+            }
+          },
+          "required": [
+            "path_id",
+            "workspace_id",
+            "nodes",
+            "depth"
+          ],
+          "title": "GraphPath",
+          "type": "object"
+        },
+        "GraphPathEdge": {
+          "additionalProperties": false,
+          "properties": {
+            "edge_id": {
+              "format": "uuid",
+              "title": "Edge Id",
+              "type": "string"
+            },
+            "relation": {
+              "enum": [
+                "supports",
+                "IN_WEEK",
+                "EXTRACTED_FROM",
+                "CONFLICTS_WITH",
+                "SUPERSEDES",
+                "CONSTRAINS",
+                "SUPPORTED_BY",
+                "TRIGGERED",
+                "SCHEDULED_FOR",
+                "NEEDS_CLARIFICATION",
+                "REVIEWED_BY"
+              ],
+              "title": "Relation",
+              "type": "string"
+            },
+            "from_node_id": {
+              "format": "uuid",
+              "title": "From Node Id",
+              "type": "string"
+            },
+            "to_node_id": {
+              "format": "uuid",
+              "title": "To Node Id",
+              "type": "string"
+            }
+          },
+          "required": [
+            "edge_id",
+            "relation",
+            "from_node_id",
+            "to_node_id"
+          ],
+          "title": "GraphPathEdge",
+          "type": "object"
+        },
+        "GraphPathNode": {
+          "additionalProperties": false,
+          "properties": {
+            "node_id": {
+              "format": "uuid",
+              "title": "Node Id",
+              "type": "string"
+            },
+            "node_type": {
+              "enum": [
+                "document",
+                "fact",
+                "restriction",
+                "symptom",
+                "appointment",
+                "question",
+                "plan",
+                "plan_item",
+                "person",
+                "journey_state",
+                "weekly_profile",
+                "document_fact",
+                "medication_mention",
+                "allergy",
+                "condition",
+                "guideline_evidence",
+                "human_review_case",
+                "symptom_event"
+              ],
+              "title": "Node Type",
+              "type": "string"
+            },
+            "entity_id": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Entity Id"
+            },
+            "entity_release_id": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Entity Release Id"
+            },
+            "entity_key": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Entity Key"
+            },
+            "label": {
+              "minLength": 1,
+              "title": "Label",
+              "type": "string"
+            },
+            "source_document_id": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Source Document Id"
+            }
+          },
+          "required": [
+            "node_id",
+            "node_type",
+            "label"
+          ],
+          "title": "GraphPathNode",
+          "type": "object"
+        },
+        "JourneyPosition": {
+          "additionalProperties": false,
+          "properties": {
+            "stage": {
+              "enum": [
+                "possible_pregnancy",
+                "pregnancy",
+                "postpartum"
+              ],
+              "title": "Stage",
+              "type": "string"
+            },
+            "unit": {
+              "enum": [
+                "none",
+                "week",
+                "day"
+              ],
+              "title": "Unit",
+              "type": "string"
+            },
+            "exact": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Exact"
+            },
+            "range_start": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Range Start"
+            },
+            "range_end": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Range End"
+            }
+          },
+          "required": [
+            "stage",
+            "unit"
+          ],
+          "title": "JourneyPosition",
+          "type": "object"
+        },
+        "MedicationRecord": {
+          "additionalProperties": false,
+          "properties": {
+            "medication_id": {
+              "format": "uuid",
+              "title": "Medication Id",
+              "type": "string"
+            },
+            "name_as_written": {
+              "minLength": 1,
+              "title": "Name As Written",
+              "type": "string"
+            },
+            "context_text": {
+              "default": "",
+              "title": "Context Text",
+              "type": "string"
+            },
+            "status": {
+              "const": "confirmed",
+              "default": "confirmed",
+              "title": "Status",
+              "type": "string"
+            },
+            "record_only": {
+              "const": true,
+              "default": true,
+              "title": "Record Only",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "medication_id",
+            "name_as_written"
+          ],
+          "title": "MedicationRecord",
+          "type": "object"
+        },
+        "MissingInformation": {
+          "additionalProperties": false,
+          "properties": {
+            "field": {
+              "minLength": 1,
+              "title": "Field",
+              "type": "string"
+            },
+            "reason": {
+              "minLength": 1,
+              "title": "Reason",
+              "type": "string"
+            },
+            "required_for": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Required For",
+              "type": "array"
+            }
+          },
+          "required": [
+            "field",
+            "reason",
+            "required_for"
+          ],
+          "title": "MissingInformation",
+          "type": "object"
+        },
+        "PersonalFactCandidate": {
+          "additionalProperties": false,
+          "properties": {
+            "fact_id": {
+              "format": "uuid",
+              "title": "Fact Id",
+              "type": "string"
+            },
+            "fact_type": {
+              "enum": [
+                "allergy",
+                "dietary_restriction",
+                "medical_history",
+                "medication",
+                "clinician_instruction",
+                "feeding_status",
+                "delivery_history",
+                "other"
+              ],
+              "title": "Fact Type",
+              "type": "string"
+            },
+            "value": {
+              "title": "Value"
+            },
+            "source_kind": {
+              "enum": [
+                "user_reported",
+                "document_extracted",
+                "human_reviewed"
+              ],
+              "title": "Source Kind",
+              "type": "string"
+            },
+            "confirmation_status": {
+              "const": "confirmed",
+              "default": "confirmed",
+              "title": "Confirmation Status",
+              "type": "string"
+            },
+            "record_only": {
+              "default": false,
+              "title": "Record Only",
+              "type": "boolean"
+            },
+            "source_document_id": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Source Document Id"
+            },
+            "source_document_fact_id": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Source Document Fact Id"
+            },
+            "valid_from": {
+              "format": "date-time",
+              "title": "Valid From",
+              "type": "string"
+            },
+            "valid_to": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Valid To"
+            },
+            "provenance": {
+              "additionalProperties": true,
+              "title": "Provenance",
+              "type": "object"
+            }
+          },
+          "required": [
+            "fact_id",
+            "fact_type",
+            "value",
+            "source_kind",
+            "valid_from"
+          ],
+          "title": "PersonalFactCandidate",
+          "type": "object"
+        },
+        "PersonalPassageCandidate": {
+          "additionalProperties": false,
+          "properties": {
+            "candidate_id": {
+              "minLength": 1,
+              "title": "Candidate Id",
+              "type": "string"
+            },
+            "chunk_id": {
+              "format": "uuid",
+              "title": "Chunk Id",
+              "type": "string"
+            },
+            "document_id": {
+              "format": "uuid",
+              "title": "Document Id",
+              "type": "string"
+            },
+            "document_status": {
+              "const": "confirmed",
+              "default": "confirmed",
+              "title": "Document Status",
+              "type": "string"
+            },
+            "text": {
+              "minLength": 1,
+              "title": "Text",
+              "type": "string"
+            },
+            "span": {
+              "$ref": "#/$defs/SourceSpan"
+            },
+            "provenance": {
+              "$ref": "#/$defs/CandidateProvenance"
+            }
+          },
+          "required": [
+            "candidate_id",
+            "chunk_id",
+            "document_id",
+            "text",
+            "span",
+            "provenance"
+          ],
+          "title": "PersonalPassageCandidate",
+          "type": "object"
+        },
+        "PlanStateSnapshot": {
+          "additionalProperties": false,
+          "properties": {
+            "plan_id": {
+              "format": "uuid",
+              "title": "Plan Id",
+              "type": "string"
+            },
+            "version": {
+              "minimum": 1,
+              "title": "Version",
+              "type": "integer"
+            },
+            "status": {
+              "enum": [
+                "draft",
+                "user_reviewed",
+                "saved",
+                "active",
+                "stale",
+                "replaced",
+                "archived"
+              ],
+              "title": "Status",
+              "type": "string"
+            },
+            "stale_reasons": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Stale Reasons",
+              "type": "array"
+            }
+          },
+          "required": [
+            "plan_id",
+            "version",
+            "status"
+          ],
+          "title": "PlanStateSnapshot",
+          "type": "object"
+        },
+        "PublicEvidenceCandidate": {
+          "additionalProperties": false,
+          "properties": {
+            "candidate_id": {
+              "minLength": 1,
+              "title": "Candidate Id",
+              "type": "string"
+            },
+            "evidence_id": {
+              "minLength": 1,
+              "title": "Evidence Id",
+              "type": "string"
+            },
+            "source_id": {
+              "minLength": 1,
+              "title": "Source Id",
+              "type": "string"
+            },
+            "source_title": {
+              "minLength": 1,
+              "title": "Source Title",
+              "type": "string"
+            },
+            "text": {
+              "minLength": 1,
+              "title": "Text",
+              "type": "string"
+            },
+            "evidence_lane": {
+              "enum": [
+                "guideline",
+                "weekly_profile"
+              ],
+              "title": "Evidence Lane",
+              "type": "string"
+            },
+            "domain": {
+              "enum": [
+                "journey",
+                "nutrition",
+                "movement",
+                "wellbeing",
+                "symptoms",
+                "preparation",
+                "followup"
+              ],
+              "title": "Domain",
+              "type": "string"
+            },
+            "journey": {
+              "$ref": "#/$defs/JourneyPosition"
+            },
+            "jurisdictions": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Jurisdictions",
+              "type": "array"
+            },
+            "conditions_required": {
+              "items": {
+                "enum": [
+                  "breastfeeding",
+                  "early_home_recovery",
+                  "professional_care_for_postpartum_depression",
+                  "complicated_delivery_or_caesarean",
+                  "uncomplicated_delivery",
+                  "feels_ready_for_gentle_activity",
+                  "exercise_clearance",
+                  "movement_restriction",
+                  "current_warning_symptom",
+                  "home_birth",
+                  "facility_birth",
+                  "pregnancy_confirmed",
+                  "consents_to_wellbeing_activity",
+                  "persistent_emotional_concern",
+                  "trusted_support_available"
+                ],
+                "type": "string"
+              },
+              "title": "Conditions Required",
+              "type": "array"
+            },
+            "conditions_excluded": {
+              "items": {
+                "enum": [
+                  "breastfeeding",
+                  "early_home_recovery",
+                  "professional_care_for_postpartum_depression",
+                  "complicated_delivery_or_caesarean",
+                  "uncomplicated_delivery",
+                  "feels_ready_for_gentle_activity",
+                  "exercise_clearance",
+                  "movement_restriction",
+                  "current_warning_symptom",
+                  "home_birth",
+                  "facility_birth",
+                  "pregnancy_confirmed",
+                  "consents_to_wellbeing_activity",
+                  "persistent_emotional_concern",
+                  "trusted_support_available"
+                ],
+                "type": "string"
+              },
+              "title": "Conditions Excluded",
+              "type": "array"
+            },
+            "release_status": {
+              "const": "published",
+              "default": "published",
+              "title": "Release Status",
+              "type": "string"
+            },
+            "source_status": {
+              "const": "published",
+              "default": "published",
+              "title": "Source Status",
+              "type": "string"
+            },
+            "candidate_status": {
+              "const": "published",
+              "default": "published",
+              "title": "Candidate Status",
+              "type": "string"
+            },
+            "allowed_use": {
+              "items": {
+                "enum": [
+                  "store",
+                  "embed",
+                  "display"
+                ],
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Allowed Use",
+              "type": "array"
+            },
+            "spans": {
+              "items": {
+                "$ref": "#/$defs/SourceSpan"
+              },
+              "minItems": 1,
+              "title": "Spans",
+              "type": "array"
+            },
+            "authority_score": {
+              "maximum": 1,
+              "minimum": 0,
+              "title": "Authority Score",
+              "type": "number"
+            },
+            "applicability_score": {
+              "maximum": 1,
+              "minimum": 0,
+              "title": "Applicability Score",
+              "type": "number"
+            },
+            "provenance": {
+              "$ref": "#/$defs/CandidateProvenance"
+            }
+          },
+          "required": [
+            "candidate_id",
+            "evidence_id",
+            "source_id",
+            "source_title",
+            "text",
+            "evidence_lane",
+            "domain",
+            "journey",
+            "jurisdictions",
+            "allowed_use",
+            "spans",
+            "authority_score",
+            "applicability_score",
+            "provenance"
+          ],
+          "title": "PublicEvidenceCandidate",
+          "type": "object"
+        },
+        "RankedRetrievalCandidate": {
+          "additionalProperties": false,
+          "properties": {
+            "candidate_id": {
+              "minLength": 1,
+              "title": "Candidate Id",
+              "type": "string"
+            },
+            "candidate_kind": {
+              "enum": [
+                "public_evidence",
+                "personal_passage"
+              ],
+              "title": "Candidate Kind",
+              "type": "string"
+            },
+            "rank": {
+              "minimum": 1,
+              "title": "Rank",
+              "type": "integer"
+            },
+            "final_score": {
+              "minimum": 0,
+              "title": "Final Score",
+              "type": "number"
+            },
+            "component_ranks": {
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "title": "Component Ranks",
+              "type": "object"
+            },
+            "component_scores": {
+              "additionalProperties": {
+                "type": "number"
+              },
+              "title": "Component Scores",
+              "type": "object"
+            },
+            "authority_score": {
+              "maximum": 1,
+              "minimum": 0,
+              "title": "Authority Score",
+              "type": "number"
+            },
+            "applicability_score": {
+              "maximum": 1,
+              "minimum": 0,
+              "title": "Applicability Score",
+              "type": "number"
+            },
+            "exact_position_fit": {
+              "title": "Exact Position Fit",
+              "type": "boolean"
+            },
+            "source_version": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Source Version"
+            },
+            "stable_tie_breaker": {
+              "minLength": 1,
+              "title": "Stable Tie Breaker",
+              "type": "string"
+            }
+          },
+          "required": [
+            "candidate_id",
+            "candidate_kind",
+            "rank",
+            "final_score",
+            "authority_score",
+            "applicability_score",
+            "exact_position_fit",
+            "stable_tie_breaker"
+          ],
+          "title": "RankedRetrievalCandidate",
+          "type": "object"
+        },
+        "RetrievalComponentResult": {
+          "additionalProperties": false,
+          "properties": {
+            "component": {
+              "enum": [
+                "exact_sql",
+                "public_full_text",
+                "public_vector",
+                "personal_full_text",
+                "personal_vector",
+                "graph",
+                "weekly_profile"
+              ],
+              "title": "Component",
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "ok",
+                "degraded",
+                "failed",
+                "skipped"
+              ],
+              "title": "Status",
+              "type": "string"
+            },
+            "attempted": {
+              "minimum": 0,
+              "title": "Attempted",
+              "type": "integer"
+            },
+            "returned": {
+              "minimum": 0,
+              "title": "Returned",
+              "type": "integer"
+            },
+            "rejected_by_filters": {
+              "minimum": 0,
+              "title": "Rejected By Filters",
+              "type": "integer"
+            },
+            "latency_ms": {
+              "minimum": 0,
+              "title": "Latency Ms",
+              "type": "number"
+            },
+            "retries": {
+              "default": 0,
+              "maximum": 1,
+              "minimum": 0,
+              "title": "Retries",
+              "type": "integer"
+            },
+            "failure": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/RetrievalFailure"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            }
+          },
+          "required": [
+            "component",
+            "status",
+            "attempted",
+            "returned",
+            "rejected_by_filters",
+            "latency_ms"
+          ],
+          "title": "RetrievalComponentResult",
+          "type": "object"
+        },
+        "RetrievalFailure": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "enum": [
+                "database_unavailable",
+                "vector_unavailable",
+                "timeout",
+                "invalid_candidate",
+                "no_eligible_evidence",
+                "no_approved_public_content",
+                "malformed_response"
+              ],
+              "title": "Code",
+              "type": "string"
+            },
+            "recoverable": {
+              "title": "Recoverable",
+              "type": "boolean"
+            },
+            "component": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "exact_sql",
+                    "public_full_text",
+                    "public_vector",
+                    "personal_full_text",
+                    "personal_vector",
+                    "graph",
+                    "weekly_profile"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Component"
+            },
+            "detail": {
+              "minLength": 1,
+              "title": "Detail",
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "recoverable",
+            "detail"
+          ],
+          "title": "RetrievalFailure",
+          "type": "object"
+        },
+        "SourceSpan": {
+          "additionalProperties": false,
+          "properties": {
+            "source_id": {
+              "minLength": 1,
+              "title": "Source Id",
+              "type": "string"
+            },
+            "evidence_id": {
+              "anyOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Evidence Id"
+            },
+            "source_block_ids": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": "Source Block Ids",
+              "type": "array"
+            },
+            "page": {
+              "anyOf": [
+                {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Page"
+            },
+            "locator": {
+              "default": "",
+              "title": "Locator",
+              "type": "string"
+            },
+            "start_char": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Start Char"
+            },
+            "end_char": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "End Char"
+            },
+            "exact_text": {
+              "minLength": 1,
+              "title": "Exact Text",
+              "type": "string"
+            },
+            "text_sha256": {
+              "pattern": "^[a-f0-9]{64}$",
+              "title": "Text Sha256",
+              "type": "string"
+            }
+          },
+          "required": [
+            "source_id",
+            "exact_text",
+            "text_sha256"
+          ],
+          "title": "SourceSpan",
+          "type": "object"
+        },
+        "SymptomRecord": {
+          "additionalProperties": false,
+          "properties": {
+            "symptom_id": {
+              "format": "uuid",
+              "title": "Symptom Id",
+              "type": "string"
+            },
+            "description": {
+              "minLength": 1,
+              "title": "Description",
+              "type": "string"
+            },
+            "reported_at": {
+              "format": "date-time",
+              "title": "Reported At",
+              "type": "string"
+            },
+            "safety_route": {
+              "enum": [
+                "urgent",
+                "clarify",
+                "no_match"
+              ],
+              "title": "Safety Route",
+              "type": "string"
+            },
+            "matched_rule_ids": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Matched Rule Ids",
+              "type": "array"
+            },
+            "safety_evaluation_only": {
+              "const": true,
+              "default": true,
+              "title": "Safety Evaluation Only",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "symptom_id",
+            "description",
+            "reported_at",
+            "safety_route"
+          ],
+          "title": "SymptomRecord",
+          "type": "object"
+        },
+        "UnresolvedConflict": {
+          "additionalProperties": false,
+          "properties": {
+            "conflict_id": {
+              "format": "uuid",
+              "title": "Conflict Id",
+              "type": "string"
+            },
+            "fact_type": {
+              "title": "Fact Type",
+              "type": "string"
+            },
+            "proposed_values": {
+              "items": {},
+              "minItems": 1,
+              "title": "Proposed Values",
+              "type": "array"
+            },
+            "source_document_ids": {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "title": "Source Document Ids",
+              "type": "array"
+            },
+            "clarification_question_ids": {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "title": "Clarification Question Ids",
+              "type": "array"
+            },
+            "state": {
+              "const": "requires_clarification",
+              "default": "requires_clarification",
+              "title": "State",
+              "type": "string"
+            }
+          },
+          "required": [
+            "conflict_id",
+            "fact_type",
+            "proposed_values"
+          ],
+          "title": "UnresolvedConflict",
+          "type": "object"
+        },
+        "WeeklyProfileCandidate": {
+          "additionalProperties": false,
+          "properties": {
+            "profile_id": {
+              "minLength": 1,
+              "title": "Profile Id",
+              "type": "string"
+            },
+            "release_id": {
+              "format": "uuid",
+              "title": "Release Id",
+              "type": "string"
+            },
+            "corpus_version": {
+              "minLength": 1,
+              "title": "Corpus Version",
+              "type": "string"
+            },
+            "journey": {
+              "$ref": "#/$defs/JourneyPosition"
+            },
+            "jurisdiction": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Jurisdiction",
+              "type": "array"
+            },
+            "hero": {
+              "additionalProperties": true,
+              "title": "Hero",
+              "type": "object"
+            },
+            "card_slots": {
+              "additionalProperties": true,
+              "title": "Card Slots",
+              "type": "object"
+            },
+            "evidence_ids": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": "Evidence Ids",
+              "type": "array"
+            },
+            "status": {
+              "const": "published",
+              "default": "published",
+              "title": "Status",
+              "type": "string"
+            },
+            "fixture_only": {
+              "default": false,
+              "title": "Fixture Only",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "profile_id",
+            "release_id",
+            "corpus_version",
+            "journey",
+            "jurisdiction",
+            "hero",
+            "card_slots"
+          ],
+          "title": "WeeklyProfileCandidate",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "5.0.0",
+          "default": "5.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "request_id": {
+          "format": "uuid",
+          "title": "Request Id",
+          "type": "string"
+        },
+        "workspace_id": {
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        },
+        "care_episode_id": {
+          "format": "uuid",
+          "title": "Care Episode Id",
+          "type": "string"
+        },
+        "question": {
+          "minLength": 1,
+          "title": "Question",
+          "type": "string"
+        },
+        "domain": {
+          "enum": [
+            "journey",
+            "nutrition",
+            "movement",
+            "wellbeing",
+            "symptoms",
+            "preparation",
+            "followup"
+          ],
+          "title": "Domain",
+          "type": "string"
+        },
+        "journey": {
+          "$ref": "#/$defs/JourneyPosition"
+        },
+        "jurisdiction": {
+          "minLength": 1,
+          "title": "Jurisdiction",
+          "type": "string"
+        },
+        "confirmed_personal_facts": {
+          "items": {
+            "$ref": "#/$defs/PersonalFactCandidate"
+          },
+          "title": "Confirmed Personal Facts",
+          "type": "array"
+        },
+        "permitted_personal_passages": {
+          "items": {
+            "$ref": "#/$defs/PersonalPassageCandidate"
+          },
+          "title": "Permitted Personal Passages",
+          "type": "array"
+        },
+        "medication_records": {
+          "items": {
+            "$ref": "#/$defs/MedicationRecord"
+          },
+          "title": "Medication Records",
+          "type": "array"
+        },
+        "symptom_records": {
+          "items": {
+            "$ref": "#/$defs/SymptomRecord"
+          },
+          "title": "Symptom Records",
+          "type": "array"
+        },
+        "appointments": {
+          "items": {
+            "$ref": "#/$defs/AppointmentSnapshot"
+          },
+          "title": "Appointments",
+          "type": "array"
+        },
+        "plan_states": {
+          "items": {
+            "$ref": "#/$defs/PlanStateSnapshot"
+          },
+          "title": "Plan States",
+          "type": "array"
+        },
+        "open_questions": {
+          "items": {
+            "$ref": "#/$defs/ClarificationQuestion"
+          },
+          "title": "Open Questions",
+          "type": "array"
+        },
+        "weekly_profile": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WeeklyProfileCandidate"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "approved_guideline_passages": {
+          "items": {
+            "$ref": "#/$defs/PublicEvidenceCandidate"
+          },
+          "title": "Approved Guideline Passages",
+          "type": "array"
+        },
+        "graph_paths": {
+          "items": {
+            "$ref": "#/$defs/GraphPath"
+          },
+          "title": "Graph Paths",
+          "type": "array"
+        },
+        "ranked_candidates": {
+          "items": {
+            "$ref": "#/$defs/RankedRetrievalCandidate"
+          },
+          "title": "Ranked Candidates",
+          "type": "array"
+        },
+        "source_ids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Source Ids",
+          "type": "array"
+        },
+        "evidence_ids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "exact_spans": {
+          "items": {
+            "$ref": "#/$defs/SourceSpan"
+          },
+          "title": "Exact Spans",
+          "type": "array"
+        },
+        "provenance_versions": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Provenance Versions",
+          "type": "object"
+        },
+        "missing_information": {
+          "items": {
+            "$ref": "#/$defs/MissingInformation"
+          },
+          "title": "Missing Information",
+          "type": "array"
+        },
+        "unresolved_conflicts": {
+          "items": {
+            "$ref": "#/$defs/UnresolvedConflict"
+          },
+          "title": "Unresolved Conflicts",
+          "type": "array"
+        },
+        "allowed_claim_types": {
+          "items": {
+            "enum": [
+              "confirmed_personal_record",
+              "record_only_medication",
+              "approved_guideline_paraphrase",
+              "published_weekly_profile",
+              "clarification_required",
+              "evaluation_only_symptom_record"
+            ],
+            "type": "string"
+          },
+          "title": "Allowed Claim Types",
+          "type": "array"
+        },
+        "required_citations": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Required Citations",
+          "type": "array"
+        },
+        "component_results": {
+          "items": {
+            "$ref": "#/$defs/RetrievalComponentResult"
+          },
+          "title": "Component Results",
+          "type": "array"
+        },
+        "failures": {
+          "items": {
+            "$ref": "#/$defs/RetrievalFailure"
+          },
+          "title": "Failures",
+          "type": "array"
+        },
+        "corpus_mode": {
+          "enum": [
+            "production_release",
+            "controlled_fixture",
+            "no_public_release"
+          ],
+          "title": "Corpus Mode",
+          "type": "string"
+        },
+        "abstention": {
+          "$ref": "#/$defs/AbstentionState"
+        }
+      },
+      "required": [
+        "request_id",
+        "workspace_id",
+        "care_episode_id",
+        "question",
+        "domain",
+        "journey",
+        "jurisdiction",
+        "component_results",
+        "corpus_mode",
+        "abstention"
+      ],
+      "title": "EvidencePacket",
+      "type": "object"
+    },
+    "retrieval_trace": {
+      "$defs": {
+        "RetrievalComponentResult": {
+          "additionalProperties": false,
+          "properties": {
+            "component": {
+              "enum": [
+                "exact_sql",
+                "public_full_text",
+                "public_vector",
+                "personal_full_text",
+                "personal_vector",
+                "graph",
+                "weekly_profile"
+              ],
+              "title": "Component",
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "ok",
+                "degraded",
+                "failed",
+                "skipped"
+              ],
+              "title": "Status",
+              "type": "string"
+            },
+            "attempted": {
+              "minimum": 0,
+              "title": "Attempted",
+              "type": "integer"
+            },
+            "returned": {
+              "minimum": 0,
+              "title": "Returned",
+              "type": "integer"
+            },
+            "rejected_by_filters": {
+              "minimum": 0,
+              "title": "Rejected By Filters",
+              "type": "integer"
+            },
+            "latency_ms": {
+              "minimum": 0,
+              "title": "Latency Ms",
+              "type": "number"
+            },
+            "retries": {
+              "default": 0,
+              "maximum": 1,
+              "minimum": 0,
+              "title": "Retries",
+              "type": "integer"
+            },
+            "failure": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/RetrievalFailure"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            }
+          },
+          "required": [
+            "component",
+            "status",
+            "attempted",
+            "returned",
+            "rejected_by_filters",
+            "latency_ms"
+          ],
+          "title": "RetrievalComponentResult",
+          "type": "object"
+        },
+        "RetrievalFailure": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "enum": [
+                "database_unavailable",
+                "vector_unavailable",
+                "timeout",
+                "invalid_candidate",
+                "no_eligible_evidence",
+                "no_approved_public_content",
+                "malformed_response"
+              ],
+              "title": "Code",
+              "type": "string"
+            },
+            "recoverable": {
+              "title": "Recoverable",
+              "type": "boolean"
+            },
+            "component": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "exact_sql",
+                    "public_full_text",
+                    "public_vector",
+                    "personal_full_text",
+                    "personal_vector",
+                    "graph",
+                    "weekly_profile"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Component"
+            },
+            "detail": {
+              "minLength": 1,
+              "title": "Detail",
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "recoverable",
+            "detail"
+          ],
+          "title": "RetrievalFailure",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "5.0.0",
+          "default": "5.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "request_id": {
+          "format": "uuid",
+          "title": "Request Id",
+          "type": "string"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "completed_at": {
+          "format": "date-time",
+          "title": "Completed At",
+          "type": "string"
+        },
+        "total_latency_ms": {
+          "minimum": 0,
+          "title": "Total Latency Ms",
+          "type": "number"
+        },
+        "normalized_query": {
+          "minLength": 1,
+          "title": "Normalized Query",
+          "type": "string"
+        },
+        "public_cache_key": {
+          "minLength": 1,
+          "title": "Public Cache Key",
+          "type": "string"
+        },
+        "personal_cache_key": {
+          "minLength": 1,
+          "title": "Personal Cache Key",
+          "type": "string"
+        },
+        "filter_version": {
+          "minLength": 1,
+          "title": "Filter Version",
+          "type": "string"
+        },
+        "ranking_version": {
+          "minLength": 1,
+          "title": "Ranking Version",
+          "type": "string"
+        },
+        "component_results": {
+          "items": {
+            "$ref": "#/$defs/RetrievalComponentResult"
+          },
+          "title": "Component Results",
+          "type": "array"
+        },
+        "rejected_candidate_ids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Rejected Candidate Ids",
+          "type": "array"
+        },
+        "deterministic_order_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Deterministic Order Digest",
+          "type": "string"
+        }
+      },
+      "required": [
+        "request_id",
+        "started_at",
+        "completed_at",
+        "total_latency_ms",
+        "normalized_query",
+        "public_cache_key",
+        "personal_cache_key",
+        "filter_version",
+        "ranking_version",
+        "component_results",
+        "deterministic_order_digest"
+      ],
+      "title": "RetrievalTrace",
+      "type": "object"
+    },
+    "retrieval_result": {
+      "$defs": {
+        "AbstentionState": {
+          "additionalProperties": false,
+          "properties": {
+            "should_abstain": {
+              "title": "Should Abstain",
+              "type": "boolean"
+            },
+            "reason": {
+              "default": "none",
+              "enum": [
+                "none",
+                "no_eligible_evidence",
+                "no_approved_public_content",
+                "database_unavailable",
+                "retrieval_timeout",
+                "unresolved_conflict",
+                "missing_information"
+              ],
+              "title": "Reason",
+              "type": "string"
+            },
+            "detail": {
+              "default": "",
+              "title": "Detail",
+              "type": "string"
+            }
+          },
+          "required": [
+            "should_abstain"
+          ],
+          "title": "AbstentionState",
+          "type": "object"
+        },
+        "AppointmentSnapshot": {
+          "additionalProperties": false,
+          "properties": {
+            "appointment_id": {
+              "format": "uuid",
+              "title": "Appointment Id",
+              "type": "string"
+            },
+            "scheduled_for": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Scheduled For"
+            },
+            "appointment_type": {
+              "default": "",
+              "title": "Appointment Type",
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "planned",
+                "confirmed",
+                "completed",
+                "cancelled"
+              ],
+              "title": "Status",
+              "type": "string"
+            }
+          },
+          "required": [
+            "appointment_id",
+            "status"
+          ],
+          "title": "AppointmentSnapshot",
+          "type": "object"
+        },
+        "CandidateProvenance": {
+          "additionalProperties": false,
+          "properties": {
+            "corpus_version": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Corpus Version"
+            },
+            "release_id": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Release Id"
+            },
+            "release_fingerprint": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Release Fingerprint"
+            },
+            "source_version": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Source Version"
+            },
+            "embedding_provider": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Embedding Provider"
+            },
+            "embedding_model": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Embedding Model"
+            },
+            "filter_version": {
+              "default": "stage5-filter-v1",
+              "minLength": 1,
+              "title": "Filter Version",
+              "type": "string"
+            },
+            "fixture_only": {
+              "default": false,
+              "title": "Fixture Only",
+              "type": "boolean"
+            }
+          },
+          "title": "CandidateProvenance",
+          "type": "object"
+        },
+        "ClarificationQuestion": {
+          "additionalProperties": false,
+          "properties": {
+            "question_id": {
+              "format": "uuid",
+              "title": "Question Id",
+              "type": "string"
+            },
+            "question": {
+              "minLength": 1,
+              "title": "Question",
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "draft",
+                "saved",
+                "stale"
+              ],
+              "title": "Status",
+              "type": "string"
+            },
+            "source_fact_ids": {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "title": "Source Fact Ids",
+              "type": "array"
+            },
+            "stale_reasons": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Stale Reasons",
+              "type": "array"
+            }
+          },
+          "required": [
+            "question_id",
+            "question",
+            "status"
+          ],
+          "title": "ClarificationQuestion",
+          "type": "object"
+        },
+        "EvidencePacket": {
+          "additionalProperties": false,
+          "properties": {
+            "schema_version": {
+              "const": "5.0.0",
+              "default": "5.0.0",
+              "title": "Schema Version",
+              "type": "string"
+            },
+            "request_id": {
+              "format": "uuid",
+              "title": "Request Id",
+              "type": "string"
+            },
+            "workspace_id": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            },
+            "care_episode_id": {
+              "format": "uuid",
+              "title": "Care Episode Id",
+              "type": "string"
+            },
+            "question": {
+              "minLength": 1,
+              "title": "Question",
+              "type": "string"
+            },
+            "domain": {
+              "enum": [
+                "journey",
+                "nutrition",
+                "movement",
+                "wellbeing",
+                "symptoms",
+                "preparation",
+                "followup"
+              ],
+              "title": "Domain",
+              "type": "string"
+            },
+            "journey": {
+              "$ref": "#/$defs/JourneyPosition"
+            },
+            "jurisdiction": {
+              "minLength": 1,
+              "title": "Jurisdiction",
+              "type": "string"
+            },
+            "confirmed_personal_facts": {
+              "items": {
+                "$ref": "#/$defs/PersonalFactCandidate"
+              },
+              "title": "Confirmed Personal Facts",
+              "type": "array"
+            },
+            "permitted_personal_passages": {
+              "items": {
+                "$ref": "#/$defs/PersonalPassageCandidate"
+              },
+              "title": "Permitted Personal Passages",
+              "type": "array"
+            },
+            "medication_records": {
+              "items": {
+                "$ref": "#/$defs/MedicationRecord"
+              },
+              "title": "Medication Records",
+              "type": "array"
+            },
+            "symptom_records": {
+              "items": {
+                "$ref": "#/$defs/SymptomRecord"
+              },
+              "title": "Symptom Records",
+              "type": "array"
+            },
+            "appointments": {
+              "items": {
+                "$ref": "#/$defs/AppointmentSnapshot"
+              },
+              "title": "Appointments",
+              "type": "array"
+            },
+            "plan_states": {
+              "items": {
+                "$ref": "#/$defs/PlanStateSnapshot"
+              },
+              "title": "Plan States",
+              "type": "array"
+            },
+            "open_questions": {
+              "items": {
+                "$ref": "#/$defs/ClarificationQuestion"
+              },
+              "title": "Open Questions",
+              "type": "array"
+            },
+            "weekly_profile": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/WeeklyProfileCandidate"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "approved_guideline_passages": {
+              "items": {
+                "$ref": "#/$defs/PublicEvidenceCandidate"
+              },
+              "title": "Approved Guideline Passages",
+              "type": "array"
+            },
+            "graph_paths": {
+              "items": {
+                "$ref": "#/$defs/GraphPath"
+              },
+              "title": "Graph Paths",
+              "type": "array"
+            },
+            "ranked_candidates": {
+              "items": {
+                "$ref": "#/$defs/RankedRetrievalCandidate"
+              },
+              "title": "Ranked Candidates",
+              "type": "array"
+            },
+            "source_ids": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": "Source Ids",
+              "type": "array"
+            },
+            "evidence_ids": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": "Evidence Ids",
+              "type": "array"
+            },
+            "exact_spans": {
+              "items": {
+                "$ref": "#/$defs/SourceSpan"
+              },
+              "title": "Exact Spans",
+              "type": "array"
+            },
+            "provenance_versions": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "title": "Provenance Versions",
+              "type": "object"
+            },
+            "missing_information": {
+              "items": {
+                "$ref": "#/$defs/MissingInformation"
+              },
+              "title": "Missing Information",
+              "type": "array"
+            },
+            "unresolved_conflicts": {
+              "items": {
+                "$ref": "#/$defs/UnresolvedConflict"
+              },
+              "title": "Unresolved Conflicts",
+              "type": "array"
+            },
+            "allowed_claim_types": {
+              "items": {
+                "enum": [
+                  "confirmed_personal_record",
+                  "record_only_medication",
+                  "approved_guideline_paraphrase",
+                  "published_weekly_profile",
+                  "clarification_required",
+                  "evaluation_only_symptom_record"
+                ],
+                "type": "string"
+              },
+              "title": "Allowed Claim Types",
+              "type": "array"
+            },
+            "required_citations": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": "Required Citations",
+              "type": "array"
+            },
+            "component_results": {
+              "items": {
+                "$ref": "#/$defs/RetrievalComponentResult"
+              },
+              "title": "Component Results",
+              "type": "array"
+            },
+            "failures": {
+              "items": {
+                "$ref": "#/$defs/RetrievalFailure"
+              },
+              "title": "Failures",
+              "type": "array"
+            },
+            "corpus_mode": {
+              "enum": [
+                "production_release",
+                "controlled_fixture",
+                "no_public_release"
+              ],
+              "title": "Corpus Mode",
+              "type": "string"
+            },
+            "abstention": {
+              "$ref": "#/$defs/AbstentionState"
+            }
+          },
+          "required": [
+            "request_id",
+            "workspace_id",
+            "care_episode_id",
+            "question",
+            "domain",
+            "journey",
+            "jurisdiction",
+            "component_results",
+            "corpus_mode",
+            "abstention"
+          ],
+          "title": "EvidencePacket",
+          "type": "object"
+        },
+        "GraphPath": {
+          "additionalProperties": false,
+          "properties": {
+            "path_id": {
+              "minLength": 1,
+              "title": "Path Id",
+              "type": "string"
+            },
+            "workspace_id": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            },
+            "nodes": {
+              "items": {
+                "$ref": "#/$defs/GraphPathNode"
+              },
+              "maxItems": 9,
+              "minItems": 1,
+              "title": "Nodes",
+              "type": "array"
+            },
+            "edges": {
+              "items": {
+                "$ref": "#/$defs/GraphPathEdge"
+              },
+              "maxItems": 8,
+              "title": "Edges",
+              "type": "array"
+            },
+            "depth": {
+              "maximum": 8,
+              "minimum": 0,
+              "title": "Depth",
+              "type": "integer"
+            },
+            "provenance": {
+              "additionalProperties": true,
+              "title": "Provenance",
+              "type": "object"
+            }
+          },
+          "required": [
+            "path_id",
+            "workspace_id",
+            "nodes",
+            "depth"
+          ],
+          "title": "GraphPath",
+          "type": "object"
+        },
+        "GraphPathEdge": {
+          "additionalProperties": false,
+          "properties": {
+            "edge_id": {
+              "format": "uuid",
+              "title": "Edge Id",
+              "type": "string"
+            },
+            "relation": {
+              "enum": [
+                "supports",
+                "IN_WEEK",
+                "EXTRACTED_FROM",
+                "CONFLICTS_WITH",
+                "SUPERSEDES",
+                "CONSTRAINS",
+                "SUPPORTED_BY",
+                "TRIGGERED",
+                "SCHEDULED_FOR",
+                "NEEDS_CLARIFICATION",
+                "REVIEWED_BY"
+              ],
+              "title": "Relation",
+              "type": "string"
+            },
+            "from_node_id": {
+              "format": "uuid",
+              "title": "From Node Id",
+              "type": "string"
+            },
+            "to_node_id": {
+              "format": "uuid",
+              "title": "To Node Id",
+              "type": "string"
+            }
+          },
+          "required": [
+            "edge_id",
+            "relation",
+            "from_node_id",
+            "to_node_id"
+          ],
+          "title": "GraphPathEdge",
+          "type": "object"
+        },
+        "GraphPathNode": {
+          "additionalProperties": false,
+          "properties": {
+            "node_id": {
+              "format": "uuid",
+              "title": "Node Id",
+              "type": "string"
+            },
+            "node_type": {
+              "enum": [
+                "document",
+                "fact",
+                "restriction",
+                "symptom",
+                "appointment",
+                "question",
+                "plan",
+                "plan_item",
+                "person",
+                "journey_state",
+                "weekly_profile",
+                "document_fact",
+                "medication_mention",
+                "allergy",
+                "condition",
+                "guideline_evidence",
+                "human_review_case",
+                "symptom_event"
+              ],
+              "title": "Node Type",
+              "type": "string"
+            },
+            "entity_id": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Entity Id"
+            },
+            "entity_release_id": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Entity Release Id"
+            },
+            "entity_key": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Entity Key"
+            },
+            "label": {
+              "minLength": 1,
+              "title": "Label",
+              "type": "string"
+            },
+            "source_document_id": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Source Document Id"
+            }
+          },
+          "required": [
+            "node_id",
+            "node_type",
+            "label"
+          ],
+          "title": "GraphPathNode",
+          "type": "object"
+        },
+        "JourneyPosition": {
+          "additionalProperties": false,
+          "properties": {
+            "stage": {
+              "enum": [
+                "possible_pregnancy",
+                "pregnancy",
+                "postpartum"
+              ],
+              "title": "Stage",
+              "type": "string"
+            },
+            "unit": {
+              "enum": [
+                "none",
+                "week",
+                "day"
+              ],
+              "title": "Unit",
+              "type": "string"
+            },
+            "exact": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Exact"
+            },
+            "range_start": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Range Start"
+            },
+            "range_end": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Range End"
+            }
+          },
+          "required": [
+            "stage",
+            "unit"
+          ],
+          "title": "JourneyPosition",
+          "type": "object"
+        },
+        "MedicationRecord": {
+          "additionalProperties": false,
+          "properties": {
+            "medication_id": {
+              "format": "uuid",
+              "title": "Medication Id",
+              "type": "string"
+            },
+            "name_as_written": {
+              "minLength": 1,
+              "title": "Name As Written",
+              "type": "string"
+            },
+            "context_text": {
+              "default": "",
+              "title": "Context Text",
+              "type": "string"
+            },
+            "status": {
+              "const": "confirmed",
+              "default": "confirmed",
+              "title": "Status",
+              "type": "string"
+            },
+            "record_only": {
+              "const": true,
+              "default": true,
+              "title": "Record Only",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "medication_id",
+            "name_as_written"
+          ],
+          "title": "MedicationRecord",
+          "type": "object"
+        },
+        "MissingInformation": {
+          "additionalProperties": false,
+          "properties": {
+            "field": {
+              "minLength": 1,
+              "title": "Field",
+              "type": "string"
+            },
+            "reason": {
+              "minLength": 1,
+              "title": "Reason",
+              "type": "string"
+            },
+            "required_for": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Required For",
+              "type": "array"
+            }
+          },
+          "required": [
+            "field",
+            "reason",
+            "required_for"
+          ],
+          "title": "MissingInformation",
+          "type": "object"
+        },
+        "PersonalFactCandidate": {
+          "additionalProperties": false,
+          "properties": {
+            "fact_id": {
+              "format": "uuid",
+              "title": "Fact Id",
+              "type": "string"
+            },
+            "fact_type": {
+              "enum": [
+                "allergy",
+                "dietary_restriction",
+                "medical_history",
+                "medication",
+                "clinician_instruction",
+                "feeding_status",
+                "delivery_history",
+                "other"
+              ],
+              "title": "Fact Type",
+              "type": "string"
+            },
+            "value": {
+              "title": "Value"
+            },
+            "source_kind": {
+              "enum": [
+                "user_reported",
+                "document_extracted",
+                "human_reviewed"
+              ],
+              "title": "Source Kind",
+              "type": "string"
+            },
+            "confirmation_status": {
+              "const": "confirmed",
+              "default": "confirmed",
+              "title": "Confirmation Status",
+              "type": "string"
+            },
+            "record_only": {
+              "default": false,
+              "title": "Record Only",
+              "type": "boolean"
+            },
+            "source_document_id": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Source Document Id"
+            },
+            "source_document_fact_id": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Source Document Fact Id"
+            },
+            "valid_from": {
+              "format": "date-time",
+              "title": "Valid From",
+              "type": "string"
+            },
+            "valid_to": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Valid To"
+            },
+            "provenance": {
+              "additionalProperties": true,
+              "title": "Provenance",
+              "type": "object"
+            }
+          },
+          "required": [
+            "fact_id",
+            "fact_type",
+            "value",
+            "source_kind",
+            "valid_from"
+          ],
+          "title": "PersonalFactCandidate",
+          "type": "object"
+        },
+        "PersonalPassageCandidate": {
+          "additionalProperties": false,
+          "properties": {
+            "candidate_id": {
+              "minLength": 1,
+              "title": "Candidate Id",
+              "type": "string"
+            },
+            "chunk_id": {
+              "format": "uuid",
+              "title": "Chunk Id",
+              "type": "string"
+            },
+            "document_id": {
+              "format": "uuid",
+              "title": "Document Id",
+              "type": "string"
+            },
+            "document_status": {
+              "const": "confirmed",
+              "default": "confirmed",
+              "title": "Document Status",
+              "type": "string"
+            },
+            "text": {
+              "minLength": 1,
+              "title": "Text",
+              "type": "string"
+            },
+            "span": {
+              "$ref": "#/$defs/SourceSpan"
+            },
+            "provenance": {
+              "$ref": "#/$defs/CandidateProvenance"
+            }
+          },
+          "required": [
+            "candidate_id",
+            "chunk_id",
+            "document_id",
+            "text",
+            "span",
+            "provenance"
+          ],
+          "title": "PersonalPassageCandidate",
+          "type": "object"
+        },
+        "PlanStateSnapshot": {
+          "additionalProperties": false,
+          "properties": {
+            "plan_id": {
+              "format": "uuid",
+              "title": "Plan Id",
+              "type": "string"
+            },
+            "version": {
+              "minimum": 1,
+              "title": "Version",
+              "type": "integer"
+            },
+            "status": {
+              "enum": [
+                "draft",
+                "user_reviewed",
+                "saved",
+                "active",
+                "stale",
+                "replaced",
+                "archived"
+              ],
+              "title": "Status",
+              "type": "string"
+            },
+            "stale_reasons": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Stale Reasons",
+              "type": "array"
+            }
+          },
+          "required": [
+            "plan_id",
+            "version",
+            "status"
+          ],
+          "title": "PlanStateSnapshot",
+          "type": "object"
+        },
+        "PublicEvidenceCandidate": {
+          "additionalProperties": false,
+          "properties": {
+            "candidate_id": {
+              "minLength": 1,
+              "title": "Candidate Id",
+              "type": "string"
+            },
+            "evidence_id": {
+              "minLength": 1,
+              "title": "Evidence Id",
+              "type": "string"
+            },
+            "source_id": {
+              "minLength": 1,
+              "title": "Source Id",
+              "type": "string"
+            },
+            "source_title": {
+              "minLength": 1,
+              "title": "Source Title",
+              "type": "string"
+            },
+            "text": {
+              "minLength": 1,
+              "title": "Text",
+              "type": "string"
+            },
+            "evidence_lane": {
+              "enum": [
+                "guideline",
+                "weekly_profile"
+              ],
+              "title": "Evidence Lane",
+              "type": "string"
+            },
+            "domain": {
+              "enum": [
+                "journey",
+                "nutrition",
+                "movement",
+                "wellbeing",
+                "symptoms",
+                "preparation",
+                "followup"
+              ],
+              "title": "Domain",
+              "type": "string"
+            },
+            "journey": {
+              "$ref": "#/$defs/JourneyPosition"
+            },
+            "jurisdictions": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Jurisdictions",
+              "type": "array"
+            },
+            "conditions_required": {
+              "items": {
+                "enum": [
+                  "breastfeeding",
+                  "early_home_recovery",
+                  "professional_care_for_postpartum_depression",
+                  "complicated_delivery_or_caesarean",
+                  "uncomplicated_delivery",
+                  "feels_ready_for_gentle_activity",
+                  "exercise_clearance",
+                  "movement_restriction",
+                  "current_warning_symptom",
+                  "home_birth",
+                  "facility_birth",
+                  "pregnancy_confirmed",
+                  "consents_to_wellbeing_activity",
+                  "persistent_emotional_concern",
+                  "trusted_support_available"
+                ],
+                "type": "string"
+              },
+              "title": "Conditions Required",
+              "type": "array"
+            },
+            "conditions_excluded": {
+              "items": {
+                "enum": [
+                  "breastfeeding",
+                  "early_home_recovery",
+                  "professional_care_for_postpartum_depression",
+                  "complicated_delivery_or_caesarean",
+                  "uncomplicated_delivery",
+                  "feels_ready_for_gentle_activity",
+                  "exercise_clearance",
+                  "movement_restriction",
+                  "current_warning_symptom",
+                  "home_birth",
+                  "facility_birth",
+                  "pregnancy_confirmed",
+                  "consents_to_wellbeing_activity",
+                  "persistent_emotional_concern",
+                  "trusted_support_available"
+                ],
+                "type": "string"
+              },
+              "title": "Conditions Excluded",
+              "type": "array"
+            },
+            "release_status": {
+              "const": "published",
+              "default": "published",
+              "title": "Release Status",
+              "type": "string"
+            },
+            "source_status": {
+              "const": "published",
+              "default": "published",
+              "title": "Source Status",
+              "type": "string"
+            },
+            "candidate_status": {
+              "const": "published",
+              "default": "published",
+              "title": "Candidate Status",
+              "type": "string"
+            },
+            "allowed_use": {
+              "items": {
+                "enum": [
+                  "store",
+                  "embed",
+                  "display"
+                ],
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Allowed Use",
+              "type": "array"
+            },
+            "spans": {
+              "items": {
+                "$ref": "#/$defs/SourceSpan"
+              },
+              "minItems": 1,
+              "title": "Spans",
+              "type": "array"
+            },
+            "authority_score": {
+              "maximum": 1,
+              "minimum": 0,
+              "title": "Authority Score",
+              "type": "number"
+            },
+            "applicability_score": {
+              "maximum": 1,
+              "minimum": 0,
+              "title": "Applicability Score",
+              "type": "number"
+            },
+            "provenance": {
+              "$ref": "#/$defs/CandidateProvenance"
+            }
+          },
+          "required": [
+            "candidate_id",
+            "evidence_id",
+            "source_id",
+            "source_title",
+            "text",
+            "evidence_lane",
+            "domain",
+            "journey",
+            "jurisdictions",
+            "allowed_use",
+            "spans",
+            "authority_score",
+            "applicability_score",
+            "provenance"
+          ],
+          "title": "PublicEvidenceCandidate",
+          "type": "object"
+        },
+        "RankedRetrievalCandidate": {
+          "additionalProperties": false,
+          "properties": {
+            "candidate_id": {
+              "minLength": 1,
+              "title": "Candidate Id",
+              "type": "string"
+            },
+            "candidate_kind": {
+              "enum": [
+                "public_evidence",
+                "personal_passage"
+              ],
+              "title": "Candidate Kind",
+              "type": "string"
+            },
+            "rank": {
+              "minimum": 1,
+              "title": "Rank",
+              "type": "integer"
+            },
+            "final_score": {
+              "minimum": 0,
+              "title": "Final Score",
+              "type": "number"
+            },
+            "component_ranks": {
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "title": "Component Ranks",
+              "type": "object"
+            },
+            "component_scores": {
+              "additionalProperties": {
+                "type": "number"
+              },
+              "title": "Component Scores",
+              "type": "object"
+            },
+            "authority_score": {
+              "maximum": 1,
+              "minimum": 0,
+              "title": "Authority Score",
+              "type": "number"
+            },
+            "applicability_score": {
+              "maximum": 1,
+              "minimum": 0,
+              "title": "Applicability Score",
+              "type": "number"
+            },
+            "exact_position_fit": {
+              "title": "Exact Position Fit",
+              "type": "boolean"
+            },
+            "source_version": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Source Version"
+            },
+            "stable_tie_breaker": {
+              "minLength": 1,
+              "title": "Stable Tie Breaker",
+              "type": "string"
+            }
+          },
+          "required": [
+            "candidate_id",
+            "candidate_kind",
+            "rank",
+            "final_score",
+            "authority_score",
+            "applicability_score",
+            "exact_position_fit",
+            "stable_tie_breaker"
+          ],
+          "title": "RankedRetrievalCandidate",
+          "type": "object"
+        },
+        "RetrievalComponentResult": {
+          "additionalProperties": false,
+          "properties": {
+            "component": {
+              "enum": [
+                "exact_sql",
+                "public_full_text",
+                "public_vector",
+                "personal_full_text",
+                "personal_vector",
+                "graph",
+                "weekly_profile"
+              ],
+              "title": "Component",
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "ok",
+                "degraded",
+                "failed",
+                "skipped"
+              ],
+              "title": "Status",
+              "type": "string"
+            },
+            "attempted": {
+              "minimum": 0,
+              "title": "Attempted",
+              "type": "integer"
+            },
+            "returned": {
+              "minimum": 0,
+              "title": "Returned",
+              "type": "integer"
+            },
+            "rejected_by_filters": {
+              "minimum": 0,
+              "title": "Rejected By Filters",
+              "type": "integer"
+            },
+            "latency_ms": {
+              "minimum": 0,
+              "title": "Latency Ms",
+              "type": "number"
+            },
+            "retries": {
+              "default": 0,
+              "maximum": 1,
+              "minimum": 0,
+              "title": "Retries",
+              "type": "integer"
+            },
+            "failure": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/RetrievalFailure"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            }
+          },
+          "required": [
+            "component",
+            "status",
+            "attempted",
+            "returned",
+            "rejected_by_filters",
+            "latency_ms"
+          ],
+          "title": "RetrievalComponentResult",
+          "type": "object"
+        },
+        "RetrievalFailure": {
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "enum": [
+                "database_unavailable",
+                "vector_unavailable",
+                "timeout",
+                "invalid_candidate",
+                "no_eligible_evidence",
+                "no_approved_public_content",
+                "malformed_response"
+              ],
+              "title": "Code",
+              "type": "string"
+            },
+            "recoverable": {
+              "title": "Recoverable",
+              "type": "boolean"
+            },
+            "component": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "exact_sql",
+                    "public_full_text",
+                    "public_vector",
+                    "personal_full_text",
+                    "personal_vector",
+                    "graph",
+                    "weekly_profile"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Component"
+            },
+            "detail": {
+              "minLength": 1,
+              "title": "Detail",
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "recoverable",
+            "detail"
+          ],
+          "title": "RetrievalFailure",
+          "type": "object"
+        },
+        "RetrievalTrace": {
+          "additionalProperties": false,
+          "properties": {
+            "schema_version": {
+              "const": "5.0.0",
+              "default": "5.0.0",
+              "title": "Schema Version",
+              "type": "string"
+            },
+            "request_id": {
+              "format": "uuid",
+              "title": "Request Id",
+              "type": "string"
+            },
+            "started_at": {
+              "format": "date-time",
+              "title": "Started At",
+              "type": "string"
+            },
+            "completed_at": {
+              "format": "date-time",
+              "title": "Completed At",
+              "type": "string"
+            },
+            "total_latency_ms": {
+              "minimum": 0,
+              "title": "Total Latency Ms",
+              "type": "number"
+            },
+            "normalized_query": {
+              "minLength": 1,
+              "title": "Normalized Query",
+              "type": "string"
+            },
+            "public_cache_key": {
+              "minLength": 1,
+              "title": "Public Cache Key",
+              "type": "string"
+            },
+            "personal_cache_key": {
+              "minLength": 1,
+              "title": "Personal Cache Key",
+              "type": "string"
+            },
+            "filter_version": {
+              "minLength": 1,
+              "title": "Filter Version",
+              "type": "string"
+            },
+            "ranking_version": {
+              "minLength": 1,
+              "title": "Ranking Version",
+              "type": "string"
+            },
+            "component_results": {
+              "items": {
+                "$ref": "#/$defs/RetrievalComponentResult"
+              },
+              "title": "Component Results",
+              "type": "array"
+            },
+            "rejected_candidate_ids": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": "Rejected Candidate Ids",
+              "type": "array"
+            },
+            "deterministic_order_digest": {
+              "pattern": "^[a-f0-9]{64}$",
+              "title": "Deterministic Order Digest",
+              "type": "string"
+            }
+          },
+          "required": [
+            "request_id",
+            "started_at",
+            "completed_at",
+            "total_latency_ms",
+            "normalized_query",
+            "public_cache_key",
+            "personal_cache_key",
+            "filter_version",
+            "ranking_version",
+            "component_results",
+            "deterministic_order_digest"
+          ],
+          "title": "RetrievalTrace",
+          "type": "object"
+        },
+        "SourceSpan": {
+          "additionalProperties": false,
+          "properties": {
+            "source_id": {
+              "minLength": 1,
+              "title": "Source Id",
+              "type": "string"
+            },
+            "evidence_id": {
+              "anyOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Evidence Id"
+            },
+            "source_block_ids": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": "Source Block Ids",
+              "type": "array"
+            },
+            "page": {
+              "anyOf": [
+                {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Page"
+            },
+            "locator": {
+              "default": "",
+              "title": "Locator",
+              "type": "string"
+            },
+            "start_char": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Start Char"
+            },
+            "end_char": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "End Char"
+            },
+            "exact_text": {
+              "minLength": 1,
+              "title": "Exact Text",
+              "type": "string"
+            },
+            "text_sha256": {
+              "pattern": "^[a-f0-9]{64}$",
+              "title": "Text Sha256",
+              "type": "string"
+            }
+          },
+          "required": [
+            "source_id",
+            "exact_text",
+            "text_sha256"
+          ],
+          "title": "SourceSpan",
+          "type": "object"
+        },
+        "SymptomRecord": {
+          "additionalProperties": false,
+          "properties": {
+            "symptom_id": {
+              "format": "uuid",
+              "title": "Symptom Id",
+              "type": "string"
+            },
+            "description": {
+              "minLength": 1,
+              "title": "Description",
+              "type": "string"
+            },
+            "reported_at": {
+              "format": "date-time",
+              "title": "Reported At",
+              "type": "string"
+            },
+            "safety_route": {
+              "enum": [
+                "urgent",
+                "clarify",
+                "no_match"
+              ],
+              "title": "Safety Route",
+              "type": "string"
+            },
+            "matched_rule_ids": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Matched Rule Ids",
+              "type": "array"
+            },
+            "safety_evaluation_only": {
+              "const": true,
+              "default": true,
+              "title": "Safety Evaluation Only",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "symptom_id",
+            "description",
+            "reported_at",
+            "safety_route"
+          ],
+          "title": "SymptomRecord",
+          "type": "object"
+        },
+        "UnresolvedConflict": {
+          "additionalProperties": false,
+          "properties": {
+            "conflict_id": {
+              "format": "uuid",
+              "title": "Conflict Id",
+              "type": "string"
+            },
+            "fact_type": {
+              "title": "Fact Type",
+              "type": "string"
+            },
+            "proposed_values": {
+              "items": {},
+              "minItems": 1,
+              "title": "Proposed Values",
+              "type": "array"
+            },
+            "source_document_ids": {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "title": "Source Document Ids",
+              "type": "array"
+            },
+            "clarification_question_ids": {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "title": "Clarification Question Ids",
+              "type": "array"
+            },
+            "state": {
+              "const": "requires_clarification",
+              "default": "requires_clarification",
+              "title": "State",
+              "type": "string"
+            }
+          },
+          "required": [
+            "conflict_id",
+            "fact_type",
+            "proposed_values"
+          ],
+          "title": "UnresolvedConflict",
+          "type": "object"
+        },
+        "WeeklyProfileCandidate": {
+          "additionalProperties": false,
+          "properties": {
+            "profile_id": {
+              "minLength": 1,
+              "title": "Profile Id",
+              "type": "string"
+            },
+            "release_id": {
+              "format": "uuid",
+              "title": "Release Id",
+              "type": "string"
+            },
+            "corpus_version": {
+              "minLength": 1,
+              "title": "Corpus Version",
+              "type": "string"
+            },
+            "journey": {
+              "$ref": "#/$defs/JourneyPosition"
+            },
+            "jurisdiction": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Jurisdiction",
+              "type": "array"
+            },
+            "hero": {
+              "additionalProperties": true,
+              "title": "Hero",
+              "type": "object"
+            },
+            "card_slots": {
+              "additionalProperties": true,
+              "title": "Card Slots",
+              "type": "object"
+            },
+            "evidence_ids": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": "Evidence Ids",
+              "type": "array"
+            },
+            "status": {
+              "const": "published",
+              "default": "published",
+              "title": "Status",
+              "type": "string"
+            },
+            "fixture_only": {
+              "default": false,
+              "title": "Fixture Only",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "profile_id",
+            "release_id",
+            "corpus_version",
+            "journey",
+            "jurisdiction",
+            "hero",
+            "card_slots"
+          ],
+          "title": "WeeklyProfileCandidate",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "packet": {
+          "$ref": "#/$defs/EvidencePacket"
+        },
+        "trace": {
+          "$ref": "#/$defs/RetrievalTrace"
+        }
+      },
+      "required": [
+        "packet",
+        "trace"
+      ],
+      "title": "RetrievalResult",
+      "type": "object"
+    }
+  }
+}
