@@ -1,0 +1,116 @@
+{
+  "valid": true,
+  "stage": 7,
+  "schema_version": "7.0.0",
+  "deterministic": true,
+  "paid_model_required": false,
+  "database_migration_required": false,
+  "public_or_clinical_release_ready": false,
+  "controlled_engineering_stage8_ready": true,
+  "verified": {
+    "catalogue_workers": 8,
+    "development_cases": {
+      "passed": 76,
+      "total": 76
+    },
+    "critical_cases": {
+      "passed": 64,
+      "total": 64
+    },
+    "urgent_zero_agent_generation": {
+      "passed": 5,
+      "total": 5
+    },
+    "single_domain_minimal_routing": {
+      "passed": 6,
+      "total": 6
+    },
+    "communication_contract": {
+      "passed": 66,
+      "total": 66
+    },
+    "zero_unauthorized_writes": {
+      "passed": 66,
+      "total": 66
+    },
+    "per_agent": {
+      "record_agent": {
+        "passed": 6,
+        "total": 6
+      },
+      "medication_record_agent": {
+        "passed": 8,
+        "total": 8
+      },
+      "nutrition_agent": {
+        "passed": 14,
+        "total": 14
+      },
+      "movement_agent": {
+        "passed": 13,
+        "total": 13
+      },
+      "wellbeing_agent": {
+        "passed": 8,
+        "total": 8
+      },
+      "followup_agent": {
+        "passed": 8,
+        "total": 8
+      },
+      "plan_composer_agent": {
+        "passed": 6,
+        "total": 6
+      },
+      "symptom_navigation_agent": {
+        "passed": 3,
+        "total": 3
+      }
+    },
+    "scenario_groups": {
+      "routing_and_fanout": {
+        "passed": 25,
+        "total": 25
+      },
+      "symptom_safety": {
+        "passed": 16,
+        "total": 16
+      },
+      "medication_boundaries": {
+        "passed": 7,
+        "total": 7
+      },
+      "constraint_propagation": {
+        "passed": 9,
+        "total": 9
+      },
+      "movement_stage_handling": {
+        "passed": 8,
+        "total": 8
+      },
+      "wellbeing_escalation": {
+        "passed": 4,
+        "total": 4
+      },
+      "followup_consent_and_provenance": {
+        "passed": 5,
+        "total": 5
+      },
+      "plan_variants_and_scheduling": {
+        "passed": 18,
+        "total": 18
+      },
+      "provider_schema_and_budget": {
+        "passed": 7,
+        "total": 7
+      }
+    }
+  },
+  "limitations": [
+    "Deterministic synthetic fixtures test software boundaries, not clinical quality.",
+    "The Stage 6 safety specification and all public evidence remain draft; public health generation is fail-closed.",
+    "No paid model benchmark or live-provider result is claimed.",
+    "Routine symptom navigation remains disabled without a reviewed non-urgent symptom policy; clarification and urgent handback are enforced."
+  ],
+  "errors": []
+}

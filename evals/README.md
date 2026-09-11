@@ -39,3 +39,18 @@ Regenerate and evaluate it with:
 python -m scripts.build_stage6_safety_evals
 python -m scripts.run_stage6_safety_evals --write-report
 ```
+
+## Stage 7 bounded orchestration development set
+
+`stage7_orchestration_development.jsonl` is a generated, visible set of 76
+synthetic cases for the deterministic router, all eight bounded workers, provider
+failure boundaries, safety bypass, context minimisation and the Schedule Builder.
+Regenerate it with `python -m scripts.build_stage7_evals`, then run
+`python -m scripts.run_stage7_evals --write-report` and
+`python -m scripts.check_stage7 --write-report`.
+
+The set uses deterministic fixture evidence and the offline provider adapter. It
+does not call a paid provider, does not access the sealed final holdout, and does
+not establish clinical, production retrieval or public-release quality. Routine
+symptom navigation remains disabled until a reviewed non-urgent symptom policy
+exists; urgent and unresolved cases stay at the Stage 6 boundary.
