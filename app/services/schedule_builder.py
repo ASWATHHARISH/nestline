@@ -220,6 +220,3 @@ class ScheduleBuilder:
              *(f"Material state changed: {item}" for item in changed_material_items)]
         ))
         return ProposedSchedule.model_validate(value)
-
-
-

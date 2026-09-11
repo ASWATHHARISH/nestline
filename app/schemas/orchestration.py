@@ -706,12 +706,3 @@ class OrchestrationResult(Contract):
         if self.trace.direct_write_count or self.trace.service_role_used:
             raise ValueError("Stage 7 orchestration cannot write or use service-role credentials")
         return self
-
-
-
-
-
-
-
-
-

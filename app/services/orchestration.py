@@ -490,11 +490,3 @@ def agent_catalogue() -> dict[AgentName, object]:
     """Return the immutable typed catalogue for checkers and future UI inspection."""
 
     return dict(AGENT_CATALOGUE)
-
-
-
-
-
-
-
-

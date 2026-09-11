@@ -762,10 +762,3 @@ def worker_for(agent: AgentName, provider: StructuredProvider) -> BoundedWorker:
     if agent == AgentName.PLAN_COMPOSER:
         raise ValueError("Plan Composer uses the deterministic Schedule Builder boundary")
     return WORKER_TYPES[agent](provider)
-
-
-
-
-
-
-

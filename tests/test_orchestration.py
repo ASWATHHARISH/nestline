@@ -864,7 +864,3 @@ class Stage7IndependentRectificationTests(unittest.TestCase):
         self.assertIn("clinician_instruction", summary)
 if __name__ == "__main__":
     unittest.main()
-
-
-
-
