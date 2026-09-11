@@ -2,10 +2,10 @@
 
 **Prepared:** 11 September 2026
 **Branch:** `feat/stage-1-governed-ingestion`
-**Reviewed baseline and current HEAD:** `448eb6d2ab7b4e8cc7db9fc42ce5c523a7fe10a7`
-**Rectification commit:** pending; the working tree is intentionally uncommitted
+**Reviewed baseline:** 448eb6d2ab7b4e8cc7db9fc42ce5c523a7fe10a7
+**Rectification implementation commit:** dcec1f9e847a64185330ba4406a886bcced688b2
 **Recommendation:** ready for independent Stage 5 re-review; Stage 6 remains blocked pending that review
-**Remote actions:** none
+**Remote publication:** implementation commit pushed to upstream/feat/stage-1-governed-ingestion; no merge or deployment
 
 ## Review conclusion
 
@@ -140,4 +140,4 @@ The existing migration was tested both as an exact Stage 4 to Stage 5 upgrade an
 
 Stage 5 is locally ready for independent re-review. The regenerated Stage 5 checker is green; the final Git check was rerun after documentation cleanup.
 
-Nothing has been pushed, merged or deployed. No Stage 6 code was created.
+The rectification implementation commit was pushed to the review branch. Nothing was merged or deployed, and no Stage 6 code was created.

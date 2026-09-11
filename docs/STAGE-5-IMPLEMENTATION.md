@@ -2,8 +2,8 @@
 
 **Updated:** 11 September 2026
 **Branch:** `feat/stage-1-governed-ingestion`
-**Reviewed/current HEAD:** `448eb6d2ab7b4e8cc7db9fc42ce5c523a7fe10a7`
-**Rectification commit:** pending; local working tree only
+**Reviewed baseline:** 448eb6d2ab7b4e8cc7db9fc42ce5c523a7fe10a7
+**Rectification implementation commit:** dcec1f9e847a64185330ba4406a886bcced688b2
 **Stage 6 status:** not started
 
 ## Scope

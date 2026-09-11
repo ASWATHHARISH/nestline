@@ -2,8 +2,8 @@
 
 **Verification date:** 11 September 2026
 **Branch:** `feat/stage-1-governed-ingestion`
-**Reviewed/current HEAD:** `448eb6d2ab7b4e8cc7db9fc42ce5c523a7fe10a7`
-**Rectification commit:** pending; working tree intentionally uncommitted
+**Reviewed baseline:** 448eb6d2ab7b4e8cc7db9fc42ce5c523a7fe10a7
+**Rectification implementation commit:** dcec1f9e847a64185330ba4406a886bcced688b2
 **Local recommendation:** Stage 5 ready for independent re-review
 **Stage 6 recommendation:** NO-GO until independent Stage 5 re-review accepts the rectification
 **Public/clinical recommendation:** NO-GO
@@ -248,4 +248,4 @@ The repository has 63 draft weekly profiles and zero publicly released weekly pr
 
 Stage 5 is ready for independent re-review. The regenerated Stage 5 checker and final Git check pass. Stage 6 is not started and remains blocked until review acceptance. Public, clinical and production release remain blocked.
 
-Nothing was pushed, merged or deployed.
+The rectification implementation commit was pushed to the review branch. Nothing was merged or deployed.

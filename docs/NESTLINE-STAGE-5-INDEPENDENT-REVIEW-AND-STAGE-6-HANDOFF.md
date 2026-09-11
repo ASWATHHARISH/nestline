@@ -3,12 +3,12 @@
 **Prepared:** 11 September 2026
 **Repository:** `kajalchourasia-cmd/nestline`
 **Branch:** `feat/stage-1-governed-ingestion`
-**Reviewed/current HEAD:** `448eb6d2ab7b4e8cc7db9fc42ce5c523a7fe10a7`
-**Rectification commit:** pending; local working tree only
+**Reviewed baseline:** 448eb6d2ab7b4e8cc7db9fc42ce5c523a7fe10a7
+**Rectification implementation commit:** dcec1f9e847a64185330ba4406a886bcced688b2
 **Engineering verdict:** ready for independent Stage 5 re-review
 **Stage 6 verdict:** NO-GO until this review is accepted
 **Public/clinical verdict:** NO-GO
-**Remote actions:** none
+**Remote publication:** implementation commit pushed to upstream/feat/stage-1-governed-ingestion; no merge or deployment
 
 ## Review decision requested
 
@@ -125,7 +125,7 @@ The vector-only baseline achieved 18/18 recall but only 18/27 evidence precision
 
 The rectification adds no migration and changes no existing migration. It relies on `20260911001300_stage5_hybrid_retrieval.sql`, which passed exact Stage 4 upgrade and clean replay locally.
 
-No migration was deployed. No code was pushed or merged. No commit was created for this rectification.
+No migration was deployed. The rectification implementation commit was pushed to the review branch. Nothing was merged.
 
 ## Limitations the reviewer must preserve
 

@@ -2,7 +2,7 @@
 
 **Status:** corrected locally and ready for independent Stage 5 re-review
 **Stage 6:** not started
-**Git:** current HEAD `448eb6d2ab7b4e8cc7db9fc42ce5c523a7fe10a7`; rectification is uncommitted and unpushed
+**Git:** reviewed baseline 448eb6d2ab7b4e8cc7db9fc42ce5c523a7fe10a7; rectification implementation commit dcec1f9e847a64185330ba4406a886bcced688b2 is pushed to the review branch
 
 ## What Stage 5 does
 

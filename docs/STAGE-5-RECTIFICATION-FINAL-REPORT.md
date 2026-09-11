@@ -4,7 +4,7 @@
 **Repository:** `kajalchourasia-cmd/nestline`
 **Branch:** `feat/stage-1-governed-ingestion`
 **Reviewed baseline:** `448eb6d2ab7b4e8cc7db9fc42ce5c523a7fe10a7`
-**Rectification implementation commit:** pending authorized publication
+**Rectification implementation commit:** dcec1f9e847a64185330ba4406a886bcced688b2
 **Recommendation:** Stage 5 ready for independent re-review; Stage 6 remains blocked pending acceptance
 
 ## Plain-language root cause

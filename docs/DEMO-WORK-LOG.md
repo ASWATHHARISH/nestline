@@ -765,7 +765,7 @@ No GitHub commit, push or pull request was performed.
 
 The deterministic SHA-256 fixture embedding proves interfaces, filters and repeatability, not production semantic quality. The 26-case synthetic development corpus is small and does not prove clinical quality. Clinical, India-localisation, licence, product/publication, production embedding-provider, real-upload scanning and Stage 6 Safety Gate reviews remain open with their owners.
 
-**Rectified decision:** Stage 5 is ready for independent re-review; Stage 6 remains blocked until that review accepts the answerability correction. Public, clinical and production use remain NO-GO. Current HEAD is 448eb6d2ab7b4e8cc7db9fc42ce5c523a7fe10a7; rectification changes are uncommitted/unpushed and the migration remains undeployed.
+**Rectified decision:** Stage 5 is ready for independent re-review; Stage 6 remains blocked until that review accepts the answerability correction. Public, clinical and production use remain NO-GO. The reviewed baseline is 448eb6d2ab7b4e8cc7db9fc42ce5c523a7fe10a7; implementation commit dcec1f9e847a64185330ba4406a886bcced688b2 is pushed to the review branch and the migration remains undeployed.
 
 ### Stage 5 answerability rectification
 
@@ -776,4 +776,4 @@ The deterministic SHA-256 fixture embedding proves interfaces, filters and repea
 - Expanded frozen truth from 5 to 26 cases across all seven domains and the required conflict, missing, graph, condition, week, stale-state, possible-pregnancy and postpartum states.
 - Regenerated schemas, metrics, corrected Evidence Packets and the independent-review handoff from repository scripts.
 
-Nothing was pushed, merged or deployed, and Stage 6 was not started.
+The rectification implementation commit was pushed to the review branch. Nothing was merged or deployed, and Stage 6 was not started.
