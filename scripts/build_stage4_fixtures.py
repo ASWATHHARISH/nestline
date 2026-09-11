@@ -206,11 +206,52 @@ def build_upload_edge_cases() -> None:
     })
 
 
+def build_fixture_registry() -> None:
+    """Pin every file exposed by the fictional demo selector to an exact digest."""
+
+    with (BASE / "document_inventory.csv").open(encoding="utf-8", newline="") as stream:
+        inventory = list(csv.DictReader(stream))
+    expected_subject = "Maya - fictional demo persona"
+    fixtures = []
+    for item in inventory:
+        path = BASE / item["watermarked_pdf"]
+        fixtures.append({
+            "id": item["document_id"],
+            "label": f"{item['document_id']} - {item['title']}",
+            "relative_path": path.relative_to(ROOT).as_posix(),
+            "media_type": "application/pdf",
+            "sha256": sha256(path.read_bytes()).hexdigest(),
+            "expected_subject": expected_subject,
+        })
+    noisy_path = NOISY / "DOC-003-noisy.png"
+    fixtures.append({
+        "id": "DOC-003-NOISY",
+        "label": "DOC-003-NOISY - controlled OCR image",
+        "relative_path": noisy_path.relative_to(ROOT).as_posix(),
+        "media_type": "image/png",
+        "sha256": sha256(noisy_path.read_bytes()).hexdigest(),
+        "expected_subject": expected_subject,
+        "ocr_truth_path": (
+            NOISY / "DOC-003-noisy.expected.json"
+        ).relative_to(ROOT).as_posix(),
+    })
+    _write_json(BASE / "stage4_fixture_registry.json", {
+        "schema_version": "stage4-fictional-fixture-registry-v1",
+        "workspace_key": "DEMO-MAYA",
+        "public_demo_upload": False,
+        "fixtures": fixtures,
+    })
+
+
 def main() -> None:
     build_graph_truth()
     build_noisy_variant()
     build_upload_edge_cases()
-    print("Built 8 graph truths, 1 controlled OCR variant, and 5 upload edge cases.")
+    build_fixture_registry()
+    print(
+        "Built 8 graph truths, 1 controlled OCR variant, 5 upload edge cases, "
+        "and the 9-file exact-hash demo registry."
+    )
 
 
 if __name__ == "__main__":

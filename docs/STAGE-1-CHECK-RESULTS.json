@@ -1,7 +1,7 @@
 {
-  "checked_at_utc": "2026-09-11T06:59:40.756205+00:00",
+  "checked_at_utc": "2026-09-11T10:29:11.185244+00:00",
   "execution": "Clean-checkout engineering checks and tracked exact-source audit",
-  "tests_run": 168,
+  "tests_run": 175,
   "checks": {
     "software_tests": {
       "arguments": [
@@ -14,7 +14,7 @@
       ],
       "exit_code": 0,
       "stdout": "",
-      "stderr": "----------------------------------------------------------------------\nRan 168 tests in 4.348s\n\nOK"
+      "stderr": "----------------------------------------------------------------------\nRan 175 tests in 1.239s\n\nOK"
     },
     "dependencies": {
       "arguments": [
@@ -69,7 +69,7 @@
         "OWH-WELLBEING": "review_required",
         "PIB-PMSMA": "review_required"
       },
-      "foundation_release_fingerprint": "ee779d44c9405fb1d9893e6c831673bd93e851a0d4b82e6262748e815132bd06"
+      "foundation_release_fingerprint": "d3b25c36806c0e6a5f442d994b48a088b99e1a86d3c4174de3d6854f27fa788b"
     },
     "canonical_source_audit_errors": [],
     "governed_review_ledger": {

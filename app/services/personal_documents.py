@@ -49,6 +49,10 @@ INJECTION_PATTERNS = (
     re.compile(r"(?:reveal|publish|export)\s+(?:all|every)\b", re.I),
     re.compile(r"(?:call|use|invoke)\s+(?:the\s+)?(?:tool|api|database)", re.I),
 )
+REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
+FIXTURE_REGISTRY_PATH = (
+    REPOSITORY_ROOT / "data/synthetic/stage4_fixture_registry.json"
+)
 
 
 class DocumentProcessingError(RuntimeError):
@@ -64,6 +68,78 @@ class ScanResult:
     status: str
     provider: str
     version: str
+
+
+@dataclass(frozen=True)
+class FictionalFixture:
+    """One immutable, repository-owned file allowed in the public demo."""
+
+    fixture_id: str
+    label: str
+    path: Path
+    media_type: str
+    sha256: str
+    expected_subject: str
+    ocr_truth_path: Path | None = None
+
+
+def load_fictional_fixture_registry() -> list[FictionalFixture]:
+    """Load the demo allowlist and prove every registered digest still matches."""
+
+    payload = json.loads(FIXTURE_REGISTRY_PATH.read_text(encoding="utf-8"))
+    if payload.get("schema_version") != "stage4-fictional-fixture-registry-v1":
+        raise DocumentProcessingError(
+            "fixture_registry", "The fictional fixture registry version is invalid."
+        )
+    fixtures: list[FictionalFixture] = []
+    seen_ids: set[str] = set()
+    for item in payload.get("fixtures", []):
+        fixture_id = str(item.get("id", "")).strip()
+        relative_path = Path(str(item.get("relative_path", "")))
+        path = (REPOSITORY_ROOT / relative_path).resolve()
+        if (
+            not fixture_id
+            or fixture_id in seen_ids
+            or not path.is_relative_to(REPOSITORY_ROOT)
+            or not path.is_file()
+        ):
+            raise DocumentProcessingError(
+                "fixture_registry", "The fictional fixture registry contains an invalid entry."
+            )
+        expected_digest = str(item.get("sha256", "")).casefold()
+        if sha256(path.read_bytes()).hexdigest() != expected_digest:
+            raise DocumentProcessingError(
+                "fixture_registry",
+                f"The registered digest for {fixture_id} does not match its file.",
+            )
+        ocr_truth_path = None
+        if item.get("ocr_truth_path"):
+            ocr_truth_path = (
+                REPOSITORY_ROOT / Path(str(item["ocr_truth_path"]))
+            ).resolve()
+            if (
+                not ocr_truth_path.is_relative_to(REPOSITORY_ROOT)
+                or not ocr_truth_path.is_file()
+            ):
+                raise DocumentProcessingError(
+                    "fixture_registry",
+                    f"The registered OCR truth for {fixture_id} is unavailable.",
+                )
+        fixtures.append(FictionalFixture(
+            fixture_id=fixture_id,
+            label=str(item["label"]),
+            path=path,
+            media_type=str(item["media_type"]),
+            sha256=expected_digest,
+            expected_subject=str(item["expected_subject"]),
+            ocr_truth_path=ocr_truth_path,
+        ))
+        seen_ids.add(fixture_id)
+    if not fixtures:
+        raise DocumentProcessingError(
+            "fixture_registry", "No fictional demo fixtures are registered."
+        )
+    return fixtures
 
 
 class MalwareScanner(Protocol):
@@ -88,30 +164,19 @@ class UnavailableMalwareScanner:
 
 @dataclass(frozen=True)
 class FictionalFixtureScanner:
-    """Development-only allowlist for conspicuously fictional fixtures."""
+    """Development-only exact-hash allowlist for repository-owned fixtures."""
 
     allowed_sha256: frozenset[str] = frozenset()
 
     def scan(self, data: bytes, *, filename: str, media_type: str) -> ScanResult:
+        del filename, media_type
         digest = sha256(data).hexdigest()
-        if digest in self.allowed_sha256:
-            return ScanResult("fixture_verified", "fictional-fixture-allowlist", "v1")
-        visible_text = ""
-        if media_type == "application/pdf":
-            try:
-                with fitz.open(stream=data, filetype="pdf") as document:
-                    visible_text = "\n".join(page.get_text() for page in document)
-            except Exception as exc:
-                raise DocumentProcessingError("corrupt", "The PDF cannot be opened.") from exc
-        if (
-            "FICTIONAL DEMO DATA" not in visible_text
-            or "NOT A REAL MEDICAL RECORD" not in visible_text
-        ):
+        if digest not in self.allowed_sha256:
             raise DocumentProcessingError(
                 "scan_unavailable",
-                "Only allowlisted fictional demo files are accepted in this development build.",
+                "Only exact, registered fictional demo files are accepted in this build.",
             )
-        return ScanResult("fixture_verified", "fictional-watermark-check", "v1")
+        return ScanResult("fixture_verified", "fictional-fixture-allowlist", "v2")
 
 
 def _safe_filename(filename: str) -> str:
@@ -177,6 +242,39 @@ def _image_page_count(data: bytes) -> int:
         raise DocumentProcessingError("corrupt", "The image cannot be opened.") from exc
 
 
+def verify_document_identity(
+    *,
+    expected_subject: str | None,
+    subject_as_written: str | None,
+    fixture_bound_subject: str | None,
+    fixture_is_verified: bool,
+) -> str:
+    """Require an exact subject match or a trusted exact-fixture binding."""
+
+    if expected_subject is None:
+        return "not_required"
+    expected = expected_subject.strip().casefold()
+    detected = (subject_as_written or "").strip()
+    if detected:
+        if detected.casefold() != expected:
+            raise DocumentProcessingError(
+                "wrong_person",
+                "The name in this document does not match the selected fictional profile.",
+            )
+        return "matched_document_subject"
+    bound = (fixture_bound_subject or "").strip()
+    if fixture_is_verified and bound:
+        if bound.casefold() != expected:
+            raise DocumentProcessingError(
+                "wrong_person",
+                "The registered fixture belongs to another fictional profile.",
+            )
+        return "verified_fixture_binding"
+    raise DocumentProcessingError(
+        "identity_unverified",
+        "Nestline could not verify that this document belongs to the selected profile.",
+    )
+
 def validate_upload(
     data: bytes,
     *,
@@ -185,6 +283,7 @@ def validate_upload(
     scanner: MalwareScanner,
     expected_subject: str | None = None,
     subject_as_written: str | None = None,
+    fixture_bound_subject: str | None = None,
 ) -> UploadValidationResult:
     if not data:
         raise DocumentProcessingError("empty", "The selected file is empty.")
@@ -197,14 +296,16 @@ def validate_upload(
         if media_type == "application/pdf"
         else _image_page_count(data)
     )
-    if expected_subject and subject_as_written and (
-        expected_subject.strip().casefold() != subject_as_written.strip().casefold()
-    ):
-        raise DocumentProcessingError(
-            "wrong_person",
-            "The name in this document does not match the selected fictional profile.",
-        )
     scan = scanner.scan(data, filename=safe_name, media_type=media_type)
+    identity_status = verify_document_identity(
+        expected_subject=expected_subject,
+        subject_as_written=subject_as_written,
+        fixture_bound_subject=fixture_bound_subject,
+        fixture_is_verified=(
+            scan.status == "fixture_verified"
+            and scan.provider == "fictional-fixture-allowlist"
+        ),
+    )
     return UploadValidationResult(
         original_filename=filename,
         safe_filename=safe_name,
@@ -217,6 +318,7 @@ def validate_upload(
         scan_version=scan.version,
         expected_subject=expected_subject,
         subject_as_written=subject_as_written,
+        identity_status=identity_status,
     )
 
 
@@ -341,7 +443,7 @@ def extract_fixture_candidates(
     started = perf_counter()
     candidates: list[DocumentCandidate] = []
     suspicious: list[str] = []
-    subject: str | None = None
+    subjects: list[str] = []
     combined = "\n".join(page.text for page in pages)
     for page_index, parsed in enumerate(pages):
         cursor = 0
@@ -362,7 +464,7 @@ def extract_fixture_candidates(
             if fact_type is None:
                 continue
             if field_name == "persona":
-                subject = value
+                subjects.append(value)
             missing = value.casefold() in MISSING_VALUES
             record_only = fact_type in {
                 CandidateFactType.MEDICATION,
@@ -395,6 +497,14 @@ def extract_fixture_candidates(
                 source_value_matches=source_value_matches,
                 conflict_document_keys=conflict_keys,
             ))
+    if len(subjects) > 1:
+        if fitz_pages:
+            fitz_pages[0].parent.close()
+        raise DocumentProcessingError(
+            "multiple_subjects",
+            "The document contains more than one subject identity and needs manual review.",
+        )
+    subject = subjects[0] if subjects else None
     if fitz_pages:
         fitz_pages[0].parent.close()
     return DocumentExtractionPacket(

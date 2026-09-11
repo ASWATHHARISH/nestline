@@ -124,8 +124,8 @@ boundary even if a client sends a crafted RPC payload.
 | Full Python regression | 154/154 passed |
 | Existing deterministic contracts | 64/64 passed |
 | Journey resolver frozen cases | 26/26 passed |
-| Stage 2 + Stage 3 pgTAP on exact 00900 upgrade | 179/179 passed |
-| Stage 2 + Stage 3 pgTAP on clean replay | 179/179 passed |
+| Stage 2 + Stage 3 pgTAP on exact 00900 upgrade | 160/160 passed |
+| Stage 2 + Stage 3 pgTAP on clean replay | 160/160 passed |
 | Real local Auth/REST/Storage checks | 13/13 passed |
 | Real local onboarding/relogin/isolation checks | 17/17 passed |
 | Streamlit no-network initial render | passed |

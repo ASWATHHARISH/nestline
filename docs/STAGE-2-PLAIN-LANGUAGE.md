@@ -30,7 +30,7 @@ deletion stops the reset rather than leaving an orphaned file.
 
 We tested the building with two fictional users. The live suite checks all 16
 personal tables, private vector search, graph links, Storage rules, cross-apartment
-references, fact invalidation and demo reset. It runs 141 assertions and rolls back
+references, fact invalidation and demo reset. The current file pins 122 assertions and rolls back
 all fixtures. It passes both when upgrading the five-migration database we already
 had and when building all ten migrations from an empty database. Database lint
 also reports zero errors.
@@ -59,4 +59,4 @@ For the demo, say:
 > “Stage 2 is Nestline's locked data building. Every user owns one private care
 > episode, report files must be removed in the safe order, and changing a fact
 > automatically marks dependent plans stale. We proved the isolation and reset
-> rules with 141 live database checks.”
+> rules with 122 pinned Stage 2 checks; the full current Stage 2–4 gate has 206.”

@@ -116,13 +116,16 @@ Another conflicts with an older movement instruction. Stage 4 retains both sourc
 asks for clarification and marks an affected movement plan stale after confirmation.
 
 All eight PDFs, typed extraction/graph truth files, one controlled noisy OCR image
-and five upload-failure fixtures are present. Deterministic extraction and controlled
-OCR are tested. Live model extraction remains a separate benchmark after the exact
-model and cost ceiling are selected.
+and five upload-failure fixtures are present. A ninth registered entry covers the
+controlled OCR image. The document feature is closed by default; a supervised demo
+can select only these exact hashes and cannot upload an arbitrary file. The review
+screen exposes page/span/coordinates/confidence/completeness/disposition and starts
+every decision empty. Live model extraction remains a separate benchmark after the
+exact candidate models and cost ceiling are selected.
 
 ### 8. Checks, not an AI evaluation result
 
-There are 168 passing unit tests covering the foundation, governed ingestion,
+There are 175 passing unit tests covering the foundation, governed ingestion,
 storage, workspace lifecycle, journey resolution, onboarding and personal-document
 confirmation. They try valid and invalid data: broken citations, wrong weeks,
 missing conditions, altered source files, parser/OCR failures, duplicate units,
@@ -163,9 +166,9 @@ Their safe fallback is sourced development text without a size comparison.
 |---|---|---|
 | 0: Content foundation | Sources, cards, rules and review controls | Corrected draft foundation; rounder comparison proposals applied and hidden; product/content accepted for the three-profile slice. Specialist and full-release reviews remain blocked. |
 | 1: Ingestion | Repeatedly read approved documents with versions and provenance | Seven independent-review corrections complete; tracked 14-source audit found all 55 anchors and verified TLS for every source. The governed ledger binds 54 Kajal decisions to 27 current tasks. No embeddings/corpus are published. |
-| 2: Storage | Keep each user's information secure and separate | Independently corrected and deployed: ten migrations, 28 RLS-enabled tables, owner-only episode workspaces, strict journey timing, dependency invalidation, Storage-first deletion and deterministic demo reset. The 141-assertion two-user suite passes on upgrade and clean databases. |
+| 2: Storage | Keep each user's information secure and separate | Independently corrected and deployed: ten migrations, 28 RLS-enabled tables, owner-only episode workspaces, strict journey timing, dependency invalidation, Storage-first deletion and deterministic demo reset. The current 122-assertion two-user suite is pinned and passes on upgrade and clean databases; the historical 141 report is explicitly reconciled. |
 | 3: Onboarding | Confirm details and work out journey timing | Independently exit-audited and deployed through migration 01000: all six timing paths, optional details, conflict choice, backward-episode blocking, atomic confirmed save, database-side arithmetic/conflict checks and relogin persistence. Symptom routing remains draft/evaluation-only until specialist review. |
-| 4: Personal documents | Propose extracted facts and request confirmation | Fictional-demo engineering complete: eight canonical documents, controlled OCR, five upload failures, strict proposals, explicit review, atomic confirmed state, conflict preservation, typed graph links and stale-plan updates. Migrations 01100/01200 are deployed; 206 local and remote database assertions, 45 authenticated API checks and remote lint pass. Anonymous access is restricted to six published-content reads. Real uploads remain scanner/reviewer gated. |
+| 4: Personal documents | Propose extracted facts and request confirmation | Supervised fictional-demo engineering complete: default-off exact-hash fixture selector, eight canonical documents, controlled OCR, five upload failures, fail-closed identity, full visible provenance, unselected explicit review choices, atomic confirmed state, conflict preservation, typed graph links and stale-plan updates. Migrations 01100/01200 are deployed; 206 local and remote database assertions, 45 authenticated API checks and remote lint pass. Anonymous access is restricted to six published-content reads. Real uploads remain scanner/reviewer gated. |
 | 5: Retrieval | Find the right evidence and personal facts | Draft/published/time/country/condition filters exist; SQL/vector/graph retrieval is not built. |
 | 6: Safety | Handle urgent and uncertain requests before normal answers | Draft rule specification and offline cases exist; reviewed live gate is not built. |
 | 7: Agents | Coordinate specialist helpers | Architecture only. |

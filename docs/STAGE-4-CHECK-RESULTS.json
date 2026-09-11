@@ -44,6 +44,8 @@
     "typed_graph_nodes": 36,
     "typed_graph_edges": 29,
     "controlled_ocr_expected_fields": 5,
+    "registered_exact_hash_fixtures": 9,
+    "pinned_pg_tap_assertions": 206,
     "upload_edge_cases": [
       "corrupt",
       "locked",
@@ -55,16 +57,17 @@
     "api_role_hardening_sha256": "c0720cdd99f324a63d4b9c6db1a8f271ca92c1b22fe567b7f64e32253ffb5349"
   },
   "implemented_boundaries": [
-    "format, size, signature, lock, corruption, wrong-person and scan validation",
-    "exact page/span candidate provenance and record-only medication text",
-    "proposal-only extraction with explicit edit, confirm, reject, conflict and supersede actions",
+    "format, size, signature, lock, corruption, exact-fixture, and fail-closed identity validation",
+    "document feature defaults off; supervised demos can select only nine repository-owned fixture hashes",
+    "visible page/span/coordinate/confidence/completeness/disposition provenance",
+    "proposal-only extraction with unselected explicit edit, confirm, reject, conflict and supersede actions",
     "atomic idempotent versioned commit with graph updates and movement-plan invalidation",
     "owner-only derived-state mutation and duplicate upload deduplication",
     "optional tool-free, store-disabled OpenAI Structured Outputs adapter"
   ],
   "parked_release_gates": [
     "deployable malware scanner for real medical documents",
-    "exact OpenAI extraction model and cost ceiling followed by live fictional benchmark",
+    "exact candidate extraction models and cost ceiling followed by live fictional benchmark",
     "qualified clinical and India-localisation approval",
     "final rendered product acceptance"
   ],

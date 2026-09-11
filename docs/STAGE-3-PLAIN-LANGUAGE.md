@@ -86,7 +86,7 @@ health questions or read reports.
 - 154 Python tests passed.
 - 64 earlier deterministic cases passed.
 - 26 journey date/conflict cases passed.
-- 179 database assertions passed on both an exact upgrade and a clean build.
+- 160 current database assertions passed on both an exact upgrade and a clean build.
 - 17 real onboarding API checks passed across all six timing paths, including relogin and another-user denial.
 - The Streamlit start screen rendered without a network call.
 - The deployed Supabase project has the Stage 3 migration and zero test fixtures.

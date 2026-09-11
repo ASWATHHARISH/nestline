@@ -3,8 +3,8 @@
 **Prepared:** 11 September 2026  
 **Scope:** Stage 4 fictional document-to-confirmed-state behavior  
 **Branch:** feat/stage-1-governed-ingestion  
-**Starting Git commit:** 613b54f  
-**GitHub status:** local changes only; no commit, push or pull request  
+**Reviewed baseline Git commit:** 68722f8039dcb5202ec105033f8b242f6dff64cb
+**GitHub status:** baseline is pushed; current independent-review corrections are local and uncommitted
 **Engineering verdict:** complete for Stage 5 engineering  
 **Real/public medical upload:** blocked by the open release gates in Section 12
 
@@ -48,11 +48,11 @@ used as release evidence.
 | Planned requirement or exit test | Implemented result | Evidence | Status |
 |---|---|---|---|
 | Eight editable fictional records, watermarked PDFs, extraction truth, graph truth and one noisy case | DOC-001 to DOC-008 contain all four artifacts; DOC-003-noisy has frozen OCR truth | document_inventory.csv; Stage 4 readiness check | Pass |
-| Reject locked, corrupt, unsupported, oversized and wrong-person files | Type, MIME, signature, size, lock, corruption, subject and scanner result are checked before persistence | Edge-case manifest; Python tests | Pass |
+| Reject locked, corrupt, unsupported, oversized and wrong-person files | Type, MIME, signature, size, lock and corruption checks run; identity requires an exact subject or verified fixture binding | Edge-case manifest; missing/blank/multiple/near/wrong identity tests | Pass |
 | Keep the original private and owner scoped | Private Storage path, RLS and orphan cleanup are implemented | Migration, pgTAP and authenticated API tests | Pass |
-| Typed proposals with page/span provenance | Candidates retain hash, page, exact words, offsets, available coordinates, method, confidence and completeness | Extraction truth and schema tests | Pass |
+| Typed proposals with page/span provenance | The review UI displays document, page, exact words, offsets, available coordinates, confidence, completeness, disposition and state | Extraction truth, schema and rendered UI tests | Pass |
 | Medication remains recorded text | Candidate and confirmed state keep record_only; UI states that this is not treatment advice | DOC-003, schema and UI | Pass; human wording review open |
-| Explicit edit, confirm, reject and keep-conflict | Every row needs a decision and the final review checkbox before save | UI and commit-function tests | Pass; product review open |
+| Explicit edit, confirm, reject and keep-conflict | Every radio starts empty; every row needs a decision and the final checkbox before save enables | Rendered UI and commit-function tests | Pass; product review open |
 | Proposal is never an active fact | Extraction has no confirmed-fact or graph side effect; direct candidate/graph mutation is revoked | pgTAP and API tests | Pass |
 | Commit once; reject stale versions | Owner, complete review, version and idempotency are checked atomically | Database tests | Pass |
 | Conflict preserves both sources | DOC-005/DOC-006 create unresolved state and clarification; disputed data cannot personalize; restriction invalidates movement output | Graph truth and database/API scenario | Pass |
@@ -66,12 +66,14 @@ docs/NESTLINE-EXECUTION-PLAN.md. No Stage 4 engineering item is parked.
 
 ## 4. Implemented change inventory
 
-1. Typed document, proposal, provenance, review and commit contracts.
-2. Fictional PDF/image validation, native parsing and controlled OCR.
+1. Typed document, proposal, provenance, identity, review and commit contracts.
+2. Default-off document feature with nine exact-hash repository fixture choices,
+   native parsing and controlled OCR; no arbitrary uploader.
 3. Optional OpenAI Structured Outputs adapter: no tools, store=false, exact-quote
    reconciliation and injected-line filtering.
 4. Owner-scoped private Storage and PostgREST integration.
-5. Field-by-field Streamlit review with edit, confirm, reject and keep-conflict.
+5. Field-by-field Streamlit review with full visible provenance, no preselection,
+   and blocked save until every row is deliberately resolved.
 6. Atomic extraction recorder and reviewed-state committer.
 7. Confirmed facts, record-only medication state, typed graph links, clarification
    questions and movement-plan invalidation.
@@ -105,13 +107,17 @@ fields. It proves one controlled case, not general OCR quality.
 
 ### Setup
 
-Use the fictional demo workspace and repository fixtures only.
+Use the fictional demo workspace and repository fixtures only. Enable the feature
+only in the supervised local process.
 
+    $env:NESTLINE_ENABLE_STAGE4_FIXTURE_DEMO="true"
     .venv\Scripts\python.exe -m scripts.check_stage4_ui
     .venv\Scripts\streamlit.exe run streamlit_app.py
 
-The first command proves the panel renders with one uploader, the fictional-only
-notice and authenticated workspace controls, with zero network calls. It does not
+The first command proves that the enabled supervised flow renders one exact-fixture
+selector, no arbitrary uploader, full provenance, no preselected decisions and a
+disabled save while one decision is missing. It separately proves the default
+public state is closed, with zero network calls. It does not
 replace visual acceptance.
 
 For every proposal check:
@@ -123,19 +129,19 @@ For every proposal check:
 - visible fictional and private-data boundaries;
 - absence of diagnosis, prescription, treatment change and invented missing data.
 
-Saving must be blocked until the reviewer checks **I reviewed every field and want
-to apply these decisions**.
+Saving must be blocked until every field has a deliberate decision and the reviewer
+checks **I reviewed every field and want to apply these decisions**.
 
 ### Required rendered flows
 
 | Flow | Action | Expected visible result |
 |---|---|---|
-| Baseline | Upload DOC-001.pdf and inspect before save | Extraction says nothing was applied; every proposal has evidence |
-| Abstention | Upload DOC-002.pdf | Missing fields abstain and no diagnosis appears |
+| Baseline | Select DOC-001 and inspect before save | Extraction says nothing was applied; every proposal has evidence |
+| Abstention | Select DOC-002 | Missing fields abstain and no diagnosis appears |
 | Medication/OCR | Review DOC-003.pdf and controlled noisy image separately | Record-only wording appears; missing route abstains; no treatment advice |
 | History | Review DOC-004.pdf | Missing new allergy information does not imply deletion |
 | Conflict/dependency | Confirm relevant DOC-005 value, then review DOC-006 | Keep-conflict or reject is offered; keep-conflict gives unresolved/clarification feedback; confirmed restriction reports stale movement output |
-| Duplicate | Upload the same fixture twice | Existing logical document is reused |
+| Duplicate | Select and process the same fixture twice | Existing logical document is reused |
 | Follow-up | Review DOC-007.pdf | Work appears only after explicit save; automated proof confirms idempotent replay |
 | Transition | Review DOC-008.pdf | Postpartum is proposed; delivery/feeding gaps abstain; no unsupported claim |
 
@@ -150,7 +156,7 @@ Product reviewer questions:
 - Are edit, reject, confirm and keep-conflict understandable before save?
 - Is medication record-only language clear?
 - Are abstention, conflict, clarification and stale-plan messages useful?
-- Are fictional boundaries visible before upload, during review and after save?
+- Are the default-off and fictional boundaries visible before selection, during review and after save?
 - Do errors help without exposing private text or secrets?
 
 ## 7. Specialist and operational review
@@ -187,7 +193,7 @@ Until this is implemented and tested, non-fictional upload stays closed.
 
 ### Extraction provider benchmark
 
-Aswath records an exact OpenAI model ID and maximum cost per fictional document.
+Aswath records the exact candidate model IDs and maximum cost per fictional document.
 Codex then runs the frozen eight PDFs plus noisy image. Report counts and
 denominators for field recall, critical misses, abstentions, exact source
 reconciliation, dose errors, injection filtering, conflict preservation, schema
@@ -198,7 +204,7 @@ deterministic extractor remains the reproducible demo baseline.
 
 | Check | Result |
 |---|---:|
-| Python regression | 168/168 |
+| Python regression | 175/175 |
 | Public-content contracts | 64/64 |
 | Journey cases | 26/26 |
 | Documents / candidates / abstentions | 8 / 33 / 6 |
@@ -243,7 +249,8 @@ be applied as a Nestline migration.
 | Data API defaults added 72 anonymous grant changes | Migration 01200 revokes broad access and restores six reads | 11 hardening tests and 200/401 boundary pass |
 | Clean reset tried to alter platform-owner defaults | Scope default ACL to application migration owner | Clean and remote checks pass |
 
-No known Stage 4 engineering defect remains after these corrections.
+No known local Stage 4 engineering defect remains after the independent-review
+corrections. GitHub CI must rerun after the local changes are pushed.
 
 ## 10. Reproduction
 
@@ -332,8 +339,8 @@ value was written to a tracked artifact.
 
 ### Provider decision still required
 
-Choose the exact OpenAI extraction model and maximum permitted cost per fictional
-document. Save them locally as:
+Choose the exact candidate extraction model IDs and maximum permitted cost per
+fictional document. Save them locally as:
 
     NESTLINE_DOCUMENT_MODEL=<exact chosen model ID>
     NESTLINE_DOCUMENT_MAX_COST_USD=<chosen ceiling>

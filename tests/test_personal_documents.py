@@ -28,6 +28,7 @@ from app.services.personal_documents import (
     UnavailableMalwareScanner,
     extract_fixture_candidates,
     extraction_payload,
+    load_fictional_fixture_registry,
     parse_document,
     validate_upload,
 )
@@ -35,6 +36,17 @@ from app.services.personal_documents import (
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = ROOT / "data/synthetic"
+
+
+def _test_fixture_scanner() -> FictionalFixtureScanner:
+    """Exact allowlist for every committed fictional fixture used by this suite."""
+
+    digests = {fixture.sha256 for fixture in load_fictional_fixture_registry()}
+    manifest = json.loads(
+        (BASE / "upload_edge_cases/manifest.json").read_text(encoding="utf-8")
+    )
+    digests.update(item["sha256"] for item in manifest["files"])
+    return FictionalFixtureScanner(frozenset(digests))
 
 
 class TruthOcrAdapter:
@@ -69,7 +81,7 @@ class PersonalDocumentTests(unittest.TestCase):
                 data,
                 filename=pdf_path.name,
                 claimed_media_type="application/pdf",
-                scanner=FictionalFixtureScanner(),
+                scanner=_test_fixture_scanner(),
             )
             pages, fitz_pages = parse_document(data, media_type=validation.media_type)
             packet = extract_fixture_candidates(
@@ -89,13 +101,103 @@ class PersonalDocumentTests(unittest.TestCase):
         self.assertEqual(total_candidates, 33)
         self.assertEqual(total_abstentions, 6)
 
+    def test_registry_is_exact_and_all_fixtures_are_profile_bound(self):
+        fixtures = load_fictional_fixture_registry()
+        self.assertEqual(len(fixtures), 9)
+        self.assertEqual(len({fixture.fixture_id for fixture in fixtures}), 9)
+        for fixture in fixtures:
+            self.assertEqual(sha256(fixture.path.read_bytes()).hexdigest(), fixture.sha256)
+            self.assertEqual(fixture.expected_subject, "Maya - fictional demo persona")
+
+    def test_watermarked_but_unregistered_file_is_rejected(self):
+        data = (BASE / "documents/DOC-001.pdf").read_bytes() + b"\nmodified-copy"
+        self.assertEqual(
+            self._error_code(lambda: validate_upload(
+                data,
+                filename="DOC-001.pdf",
+                claimed_media_type="application/pdf",
+                scanner=_test_fixture_scanner(),
+            )),
+            "scan_unavailable",
+        )
+
+    def test_missing_subject_fails_without_trusted_fixture_binding(self):
+        data = (BASE / "documents/DOC-002.pdf").read_bytes()
+        self.assertEqual(
+            self._error_code(lambda: validate_upload(
+                data,
+                filename="DOC-002.pdf",
+                claimed_media_type="application/pdf",
+                scanner=_test_fixture_scanner(),
+                expected_subject="Maya - fictional demo persona",
+                subject_as_written=None,
+            )),
+            "identity_unverified",
+        )
+        validation = validate_upload(
+            data,
+            filename="DOC-002.pdf",
+            claimed_media_type="application/pdf",
+            scanner=_test_fixture_scanner(),
+            expected_subject="Maya - fictional demo persona",
+            subject_as_written=None,
+            fixture_bound_subject="Maya - fictional demo persona",
+        )
+        self.assertEqual(validation.identity_status, "verified_fixture_binding")
+
+    def test_unreadable_subject_fails_without_trusted_fixture_binding(self):
+        data = (BASE / "documents/DOC-002.pdf").read_bytes()
+        self.assertEqual(
+            self._error_code(lambda: validate_upload(
+                data,
+                filename="DOC-002.pdf",
+                claimed_media_type="application/pdf",
+                scanner=_test_fixture_scanner(),
+                expected_subject="Maya - fictional demo persona",
+                subject_as_written="   ",
+            )),
+            "identity_unverified",
+        )
+    def test_close_but_nonmatching_subject_is_rejected(self):
+        data = (BASE / "documents/DOC-001.pdf").read_bytes()
+        self.assertEqual(
+            self._error_code(lambda: validate_upload(
+                data,
+                filename="DOC-001.pdf",
+                claimed_media_type="application/pdf",
+                scanner=_test_fixture_scanner(),
+                expected_subject="Maya - fictional demo persona",
+                subject_as_written="Maya fictional demo persona",
+                fixture_bound_subject="Maya - fictional demo persona",
+            )),
+            "wrong_person",
+        )
+
+    def test_multiple_subject_lines_are_rejected(self):
+        text = (
+            "FICTIONAL DEMO DATA - NOT A REAL MEDICAL RECORD\n"
+            "persona: Maya - fictional demo persona\n"
+            "persona: Other Fictional Person"
+        )
+        page = ParsedPage(
+            page=1,
+            text=text,
+            extraction_method="ocr",
+            text_sha256=sha256(text.encode("utf-8")).hexdigest(),
+        )
+        self.assertEqual(
+            self._error_code(lambda: extract_fixture_candidates(
+                [page], document_sha256="f" * 64
+            )),
+            "multiple_subjects",
+        )
     def test_prompt_injection_is_data_and_never_a_candidate(self):
         data = (BASE / "documents/DOC-006.pdf").read_bytes()
         validation = validate_upload(
             data,
             filename="DOC-006.pdf",
             claimed_media_type="application/pdf",
-            scanner=FictionalFixtureScanner(),
+            scanner=_test_fixture_scanner(),
         )
         pages, fitz_pages = parse_document(data, media_type=validation.media_type)
         packet = extract_fixture_candidates(
@@ -114,7 +216,7 @@ class PersonalDocumentTests(unittest.TestCase):
             data,
             filename="DOC-003.pdf",
             claimed_media_type="application/pdf",
-            scanner=FictionalFixtureScanner(),
+            scanner=_test_fixture_scanner(),
         )
         pages, fitz_pages = parse_document(data, media_type=validation.media_type)
         packet = extract_fixture_candidates(
@@ -190,7 +292,7 @@ class PersonalDocumentTests(unittest.TestCase):
         self.assertEqual(
             self._error_code(lambda: validate_upload(
                 locked, filename="locked-fictional.pdf", claimed_media_type="application/pdf",
-                scanner=FictionalFixtureScanner()
+                scanner=_test_fixture_scanner()
             )),
             "locked",
         )
@@ -198,7 +300,7 @@ class PersonalDocumentTests(unittest.TestCase):
         self.assertEqual(
             self._error_code(lambda: validate_upload(
                 corrupt, filename="corrupt-fictional.pdf", claimed_media_type="application/pdf",
-                scanner=FictionalFixtureScanner()
+                scanner=_test_fixture_scanner()
             )),
             "corrupt",
         )
@@ -206,14 +308,14 @@ class PersonalDocumentTests(unittest.TestCase):
         self.assertEqual(
             self._error_code(lambda: validate_upload(
                 unsupported, filename="unsupported-fictional.rtf", claimed_media_type="application/rtf",
-                scanner=FictionalFixtureScanner()
+                scanner=_test_fixture_scanner()
             )),
             "unsupported_format",
         )
         self.assertEqual(
             self._error_code(lambda: validate_upload(
                 b"x" * cases["oversize"]["generated_byte_count"], filename="large.pdf",
-                claimed_media_type="application/pdf", scanner=FictionalFixtureScanner()
+                claimed_media_type="application/pdf", scanner=_test_fixture_scanner()
             )),
             "oversize",
         )
@@ -221,7 +323,7 @@ class PersonalDocumentTests(unittest.TestCase):
         self.assertEqual(
             self._error_code(lambda: validate_upload(
                 wrong, filename="wrong-person-fictional.pdf", claimed_media_type="application/pdf",
-                scanner=FictionalFixtureScanner(),
+                scanner=_test_fixture_scanner(),
                 expected_subject=cases["wrong_person"]["expected_subject"],
                 subject_as_written=cases["wrong_person"]["subject_as_written"],
             )),
@@ -243,14 +345,14 @@ class PersonalDocumentTests(unittest.TestCase):
         self.assertEqual(
             self._error_code(lambda: validate_upload(
                 pdf, filename="DOC-001.png", claimed_media_type="image/png",
-                scanner=FictionalFixtureScanner()
+                scanner=_test_fixture_scanner()
             )),
             "signature_mismatch",
         )
         self.assertEqual(
             self._error_code(lambda: validate_upload(
                 pdf, filename="DOC-001.pdf", claimed_media_type="image/png",
-                scanner=FictionalFixtureScanner()
+                scanner=_test_fixture_scanner()
             )),
             "media_type_mismatch",
         )
@@ -259,7 +361,7 @@ class PersonalDocumentTests(unittest.TestCase):
         data = (BASE / "documents/DOC-001.pdf").read_bytes()
         validation = validate_upload(
             data, filename="DOC-001.pdf", claimed_media_type="application/pdf",
-            scanner=FictionalFixtureScanner()
+            scanner=_test_fixture_scanner()
         )
         pages, fitz_pages = parse_document(data, media_type=validation.media_type)
         packet = extract_fixture_candidates(

@@ -68,7 +68,7 @@ binds each file to its canonical SHA-256 and records the remote schema counts.
 
 ## Verification
 
-The database suite contains 141 pgTAP assertions. It uses two fictional authenticated
+The current database suite pins 122 pgTAP assertions. It uses two fictional authenticated
 principals and covers policy inventory, owner/non-owner read and update behavior for
 all 16 personal tables, permitted deletes, the protected document exception,
 cross-workspace parent references, private vector retrieval, Storage policies,

@@ -25,10 +25,16 @@ OPENAI = ROOT / "app/services/openai_document_extractor.py"
 SCHEMA = ROOT / "data/schemas/document.schema.json"
 REPORT = ROOT / "docs/STAGE-4-CHECK-RESULTS.json"
 REMOTE_EVIDENCE = ROOT / "data/supabase/stage4-remote-verification.json"
+FIXTURE_REGISTRY = BASE / "stage4_fixture_registry.json"
 
 
 def _digest(path: Path) -> str:
-    return sha256(path.read_bytes()).hexdigest()
+    data = path.read_bytes()
+    if path.suffix.casefold() == ".sql":
+        # Git may materialise SQL with CRLF on Windows. Migration identity is
+        # based on canonical LF bytes so the same commit verifies everywhere.
+        data = data.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return sha256(data).hexdigest()
 
 
 def _remote_errors(payload: dict) -> list[str]:
@@ -95,6 +101,19 @@ def run(skip_remote: bool = False) -> dict:
     errors.extend(validate_document_service(SERVICE))
     errors.extend(validate_openai_adapter(OPENAI))
 
+    expected_pg_tap_plans = {
+        "stage2_security_and_lifecycle.test.sql": 122,
+        "stage3_exit_hardening.test.sql": 12,
+        "stage3_onboarding.test.sql": 26,
+        "stage4_api_role_hardening.test.sql": 11,
+        "stage4_document_confirmation.test.sql": 35,
+    }
+    for filename, expected in expected_pg_tap_plans.items():
+        sql = (ROOT / "supabase/tests" / filename).read_text(encoding="utf-8")
+        if f"select plan({expected});" not in sql.casefold():
+            errors.append(f"{filename}: expected pgTAP plan({expected}) is not pinned")
+    if sum(expected_pg_tap_plans.values()) != 206:
+        errors.append("pinned pgTAP plans do not total 206")
     tracked_schema = json.loads(SCHEMA.read_text(encoding="utf-8")) if SCHEMA.exists() else None
     if tracked_schema != build_payload():
         errors.append("tracked Stage 4 document JSON Schema is stale")
@@ -140,6 +159,20 @@ def run(skip_remote: bool = False) -> dict:
             errors.append("controlled OCR truth does not require exact canonical field recall")
         noisy_fields = len(noisy_truth.get("expected_fields", []))
 
+    fixture_registry = json.loads(FIXTURE_REGISTRY.read_text(encoding="utf-8"))
+    registered_fixtures = fixture_registry.get("fixtures", [])
+    if fixture_registry.get("public_demo_upload") is not False:
+        errors.append("arbitrary public demo upload must remain disabled")
+    if len(registered_fixtures) != 9:
+        errors.append("fictional fixture registry must contain exactly nine entries")
+    for item in registered_fixtures:
+        fixture_path = ROOT / item.get("relative_path", "")
+        if (
+            not fixture_path.is_file()
+            or _digest(fixture_path) != item.get("sha256")
+            or item.get("expected_subject") != "Maya - fictional demo persona"
+        ):
+            errors.append(f"fictional fixture registry entry is invalid: {item.get('id')}")
     edge_manifest_path = BASE / "upload_edge_cases/manifest.json"
     edge_case_ids: set[str] = set()
     if not edge_manifest_path.exists():
@@ -157,16 +190,26 @@ def run(skip_remote: bool = False) -> dict:
 
     ui = (ROOT / "app/pages_and_components/documents.py").read_text(encoding="utf-8")
     for fragment in (
-        "Fictional demo only", "Review every extracted field", "exact source text",
-        "recorded text only", "I reviewed every field", "unresolved conflict",
+        "NESTLINE_ENABLE_STAGE4_FIXTURE_DEMO", "Arbitrary uploads are disabled",
+        "Review every extracted field",
+        "No review choice is preselected", "character span", "confidence",
+        "completeness", "extraction disposition", "I reviewed every field",
+        "unresolved conflict",
     ):
         if fragment.casefold() not in ui.casefold():
             errors.append(f"Stage 4 UI is missing: {fragment}")
+    if "st.file_uploader" in ui:
+        errors.append("Stage 4 public demo still exposes an arbitrary file uploader")
+    if ui.count("index=None") < 2:
+        errors.append("Stage 4 selector and review decisions must have no default")
     if "render_document_panel" not in (
         ROOT / "app/pages_and_components/onboarding.py"
     ).read_text(encoding="utf-8"):
         errors.append("Stage 4 UI is not integrated into the authenticated workspace")
 
+    env_example = (ROOT / ".env.example").read_text(encoding="utf-8")
+    if "NESTLINE_ENABLE_STAGE4_FIXTURE_DEMO=false" not in env_example:
+        errors.append("Stage 4 fixture feature must default off in .env.example")
     requirements = (ROOT / "requirements.txt").read_text(encoding="utf-8")
     if "Pillow==12.3.0" not in requirements:
         errors.append("controlled OCR image dependency is not pinned")
@@ -194,21 +237,24 @@ def run(skip_remote: bool = False) -> dict:
             "typed_graph_nodes": graph_nodes,
             "typed_graph_edges": graph_edges,
             "controlled_ocr_expected_fields": noisy_fields,
+            "registered_exact_hash_fixtures": len(registered_fixtures),
+            "pinned_pg_tap_assertions": sum(expected_pg_tap_plans.values()),
             "upload_edge_cases": sorted(edge_case_ids),
             "migration_sha256": _digest(MIGRATION),
             "api_role_hardening_sha256": _digest(API_ROLE_HARDENING),
         },
         "implemented_boundaries": [
-            "format, size, signature, lock, corruption, wrong-person and scan validation",
-            "exact page/span candidate provenance and record-only medication text",
-            "proposal-only extraction with explicit edit, confirm, reject, conflict and supersede actions",
+            "format, size, signature, lock, corruption, exact-fixture, and fail-closed identity validation",
+            "document feature defaults off; supervised demos can select only nine repository-owned fixture hashes",
+            "visible page/span/coordinate/confidence/completeness/disposition provenance",
+            "proposal-only extraction with unselected explicit edit, confirm, reject, conflict and supersede actions",
             "atomic idempotent versioned commit with graph updates and movement-plan invalidation",
             "owner-only derived-state mutation and duplicate upload deduplication",
             "optional tool-free, store-disabled OpenAI Structured Outputs adapter",
         ],
         "parked_release_gates": [
             "deployable malware scanner for real medical documents",
-            "exact OpenAI extraction model and cost ceiling followed by live fictional benchmark",
+            "exact candidate extraction models and cost ceiling followed by live fictional benchmark",
             "qualified clinical and India-localisation approval",
             "final rendered product acceptance",
         ],

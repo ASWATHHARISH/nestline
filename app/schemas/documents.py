@@ -133,6 +133,9 @@ class UploadValidationResult(Contract):
     scan_version: Text
     expected_subject: str | None = None
     subject_as_written: str | None = None
+    identity_status: Literal[
+        "not_required", "matched_document_subject", "verified_fixture_binding"
+    ]
 
 
 class ConfirmationDecision(Contract):

@@ -184,6 +184,15 @@
         ],
         "default": null,
         "title": "Subject As Written"
+      },
+      "identity_status": {
+        "enum": [
+          "not_required",
+          "matched_document_subject",
+          "verified_fixture_binding"
+        ],
+        "title": "Identity Status",
+        "type": "string"
       }
     },
     "required": [
@@ -195,7 +204,8 @@
       "page_count",
       "scan_status",
       "scan_provider",
-      "scan_version"
+      "scan_version",
+      "identity_status"
     ],
     "title": "UploadValidationResult",
     "type": "object"

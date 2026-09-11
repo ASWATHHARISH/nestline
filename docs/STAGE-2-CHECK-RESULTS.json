@@ -34,5 +34,11 @@
     "transactional_pg_tap_assertions": 141,
     "temporary_fixture_rows_remaining": 0
   },
+  "assertion_accounting": {
+    "current_stage2_assertions": 122,
+    "historical_remote_reported_assertions": 141,
+    "historical_source_available": false,
+    "current_all_stage_assertions": 206
+  },
   "errors": []
 }

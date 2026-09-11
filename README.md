@@ -25,7 +25,7 @@ are 31 registered sources, 14 active selected-excerpt snapshots, 55 unique evide
 and 56 draft fragments. The additional catalogues, eight fictional PDF/text/truth
 fixtures and visible software-test cases are present.
 
-Local checks pass: 168 unit tests, 64 public-content contract cases and 26 journey
+Local checks pass: 175 unit tests, 64 public-content contract cases and 26 journey
 resolver cases. These are not live AI-model or clinical evaluations. **Stage 0 is
 not a completed content release:**
 source currency, current Indian clinical interpretation, exact wording and actual
@@ -49,8 +49,11 @@ RLS on all 28, a private medical-document bucket, pgvector support, release-boun
 public provenance and authenticated workspace/journey lifecycle functions. Ten
 migrations now enforce owner-only workspaces, strict timing combinations,
 dependency invalidation, Storage-first document deletion and versioned per-session
-demo reset. A 141-assertion two-user database suite passes on both an upgrade and
-a clean installation, then rolls back all fixtures. A separate 13-check local API
+demo reset. The current Stage 2 two-user suite pins 122 assertions, passes on both
+an upgrade and a clean installation, and rolls back all fixtures. The earlier
+remote record reported 141, but its exact SQL source was not preserved; the
+reconciliation is documented without inventing a one-to-one mapping. A separate
+13-check local API
 test proves the same owner boundary through Auth, REST and private Storage and
 removes every temporary fixture.
 
@@ -62,14 +65,16 @@ appointments. Pure Python calculates exact week/day or an approximate range with
 a test clock; conflicts are shown for explicit user choice, while backward care-
 episode transitions require a new workspace. The database independently rechecks
 timing arithmetic, conflict provenance and the draft-safety marker. Direct and
-legacy journey mutation grants are both zero. The 26-case date corpus, 179 database
+legacy journey mutation grants are both zero. The 26-case date corpus, 160 current database
 assertions, 17 real onboarding API checks and Streamlit smoke render pass. Draft
 symptom routing remains evaluation-only until specialist review.
 
-Stage 4 personal-document engineering is complete for the isolated fictional demo.
-It validates private uploads, uses native text or controlled OCR, creates typed
-proposals with exact source spans, requires explicit review, commits confirmed
-state atomically and preserves conflicts. The governed document migration and API-
+Stage 4 personal-document engineering is complete for a supervised fictional demo.
+The document feature defaults off and exposes no arbitrary uploader. When enabled
+for development, it accepts only nine exact-hash repository fixtures, verifies
+identity, uses native text or controlled OCR, shows complete proposal provenance,
+starts every review decision empty, and commits confirmed state only after every
+row is deliberately resolved. The governed document migration and API-
 role hardening are deployed to `nestline-dev`; all 14 migrations are in parity, all
 206 local and remote database assertions pass, 45 authenticated API checks pass,
 and remote lint reports zero findings. Anonymous access is limited to six read-only

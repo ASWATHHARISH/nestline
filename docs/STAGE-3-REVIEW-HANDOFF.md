@@ -83,7 +83,7 @@ product review unless the reviewer is explicitly serving in the qualified role.
 | S3-ENG-08 | Relogin restores the confirmed state | API check |  |  |
 | S3-ENG-09 | Symptoms are timestamped with rule provenance | schema, RPC and API check |  |  |
 | S3-ENG-10 | No temporary fixtures or secrets remain | deployment evidence; repository secret check |  |  |
-| S3-ENG-11 | Exact 00900 upgrade and clean replay both work | 179 assertions on both paths |  |  |
+| S3-ENG-11 | Exact 00900 upgrade and clean replay both work | 160 current assertions on both paths |  |  |
 | S3-ENG-12 | CI reproduces Python, UI and Supabase checks | .github/workflows/data-contracts.yml |  |  |
 
 ## Explicit boundaries for this review

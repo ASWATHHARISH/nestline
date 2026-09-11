@@ -1,0 +1,69 @@
+{
+  "schema_version": "stage2-assertion-coverage-v1",
+  "source_file": "supabase/tests/stage2_security_and_lifecycle.test.sql",
+  "current_assertions": 122,
+  "historical_remote_reported_assertions": 141,
+  "historical_141_source_available": false,
+  "mapping_kind": "current coverage inventory; not a one-to-one mapping from the unavailable historical 141-assertion source",
+  "categories": [
+    {
+      "name": "policy catalogue",
+      "assertions": 16
+    },
+    {
+      "name": "owner reads",
+      "assertions": 16
+    },
+    {
+      "name": "owner updates",
+      "assertions": 9
+    },
+    {
+      "name": "owner deletes",
+      "assertions": 9
+    },
+    {
+      "name": "owner special boundaries",
+      "assertions": 6
+    },
+    {
+      "name": "outsider reads",
+      "assertions": 16
+    },
+    {
+      "name": "outsider updates",
+      "assertions": 9
+    },
+    {
+      "name": "outsider deletes",
+      "assertions": 16
+    },
+    {
+      "name": "outsider private retrieval",
+      "assertions": 1
+    },
+    {
+      "name": "owner-only membership constraint",
+      "assertions": 1
+    },
+    {
+      "name": "dependency invalidation",
+      "assertions": 5
+    },
+    {
+      "name": "Storage and lifecycle boundary",
+      "assertions": 6
+    },
+    {
+      "name": "demo workspace and reset",
+      "assertions": 12
+    }
+  ],
+  "later_stage_suites": {
+    "stage3_exit_hardening": 12,
+    "stage3_onboarding": 26,
+    "stage4_documents": 35,
+    "stage4_api_roles": 11
+  },
+  "current_all_stage_assertions": 206
+}

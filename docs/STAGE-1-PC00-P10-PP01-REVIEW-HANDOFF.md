@@ -2,7 +2,7 @@
 
 This is the current reviewer packet for the first demonstration slice. It is generated from the governed evidence tasks and decision ledger, so task IDs and checksums below name the exact versions reviewed.
 
-- Current Stage 0 release fingerprint: `ee779d44c9405fb1d9893e6c831673bd93e851a0d4b82e6262748e815132bd06`
+- Current Stage 0 release fingerprint: `d3b25c36806c0e6a5f442d994b48a088b99e1a86d3c4174de3d6854f27fa788b`
 - Profiles: `PC00, P10, PP01`
 - Governed evidence tasks in this slice: **27**
 - Recorded product/content decisions: **54**

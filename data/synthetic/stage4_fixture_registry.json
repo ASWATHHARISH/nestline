@@ -1,0 +1,80 @@
+{
+  "schema_version": "stage4-fictional-fixture-registry-v1",
+  "workspace_key": "DEMO-MAYA",
+  "public_demo_upload": false,
+  "fixtures": [
+    {
+      "id": "DOC-001",
+      "label": "DOC-001 - Pregnancy intake summary",
+      "relative_path": "data/synthetic/documents/DOC-001.pdf",
+      "media_type": "application/pdf",
+      "sha256": "70e8f0be9c7c13e90c3329decab261b075d8440e4e35a2ff63908173fd2a070b",
+      "expected_subject": "Maya - fictional demo persona"
+    },
+    {
+      "id": "DOC-002",
+      "label": "DOC-002 - Laboratory report",
+      "relative_path": "data/synthetic/documents/DOC-002.pdf",
+      "media_type": "application/pdf",
+      "sha256": "22e37a5f3f7dcb74292cf84cf71db676f49e8c481d52c08f0425d8d0a74b7f38",
+      "expected_subject": "Maya - fictional demo persona"
+    },
+    {
+      "id": "DOC-003",
+      "label": "DOC-003 - Recorded medication instruction",
+      "relative_path": "data/synthetic/documents/DOC-003.pdf",
+      "media_type": "application/pdf",
+      "sha256": "428fe23c475820583e3746a3056865c1b265b993892e0f210c8c2231d8c2b474",
+      "expected_subject": "Maya - fictional demo persona"
+    },
+    {
+      "id": "DOC-004",
+      "label": "DOC-004 - Routine visit summary",
+      "relative_path": "data/synthetic/documents/DOC-004.pdf",
+      "media_type": "application/pdf",
+      "sha256": "e2743e6c0d5b595c22f7402c534010df3004946ec6d9fbf436e9d8e3ffd15fe4",
+      "expected_subject": "Maya - fictional demo persona"
+    },
+    {
+      "id": "DOC-005",
+      "label": "DOC-005 - Earlier movement instruction",
+      "relative_path": "data/synthetic/documents/DOC-005.pdf",
+      "media_type": "application/pdf",
+      "sha256": "3184658db4d3d96f8a3b4b318ac42a344b8c91b9938a40d153105ab799ecc024",
+      "expected_subject": "Maya - fictional demo persona"
+    },
+    {
+      "id": "DOC-006",
+      "label": "DOC-006 - Later conflicting instruction",
+      "relative_path": "data/synthetic/documents/DOC-006.pdf",
+      "media_type": "application/pdf",
+      "sha256": "cf1a3681656d93388f86fd02d73767797b7d6690794064782fb79000ef42fd06",
+      "expected_subject": "Maya - fictional demo persona"
+    },
+    {
+      "id": "DOC-007",
+      "label": "DOC-007 - Follow-up instruction",
+      "relative_path": "data/synthetic/documents/DOC-007.pdf",
+      "media_type": "application/pdf",
+      "sha256": "a604b5cc0519f8c10c8b5f395b6367881dca140776a36e9b8b60f5dfe254890e",
+      "expected_subject": "Maya - fictional demo persona"
+    },
+    {
+      "id": "DOC-008",
+      "label": "DOC-008 - Postpartum discharge summary",
+      "relative_path": "data/synthetic/documents/DOC-008.pdf",
+      "media_type": "application/pdf",
+      "sha256": "7f3e482cd829c51ca2240b78a5cbc1ea83a0da8f8a0770145d242ff09d9be0d6",
+      "expected_subject": "Maya - fictional demo persona"
+    },
+    {
+      "id": "DOC-003-NOISY",
+      "label": "DOC-003-NOISY - controlled OCR image",
+      "relative_path": "data/synthetic/noisy_variants/DOC-003-noisy.png",
+      "media_type": "image/png",
+      "sha256": "d1b719e528511b147c3a9e6f92a9670864ee9c68f4ce073b69eb04bedaaa328d",
+      "expected_subject": "Maya - fictional demo persona",
+      "ocr_truth_path": "data/synthetic/noisy_variants/DOC-003-noisy.expected.json"
+    }
+  ]
+}

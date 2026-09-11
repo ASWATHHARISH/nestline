@@ -554,9 +554,11 @@ lifecycle functions the only database deletion route after Storage cleanup.
 The first pgTAP run exposed a test-harness column-name error; the next reached
 128 successful assertions before a leftover direct Storage cleanup statement hit
 Supabase's own deletion-protection trigger. We corrected the harness instead of
-weakening Storage. The final suite passes all 141 assertions. Both the exact
-five-migration upgrade and a clean ten-migration replay pass with zero database
-lint errors. All five additive corrections were then deployed to `nestline-dev`,
+weakening Storage. The remote verification at that point reported 141 assertions,
+but its exact SQL source was not preserved in Git. The current Stage 2 suite pins
+122 assertions; the evidence gap and current coverage inventory are recorded in
+STAGE-2-ASSERTION-COVERAGE-MAPPING.md. Both the exact five-migration upgrade and
+a clean ten-migration replay pass with zero database lint errors. All five additive corrections were then deployed to `nestline-dev`,
 and read-only remote verification found ten migration rows, all 28 tables under
 RLS, five dependency tables, zero direct document-delete grants and zero fixtures.
 A separate 13-check local Auth/REST/Storage run also proved the actual owner and
@@ -635,7 +637,7 @@ lint was rerun after the transaction and returned zero findings. CI keeps these
 steps sequential.
 
 Final evidence is 154/154 Python tests, 64/64 contract cases, 26/26 journey cases,
-24/24 focused journey/onboarding tests, and 179/179 database assertions on both an
+24/24 focused journey/onboarding tests, and 160/160 database assertions on both an
 exact 00900-to-01000 upgrade and a clean twelve-migration replay. The 13 Storage
 API checks, 17 onboarding API checks and Streamlit smoke render pass. Read-only
 remote inspection confirms 12 migrations, all hardening constraints and trigger,
@@ -667,7 +669,7 @@ The exact migration upgrade was tested from `01000` with pre-existing confirmed
 document, fact and medication rows. It backfilled the required decision provenance.
 A clean replay through `01100` was tested separately. Each path passed 195 pgTAP
 assertions, 45 authenticated Auth/Storage/PostgREST/RPC checks and database lint
-with zero findings. The complete application suite passed 168 Python tests, 64
+with zero findings. The complete application suite passed 175 Python tests, 64
 content-contract cases, 26 journey cases and the Stage 3/4 Streamlit renders.
 
 Adding the noisy PNG first broke the release fingerprint because binary images

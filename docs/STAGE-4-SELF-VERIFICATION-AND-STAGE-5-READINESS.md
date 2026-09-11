@@ -2,7 +2,11 @@
 
 **Audit date:** 11 September 2026  
 **Auditor:** Codex engineering self-review  
-**Verdict:** Stage 4 fictional-demo engineering passes and Stage 5 engineering may begin
+**Verdict:** Stage 4 fictional-demo engineering passes and Stage 5 engineering may begin locally
+
+The current finding-by-finding correction record is
+STAGE-2-3-4-INDEPENDENT-REVIEW-RESPONSE-AND-STAGE-5-GATE.md. GitHub CI remains
+pending until these local changes are approved and pushed.
 
 ## Scope of the verdict
 
@@ -18,9 +22,12 @@ named external work listed below.
 | Eight coherent fictional documents | Text, watermarked PDFs, extraction truth and typed graph truth for `DOC-001`–`DOC-008` | Pass |
 | Controlled OCR case | Frozen noisy image and five-field truth; injected OCR adapter test | Pass |
 | Upload failures are explicit | Locked, corrupt, unsupported, oversize and wrong-person fixtures | Pass |
+| Public upload boundary | Feature defaults off; supervised mode selects nine exact-hash fixtures and exposes no arbitrary uploader | Pass |
+| Identity cannot be skipped | Extracted exact match or verified fixture binding; missing, blank, multiple, near-match and wrong tests | Pass |
 | Proposals are not active facts | SQL grants/RLS and pre-confirmation API lookup | Pass |
 | Exact provenance | Page, source quote, offsets, coordinates, checksum and extraction method | Pass |
-| User controls the change | Edit, confirm, reject, conflict and complete-review contract | Pass |
+| User controls the change | No radio is preselected; save is disabled until every row has a decision | Pass |
+| Reviewer sees provenance | Document, page/span, coordinates, confidence, completeness, disposition and state render | Pass |
 | Atomic and repeatable commit | Expected-version and idempotency ledger checks | Pass |
 | Conflicts preserve history | `DOC-005`/`DOC-006` database and API scenario | Pass |
 | Plan dependency is visible | Restriction confirmation marks movement plan stale | Pass |
@@ -31,7 +38,7 @@ named external work listed below.
 
 ## Evidence totals
 
-- 168 Python tests passed.
+- 175 Python tests passed.
 - 64 public-content contract cases passed.
 - 26 journey cases passed.
 - The exact Stage 3→4 document upgrade retains its 195 passing assertions; the
@@ -112,7 +119,7 @@ CR/LF serialization and one platform helper.
 | Item | Why it is parked | Required before |
 |---|---|---|
 | Production malware scanner | No scanner service was selected | Any real medical upload |
-| Exact OpenAI extraction model and cost ceiling | Product/cost choice is unset | Live fictional provider benchmark |
+| Exact candidate model IDs and cost ceiling | Product/cost choice is unset | Live fictional provider benchmark |
 | Clinical and India-localisation decisions | Code cannot self-approve care wording | Live health guidance/public release |
 | Final rendered product acceptance | Named product review is still open | Public release |
 
@@ -126,4 +133,5 @@ and workspace filters before semantic ranking. Stage 5 must also prove that grap
 expansion changes a relationship-dependent case and must not claim a graph benefit
 when exact SQL already answers it.
 
-No GitHub commit, push or pull request was performed during Stage 4.
+This independent-review correction remains local. GitHub still points to reviewed
+commit 68722f8 until Aswath explicitly approves a push.

@@ -1,7 +1,8 @@
 begin;
 
 create extension if not exists pgtap with schema extensions;
-select no_plan();
+-- Pin the present suite size so accidental assertion deletion fails CI.
+select plan(122);
 
 -- Fixed UUIDs keep failures easy to reproduce while the surrounding
 -- transaction guarantees that no test data survives.

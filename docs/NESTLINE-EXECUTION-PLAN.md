@@ -197,8 +197,8 @@ Completed and independently corrected on 11 September 2026 in the `nestline-dev`
 Supabase project. Ten tracked migrations create 28 RLS-enabled tables, private
 Storage, pgvector, release-bound provenance, owner-only workspaces, strict journey
 states, normalized dependency invalidation and versioned per-session demo reset.
-The Docker/pgTAP suite passes 141 assertions against both a five-migration upgrade
-and a clean installation. It covers all 16 personal tables, vectors, Storage,
+The current Docker/pgTAP Stage 2 suite pins and passes 122 assertions against both
+an upgrade and a clean installation. It covers all 16 personal tables, vectors, Storage,
 cross-workspace references, graph cleanup and three repeatable resets. Secret-free
 remote hashes/counts are tracked in `data/supabase/remote-verification.json`.
 A separate 13-check local Auth/REST/Storage run proves owner file operations,
@@ -210,7 +210,10 @@ outsider denial, Storage-first deletion and full temporary-fixture cleanup.
 
 - [x] Implement due date, manual week/day, month range, delivery date and postpartum-week inputs using deterministic functions with a testable clock.
 - [x] Preserve effective date, timing provenance, conflicts and user confirmation. Month input remains a range.
-- [x] Connect onboarding symptoms to S6 and store timestamped events.
+- [x] Capture optional symptoms with timestamps and source provenance.
+- [x] Store symptoms atomically with the confirmed onboarding submission.
+- [x] Force all onboarding symptom records to remain safety-evaluation-only.
+- [ ] Route symptoms through the reviewed Stage 6 classifier and escalation policy.
 
 Completed, independently exit-audited and deployed on 11 September 2026. The
 Streamlit flow includes the privacy boundary, authentication, Personal Empty/
@@ -222,7 +225,7 @@ arithmetic, reject backward care-episode transitions and preserve the draft-safe
 marker.
 
 Verification: 26/26 frozen date/conflict cases, 24/24 focused journey/onboarding
-unit tests, 179/179 database assertions on both exact 00900 upgrade and clean
+unit tests, 160/160 database assertions on both exact 00900 upgrade and clean
 replay, 17/17 real Auth/PostgREST onboarding checks covering all six timing paths,
 one Streamlit render check, zero database lint findings and zero fixtures. The
 remote nestline-dev catalog has 12 migrations and no direct or legacy journey

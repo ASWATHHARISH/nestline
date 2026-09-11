@@ -17,6 +17,7 @@ from app.services.personal_documents import (
     FictionalFixtureScanner,
     SupabaseDocumentGateway,
     extract_fixture_candidates,
+    load_fictional_fixture_registry,
     parse_document,
     validate_upload,
 )
@@ -46,17 +47,32 @@ def _process_fixture(
     workspace_id,
     document_key: str,
 ):
-    path = ROOT / "data/synthetic/documents" / f"{document_key}.pdf"
+    fixture = next(
+        item
+        for item in load_fictional_fixture_registry()
+        if item.fixture_id == document_key
+    )
+    path = fixture.path
     data = path.read_bytes()
+    scanner = FictionalFixtureScanner(frozenset({fixture.sha256}))
     validation = validate_upload(
         data,
         filename=path.name,
-        claimed_media_type="application/pdf",
-        scanner=FictionalFixtureScanner(),
+        claimed_media_type=fixture.media_type,
+        scanner=scanner,
     )
     pages, fitz_pages = parse_document(data, media_type=validation.media_type)
     packet = extract_fixture_candidates(
         pages, document_sha256=validation.sha256, fitz_pages=fitz_pages
+    )
+    validation = validate_upload(
+        data,
+        filename=path.name,
+        claimed_media_type=fixture.media_type,
+        scanner=scanner,
+        expected_subject=fixture.expected_subject,
+        subject_as_written=packet.subject_as_written,
+        fixture_bound_subject=fixture.expected_subject,
     )
     document_id, created = gateway.upload_and_register(workspace_id, validation, data)
     review_version = gateway.record_extraction(

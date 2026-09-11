@@ -32,11 +32,11 @@ flowchart LR
 | Isolated synthetic profile | Demo files are conspicuously fictional and watermarked; each session receives its own resettable workspace. |
 | Eight canonical documents | `DOC-001` through `DOC-008` each have editable source, PDF, extraction truth and typed graph truth. |
 | Controlled OCR | One noisy image fixture has frozen OCR truth. OCR is dependency-injected and is used only when an image has no native text. |
-| Upload validation | PDF/PNG/JPEG signature, MIME, size, lock, corruption, wrong-person and scanner result are checked before persistence. |
+| Upload validation | The supervised demo accepts only exact registered fixture hashes. PDF/PNG signature, MIME, size, lock, corruption and identity are checked before persistence; missing, blank, multiple, near-match and wrong identities fail closed. |
 | Private original | Authenticated owner uploads to the private `medical-documents` bucket under a workspace/hash path. Failed metadata registration removes the orphaned object. |
 | Structured classification/extraction | The deterministic fixture adapter proves the full demo without a provider. An optional OpenAI Responses Structured Outputs adapter is strict-schema, tool-free and `store=false`; it has no invented default model. |
-| Candidate provenance | Every proposal keeps document hash, page, exact source quote, character offsets and PDF coordinates where available, plus extraction method, confidence and completeness. |
-| Confirmation states | Confirm, edit, reject, keep-conflict and supersede behavior is versioned and auditable. Missing values abstain. |
+| Candidate provenance | Every proposal keeps and displays document name, page, exact source quote, character offsets, PDF coordinates, extraction method, confidence, completeness, disposition and state. |
+| Confirmation states | Every review choice starts empty. Save remains disabled until every row has a deliberate confirm, edit, reject or keep-conflict decision. Missing values require an explicit reject acknowledgement. |
 | Confirmed state writes | One security-definer transaction checks owner, review completeness, expected version and idempotency key before writing health facts, medication records, appointments, graph links and dependency changes. |
 | Conflict behavior | Older facts remain; the disagreement is stored, a clarification question is created, and conflicted information cannot personalize output. |
 | Plan dependency | Confirmed restriction changes mark affected movement plans stale. |
@@ -77,7 +77,7 @@ Both histories passed:
 
 The application evidence also passed:
 
-- 168 Python regression tests;
+- 175 Python regression tests;
 - 64 public-content contract cases;
 - 26 journey cases;
 - Stage 3 and Stage 4 Streamlit render checks with zero network calls;
@@ -108,8 +108,8 @@ drift. The secret-free proof is
 
 ## Gates that code cannot complete
 
-- Configure a deployable malware scanner before accepting real medical documents.
-- Select the exact OpenAI extraction model and a per-document cost ceiling, then
+- Configure a deployable server-side malware scanner before accepting real medical documents.
+- Select exact candidate extraction models and a per-document cost ceiling, then
   run the frozen fictional provider benchmark. Deterministic demo extraction does
   not depend on this choice.
 - Complete qualified clinical and India-localisation review.

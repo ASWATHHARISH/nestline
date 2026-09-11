@@ -130,10 +130,12 @@ India calculation/effective dates and a future-relative fictional appointment.
 
 ### 7. Current documentation contained stale test counts
 
-The Stage 2 pgTAP file was described as 143 assertions. Running that file alone
-shows 141. The combined current database suite is 141 Stage 2 + 26 Stage 3 base +
-12 Stage 3 hardening = 179 assertions. Current-status documents are corrected to
-use observed counts.
+An earlier audit changed a claimed Stage 2 count from 143 to the remote record of
+141 without preserving the corresponding SQL source. The current tracked Stage 2
+file actually contains and now pins 122 assertions. With 26 Stage 3 base and 12
+Stage 3 hardening assertions, the Stage 2–3 subtotal is 160. The current Stage
+2–4 full gate is 206. STAGE-2-ASSERTION-COVERAGE-MAPPING.md records the evidence
+gap and current coverage without inventing a one-to-one mapping.
 
 ## Failures during this verification and recovery
 
@@ -158,8 +160,8 @@ lint sequential.
 | Existing deterministic contract cases | 64/64 passed |
 | Frozen journey/date/conflict cases | 26/26 passed |
 | Focused journey + onboarding unit tests | 24/24 passed |
-| Database assertions, exact 00900 to 01000 upgrade | 179/179 passed |
-| Database assertions, clean twelve-migration install | 179/179 passed |
+| Database assertions, exact 00900 to 01000 upgrade | 160/160 passed |
+| Database assertions, clean twelve-migration install | 160/160 passed |
 | Real local Auth/REST/Storage checks | 13/13 passed |
 | Real local onboarding/relogin/isolation checks | 17/17 passed |
 | Streamlit initial render | passed, zero network calls |
