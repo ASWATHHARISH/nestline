@@ -1,0 +1,59 @@
+{
+  "document_states": [
+    "ready",
+    "low_confidence",
+    "conflict",
+    "locked",
+    "corrupt",
+    "unsupported",
+    "wrong_person"
+  ],
+  "modes": [
+    "Personal Mode",
+    "Demo Mode"
+  ],
+  "pages": [
+    "Weekly Home",
+    "Compass",
+    "Records",
+    "Plan",
+    "Evidence",
+    "Simulated review",
+    "Evaluator view"
+  ],
+  "plan_states": [
+    "none",
+    "draft",
+    "saved",
+    "stale",
+    "conflict",
+    "invalid",
+    "unavailable"
+  ],
+  "provenance_labels": [
+    "Your confirmed information",
+    "Your uploaded record says",
+    "You reported",
+    "Public guidance says",
+    "Needs confirmation"
+  ],
+  "provider_boundary": "deterministic controlled fixtures; no live paid provider run",
+  "schema_version": "9.0.0",
+  "stage10_disabled": [
+    "durable plan save",
+    "durable fact confirmation",
+    "review submission",
+    "automation",
+    "deployment"
+  ],
+  "view_states": [
+    "loading",
+    "empty",
+    "success",
+    "validation_error",
+    "recoverable_error",
+    "blocked_safety",
+    "stale_conflict",
+    "unavailable_disabled"
+  ]
+}

@@ -1,0 +1,950 @@
+{
+  "models": {
+    "ChatDisplayResult": {
+      "$defs": {
+        "EvidenceDrawerItem": {
+          "additionalProperties": false,
+          "properties": {
+            "current_status": {
+              "minLength": 1,
+              "title": "Current Status",
+              "type": "string"
+            },
+            "evidence_id": {
+              "minLength": 1,
+              "title": "Evidence Id",
+              "type": "string"
+            },
+            "fixture_only": {
+              "const": true,
+              "default": true,
+              "title": "Fixture Only",
+              "type": "boolean"
+            },
+            "journey_applicability": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Journey Applicability"
+            },
+            "locator": {
+              "minLength": 1,
+              "title": "Locator",
+              "type": "string"
+            },
+            "publisher": {
+              "minLength": 1,
+              "title": "Publisher",
+              "type": "string"
+            },
+            "review_status": {
+              "minLength": 1,
+              "title": "Review Status",
+              "type": "string"
+            },
+            "source_id": {
+              "minLength": 1,
+              "title": "Source Id",
+              "type": "string"
+            },
+            "source_title": {
+              "minLength": 1,
+              "title": "Source Title",
+              "type": "string"
+            },
+            "source_type": {
+              "enum": [
+                "public_fixture",
+                "personal_document_fixture"
+              ],
+              "title": "Source Type",
+              "type": "string"
+            },
+            "supporting_passage": {
+              "minLength": 1,
+              "title": "Supporting Passage",
+              "type": "string"
+            },
+            "supports_claim": {
+              "title": "Supports Claim",
+              "type": "boolean"
+            },
+            "workspace_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Workspace Id"
+            }
+          },
+          "required": [
+            "evidence_id",
+            "source_id",
+            "source_title",
+            "publisher",
+            "source_type",
+            "review_status",
+            "current_status",
+            "locator",
+            "supporting_passage",
+            "supports_claim"
+          ],
+          "title": "EvidenceDrawerItem",
+          "type": "object"
+        },
+        "ViewState": {
+          "enum": [
+            "loading",
+            "empty",
+            "success",
+            "validation_error",
+            "recoverable_error",
+            "blocked_safety",
+            "stale_conflict",
+            "unavailable_disabled"
+          ],
+          "title": "ViewState",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "applied_constraints": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Applied Constraints",
+          "type": "array"
+        },
+        "citations": {
+          "items": {
+            "$ref": "#/$defs/EvidenceDrawerItem"
+          },
+          "title": "Citations",
+          "type": "array"
+        },
+        "fixture_only": {
+          "const": true,
+          "default": true,
+          "title": "Fixture Only",
+          "type": "boolean"
+        },
+        "ordinary_generation_calls": {
+          "maximum": 5,
+          "minimum": 0,
+          "title": "Ordinary Generation Calls",
+          "type": "integer"
+        },
+        "proposed_actions": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Proposed Actions",
+          "type": "array"
+        },
+        "provenance_sections": {
+          "additionalProperties": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "propertyNames": {
+            "minLength": 1
+          },
+          "title": "Provenance Sections",
+          "type": "object"
+        },
+        "request_id": {
+          "minLength": 1,
+          "title": "Request Id",
+          "type": "string"
+        },
+        "route": {
+          "enum": [
+            "urgent",
+            "clarification",
+            "validated",
+            "abstained",
+            "unsupported"
+          ],
+          "title": "Route",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "9.0.0",
+          "default": "9.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/$defs/ViewState"
+        },
+        "summary": {
+          "minLength": 1,
+          "title": "Summary",
+          "type": "string"
+        },
+        "title": {
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "trace_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Trace Id"
+        },
+        "uncertainties": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Uncertainties",
+          "type": "array"
+        },
+        "validation_display_allowed": {
+          "title": "Validation Display Allowed",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "request_id",
+        "route",
+        "title",
+        "summary",
+        "ordinary_generation_calls",
+        "validation_display_allowed",
+        "state"
+      ],
+      "title": "ChatDisplayResult",
+      "type": "object"
+    },
+    "DocumentView": {
+      "$defs": {
+        "RecordFieldView": {
+          "additionalProperties": false,
+          "properties": {
+            "confidence": {
+              "maximum": 1,
+              "minimum": 0,
+              "title": "Confidence",
+              "type": "number"
+            },
+            "exact_span": {
+              "minLength": 1,
+              "title": "Exact Span",
+              "type": "string"
+            },
+            "label": {
+              "minLength": 1,
+              "title": "Label",
+              "type": "string"
+            },
+            "locator": {
+              "minLength": 1,
+              "title": "Locator",
+              "type": "string"
+            },
+            "record_only": {
+              "default": false,
+              "title": "Record Only",
+              "type": "boolean"
+            },
+            "source_id": {
+              "minLength": 1,
+              "title": "Source Id",
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "confirmed",
+                "unconfirmed",
+                "conflicting",
+                "missing"
+              ],
+              "title": "Status",
+              "type": "string"
+            },
+            "value": {
+              "minLength": 1,
+              "title": "Value",
+              "type": "string"
+            }
+          },
+          "required": [
+            "label",
+            "value",
+            "status",
+            "source_id",
+            "locator",
+            "exact_span",
+            "confidence"
+          ],
+          "title": "RecordFieldView",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "document_id": {
+          "minLength": 1,
+          "title": "Document Id",
+          "type": "string"
+        },
+        "fictional": {
+          "const": true,
+          "default": true,
+          "title": "Fictional",
+          "type": "boolean"
+        },
+        "fields": {
+          "items": {
+            "$ref": "#/$defs/RecordFieldView"
+          },
+          "title": "Fields",
+          "type": "array"
+        },
+        "label": {
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "recovery": {
+          "minLength": 1,
+          "title": "Recovery",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "ready",
+            "low_confidence",
+            "conflict",
+            "locked",
+            "corrupt",
+            "unsupported",
+            "wrong_person"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "subject": {
+          "minLength": 1,
+          "title": "Subject",
+          "type": "string"
+        }
+      },
+      "required": [
+        "document_id",
+        "label",
+        "status",
+        "subject",
+        "recovery"
+      ],
+      "title": "DocumentView",
+      "type": "object"
+    },
+    "EvaluatorMetric": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact": {
+          "minLength": 1,
+          "title": "Artifact",
+          "type": "string"
+        },
+        "dataset_version": {
+          "minLength": 1,
+          "title": "Dataset Version",
+          "type": "string"
+        },
+        "failed": {
+          "minimum": 0,
+          "title": "Failed",
+          "type": "integer"
+        },
+        "live_provider_run": {
+          "default": false,
+          "title": "Live Provider Run",
+          "type": "boolean"
+        },
+        "passed": {
+          "minimum": 0,
+          "title": "Passed",
+          "type": "integer"
+        },
+        "skipped": {
+          "minimum": 0,
+          "title": "Skipped",
+          "type": "integer"
+        },
+        "stage": {
+          "minLength": 1,
+          "title": "Stage",
+          "type": "string"
+        },
+        "total": {
+          "minimum": 0,
+          "title": "Total",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "stage",
+        "artifact",
+        "passed",
+        "total",
+        "failed",
+        "skipped",
+        "dataset_version"
+      ],
+      "title": "EvaluatorMetric",
+      "type": "object"
+    },
+    "EvidenceDrawerItem": {
+      "additionalProperties": false,
+      "properties": {
+        "current_status": {
+          "minLength": 1,
+          "title": "Current Status",
+          "type": "string"
+        },
+        "evidence_id": {
+          "minLength": 1,
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "fixture_only": {
+          "const": true,
+          "default": true,
+          "title": "Fixture Only",
+          "type": "boolean"
+        },
+        "journey_applicability": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Journey Applicability"
+        },
+        "locator": {
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "publisher": {
+          "minLength": 1,
+          "title": "Publisher",
+          "type": "string"
+        },
+        "review_status": {
+          "minLength": 1,
+          "title": "Review Status",
+          "type": "string"
+        },
+        "source_id": {
+          "minLength": 1,
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_title": {
+          "minLength": 1,
+          "title": "Source Title",
+          "type": "string"
+        },
+        "source_type": {
+          "enum": [
+            "public_fixture",
+            "personal_document_fixture"
+          ],
+          "title": "Source Type",
+          "type": "string"
+        },
+        "supporting_passage": {
+          "minLength": 1,
+          "title": "Supporting Passage",
+          "type": "string"
+        },
+        "supports_claim": {
+          "title": "Supports Claim",
+          "type": "boolean"
+        },
+        "workspace_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workspace Id"
+        }
+      },
+      "required": [
+        "evidence_id",
+        "source_id",
+        "source_title",
+        "publisher",
+        "source_type",
+        "review_status",
+        "current_status",
+        "locator",
+        "supporting_passage",
+        "supports_claim"
+      ],
+      "title": "EvidenceDrawerItem",
+      "type": "object"
+    },
+    "JourneyHeader": {
+      "additionalProperties": false,
+      "properties": {
+        "display_label": {
+          "minLength": 1,
+          "title": "Display Label",
+          "type": "string"
+        },
+        "exact": {
+          "title": "Exact",
+          "type": "boolean"
+        },
+        "position_end": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Position End"
+        },
+        "position_start": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Position Start"
+        },
+        "stage": {
+          "enum": [
+            "pregnancy",
+            "postpartum",
+            "possible_pregnancy"
+          ],
+          "title": "Stage",
+          "type": "string"
+        },
+        "state_version": {
+          "minimum": 1,
+          "title": "State Version",
+          "type": "integer"
+        },
+        "unit": {
+          "enum": [
+            "week",
+            "day",
+            "none"
+          ],
+          "title": "Unit",
+          "type": "string"
+        }
+      },
+      "required": [
+        "stage",
+        "display_label",
+        "exact",
+        "unit",
+        "state_version"
+      ],
+      "title": "JourneyHeader",
+      "type": "object"
+    },
+    "RuntimeConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "demo_mode_available": {
+          "const": true,
+          "default": true,
+          "title": "Demo Mode Available",
+          "type": "boolean"
+        },
+        "fixture_only": {
+          "const": true,
+          "default": true,
+          "title": "Fixture Only",
+          "type": "boolean"
+        },
+        "missing_fields": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Missing Fields",
+          "type": "array"
+        },
+        "personal_mode_available": {
+          "title": "Personal Mode Available",
+          "type": "boolean"
+        },
+        "public_health_routing_available": {
+          "const": false,
+          "default": false,
+          "title": "Public Health Routing Available",
+          "type": "boolean"
+        },
+        "schema_version": {
+          "const": "9.0.0",
+          "default": "9.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "supabase_configured": {
+          "title": "Supabase Configured",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "supabase_configured",
+        "personal_mode_available"
+      ],
+      "title": "RuntimeConfig",
+      "type": "object"
+    },
+    "SimulatedReviewView": {
+      "additionalProperties": false,
+      "properties": {
+        "can_delay_urgent_route": {
+          "const": false,
+          "default": false,
+          "title": "Can Delay Urgent Route",
+          "type": "boolean"
+        },
+        "context_proposed": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Context Proposed",
+          "type": "array"
+        },
+        "label": {
+          "const": "Simulated review",
+          "default": "Simulated review",
+          "title": "Label",
+          "type": "string"
+        },
+        "persistence_available": {
+          "const": false,
+          "default": false,
+          "title": "Persistence Available",
+          "type": "boolean"
+        },
+        "status": {
+          "enum": [
+            "offered",
+            "consented",
+            "queued",
+            "responded",
+            "declined",
+            "unavailable",
+            "timed_out"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "title": "SimulatedReviewView",
+      "type": "object"
+    },
+    "WeeklyHomeView": {
+      "$defs": {
+        "HomeSection": {
+          "additionalProperties": false,
+          "properties": {
+            "heading": {
+              "minLength": 1,
+              "title": "Heading",
+              "type": "string"
+            },
+            "items": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": "Items",
+              "type": "array"
+            },
+            "primary_action": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Primary Action"
+            },
+            "state": {
+              "$ref": "#/$defs/ViewState",
+              "default": "success"
+            }
+          },
+          "required": [
+            "heading"
+          ],
+          "title": "HomeSection",
+          "type": "object"
+        },
+        "JourneyHeader": {
+          "additionalProperties": false,
+          "properties": {
+            "display_label": {
+              "minLength": 1,
+              "title": "Display Label",
+              "type": "string"
+            },
+            "exact": {
+              "title": "Exact",
+              "type": "boolean"
+            },
+            "position_end": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Position End"
+            },
+            "position_start": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Position Start"
+            },
+            "stage": {
+              "enum": [
+                "pregnancy",
+                "postpartum",
+                "possible_pregnancy"
+              ],
+              "title": "Stage",
+              "type": "string"
+            },
+            "state_version": {
+              "minimum": 1,
+              "title": "State Version",
+              "type": "integer"
+            },
+            "unit": {
+              "enum": [
+                "week",
+                "day",
+                "none"
+              ],
+              "title": "Unit",
+              "type": "string"
+            }
+          },
+          "required": [
+            "stage",
+            "display_label",
+            "exact",
+            "unit",
+            "state_version"
+          ],
+          "title": "JourneyHeader",
+          "type": "object"
+        },
+        "PlanDisplayState": {
+          "enum": [
+            "none",
+            "draft",
+            "saved",
+            "stale",
+            "conflict",
+            "invalid",
+            "unavailable"
+          ],
+          "title": "PlanDisplayState",
+          "type": "string"
+        },
+        "ProductMode": {
+          "enum": [
+            "Personal Mode",
+            "Demo Mode"
+          ],
+          "title": "ProductMode",
+          "type": "string"
+        },
+        "ViewState": {
+          "enum": [
+            "loading",
+            "empty",
+            "success",
+            "validation_error",
+            "recoverable_error",
+            "blocked_safety",
+            "stale_conflict",
+            "unavailable_disabled"
+          ],
+          "title": "ViewState",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "agent_fanout_count": {
+          "const": 0,
+          "default": 0,
+          "title": "Agent Fanout Count",
+          "type": "integer"
+        },
+        "confirmed_context": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Confirmed Context",
+          "type": "array"
+        },
+        "fictional": {
+          "title": "Fictional",
+          "type": "boolean"
+        },
+        "hero_alt": {
+          "minLength": 1,
+          "title": "Hero Alt",
+          "type": "string"
+        },
+        "hero_asset": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hero Asset"
+        },
+        "hero_body": {
+          "minLength": 1,
+          "title": "Hero Body",
+          "type": "string"
+        },
+        "hero_title": {
+          "minLength": 1,
+          "title": "Hero Title",
+          "type": "string"
+        },
+        "journey": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JourneyHeader"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "mode": {
+          "$ref": "#/$defs/ProductMode"
+        },
+        "plan_state": {
+          "$ref": "#/$defs/PlanDisplayState"
+        },
+        "schema_version": {
+          "const": "9.0.0",
+          "default": "9.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sections": {
+          "items": {
+            "$ref": "#/$defs/HomeSection"
+          },
+          "title": "Sections",
+          "type": "array"
+        },
+        "state": {
+          "$ref": "#/$defs/ViewState"
+        },
+        "unresolved_items": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Unresolved Items",
+          "type": "array"
+        }
+      },
+      "required": [
+        "mode",
+        "fictional",
+        "hero_title",
+        "hero_body",
+        "hero_alt",
+        "sections",
+        "plan_state",
+        "state"
+      ],
+      "title": "WeeklyHomeView",
+      "type": "object"
+    }
+  },
+  "schema_version": "9.0.0"
+}

@@ -1,0 +1,39 @@
+{
+  "valid": true,
+  "method": "Chrome DevTools keyboard events only; no pointer input",
+  "start": "Weekly Home",
+  "destination": "Compass",
+  "destination_reached": true,
+  "focus_sequence": [
+    {
+      "name": "Help for Experience mode",
+      "tag": "BUTTON",
+      "outline": "none",
+      "outlineWidth": "3px",
+      "boxShadow": "rgba(217, 95, 118, 0.5) 0px 0px 0px 3.2px"
+    },
+    {
+      "name": "INPUT",
+      "tag": "INPUT",
+      "outline": "solid",
+      "outlineWidth": "4px",
+      "boxShadow": "none"
+    },
+    {
+      "name": "Weekly Home",
+      "tag": "BUTTON",
+      "outline": "solid",
+      "outlineWidth": "4px",
+      "boxShadow": "rgba(217, 95, 118, 0.5) 0px 0px 0px 3.2px"
+    },
+    {
+      "name": "Compass",
+      "tag": "BUTTON",
+      "outline": "solid",
+      "outlineWidth": "4px",
+      "boxShadow": "rgba(217, 95, 118, 0.5) 0px 0px 0px 3.2px"
+    }
+  ],
+  "visible_focus_observed": true,
+  "limitations": "Internal deterministic walkthrough; not external user research or a WCAG conformance audit."
+}

@@ -37,6 +37,9 @@ jobs:
       - run: python -m scripts.check_stage7
       - run: python -m scripts.run_stage8_evals
       - run: python -m scripts.check_stage8
+      - run: python -m scripts.run_stage9_evals
+      - run: python -m scripts.check_stage9_ui
+      - run: python -m scripts.check_stage9
       # Release readiness is intentionally a separate gate: draft shells must
       # remain legal during authoring. Unit tests verify release fails closed.
 

@@ -1,0 +1,79 @@
+{
+  "schema_version": "9.0.0",
+  "review_scope": "One internal implementation self-review and consolidated rectification; not external user research or clinical validation.",
+  "first_pass": {
+    "focused_tests": {"passed": 24, "total": 24},
+    "development_cases": {"passed": 38, "total": 38},
+    "demo_story_runs": {"passed": 9, "total": 9},
+    "limitation": "The initial UI checker verified that a citation action rendered but did not activate it. The browser walkthrough exposed the widget-state failure."
+  },
+  "findings": [
+    {
+      "id": "S9-F01",
+      "severity": "high",
+      "area": "Stage 8 plan integration",
+      "observed": "Repeated weekly schedule items reused one evidence span identity, causing strict Stage 8 packet validation to reject a real week-plan draft.",
+      "reproduction": "run_compass('Show my weekly plan', horizon='week') through the first Stage 9 adapter",
+      "user_impact": "A week plan could not reach the display gate.",
+      "rectification": "Generate a stable unique exact-span identity from day and start time for every repeated schedule item.",
+      "post_status": "PASS"
+    },
+    {
+      "id": "S9-F02",
+      "severity": "high",
+      "area": "Citation and quick-action navigation",
+      "observed": "Activating Open supporting evidence attempted to mutate the already-instantiated sidebar radio state and raised StreamlitWidgetAlreadyInstantiatedError.",
+      "reproduction": "Send Show meal options in Compass, then activate Open supporting evidence.",
+      "user_impact": "The user could see a citation but could not inspect its exact supporting span.",
+      "rectification": "Replace widget-backed navigation state with explicit accessible sidebar buttons and a regular page/query state boundary; add an executable navigation assertion.",
+      "post_status": "PASS"
+    },
+    {
+      "id": "S9-F03",
+      "severity": "medium",
+      "area": "Review deep links and recovery",
+      "observed": "The first Streamlit query-parameter rerun could discard plan/evidence review selections, leaving a valid review link on an empty view.",
+      "reproduction": "Open local review URLs containing draft or evidence identifiers in a fresh browser target.",
+      "user_impact": "A reviewer could land on an unexplained empty state.",
+      "rectification": "Preserve recognized review identifiers in isolated Demo Mode session state and add a visible controlled-fictional evidence recovery action.",
+      "post_status": "PASS"
+    },
+    {
+      "id": "S9-F04",
+      "severity": "medium",
+      "area": "Safe rendering and privacy contract",
+      "observed": "The fictional hero used HTML interpolation and the evidence schema did not itself reject public/private scope mixing.",
+      "reproduction": "Line review of Weekly Home rendering and EvidenceDrawerItem cross-field invariants.",
+      "user_impact": "The current fixture was safe, but the boundary was weaker than required for later authenticated data.",
+      "rectification": "Render typed hero content with Streamlit primitives, remove the unnecessary evidence HTML marker, and reject personal evidence without workspace scope or public evidence carrying private scope.",
+      "post_status": "PASS"
+    }
+  ],
+  "requirement_matrix": [
+    {"area":"application shell and mode separation","status":"PASS","evidence":"AppTest Personal empty state; Demo fixture/reset tests"},
+    {"area":"Weekly Home hierarchy and zero fan-out","status":"PASS","evidence":"home contract tests and UI checker home_agent_fanout=0"},
+    {"area":"Compass Stage 6-8 integration","status":"PASS","evidence":"validated, clarification, unsupported and urgent focused tests"},
+    {"area":"citation-to-exact-span interaction","status":"PASS","evidence":"Stage 9 UI checker activates citation and reaches Supporting passage"},
+    {"area":"records and recovery states","status":"PASS","evidence":"seven fictional states; confirmation controls disabled"},
+    {"area":"plan variants and Stage 10 boundary","status":"PASS","evidence":"four deterministic plan eval cases; persistent writes=0"},
+    {"area":"simulated review truth","status":"PASS","evidence":"seven status cases; submission disabled; urgent delay=false"},
+    {"area":"evaluator evidence truth","status":"PASS","evidence":"metrics loaded from Stage 5-8 generated artifacts; authentic 55/62 first-pass trace"},
+    {"area":"shared state and recovery vocabulary","status":"PASS","evidence":"strict eight-state catalogue and coverage manifest"},
+    {"area":"keyboard navigation and visible focus","status":"PASS","evidence":"keyboard-walkthrough.json"},
+    {"area":"desktop and phone responsive inspection","status":"PASS","evidence":"visual-inspection.json and 11 fictional/redacted screenshots"},
+    {"area":"privacy, safe rendering and workspace isolation","status":"PASS","evidence":"mode reset isolation, evidence scope mutation tests, secret scan"},
+    {"area":"public/clinical/live-provider readiness","status":"BLOCKED BY DESIGN","evidence":"draft safety/content review and live providers remain unavailable; does not block controlled Stage 10 engineering"},
+    {"area":"durable plan/fact/review writes and deployment","status":"DISABLED BY DESIGN","evidence":"Stage 10 and external-action boundary preserved"}
+  ],
+  "post_rectification": {
+    "focused_tests": {"passed": 25, "total": 25},
+    "critical_browser_defects_remaining": 0,
+    "known_external_blockers": [
+      "No released public weekly profiles",
+      "Safety specification remains draft",
+      "No live provider or LangSmith UI benchmark",
+      "No external participant walkthrough",
+      "Stage 10 persistence and deployment remain unavailable"
+    ]
+  }
+}

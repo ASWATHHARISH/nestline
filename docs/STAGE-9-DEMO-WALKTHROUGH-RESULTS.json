@@ -1,0 +1,83 @@
+{
+  "schema_version": "9.0.0",
+  "fictional": true,
+  "reset_before_each_run": true,
+  "runs": [
+    {
+      "run": 1,
+      "story": "week-aware-plan",
+      "route": "validated",
+      "passed": true,
+      "ordinary_generation_calls": 5,
+      "stage10_persistence": "unavailable"
+    },
+    {
+      "run": 1,
+      "story": "record-to-action",
+      "route": "validated",
+      "passed": true,
+      "ordinary_generation_calls": 1,
+      "stage10_persistence": "unavailable"
+    },
+    {
+      "run": 1,
+      "story": "urgent-bypass",
+      "route": "urgent",
+      "passed": true,
+      "ordinary_generation_calls": 0,
+      "stage10_persistence": "unavailable"
+    },
+    {
+      "run": 2,
+      "story": "week-aware-plan",
+      "route": "validated",
+      "passed": true,
+      "ordinary_generation_calls": 5,
+      "stage10_persistence": "unavailable"
+    },
+    {
+      "run": 2,
+      "story": "record-to-action",
+      "route": "validated",
+      "passed": true,
+      "ordinary_generation_calls": 1,
+      "stage10_persistence": "unavailable"
+    },
+    {
+      "run": 2,
+      "story": "urgent-bypass",
+      "route": "urgent",
+      "passed": true,
+      "ordinary_generation_calls": 0,
+      "stage10_persistence": "unavailable"
+    },
+    {
+      "run": 3,
+      "story": "week-aware-plan",
+      "route": "validated",
+      "passed": true,
+      "ordinary_generation_calls": 5,
+      "stage10_persistence": "unavailable"
+    },
+    {
+      "run": 3,
+      "story": "record-to-action",
+      "route": "validated",
+      "passed": true,
+      "ordinary_generation_calls": 1,
+      "stage10_persistence": "unavailable"
+    },
+    {
+      "run": 3,
+      "story": "urgent-bypass",
+      "route": "urgent",
+      "passed": true,
+      "ordinary_generation_calls": 0,
+      "stage10_persistence": "unavailable"
+    }
+  ],
+  "passed": 9,
+  "total": 9,
+  "stage10_boundary": "durable save/review submission unavailable in every run",
+  "called_user_research": false
+}

@@ -1,0 +1,38 @@
+{"case_id":"home_exact","kind":"home","variant":"exact","expected":"success","critical":true,"domain":"weekly_home"}
+{"case_id":"home_approximate","kind":"home","variant":"approximate","expected":"range","critical":true,"domain":"weekly_home"}
+{"case_id":"home_zero_fanout","kind":"home","variant":"fanout","expected":"0","critical":true,"domain":"weekly_home"}
+{"case_id":"home_no_unreleased_size","kind":"home","variant":"unreleased_profile","expected":"blocked","critical":true,"domain":"weekly_home"}
+{"case_id":"personal_empty","kind":"mode","variant":"personal","expected":"empty","critical":true,"domain":"privacy"}
+{"case_id":"demo_fictional","kind":"mode","variant":"demo","expected":"fictional","critical":true,"domain":"privacy"}
+{"case_id":"nutrition_chat","kind":"chat","query":"Show meal options","horizon":"none","expected":"validated","critical":true,"domain":"compass"}
+{"case_id":"record_chat","kind":"chat","query":"Show what my document says","horizon":"none","expected":"validated","critical":true,"domain":"compass"}
+{"case_id":"medication_chat","kind":"chat","query":"List my medication record","horizon":"none","expected":"validated","critical":true,"domain":"compass"}
+{"case_id":"movement_chat","kind":"chat","query":"Show movement options","horizon":"none","expected":"validated","critical":true,"domain":"compass"}
+{"case_id":"wellbeing_chat","kind":"chat","query":"Show my wellbeing support plan","horizon":"none","expected":"validated","critical":true,"domain":"compass"}
+{"case_id":"followup_chat","kind":"chat","query":"Show appointment questions","horizon":"none","expected":"validated","critical":true,"domain":"compass"}
+{"case_id":"nutrition_plan","kind":"chat","query":"Show my nutrition weekly plan","horizon":"week","expected":"validated","critical":true,"domain":"plan"}
+{"case_id":"movement_plan","kind":"chat","query":"Show my movement weekly plan","horizon":"week","expected":"validated","critical":true,"domain":"plan"}
+{"case_id":"wellbeing_plan","kind":"chat","query":"Show my wellbeing weekly plan","horizon":"week","expected":"validated","critical":true,"domain":"plan"}
+{"case_id":"holistic_plan","kind":"chat","query":"Show my weekly plan","horizon":"week","expected":"validated","critical":true,"domain":"plan"}
+{"case_id":"urgent_bypass","kind":"chat","query":"I cannot breathe. Show my weekly plan.","horizon":"week","expected":"urgent","critical":true,"domain":"safety"}
+{"case_id":"symptom_clarification","kind":"chat","query":"I feel dizzy","horizon":"none","expected":"clarification","critical":true,"domain":"safety"}
+{"case_id":"unsupported_intent","kind":"chat","query":"Open the billing settings","horizon":"none","expected":"unsupported","critical":false,"domain":"compass"}
+{"case_id":"record_ready","kind":"document","variant":"ready","expected":"present","critical":false,"domain":"records"}
+{"case_id":"record_low_confidence","kind":"document","variant":"low_confidence","expected":"present","critical":true,"domain":"records"}
+{"case_id":"record_conflict","kind":"document","variant":"conflict","expected":"present","critical":true,"domain":"records"}
+{"case_id":"record_locked","kind":"document","variant":"locked","expected":"present","critical":false,"domain":"records"}
+{"case_id":"record_corrupt","kind":"document","variant":"corrupt","expected":"present","critical":false,"domain":"records"}
+{"case_id":"record_unsupported","kind":"document","variant":"unsupported","expected":"present","critical":false,"domain":"records"}
+{"case_id":"record_wrong_person","kind":"document","variant":"wrong_person","expected":"present","critical":true,"domain":"privacy"}
+{"case_id":"review_offered","kind":"review","variant":"offered","expected":"simulated","critical":false,"domain":"review"}
+{"case_id":"review_consented","kind":"review","variant":"consented","expected":"simulated","critical":false,"domain":"review"}
+{"case_id":"review_queued","kind":"review","variant":"queued","expected":"simulated","critical":false,"domain":"review"}
+{"case_id":"review_responded","kind":"review","variant":"responded","expected":"simulated","critical":false,"domain":"review"}
+{"case_id":"review_declined","kind":"review","variant":"declined","expected":"simulated","critical":false,"domain":"review"}
+{"case_id":"review_unavailable","kind":"review","variant":"unavailable","expected":"simulated","critical":true,"domain":"review"}
+{"case_id":"review_timed_out","kind":"review","variant":"timed_out","expected":"simulated","critical":true,"domain":"review"}
+{"case_id":"evaluator_artifacts","kind":"evaluator","variant":"generated","expected":"4","critical":false,"domain":"evaluator"}
+{"case_id":"authentic_failed_trace","kind":"evaluator","variant":"failed_trace","expected":"55/62","critical":false,"domain":"evaluator"}
+{"case_id":"demo_reset_isolation","kind":"mode","variant":"reset","expected":"isolated","critical":true,"domain":"privacy"}
+{"case_id":"all_view_states","kind":"contract","variant":"view_states","expected":"8","critical":false,"domain":"shared_states"}
+{"case_id":"no_stage10_writes","kind":"contract","variant":"writes","expected":"0","critical":true,"domain":"persistence"}

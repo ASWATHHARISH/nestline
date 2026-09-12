@@ -1,0 +1,948 @@
+{
+  "valid": true,
+  "screenshots": [
+    "desktop-compass-validated.png",
+    "desktop-evaluator.png",
+    "desktop-evidence.png",
+    "desktop-home.png",
+    "desktop-plan.png",
+    "desktop-records.png",
+    "desktop-simulated-review.png",
+    "phone-home.png",
+    "phone-plan.png",
+    "phone-records.png",
+    "phone-urgent.png"
+  ],
+  "responsive_checks": {
+    "desktop-home.png": {
+      "width": 1440,
+      "height": 1100,
+      "clipped": [],
+      "focusable": [
+        {
+          "name": "keyboard_double_arrow_right",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Deploy",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Main menu",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Fullscreen",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Ask Compass",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Draft a plan",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Review records",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "BUTTON",
+          "tabIndex": 0,
+          "disabled": false
+        }
+      ],
+      "marker": "Your week, gathered in one calm place"
+    },
+    "phone-home.png": {
+      "width": 390,
+      "height": 844,
+      "clipped": [],
+      "focusable": [
+        {
+          "name": "keyboard_double_arrow_right",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Deploy",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Main menu",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Fullscreen",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Ask Compass",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Draft a plan",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Review records",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "BUTTON",
+          "tabIndex": 0,
+          "disabled": false
+        }
+      ],
+      "marker": "Your week, gathered in one calm place"
+    },
+    "desktop-records.png": {
+      "width": 1440,
+      "height": 1100,
+      "clipped": [],
+      "focusable": [
+        {
+          "name": "keyboard_double_arrow_right",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Deploy",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Main menu",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "BUTTON",
+          "tabIndex": 0,
+          "disabled": true
+        },
+        {
+          "name": "BUTTON",
+          "tabIndex": 0,
+          "disabled": true
+        },
+        {
+          "name": "BUTTON",
+          "tabIndex": 0,
+          "disabled": true
+        },
+        {
+          "name": "BUTTON",
+          "tabIndex": 0,
+          "disabled": true
+        },
+        {
+          "name": "BUTTON",
+          "tabIndex": 0,
+          "disabled": true
+        },
+        {
+          "name": "BUTTON",
+          "tabIndex": 0,
+          "disabled": true
+        },
+        {
+          "name": "BUTTON",
+          "tabIndex": 0,
+          "disabled": true
+        },
+        {
+          "name": "BUTTON",
+          "tabIndex": 0,
+          "disabled": false
+        }
+      ],
+      "marker": "Production document upload is unavailable"
+    },
+    "phone-records.png": {
+      "width": 390,
+      "height": 844,
+      "clipped": [],
+      "focusable": [
+        {
+          "name": "keyboard_double_arrow_right",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Deploy",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Main menu",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "BUTTON",
+          "tabIndex": 0,
+          "disabled": true
+        },
+        {
+          "name": "BUTTON",
+          "tabIndex": 0,
+          "disabled": true
+        },
+        {
+          "name": "BUTTON",
+          "tabIndex": 0,
+          "disabled": true
+        },
+        {
+          "name": "BUTTON",
+          "tabIndex": 0,
+          "disabled": true
+        },
+        {
+          "name": "BUTTON",
+          "tabIndex": 0,
+          "disabled": true
+        },
+        {
+          "name": "BUTTON",
+          "tabIndex": 0,
+          "disabled": true
+        },
+        {
+          "name": "BUTTON",
+          "tabIndex": 0,
+          "disabled": true
+        },
+        {
+          "name": "BUTTON",
+          "tabIndex": 0,
+          "disabled": false
+        }
+      ],
+      "marker": "Production document upload is unavailable"
+    },
+    "desktop-plan.png": {
+      "width": 1440,
+      "height": 1100,
+      "clipped": [],
+      "focusable": [
+        {
+          "name": "keyboard_double_arrow_right",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Deploy",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Main menu",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "INPUT",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "INPUT",
+          "tabIndex": -1,
+          "disabled": false
+        },
+        {
+          "name": "INPUT",
+          "tabIndex": -1,
+          "disabled": false
+        },
+        {
+          "name": "INPUT",
+          "tabIndex": -1,
+          "disabled": false
+        },
+        {
+          "name": "Build validated fictional week",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Describe a change request (proposal only)",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Record session change intent",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Save plan (Stage 10 unavailable)",
+          "tabIndex": 0,
+          "disabled": true
+        },
+        {
+          "name": "Discard session draft",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "BUTTON",
+          "tabIndex": 0,
+          "disabled": false
+        }
+      ],
+      "marker": "Plan state: draft"
+    },
+    "phone-plan.png": {
+      "width": 390,
+      "height": 844,
+      "clipped": [],
+      "focusable": [
+        {
+          "name": "keyboard_double_arrow_right",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Deploy",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Main menu",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "INPUT",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "INPUT",
+          "tabIndex": -1,
+          "disabled": false
+        },
+        {
+          "name": "INPUT",
+          "tabIndex": -1,
+          "disabled": false
+        },
+        {
+          "name": "INPUT",
+          "tabIndex": -1,
+          "disabled": false
+        },
+        {
+          "name": "Build validated fictional week",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Describe a change request (proposal only)",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Record session change intent",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Save plan (Stage 10 unavailable)",
+          "tabIndex": 0,
+          "disabled": true
+        },
+        {
+          "name": "Discard session draft",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "BUTTON",
+          "tabIndex": 0,
+          "disabled": false
+        }
+      ],
+      "marker": "Plan state: draft"
+    },
+    "desktop-evidence.png": {
+      "width": 1440,
+      "height": 1000,
+      "clipped": [],
+      "focusable": [
+        {
+          "name": "keyboard_double_arrow_right",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Deploy",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Main menu",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "BUTTON",
+          "tabIndex": 0,
+          "disabled": false
+        }
+      ],
+      "marker": "Supporting passage"
+    },
+    "desktop-simulated-review.png": {
+      "width": 1440,
+      "height": 900,
+      "clipped": [],
+      "focusable": [
+        {
+          "name": "keyboard_double_arrow_right",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Deploy",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Main menu",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Simulated status",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Open",
+          "tabIndex": -1,
+          "disabled": false
+        },
+        {
+          "name": "Submit review (Stage 10 unavailable)",
+          "tabIndex": 0,
+          "disabled": true
+        },
+        {
+          "name": "BUTTON",
+          "tabIndex": 0,
+          "disabled": false
+        }
+      ],
+      "marker": "No doctor or authorized reviewer"
+    },
+    "desktop-evaluator.png": {
+      "width": 1440,
+      "height": 1000,
+      "clipped": [],
+      "focusable": [
+        {
+          "name": "keyboard_double_arrow_right",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Deploy",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Main menu",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Show/hide columns",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Download as CSV",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Search",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Fullscreen",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "Link to heading",
+          "tabIndex": 0,
+          "disabled": false
+        },
+        {
+          "name": "BUTTON",
+          "tabIndex": 0,
+          "disabled": false
+        }
+      ],
+      "marker": "Authentic failed-trace walkthrough"
+    }
+  },
+  "keyboard_inventory": [
+    {
+      "name": "keyboard_double_arrow_right",
+      "tabIndex": 0,
+      "disabled": false
+    },
+    {
+      "name": "Deploy",
+      "tabIndex": 0,
+      "disabled": false
+    },
+    {
+      "name": "Main menu",
+      "tabIndex": 0,
+      "disabled": false
+    },
+    {
+      "name": "Link to heading",
+      "tabIndex": 0,
+      "disabled": false
+    },
+    {
+      "name": "Link to heading",
+      "tabIndex": 0,
+      "disabled": false
+    },
+    {
+      "name": "Link to heading",
+      "tabIndex": 0,
+      "disabled": false
+    },
+    {
+      "name": "Fullscreen",
+      "tabIndex": 0,
+      "disabled": false
+    },
+    {
+      "name": "Link to heading",
+      "tabIndex": 0,
+      "disabled": false
+    },
+    {
+      "name": "Link to heading",
+      "tabIndex": 0,
+      "disabled": false
+    },
+    {
+      "name": "Link to heading",
+      "tabIndex": 0,
+      "disabled": false
+    },
+    {
+      "name": "Link to heading",
+      "tabIndex": 0,
+      "disabled": false
+    },
+    {
+      "name": "Link to heading",
+      "tabIndex": 0,
+      "disabled": false
+    },
+    {
+      "name": "Link to heading",
+      "tabIndex": 0,
+      "disabled": false
+    },
+    {
+      "name": "Link to heading",
+      "tabIndex": 0,
+      "disabled": false
+    },
+    {
+      "name": "Link to heading",
+      "tabIndex": 0,
+      "disabled": false
+    },
+    {
+      "name": "Link to heading",
+      "tabIndex": 0,
+      "disabled": false
+    },
+    {
+      "name": "Link to heading",
+      "tabIndex": 0,
+      "disabled": false
+    },
+    {
+      "name": "Link to heading",
+      "tabIndex": 0,
+      "disabled": false
+    },
+    {
+      "name": "Link to heading",
+      "tabIndex": 0,
+      "disabled": false
+    },
+    {
+      "name": "Ask Compass",
+      "tabIndex": 0,
+      "disabled": false
+    },
+    {
+      "name": "Draft a plan",
+      "tabIndex": 0,
+      "disabled": false
+    },
+    {
+      "name": "Review records",
+      "tabIndex": 0,
+      "disabled": false
+    },
+    {
+      "name": "BUTTON",
+      "tabIndex": 0,
+      "disabled": false
+    }
+  ],
+  "method": "local headless Chrome 152 through DevTools; fictional/redacted data only"
+}

@@ -1,0 +1,31 @@
+{
+  "controlled_engineering_stage10_ready": true,
+  "database_migration_required": false,
+  "deployment_performed": false,
+  "errors": [],
+  "limitations": [
+    "Automated and internal walkthrough checks are not WCAG conformance or external user research.",
+    "The public safety specification and health content remain unapproved.",
+    "Live provider, LangSmith, production upload, persistence and deployment were not exercised."
+  ],
+  "local_streamlit_only": true,
+  "paid_provider_required": false,
+  "public_or_clinical_release_ready": false,
+  "schema_version": "9.0.0",
+  "stage": 9,
+  "valid": true,
+  "verified": {
+    "demo_story_runs": 9,
+    "development_cases": {
+      "passed": 38,
+      "total": 38
+    },
+    "home_agent_fanout": 0,
+    "keyboard_walkthroughs": 1,
+    "pages": 7,
+    "responsive_screenshots": 11,
+    "shared_view_states": 8,
+    "stage10_persistent_writes": 0,
+    "urgent_generation_calls": 0
+  }
+}
