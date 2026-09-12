@@ -185,7 +185,9 @@ Machine-readable findings are in `docs/STAGE-9-SELF-REVIEW-FINDINGS.json`. All f
 | Database lint on upgraded and clean histories | 0 findings on both |
 | Local documented Streamlit start and navigation | PASS using the exact runbook command; 11 screenshot states and keyboard walkthrough captured |
 | `git diff --check` | PASS; line-ending conversion warnings only |
-| GitHub `validate` and `supabase-integration` | Pending first Stage 9 push; exact run and final-commit checks will be recorded after push |
+| GitHub `validate` and `supabase-integration` | PASS on implementation commit `c57fd135426647f559d9d19e783b0b907ec6309e`; run `34670830170`; jobs `103491743614` and `103491743721` |
+
+The successful GitHub implementation run is [Data contracts run 34670830170](https://github.com/ASWATHHARISH/nestline/actions/runs/34670830170): [validate job 103491743614](https://github.com/ASWATHHARISH/nestline/actions/runs/34670830170/job/103491743614) and [supabase-integration job 103491743721](https://github.com/ASWATHHARISH/nestline/actions/runs/34670830170/job/103491743721). Both ran against `c57fd135426647f559d9d19e783b0b907ec6309e` and concluded `success`.
 
 A PowerShell wrapper used during the first regression pass accidentally launched interactive Python because it reused PowerShell's automatic `$args` variable. Its output was discarded. Every intended command was then rerun explicitly and the table above reports only the corrected runs.
 
@@ -266,6 +268,6 @@ Stage 9 does not implement or enable durable plan saving, State Committer change
 
 ## Final recommendation
 
-The implementation is ready for controlled Stage 10 engineering once the final Stage 9 branch commit passes both required GitHub jobs. Public/live use remains blocked by the draft safety specification, unreleased public content, absent clinical/licence/localisation approvals and unrun external usability/provider validation.
+The implementation commit passed both required GitHub jobs and is ready for controlled Stage 10 engineering. This report-only follow-up commit must also pass those jobs; its exact final SHA and check URLs are recorded in the final task response to avoid a self-referential commit. Public/live use remains blocked by the draft safety specification, unreleased public content, absent clinical/licence/localisation approvals and unrun external usability/provider validation.
 
 `STAGE 9 ACCEPTED FOR CONTROLLED ENGINEERING — STAGE 10 ENGINEERING MAY BEGIN`
