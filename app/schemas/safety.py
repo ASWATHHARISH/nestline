@@ -138,6 +138,9 @@ class SafetyTrace(Contract):
         "minimum_clarification_required",
         "context_not_attributed_to_user",
         "clearly_non_symptom_product_request",
+        "stored_constraint_product_request",
+        "record_management_product_request",
+        "explicit_non_symptom_product_request",
         "configuration_failure",
     ]
     normalized_input_sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
@@ -197,8 +200,14 @@ class SafetyGateResult(Contract):
             raise ValueError("fixed-message identity does not match the route")
         if self.route == "urgent" and self.trace.stop_reason != "urgent_match":
             raise ValueError("urgent route requires the urgent stop reason")
-        if self.route == "non_urgent" and self.trace.stop_reason != "clearly_non_symptom_product_request":
-            raise ValueError("non-urgent route is limited to clearly non-symptom product requests")
+        product_stop_reasons = {
+            "clearly_non_symptom_product_request",
+            "stored_constraint_product_request",
+            "record_management_product_request",
+            "explicit_non_symptom_product_request",
+        }
+        if self.route == "non_urgent" and self.trace.stop_reason not in product_stop_reasons:
+            raise ValueError("non-urgent route requires a recognized product-intent reason")
         if self.configuration_failure is not None:
             if self.route != "needs_clarification" or self.ordinary_generation_allowed:
                 raise ValueError("configuration failures must fail closed")

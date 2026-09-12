@@ -1,0 +1,509 @@
+{
+  "schema_version": "stage5-paraphrase-report-v1",
+  "valid": true,
+  "dataset_version": "stage5-paraphrases-v1",
+  "frozen_before_first_run": true,
+  "original_expected_truth_unchanged": true,
+  "fixture_only": true,
+  "paid_provider_calls": 0,
+  "cases": {
+    "passed": 12,
+    "total": 12
+  },
+  "metrics": {
+    "recall_at_5": {
+      "value": 1.0,
+      "numerator": 9,
+      "denominator": 9
+    },
+    "citation_evidence_precision": {
+      "value": 1.0,
+      "numerator": 9,
+      "denominator": 9
+    },
+    "wrong_week_retrieval_count": 0,
+    "wrong_jurisdiction_retrieval_count": 0,
+    "unapproved_source_retrieval_count": 0,
+    "cross_workspace_leakage_count": 0,
+    "confirmed_personal_fact_precision": {
+      "value": 1.0,
+      "numerator": 4,
+      "denominator": 4
+    },
+    "conflict_proposal_personalization_violations": 0,
+    "graph_path_correctness": {
+      "value": 1.0,
+      "numerator": 1,
+      "denominator": 1
+    },
+    "expected_behavior_accuracy": {
+      "value": 1.0,
+      "numerator": 12,
+      "denominator": 12
+    },
+    "support_state_accuracy": {
+      "value": 1.0,
+      "numerator": 12,
+      "denominator": 12
+    },
+    "journey_relation_accuracy": {
+      "value": 1.0,
+      "numerator": 12,
+      "denominator": 12
+    },
+    "forbidden_evidence_ids_seen": [],
+    "latency_ms_by_component": {
+      "exact_sql": {
+        "count": 12,
+        "mean": 0.443492,
+        "max": 1.5692
+      },
+      "graph": {
+        "count": 12,
+        "mean": 0.01495,
+        "max": 0.1649
+      },
+      "personal_full_text": {
+        "count": 12,
+        "mean": 0.185892,
+        "max": 0.7809
+      },
+      "personal_vector": {
+        "count": 12,
+        "mean": 0.146008,
+        "max": 0.3483
+      },
+      "public_full_text": {
+        "count": 12,
+        "mean": 0.998217,
+        "max": 1.8639
+      },
+      "public_vector": {
+        "count": 12,
+        "mean": 0.965867,
+        "max": 2.2968
+      },
+      "weekly_profile": {
+        "count": 12,
+        "mean": 0.002242,
+        "max": 0.0048
+      }
+    }
+  },
+  "observations": [
+    {
+      "case_id": "PARA-ALLERGY-IN-01",
+      "public": [],
+      "facts": [
+        "a1111111-1111-4111-8111-111111111111"
+      ],
+      "paths": [],
+      "personal_passages": [
+        "personal-b1111111-1111-4111-8111-111111111111"
+      ],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "7b311fc0df7b08b81824d1d4194b5f83de4d3e541a7b0f8d9a5a998b8e1ada83",
+      "components": {
+        "exact_sql": 1.5691999869886786,
+        "public_full_text": 0.0,
+        "public_vector": 0.0,
+        "weekly_profile": 0.0,
+        "personal_full_text": 0.7808999944245443,
+        "personal_vector": 0.34830000367946923,
+        "graph": 0.0022000021999701858
+      }
+    },
+    {
+      "case_id": "PARA-GRAPH-IN-01",
+      "public": [],
+      "facts": [
+        "a2222222-2222-4222-8222-222222222222"
+      ],
+      "paths": [
+        "PATH-DOC-RESTRICTION-STALE-PLAN"
+      ],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "components": {
+        "exact_sql": 0.4354000120656565,
+        "public_full_text": 0.0,
+        "public_vector": 0.0,
+        "weekly_profile": 0.0,
+        "personal_full_text": 0.21150000975467265,
+        "personal_vector": 0.18879999697674066,
+        "graph": 0.16489998961333185
+      }
+    },
+    {
+      "case_id": "PARA-NUTRITION-IN-01",
+      "public": [
+        "EV-NUT-24"
+      ],
+      "facts": [
+        "a1111111-1111-4111-8111-111111111111"
+      ],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "b011065b918f403f5c194eb18a3a9e38fa5b133f5b1c701a46971c5189da6226",
+      "components": {
+        "exact_sql": 0.3012999950442463,
+        "public_full_text": 1.8639000045368448,
+        "public_vector": 2.296799997566268,
+        "weekly_profile": 0.004799992893822491,
+        "personal_full_text": 0.12419999984558672,
+        "personal_vector": 0.1294999965466559,
+        "graph": 0.0017999991541728377
+      }
+    },
+    {
+      "case_id": "PARA-MOVEMENT-IN-01",
+      "public": [
+        "EV-MOVE-24",
+        "EV-COND-POS"
+      ],
+      "facts": [
+        "a2222222-2222-4222-8222-222222222222"
+      ],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "f5c061b8245fd1960594c9a1d0f6c2a2dcec70665de81be55bd7ddd227143a56",
+      "components": {
+        "exact_sql": 0.2948000037577003,
+        "public_full_text": 1.4088999887462705,
+        "public_vector": 1.3142999960109591,
+        "weekly_profile": 0.00449999060947448,
+        "personal_full_text": 0.13729999773204327,
+        "personal_vector": 0.13129999570082873,
+        "graph": 0.00100000761449337
+      }
+    },
+    {
+      "case_id": "PARA-JOURNEY-IN-01",
+      "public": [
+        "EV-JOURNEY-24"
+      ],
+      "facts": [],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "82029541aaa1edcce2b66d39785b4d3b556976e28d75883374e232e939a7fee8",
+      "components": {
+        "exact_sql": 0.2773000014713034,
+        "public_full_text": 1.7174999957205728,
+        "public_vector": 1.247499996679835,
+        "weekly_profile": 0.0027999922167509794,
+        "personal_full_text": 0.1142999972216785,
+        "personal_vector": 0.12509999214671552,
+        "graph": 0.001100008375942707
+      }
+    },
+    {
+      "case_id": "PARA-WELLBEING-IN-01",
+      "public": [
+        "EV-WELL-24"
+      ],
+      "facts": [],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "012a0f6a742652ad018438b1169d35dae09b770e33a94b802bfe2b7cb705daf5",
+      "components": {
+        "exact_sql": 0.40820000867825,
+        "public_full_text": 1.4664000045740977,
+        "public_vector": 1.8511999951442704,
+        "weekly_profile": 0.0032999960239976645,
+        "personal_full_text": 0.12250000145286322,
+        "personal_vector": 0.12820000119972974,
+        "graph": 0.001400010660290718
+      }
+    },
+    {
+      "case_id": "PARA-SYMPTOM-RECORD-IN-01",
+      "public": [
+        "EV-SYM-24"
+      ],
+      "facts": [],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "c0987fda92fc86175e3610d8988556893fd97c42805ad56fcb03ac94563a278a",
+      "components": {
+        "exact_sql": 0.48919999971985817,
+        "public_full_text": 1.5115999995032325,
+        "public_vector": 1.2295000051381066,
+        "weekly_profile": 0.003000008291564882,
+        "personal_full_text": 0.1711000077193603,
+        "personal_vector": 0.16660000255797058,
+        "graph": 0.001600012183189392
+      }
+    },
+    {
+      "case_id": "PARA-PREPARATION-IN-01",
+      "public": [
+        "EV-PREP-24"
+      ],
+      "facts": [],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "1c4839eb91aa2851d8f9fe7e6a96cc9a3bfcb7ac542ff1c212b8dac752c60d8c",
+      "components": {
+        "exact_sql": 0.2730999985942617,
+        "public_full_text": 1.3599999947473407,
+        "public_vector": 1.2106999929528683,
+        "weekly_profile": 0.003000008291564882,
+        "personal_full_text": 0.11930000619031489,
+        "personal_vector": 0.12840000272262841,
+        "graph": 0.0009999930625781417
+      }
+    },
+    {
+      "case_id": "PARA-FOLLOWUP-IN-01",
+      "public": [
+        "EV-FOLLOW-24"
+      ],
+      "facts": [],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "821f8268d4d15bebd70fabab199054b6a650fb6c8ad5dd6bf771615e6749a9c0",
+      "components": {
+        "exact_sql": 0.34240000240970403,
+        "public_full_text": 1.3060000055702403,
+        "public_vector": 1.239799996255897,
+        "weekly_profile": 0.002700006007216871,
+        "personal_full_text": 0.1221999991685152,
+        "personal_vector": 0.12910000805277377,
+        "graph": 0.0010999938240274787
+      }
+    },
+    {
+      "case_id": "PARA-MEDICATION-IN-01",
+      "public": [],
+      "facts": [],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "components": {
+        "exact_sql": 0.4700999998021871,
+        "public_full_text": 0.0,
+        "public_vector": 0.0,
+        "weekly_profile": 0.0,
+        "personal_full_text": 0.1664000010350719,
+        "personal_vector": 0.13050000416114926,
+        "graph": 0.001200009137392044
+      }
+    },
+    {
+      "case_id": "PARA-APPOINTMENT-IN-01",
+      "public": [],
+      "facts": [],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "pregnancy",
+        "unit": "week",
+        "exact": 24,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 3,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "components": {
+        "exact_sql": 0.3127999952994287,
+        "public_full_text": 0.0,
+        "public_vector": 0.0,
+        "weekly_profile": 0.0,
+        "personal_full_text": 0.12319999223109335,
+        "personal_vector": 0.12929999502375722,
+        "graph": 0.00100000761449337
+      }
+    },
+    {
+      "case_id": "PARA-POSTPARTUM-IN-01",
+      "public": [
+        "EV-PP-DAY3"
+      ],
+      "facts": [],
+      "paths": [],
+      "personal_passages": [],
+      "abstained": false,
+      "abstention_reason": "none",
+      "support_state": "fully_supported",
+      "journey_relation": "current",
+      "effective_journey": {
+        "stage": "postpartum",
+        "unit": "day",
+        "exact": 3,
+        "range_start": null,
+        "range_end": null
+      },
+      "caller_state_version_was_stale": false,
+      "resolved_state_version": 1,
+      "conflicts": [],
+      "missing": [],
+      "order_digest": "393c6189db9fe5030084bb9e87d0b7caaa332ca2b3da2ab7afec11ca2f597111",
+      "components": {
+        "exact_sql": 0.14810000720899552,
+        "public_full_text": 1.3443000061670318,
+        "public_vector": 1.2006000033579767,
+        "weekly_profile": 0.0027999922167509794,
+        "personal_full_text": 0.03779999678954482,
+        "personal_vector": 0.016999998479150236,
+        "graph": 0.0010999938240274787
+      }
+    }
+  ],
+  "limitation": "This small controlled paraphrase set does not prove production-language retrieval quality."
+}

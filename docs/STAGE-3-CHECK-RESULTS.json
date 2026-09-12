@@ -15,26 +15,8 @@
     "passed": 26,
     "dataset_sha256": "014467ded8a974034f0fcf15e1d39682cdcd16f7dff52e9afb8034dd89353996"
   },
-  "remote_project": "nestline-dev",
-  "remote_verified_at": "2026-09-11T09:19:12.0342131+05:30",
-  "remote_checks": {
-    "migration_history_rows": 12,
-    "journey_provenance_columns": 8,
-    "symptom_provenance_columns": 4,
-    "onboarding_submission_indexes": 4,
-    "complete_onboarding_functions": 1,
-    "complete_onboarding_authenticated_grants": 1,
-    "journey_direct_mutation_grants": 0,
-    "legacy_journey_mutation_grants": 0,
-    "journey_hardening_constraints": 3,
-    "symptom_hardening_constraints": 1,
-    "journey_transition_triggers": 1,
-    "private_bounds_authenticated_grants": 0,
-    "stage3_pg_tap_assertions": 26,
-    "stage3_exit_hardening_pg_tap_assertions": 12,
-    "stage3_api_checks": 17,
-    "stage3_streamlit_render_checks": 1,
-    "temporary_fixture_rows_remaining": 0
-  },
+  "remote_project": null,
+  "remote_verified_at": null,
+  "remote_checks": null,
   "errors": []
 }

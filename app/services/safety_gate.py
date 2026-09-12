@@ -54,7 +54,7 @@ _SCOPED_NEGATION = re.compile(
     r"\b(?:am|is|was)\s+not\s+(?:having|experiencing))\s+(?:any\s+)?$"
 )
 _HISTORICAL = re.compile(
-    r"\b(history of|previously|used to|years? ago|before (my )?pregnancy|"
+    r"\b(history of|previously|prior|used to|years? ago|before (my )?pregnancy|"
     r"in (19|20)\d{2}|when i was (younger|a child))\b"
 )
 _HYPOTHETICAL = re.compile(r"\b(what if|hypothetically|suppose|imagining|if i were to)\b")
@@ -75,6 +75,15 @@ _PRODUCT_LANGUAGE = re.compile(
 )
 _CURRENT_EXPERIENCE = re.compile(
     r"\b(i am|i'm|i have|i've|i feel|having|currently|right now|today|getting worse)\b"
+)
+_STORED_CONTEXT_LANGUAGE = re.compile(
+    r"\b(record|records|recorded|saved|uploaded|document|documented|report|"
+    r"prior|previous|history|restriction|constraint|profile)\b"
+)
+_EXPLICIT_PRODUCT_REQUEST = re.compile(
+    r"\b(show|create|make|build|draft|prepare|list|use|give|open|organize|organise)\b"
+    r".{0,120}\b(plan|options?|ideas?|meal|diet|fitness|exercise|activity|record|"
+    r"dashboard|appointment|document|profile)\b"
 )
 
 
@@ -282,12 +291,14 @@ class SafetyGate:
             allowed = False
             stop_reason = "context_not_attributed_to_user"
             reasons = ["urgent_phrase_context_requires_clarification", "no_user_attribution"]
-        elif _is_clearly_non_symptom_product_request(normalized, request.input_channel):
+        elif (product_reason := _non_symptom_product_reason(
+            normalized, request.input_channel
+        )) is not None:
             route = "non_urgent"
             clarification = SafetyClarificationState(required=False)
             allowed = True
-            stop_reason = "clearly_non_symptom_product_request"
-            reasons = ["clearly_non_symptom_product_request", "no_medical_safety_claim"]
+            stop_reason = product_reason
+            reasons = [product_reason, "no_medical_safety_claim"]
         elif clarify_matches or _SYMPTOM_LANGUAGE.search(normalized):
             route = "needs_clarification"
             clarification = SafetyClarificationState(
@@ -327,17 +338,43 @@ class SafetyGate:
         )
 
 
-def _is_clearly_non_symptom_product_request(text: str, channel: SafetyInputChannel) -> bool:
+def _non_symptom_product_reason(
+    text: str, channel: SafetyInputChannel,
+) -> str | None:
+    """Identify a product intent without treating stored constraints as symptoms.
+
+    Urgent matching runs before this function. Current-experience language always
+    remains on the safety path. A symptom vocabulary term may pass only when the
+    sentence is an explicit product/record request or clearly attributes that term
+    to stored context. The reason is recorded for cross-stage trace review.
+    """
+
     if channel in {"onboarding_symptom", "symptom_check_in", "extracted_document_fact"}:
-        return False
+        return None
     if not _PRODUCT_LANGUAGE.search(text):
-        return False
+        return None
     if _CURRENT_EXPERIENCE.search(text):
-        return False
-    # Record-management questions may name a category without reporting a symptom.
-    if _SYMPTOM_LANGUAGE.search(text) and not re.search(r"\b(record|show|list|document|profile)\b", text):
-        return False
-    return True
+        return None
+    stored_context = _STORED_CONTEXT_LANGUAGE.search(text) is not None
+    explicit_product = _EXPLICIT_PRODUCT_REQUEST.search(text) is not None
+    if stored_context and explicit_product:
+        return "stored_constraint_product_request"
+    symptom_like = _SYMPTOM_LANGUAGE.search(text) is not None
+    if not symptom_like:
+        return "clearly_non_symptom_product_request"
+    if stored_context:
+        return "record_management_product_request"
+    if explicit_product:
+        return "explicit_non_symptom_product_request"
+    return None
+
+
+def _is_clearly_non_symptom_product_request(
+    text: str, channel: SafetyInputChannel,
+) -> bool:
+    """Compatibility predicate retained for callers that need a boolean."""
+
+    return _non_symptom_product_reason(text, channel) is not None
 
 
 def build_safety_input(

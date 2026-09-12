@@ -43,6 +43,13 @@
     "partial_semantic_support",
     "weaker_semantic_support",
     "uncertain_semantic_support",
+    "similar_words_opposite_conclusion",
+    "two_claims_one_supporting_span",
+    "general_nutrition_not_allergy_support",
+    "movement_intensity_mismatch",
+    "raw_recorded_constraint_plan",
+    "raw_urgent_plan",
+    "raw_ambiguous_plan",
     "semantic_evaluator_unavailable",
     "semantic_evaluator_timeout",
     "one_mechanical_repair",
@@ -64,7 +71,7 @@
     "proposal_only_no_write"
   ],
   "cases_by_criticality": {
-    "critical": 50,
+    "critical": 57,
     "high": 12
   },
   "cases_by_group": {
@@ -74,6 +81,7 @@
     "citation": 7,
     "consistency": 1,
     "constraint": 5,
+    "cross_stage": 3,
     "evidence": 1,
     "happy_path": 1,
     "journey": 5,
@@ -84,7 +92,7 @@
     "retry": 2,
     "safety": 1,
     "schema": 2,
-    "semantic": 6,
+    "semantic": 10,
     "trace": 1
   },
   "controls": {
@@ -100,7 +108,7 @@
     "strict_extra_fields": true,
     "urgent_ordinary_composition_calls": 0
   },
-  "development_cases": 62,
+  "development_cases": 69,
   "fixture_only": true,
   "schema_version": "8.0.0",
   "sealed_holdout_accessed": false,

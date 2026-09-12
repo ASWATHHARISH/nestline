@@ -1,0 +1,38 @@
+{
+  "accepted_stage8_baseline_sha": "2444f1c15b9b8a37b38a76b0257b76d2180f4b17",
+  "controlled_engineering": "GO",
+  "database_migrations_changed": false,
+  "errors": [],
+  "evaluations": {
+    "stage5_paraphrases": {
+      "passed": 12,
+      "total": 12
+    },
+    "stage6_safety": {
+      "passed": 55,
+      "total": 55
+    },
+    "stage7_orchestration": {
+      "passed": 76,
+      "total": 76
+    },
+    "stage8_validation": {
+      "passed": 69,
+      "total": 69
+    }
+  },
+  "limitations": [
+    "Fixture embeddings, deterministic providers and synthetic development sets do not prove production quality.",
+    "Routine symptom guidance remains unavailable pending qualified policy review.",
+    "The safety specification and public content remain draft/unreleased.",
+    "Human product/tone review and live-provider comparison have not run."
+  ],
+  "live_provider": "NO-GO_PENDING_AUTHORIZATION_AND_BENCHMARK",
+  "paid_provider_calls_made": false,
+  "personal_ui_integration": "READY_FOR_STAGE_9_ENGINEERING",
+  "public_clinical_release": "NO-GO_PENDING_APPROVALS_AND_RELEASED_CONTENT",
+  "schema_version": "stages-5-8-rectification-gate-v1",
+  "sealed_holdout_accessed": false,
+  "stage9_engineering_may_begin": true,
+  "valid": true
+}

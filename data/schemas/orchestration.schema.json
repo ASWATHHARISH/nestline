@@ -465,6 +465,14 @@
           "title": "ContextKind",
           "type": "string"
         },
+        "ContextOrigin": {
+          "enum": [
+            "authenticated_store",
+            "fictional_fixture"
+          ],
+          "title": "ContextOrigin",
+          "type": "string"
+        },
         "FactState": {
           "enum": [
             "confirmed",
@@ -555,6 +563,10 @@
           "title": "Care Episode Id",
           "type": "string"
         },
+        "context_origin": {
+          "$ref": "#/$defs/ContextOrigin",
+          "default": "fictional_fixture"
+        },
         "items": {
           "items": {
             "$ref": "#/$defs/ContextItem"
@@ -564,6 +576,11 @@
         },
         "journey": {
           "$ref": "#/$defs/JourneyPosition"
+        },
+        "onboarding_confirmed": {
+          "default": true,
+          "title": "Onboarding Confirmed",
+          "type": "boolean"
         },
         "owner_user_id": {
           "format": "uuid",
@@ -894,6 +911,10 @@
               "title": "Care Episode Id",
               "type": "string"
             },
+            "context_origin": {
+              "$ref": "#/$defs/ContextOrigin",
+              "default": "fictional_fixture"
+            },
             "items": {
               "items": {
                 "$ref": "#/$defs/ContextItem"
@@ -903,6 +924,11 @@
             },
             "journey": {
               "$ref": "#/$defs/JourneyPosition"
+            },
+            "onboarding_confirmed": {
+              "default": true,
+              "title": "Onboarding Confirmed",
+              "type": "boolean"
             },
             "owner_user_id": {
               "format": "uuid",
@@ -1071,6 +1097,14 @@
             "delivery_recovery"
           ],
           "title": "ContextKind",
+          "type": "string"
+        },
+        "ContextOrigin": {
+          "enum": [
+            "authenticated_store",
+            "fictional_fixture"
+          ],
+          "title": "ContextOrigin",
           "type": "string"
         },
         "EvidenceLane": {
@@ -1386,6 +1420,16 @@
           "title": "RetrievalPurpose",
           "type": "string"
         },
+        "RuntimeMode": {
+          "description": "Explicit product mode; fixture data is never implicit personal state.",
+          "enum": [
+            "demo",
+            "personal",
+            "evaluation"
+          ],
+          "title": "RuntimeMode",
+          "type": "string"
+        },
         "SafetyClarificationState": {
           "additionalProperties": false,
           "properties": {
@@ -1673,6 +1717,9 @@
                 "minimum_clarification_required",
                 "context_not_attributed_to_user",
                 "clearly_non_symptom_product_request",
+                "stored_constraint_product_request",
+                "record_management_product_request",
+                "explicit_non_symptom_product_request",
                 "configuration_failure"
               ],
               "title": "Stop Reason",
@@ -1787,6 +1834,11 @@
           "title": "Execution Mode",
           "type": "string"
         },
+        "explicit_user_action": {
+          "default": true,
+          "title": "Explicit User Action",
+          "type": "boolean"
+        },
         "max_total_model_calls": {
           "default": 5,
           "maximum": 5,
@@ -1815,6 +1867,10 @@
           ],
           "title": "Requested Horizon",
           "type": "string"
+        },
+        "runtime_mode": {
+          "$ref": "#/$defs/RuntimeMode",
+          "default": "evaluation"
         },
         "safety_result": {
           "$ref": "#/$defs/SafetyGateResult"
@@ -3371,6 +3427,9 @@
                 "minimum_clarification_required",
                 "context_not_attributed_to_user",
                 "clearly_non_symptom_product_request",
+                "stored_constraint_product_request",
+                "record_management_product_request",
+                "explicit_non_symptom_product_request",
                 "configuration_failure"
               ],
               "title": "Stop Reason",
@@ -5734,6 +5793,9 @@
                 "minimum_clarification_required",
                 "context_not_attributed_to_user",
                 "clearly_non_symptom_product_request",
+                "stored_constraint_product_request",
+                "record_management_product_request",
+                "explicit_non_symptom_product_request",
                 "configuration_failure"
               ],
               "title": "Stop Reason",

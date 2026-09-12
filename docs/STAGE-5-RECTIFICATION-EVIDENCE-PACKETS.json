@@ -21,7 +21,7 @@
   "corrected_after": {
     "S5-DEFECT-PUBLIC-001": {
       "schema_version": "5.0.0",
-      "request_id": "341ca591-0c9a-4545-83d4-1aea76206512",
+      "request_id": "6d7f245f-de7b-4b59-a75b-e890fc9308db",
       "workspace_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
       "care_episode_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
       "question": "What hospital documents and finances should I prepare at week 25?",
@@ -62,7 +62,7 @@
           "owner_user_id": "11111111-1111-4111-8111-111111111111",
           "session_subject": "11111111-1111-4111-8111-111111111111",
           "state_version": 3,
-          "authenticated_at": "2026-09-11T20:46:35.966709Z"
+          "authenticated_at": "2026-09-12T09:39:07.273081Z"
         },
         "current_journey": {
           "stage": "pregnancy",
@@ -148,7 +148,7 @@
           "attempted": 2,
           "returned": 6,
           "rejected_by_filters": 0,
-          "latency_ms": 0.13100000796839595,
+          "latency_ms": 0.2624999906402081,
           "retries": 0,
           "failure": null
         },
@@ -158,7 +158,7 @@
           "attempted": 0,
           "returned": 0,
           "rejected_by_filters": 0,
-          "latency_ms": 0.7001000049058348,
+          "latency_ms": 1.4167000044835731,
           "retries": 0,
           "failure": null
         },
@@ -168,7 +168,7 @@
           "attempted": 0,
           "returned": 0,
           "rejected_by_filters": 0,
-          "latency_ms": 0.5554999952437356,
+          "latency_ms": 1.2629999982891604,
           "retries": 0,
           "failure": null
         },
@@ -178,7 +178,7 @@
           "attempted": 1,
           "returned": 0,
           "rejected_by_filters": 0,
-          "latency_ms": 0.0024000037228688598,
+          "latency_ms": 0.0051000097300857306,
           "retries": 0,
           "failure": null
         },
@@ -188,7 +188,7 @@
           "attempted": 0,
           "returned": 0,
           "rejected_by_filters": 0,
-          "latency_ms": 0.09460000728722662,
+          "latency_ms": 0.18650000856723636,
           "retries": 0,
           "failure": null
         },
@@ -198,7 +198,7 @@
           "attempted": 1,
           "returned": 0,
           "rejected_by_filters": 1,
-          "latency_ms": 0.07239999831654131,
+          "latency_ms": 0.14590000500902534,
           "retries": 0,
           "failure": null
         },
@@ -208,7 +208,7 @@
           "attempted": 0,
           "returned": 0,
           "rejected_by_filters": 0,
-          "latency_ms": 0.0006999907782301307,
+          "latency_ms": 0.001300009898841381,
           "retries": 0,
           "failure": null
         }
@@ -230,7 +230,7 @@
     },
     "S5-DEFECT-CONFLICT-001": {
       "schema_version": "5.0.0",
-      "request_id": "29f199c7-fc28-4987-a10e-ef1b56594bd8",
+      "request_id": "02ca8497-2df1-454b-b99b-8a226b6c4e1d",
       "workspace_id": "ffffffff-ffff-4fff-8fff-ffffffffffff",
       "care_episode_id": "ffffffff-ffff-4fff-8fff-ffffffffffff",
       "question": "How should my conflicting prenatal yoga record affect week 25 movement guidance?",
@@ -272,7 +272,7 @@
           "owner_user_id": "66666666-6666-4666-8666-666666666666",
           "session_subject": "66666666-6666-4666-8666-666666666666",
           "state_version": 1,
-          "authenticated_at": "2026-09-11T20:46:35.980366Z"
+          "authenticated_at": "2026-09-12T09:39:07.307133Z"
         },
         "current_journey": {
           "stage": "pregnancy",
@@ -405,7 +405,7 @@
           "attempted": 2,
           "returned": 2,
           "rejected_by_filters": 0,
-          "latency_ms": 0.09929999941959977,
+          "latency_ms": 0.21920001017861068,
           "retries": 0,
           "failure": null
         },
@@ -415,7 +415,7 @@
           "attempted": 0,
           "returned": 0,
           "rejected_by_filters": 0,
-          "latency_ms": 0.5922999989707023,
+          "latency_ms": 1.7002999957185239,
           "retries": 0,
           "failure": null
         },
@@ -425,7 +425,7 @@
           "attempted": 0,
           "returned": 0,
           "rejected_by_filters": 0,
-          "latency_ms": 0.5689999961759895,
+          "latency_ms": 1.1924999998882413,
           "retries": 0,
           "failure": null
         },
@@ -435,7 +435,7 @@
           "attempted": 1,
           "returned": 0,
           "rejected_by_filters": 0,
-          "latency_ms": 0.0011999945854768157,
+          "latency_ms": 0.003100009053014219,
           "retries": 0,
           "failure": null
         },
@@ -445,7 +445,7 @@
           "attempted": 0,
           "returned": 0,
           "rejected_by_filters": 0,
-          "latency_ms": 0.016699996194802225,
+          "latency_ms": 0.03749999450519681,
           "retries": 0,
           "failure": null
         },
@@ -455,7 +455,7 @@
           "attempted": 0,
           "returned": 0,
           "rejected_by_filters": 0,
-          "latency_ms": 0.007700000423938036,
+          "latency_ms": 0.015500001609325409,
           "retries": 0,
           "failure": null
         },
@@ -465,7 +465,7 @@
           "attempted": 0,
           "returned": 0,
           "rejected_by_filters": 0,
-          "latency_ms": 0.000500003807246685,
+          "latency_ms": 0.0010999938240274787,
           "retries": 0,
           "failure": null
         }

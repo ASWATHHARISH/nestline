@@ -51,6 +51,16 @@ def _with_span(request, **updates):
     return replace_packet(request, spans=spans)
 
 
+def _replace_span_and_claim(request, *, claim_text: str, span_text: str):
+    span = request.evidence_packet.spans[0]
+    digest = sha256(span_text.encode("utf-8")).hexdigest()
+    changed_span = span.model_copy(update={"exact_span": span_text, "span_sha256": digest})
+    link = request.draft.claims[0].evidence_links[0].model_copy(update={
+        "exact_span": span_text, "span_sha256": digest,
+    })
+    request = replace_packet(request, spans=[changed_span])
+    return replace_claim(request, text=claim_text, evidence_links=[link])
+
 def _with_context_item(request, item, *, apply=False):
     context = request.context.model_copy(update={
         "items": [*request.context.items, item]
@@ -249,6 +259,48 @@ def _prepare(case_id):
             "uncertain_semantic_support": SemanticSupport.UNCERTAIN,
         }[case_id]
         evaluator = _scripted(outcome)
+    elif case_id == "similar_words_opposite_conclusion":
+        request = _replace_span_and_claim(
+            request,
+            claim_text="Walking is safe at this intensity.",
+            span_text="Walking is not safe at this intensity.",
+        )
+    elif case_id == "two_claims_one_supporting_span":
+        first = request.draft.claims[0]
+        second = first.model_copy(update={
+            "claim_id": "claim-guidance-2",
+            "text": "High intensity running is recommended every day.",
+        })
+        request = request.model_copy(update={
+            "draft": request.draft.model_copy(update={"claims": [first, second]})
+        })
+    elif case_id == "general_nutrition_not_allergy_support":
+        request = _replace_span_and_claim(
+            request,
+            claim_text="This meal will prevent allergic reactions.",
+            span_text="A balanced eating pattern can include grains and vegetables.",
+        )
+    elif case_id == "movement_intensity_mismatch":
+        request = _replace_span_and_claim(
+            request,
+            claim_text="High intensity exercise is recommended.",
+            span_text="Gentle movement at a comfortable pace may be considered.",
+        )
+    elif case_id == "raw_recorded_constraint_plan":
+        request = base_validation_request(
+            plan=True,
+            raw_text="Create a weekly nutrition plan using my recorded peanut allergy.",
+        )
+    elif case_id == "raw_urgent_plan":
+        request = base_validation_request(
+            plan=True,
+            raw_text="I have heavy bleeding; create a nutrition plan too.",
+        )
+    elif case_id == "raw_ambiguous_plan":
+        request = base_validation_request(
+            plan=True,
+            raw_text="I am dizzy and want a nutrition plan.",
+        )
     elif case_id == "semantic_evaluator_unavailable":
         evaluator = ScriptedSemanticSupportEvaluator([SemanticEvaluatorUnavailable("offline")])
     elif case_id == "semantic_evaluator_timeout":

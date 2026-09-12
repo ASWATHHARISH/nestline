@@ -289,6 +289,9 @@
             "minimum_clarification_required",
             "context_not_attributed_to_user",
             "clearly_non_symptom_product_request",
+            "stored_constraint_product_request",
+            "record_management_product_request",
+            "explicit_non_symptom_product_request",
             "configuration_failure"
           ],
           "title": "Stop Reason",
@@ -546,6 +549,9 @@
                 "minimum_clarification_required",
                 "context_not_attributed_to_user",
                 "clearly_non_symptom_product_request",
+                "stored_constraint_product_request",
+                "record_management_product_request",
+                "explicit_non_symptom_product_request",
                 "configuration_failure"
               ],
               "title": "Stop Reason",

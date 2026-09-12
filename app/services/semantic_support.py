@@ -11,7 +11,7 @@ from __future__ import annotations
 from collections import deque
 import re
 from time import perf_counter
-from typing import Protocol
+from typing import Callable, Protocol
 
 from app.schemas.validation import (
     Claim,
@@ -26,6 +26,8 @@ STOP_WORDS = {
     "is", "it", "of", "on", "or", "that", "the", "this", "to", "with",
     "your", "you",
 }
+NEGATION_TERMS = {"no", "not", "never", "without", "avoid", "unsafe"}
+
 STRENGTHENING_TERMS = {
     "always", "certain", "certainly", "cure", "guarantee", "guaranteed",
     "must", "never", "proves", "safe", "will",
@@ -63,7 +65,11 @@ class DeterministicSemanticSupportEvaluator:
         shared = claim_tokens & span_tokens
         coverage = len(shared) / max(1, len(claim_tokens))
         unsupported_strength = (claim_tokens & STRENGTHENING_TERMS) - span_tokens
-        if not shared:
+        polarity_mismatch = bool(claim_tokens & NEGATION_TERMS) != bool(span_tokens & NEGATION_TERMS)
+        if polarity_mismatch and shared:
+            support = SemanticSupport.IRRELEVANT
+            reason = "The claim and cited span use opposing negative/positive wording."
+        elif not shared:
             support = SemanticSupport.IRRELEVANT
             reason = "No material claim term appears in the cited span."
         elif unsupported_strength:
@@ -121,3 +127,46 @@ class ScriptedSemanticSupportEvaluator:
             estimated_cost_usd=0.0,
             latency_ms=0.0,
         )
+
+
+class ConfiguredSemanticSupportEvaluator:
+    """Explicit fail-closed adapter for a separately authorized semantic assessor.
+
+    This class performs no network call and selects no model.  A caller must inject
+    an authorized bounded assessor.  The returned identity is checked so a fixture
+    or different provider cannot masquerade as the configured evaluator.
+    """
+
+    fixture_only = False
+
+    def __init__(
+        self,
+        *,
+        evaluator_id: str,
+        model_id: str,
+        assessor: Callable[[Claim, EligibleEvidenceSpan], SemanticAssessment] | None = None,
+    ) -> None:
+        if not evaluator_id.strip() or not model_id.strip():
+            raise ValueError("semantic evaluator and model identities are required")
+        if "fixture" in evaluator_id.casefold() or "fixture" in model_id.casefold():
+            raise ValueError("fixture identities cannot claim configured-evaluator status")
+        self.evaluator_id = evaluator_id
+        self.model_id = model_id
+        self._assessor = assessor
+
+    def assess(self, claim: Claim, evidence: EligibleEvidenceSpan) -> SemanticAssessment:
+        if self._assessor is None:
+            raise SemanticEvaluatorUnavailable("configured semantic assessor is unavailable")
+        try:
+            assessment = self._assessor(claim, evidence)
+        except TimeoutError:
+            raise
+        except SemanticEvaluatorUnavailable:
+            raise
+        except Exception as exc:
+            raise SemanticEvaluatorUnavailable("configured semantic assessor failed") from exc
+        if assessment.claim_id != claim.claim_id or assessment.evidence_id != evidence.evidence_id:
+            raise SemanticEvaluatorUnavailable("semantic assessment identity mismatch")
+        if assessment.evaluator != self.evaluator_id or assessment.model != self.model_id:
+            raise SemanticEvaluatorUnavailable("semantic evaluator identity mismatch")
+        return assessment

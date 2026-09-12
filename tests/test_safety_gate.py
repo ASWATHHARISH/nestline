@@ -324,6 +324,64 @@ class SafetyGateTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "execution mode"):
             SafetyGate(self.spec, mode="invalid")
 
+    def test_stage5_to_8_review_product_and_current_symptom_matrix(self):
+        expected = {
+            "Create a weekly plan using my recorded peanut allergy.": "non_urgent",
+            "Create a movement plan respecting my recorded restriction.": "non_urgent",
+            "Use my uploaded report when making my diet plan.": "non_urgent",
+            "Show the symptoms saved in my record.": "non_urgent",
+            "I feel reduced movement right now.": "needs_clarification",
+            "My baby is moving less than usual right now.": "urgent",
+            "I have heavy bleeding; make a meal plan too.": "urgent",
+            "My report records prior nausea; create this week's plan.": "non_urgent",
+            "I feel nauseous right now.": "needs_clarification",
+            "I am dizzy and want a plan.": "needs_clarification",
+        }
+        for text, route in expected.items():
+            with self.subTest(text=text):
+                result = evaluate_chat_message(self.gate(), text)
+                self.assertEqual(result.route, route)
+                self.assertEqual(result.trace.generation_call_count, 0)
+                if route == "urgent":
+                    self.assertEqual(result.trace.stop_reason, "urgent_match")
+                    self.assertFalse(result.ordinary_generation_allowed)
+
+        reduced = evaluate_chat_message(self.gate(), "I feel reduced movement right now.")
+        self.assertEqual(reduced.trace.matched_rule_ids, [])
+        self.assertEqual(
+            reduced.reasons,
+            ["symptom_or_medical_ambiguity", "no_match_is_not_safety_clearance"],
+        )
+        self.assertEqual(reduced.trace.stop_reason, "minimum_clarification_required")
+        self.assertFalse(reduced.ordinary_generation_allowed)
+
+        less_movement = evaluate_chat_message(
+            self.gate(), "My baby is moving less than usual right now."
+        )
+        self.assertEqual(less_movement.route, "urgent")
+        self.assertEqual(less_movement.trace.matched_rule_ids, ["S-FETAL"])
+        self.assertFalse(less_movement.ordinary_generation_allowed)
+        self.assertFalse(less_movement.public_routing_eligible)
+
+        historical = evaluate_chat_message(
+            self.gate(),
+            "My report records prior nausea; create this week's plan.",
+        )
+        self.assertEqual(historical.trace.matched_rule_ids, ["S-CLARIFY"])
+        historical_match = historical.matched_rules[0]
+        self.assertEqual(historical_match.mention_context, "historical_self")
+        self.assertFalse(historical_match.attributed_to_user)
+        self.assertEqual(historical.route, "non_urgent")
+        self.assertTrue(historical.ordinary_generation_allowed)
+
+        current_nausea = evaluate_chat_message(
+            self.gate(), "I feel nauseous right now."
+        )
+        self.assertEqual(current_nausea.route, "needs_clarification")
+        self.assertEqual(current_nausea.trace.matched_rule_ids, [])
+        self.assertFalse(current_nausea.ordinary_generation_allowed)
+        self.assertEqual(current_nausea.trace.generation_call_count, 0)
+
 
 if __name__ == "__main__":
     unittest.main()

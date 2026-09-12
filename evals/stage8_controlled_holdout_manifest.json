@@ -1,0 +1,20 @@
+{
+  "schema_version": "stage8-controlled-holdout-manifest-v1",
+  "status": "answers_not_present_in_repository",
+  "controlled_by": "Kajal/team-designated independent evaluator",
+  "case_count_required": 15,
+  "case_ids": [
+    "HOLDOUT-01", "HOLDOUT-02", "HOLDOUT-03", "HOLDOUT-04", "HOLDOUT-05",
+    "HOLDOUT-06", "HOLDOUT-07", "HOLDOUT-08", "HOLDOUT-09", "HOLDOUT-10",
+    "HOLDOUT-11", "HOLDOUT-12", "HOLDOUT-13", "HOLDOUT-14", "HOLDOUT-15"
+  ],
+  "expected_answers_in_repository": false,
+  "opened_during_stages_5_8_rectification": false,
+  "permitted_use": "one independently controlled final evaluation after candidate freeze",
+  "not_permitted": [
+    "prompt tuning",
+    "retrieval tuning",
+    "changing expected outcomes after execution",
+    "claiming clinical validation"
+  ]
+}

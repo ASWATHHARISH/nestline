@@ -654,6 +654,69 @@ class Stage8RectificationTests(unittest.TestCase):
         self.assertEqual(len(packet.spans), 1)
         self.assertEqual(packet.spans[0].exact_span, original.approved_guideline_passages[0].spans[0].exact_text)
 
+class Stage8IndependentReviewSemanticHardCases(unittest.TestCase):
+    @staticmethod
+    def _replace_span_and_claim(request, *, claim_text: str, span_text: str):
+        span = request.evidence_packet.spans[0]
+        digest = sha256(span_text.encode("utf-8")).hexdigest()
+        changed_span = span.model_copy(update={
+            "exact_span": span_text,
+            "span_sha256": digest,
+        })
+        changed_link = request.draft.claims[0].evidence_links[0].model_copy(update={
+            "exact_span": span_text,
+            "span_sha256": digest,
+        })
+        request = replace_packet(request, spans=[changed_span])
+        return replace_claim(request, text=claim_text, evidence_links=[changed_link])
+
+    def test_similar_words_with_opposite_conclusion_fail_closed(self):
+        request = self._replace_span_and_claim(
+            base_validation_request(),
+            claim_text="Walking is safe at this intensity.",
+            span_text="Walking is not safe at this intensity.",
+        )
+        result = Stage8ValidationPipeline().run(request)
+        self.assertIn(FindingCode.CITATION_IRRELEVANT, codes(result))
+        self.assertFalse(result.ordinary_composition_called)
+
+    def test_two_material_claims_with_one_supporting_span_rejects_unsupported_claim(self):
+        request = base_validation_request()
+        first = request.draft.claims[0]
+        second = first.model_copy(update={
+            "claim_id": "claim-guidance-2",
+            "text": "High intensity running is recommended every day.",
+        })
+        request = request.model_copy(update={
+            "draft": request.draft.model_copy(update={"claims": [first, second]})
+        })
+        result = Stage8ValidationPipeline().run(request)
+        self.assertIn(FindingCode.CITATION_IRRELEVANT, codes(result))
+        self.assertEqual(len(result.validation_report.trace.semantic_assessments), 2)
+        self.assertFalse(result.ordinary_composition_called)
+
+    def test_general_nutrition_span_does_not_prove_allergy_specific_safety(self):
+        request = self._replace_span_and_claim(
+            base_validation_request(),
+            claim_text="This meal will prevent allergic reactions.",
+            span_text="A balanced eating pattern can include grains and vegetables.",
+        )
+        result = Stage8ValidationPipeline().run(request)
+        self.assertIn(FindingCode.CITATION_IRRELEVANT, codes(result))
+        self.assertFalse(result.ordinary_composition_called)
+
+    def test_gentle_movement_span_does_not_support_high_intensity_instruction(self):
+        request = self._replace_span_and_claim(
+            base_validation_request(),
+            claim_text="High intensity exercise is recommended.",
+            span_text="Gentle movement at a comfortable pace may be considered.",
+        )
+        result = Stage8ValidationPipeline().run(request)
+        self.assertTrue(
+            {FindingCode.CITATION_IRRELEVANT, FindingCode.CITATION_WEAKER_SUPPORT}
+            & codes(result)
+        )
+        self.assertFalse(result.ordinary_composition_called)
 
 if __name__ == "__main__":
     unittest.main()

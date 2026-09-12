@@ -21,12 +21,12 @@
       "urgent_ordinary_composition_calls": 0
     },
     "critical_cases": {
-      "passed": 50,
-      "total": 50
+      "passed": 57,
+      "total": 57
     },
     "development_cases": {
-      "passed": 62,
-      "total": 62
+      "passed": 69,
+      "total": 69
     },
     "observed_rejection_codes": [
       "allergy_violation",
@@ -59,6 +59,7 @@
       "required_constraint_dropped",
       "required_information_missing",
       "restriction_violation",
+      "safety_clarification_blocked",
       "schema_invalid",
       "semantic_evaluator_timeout",
       "semantic_evaluator_unavailable",
@@ -107,6 +108,10 @@
         "passed": 5,
         "total": 5
       },
+      "cross_stage": {
+        "passed": 3,
+        "total": 3
+      },
       "evidence": {
         "passed": 1,
         "total": 1
@@ -148,8 +153,8 @@
         "total": 2
       },
       "semantic": {
-        "passed": 6,
-        "total": 6
+        "passed": 10,
+        "total": 10
       },
       "trace": {
         "passed": 1,
@@ -158,38 +163,38 @@
     },
     "validator_coverage": {
       "boundary_validator": {
-        "negative": 9,
-        "positive": 51
+        "negative": 11,
+        "positive": 56
       },
       "citation_validator": {
-        "negative": 16,
-        "positive": 43
+        "negative": 20,
+        "positive": 44
       },
       "consistency_validator": {
         "negative": 12,
-        "positive": 47
+        "positive": 52
       },
       "evidence_verifier": {
         "negative": 6,
-        "positive": 53
+        "positive": 58
       },
       "personal_constraint_validator": {
         "negative": 5,
-        "positive": 54
+        "positive": 59
       },
       "schema_validator": {
         "negative": 1,
-        "positive": 59
+        "positive": 66
       },
       "state_journey_validator": {
         "negative": 5,
-        "positive": 54
+        "positive": 59
       }
     },
     "validators": 7,
     "zero_persistent_writes": {
-      "passed": 60,
-      "total": 60
+      "passed": 67,
+      "total": 67
     }
   }
 }

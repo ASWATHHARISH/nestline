@@ -57,7 +57,7 @@ exists; urgent and unresolved cases stay at the Stage 6 boundary.
 
 ## Stage 8 validation and composition development set
 
-`stage8_validation_development.jsonl` is a generated, visible set of 62
+`stage8_validation_development.jsonl` is a generated, visible set of 69
 synthetic cases for the seven-validator display gate, exact-span citations, bounded
 semantic assessment, answerability, provenance, repair/retry limits and reusable
 daily/weekly plan validation. Regenerate it with
@@ -72,3 +72,20 @@ The set uses controlled fixtures and deterministic evaluator outcomes. It does n
 call a paid provider, access the sealed final holdout, establish clinical validity,
 or prove public-release quality. An unavailable or uncertain semantic evaluator
 remains blocking, and the draft safety specification keeps public runtime closed.
+
+## Stage 5 frozen paraphrase set
+
+`stage5_retrieval_paraphrases_v1.jsonl` contains 12 separately frozen variants of the existing Stage 5 expected truth. It covers concise, noisy and common Indian-English-style phrasing without replacing or editing the original 28-case development set. Regenerate and evaluate it with:
+
+```text
+python -m scripts.build_stage5_paraphrase_evals
+python -m scripts.run_stage5_paraphrase_evals --write-report
+```
+
+It uses deterministic fixture embeddings and proves only the tested filtering and retrieval contract. It is not a production embedding benchmark.
+
+## Cross-stage controlled holdout and provider boundaries
+
+`stage8_controlled_holdout_manifest.json` contains 15 identifiers only. Expected answers remain outside the repository under the team-designated independent evaluator, and the manifest was not opened for this rectification.
+
+The Stage 7/8 provider adapter and benchmark harness require an explicitly injected, authorised provider transport. Deterministic fixtures remain limited to Demo/evaluation execution. `docs/STAGES-7-8-LIVE-PROVIDER-BENCHMARK-STATUS.json` records the live comparison as blocked and reports zero calls and zero cost. No provider has been selected.

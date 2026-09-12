@@ -1,0 +1,100 @@
+{
+  "schema_version": "stages-5-8-self-review-v1",
+  "review_date": "2026-09-12",
+  "branch": "fix/stages-5-8-integration-closure",
+  "accepted_stage8_baseline_sha": "2444f1c15b9b8a37b38a76b0257b76d2180f4b17",
+  "review_rounds": 1,
+  "findings": [
+    {
+      "id": "S58-001",
+      "severity": "high",
+      "area": "Stage 6 trace truth",
+      "original_evidence": "Stage 6 evaluation passed 51/53: current_reduced_movement expected S-CLARIFY although no rule matched; historical_report_plan omitted observed S-CLARIFY.",
+      "disposition": "corrected_with_explicit_user_approval",
+      "correction": "Corrected metadata only, added exact reasons/stop/attribution assertions and two contrast regressions. User-visible routes and generation permissions were unchanged.",
+      "verification": "Stage 6 55/55; critical 51/51; urgent zero generation 27/27; conservative clarification 19/19."
+    },
+    {
+      "id": "S58-002",
+      "severity": "high",
+      "area": "safety precedence",
+      "original_evidence": "Personal provider availability could be checked before returning an already-determined urgent or clarification safety result.",
+      "disposition": "fixed",
+      "correction": "Moved urgent and unresolved clarification exits before provider availability checks.",
+      "verification": "test_urgent_safety_precedes_personal_provider_availability passes; Stage 7 urgent zero-agent generation 5/5."
+    },
+    {
+      "id": "S58-003",
+      "severity": "medium",
+      "area": "intent routing",
+      "original_evidence": "Substring matching allowed the token eat inside peanut to create an unintended nutrition signal.",
+      "disposition": "fixed",
+      "correction": "Replaced substring keyword matching with whole-word matching.",
+      "verification": "Stage 7 routing and fan-out 25/25; full Stage 7 evaluation 76/76."
+    },
+    {
+      "id": "S58-004",
+      "severity": "high",
+      "area": "runtime isolation",
+      "original_evidence": "Stage boundaries lacked one explicit typed gate for Personal, Demo and evaluation context provenance.",
+      "disposition": "fixed",
+      "correction": "Added strict runtime modes, context origin, authenticated snapshot binding, onboarding/confirmation/conflict/stale-state stops and explicit plan-action enforcement.",
+      "verification": "Cross-stage integration and runtime isolation tests pass in the 418/418 full Python suite."
+    },
+    {
+      "id": "S58-005",
+      "severity": "high",
+      "area": "provider truth",
+      "original_evidence": "A configured provider boundary and benchmark result contract were incomplete.",
+      "disposition": "fixed_with_external_gate_open",
+      "correction": "Added injected, provider-neutral fail-closed adapters and a benchmark harness/report that records zero paid calls and no selected provider.",
+      "verification": "Provider boundary/harness tests pass. Live provider status remains NO-GO pending authorization and benchmark."
+    },
+    {
+      "id": "S58-006",
+      "severity": "high",
+      "area": "semantic citation support",
+      "original_evidence": "The visible deterministic semantic suite needed harder negative cases.",
+      "disposition": "fixed_with_production_limit_open",
+      "correction": "Added opposite-conclusion, split-claim, allergy-specific and movement-intensity mismatch cases.",
+      "verification": "Stage 8 69/69; critical 57/57; semantic group 10/10."
+    },
+    {
+      "id": "S58-007",
+      "severity": "high",
+      "area": "clinical policy",
+      "original_evidence": "Reduced-movement wording exposes an unresolved distinction between generic fallback and draft S-FETAL matching.",
+      "disposition": "open_external_review",
+      "correction": "No clinical rule was added or approved. Both phrases are regression tested with zero ordinary generation and public routing disabled.",
+      "verification": "Safety spec remains draft; review packet records the open qualified-review requirement."
+    },
+    {
+      "id": "S58-008",
+      "severity": "medium",
+      "area": "Stage 9 verification",
+      "original_evidence": "Accepted baseline contains no Stage 9 implementation or Stage 9 checker.",
+      "disposition": "not_applicable_to_this_branch",
+      "correction": "No Stage 9 code was invented. Existing Stage 3/4 Streamlit smoke checks were run.",
+      "verification": "Controlled Stage 9 engineering may begin; Stage 9 product completion is not claimed."
+    },
+    {
+      "id": "S58-009",
+      "severity": "high",
+      "area": "final formatting cleanup",
+      "original_evidence": "The first post-cleanup compileall run found a SyntaxError in app/services/model_provider.py because a broad PowerShell replacement removed three closing delimiters.",
+      "disposition": "fixed_before_commit",
+      "correction": "Restored the exact three delimiters and retained only intended blank-line formatting.",
+      "verification": "Affected tests 48/48, compileall passed, then the complete Python suite passed 418/418."
+    }
+  ],
+  "final_required_gates": {
+    "full_python": "418/418",
+    "stage5_paraphrases": "12/12",
+    "stage6_safety": "55/55",
+    "stage7_orchestration": "76/76",
+    "stage8_validation": "69/69",
+    "git_diff_check": "passed",
+    "controlled_engineering": "GO",
+    "public_clinical_release": "NO-GO"
+  }
+}

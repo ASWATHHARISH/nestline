@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from time import perf_counter
 from pydantic import ValidationError
 
@@ -19,6 +20,7 @@ from app.schemas.orchestration import (
     ProposedSchedule,
     RecordedReminder,
     RoutePlan,
+    RuntimeMode,
     ScheduleRequest,
     WorkerEvidence,
     WorkerResult,
@@ -67,11 +69,17 @@ def _default_evidence(agent: AgentName, evaluation_only: bool) -> WorkerEvidence
     )
 
 
+def _contains_keyword(text: str, keyword: str) -> bool:
+    """Match whole words/phrases so `eat` cannot match inside `peanut`."""
+
+    return re.search(r"(?<!\w)" + re.escape(keyword) + r"(?!\w)", text) is not None
+
+
 def classify_intents(text: str) -> list[Intent]:
     lower = text.casefold()
     matches: list[Intent] = []
     for intent, words in INTENT_KEYWORDS.items():
-        if any(word in lower for word in words):
+        if any(_contains_keyword(lower, word) for word in words):
             matches.append(intent)
     if Intent.MEDICATION in matches and Intent.RECORD in matches:
         return [Intent.MEDICATION]
@@ -171,6 +179,17 @@ class JourneyOrchestrator:
         route = build_route_plan(request)
         if request.safety_result.route != "non_urgent":
             return self._result(request, route, [], None, started, f"safety_{request.safety_result.route}")
+        if request.runtime_mode == RuntimeMode.PERSONAL and getattr(self.provider, "fixture_only", True):
+            blocked = route.model_copy(update={
+                "selected_workers": [],
+                "evidence_plan": [],
+                "requires_clarification": True,
+                "reason": "Personal Mode cannot fall back to the deterministic fixture provider.",
+                "total_call_budget": 0,
+            })
+            return self._result(
+                request, blocked, [], None, started, "personal_provider_unavailable",
+            )
         if not route.selected_workers:
             reason = "clarification_required" if route.requires_clarification else "unsupported_intent"
             return self._result(request, route, [], None, started, reason)

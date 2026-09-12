@@ -2559,6 +2559,9 @@
                 "minimum_clarification_required",
                 "context_not_attributed_to_user",
                 "clearly_non_symptom_product_request",
+                "stored_constraint_product_request",
+                "record_management_product_request",
+                "explicit_non_symptom_product_request",
                 "configuration_failure"
               ],
               "title": "Stop Reason",
@@ -4699,6 +4702,10 @@
               "title": "Care Episode Id",
               "type": "string"
             },
+            "context_origin": {
+              "$ref": "#/$defs/ContextOrigin",
+              "default": "fictional_fixture"
+            },
             "items": {
               "items": {
                 "$ref": "#/$defs/ContextItem"
@@ -4708,6 +4715,11 @@
             },
             "journey": {
               "$ref": "#/$defs/JourneyPosition"
+            },
+            "onboarding_confirmed": {
+              "default": true,
+              "title": "Onboarding Confirmed",
+              "type": "boolean"
             },
             "owner_user_id": {
               "format": "uuid",
@@ -5048,6 +5060,14 @@
             "delivery_recovery"
           ],
           "title": "ContextKind",
+          "type": "string"
+        },
+        "ContextOrigin": {
+          "enum": [
+            "authenticated_store",
+            "fictional_fixture"
+          ],
+          "title": "ContextOrigin",
           "type": "string"
         },
         "EligibleEvidenceSpan": {
@@ -6677,6 +6697,9 @@
                 "minimum_clarification_required",
                 "context_not_attributed_to_user",
                 "clearly_non_symptom_product_request",
+                "stored_constraint_product_request",
+                "record_management_product_request",
+                "explicit_non_symptom_product_request",
                 "configuration_failure"
               ],
               "title": "Stop Reason",

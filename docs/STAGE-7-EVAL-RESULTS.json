@@ -130,8 +130,8 @@
   },
   "latency_ms": {
     "samples": 76,
-    "median": 1.2801,
-    "maximum": 4.7013
+    "median": 4.9048,
+    "maximum": 13.3464
   },
   "limitations": [
     "Deterministic synthetic fixtures test software boundaries, not clinical quality.",
@@ -153,7 +153,7 @@
         ],
         "stop": "completed"
       },
-      "latency_ms": 4.7013
+      "latency_ms": 13.3464
     },
     {
       "case_id": "route_medication",
@@ -167,7 +167,7 @@
         ],
         "stop": "completed"
       },
-      "latency_ms": 2.0995
+      "latency_ms": 6.4817
     },
     {
       "case_id": "route_nutrition",
@@ -181,7 +181,7 @@
         ],
         "stop": "completed"
       },
-      "latency_ms": 1.606
+      "latency_ms": 4.4483
     },
     {
       "case_id": "route_movement",
@@ -195,7 +195,7 @@
         ],
         "stop": "completed"
       },
-      "latency_ms": 1.4124
+      "latency_ms": 5.0439
     },
     {
       "case_id": "route_wellbeing",
@@ -209,7 +209,7 @@
         ],
         "stop": "completed"
       },
-      "latency_ms": 1.4171
+      "latency_ms": 5.377
     },
     {
       "case_id": "route_followup",
@@ -223,7 +223,7 @@
         ],
         "stop": "completed"
       },
-      "latency_ms": 1.4396
+      "latency_ms": 5.2257
     },
     {
       "case_id": "route_out_of_scope",
@@ -235,7 +235,7 @@
         "workers": [],
         "stop": "unsupported_intent"
       },
-      "latency_ms": 1.1137
+      "latency_ms": 5.4648
     },
     {
       "case_id": "route_ambiguous",
@@ -247,7 +247,7 @@
         "workers": [],
         "stop": "clarification_required"
       },
-      "latency_ms": 1.308
+      "latency_ms": 5.1077
     },
     {
       "case_id": "route_full_week",
@@ -265,7 +265,7 @@
         ],
         "stop": "completed"
       },
-      "latency_ms": 3.2818
+      "latency_ms": 8.8393
     },
     {
       "case_id": "route_full_day",
@@ -283,7 +283,7 @@
         ],
         "stop": "completed"
       },
-      "latency_ms": 3.0931
+      "latency_ms": 12.9372
     },
     {
       "case_id": "route_nutrition_week",
@@ -298,7 +298,7 @@
         ],
         "stop": "completed"
       },
-      "latency_ms": 2.2559
+      "latency_ms": 6.2934
     },
     {
       "case_id": "route_movement_week",
@@ -313,7 +313,7 @@
         ],
         "stop": "completed"
       },
-      "latency_ms": 1.9245
+      "latency_ms": 6.4519
     },
     {
       "case_id": "route_wellbeing_week",
@@ -328,7 +328,7 @@
         ],
         "stop": "completed"
       },
-      "latency_ms": 1.8467
+      "latency_ms": 4.2313
     },
     {
       "case_id": "route_holistic",
@@ -346,7 +346,7 @@
         ],
         "stop": "completed"
       },
-      "latency_ms": 2.8255
+      "latency_ms": 9.0984
     },
     {
       "case_id": "budget_preflight",
@@ -358,7 +358,7 @@
         "workers": [],
         "stop": "budget_exhausted_before_execution"
       },
-      "latency_ms": 1.1799
+      "latency_ms": 3.2659
     },
     {
       "case_id": "urgent_breathing_plan",
@@ -370,7 +370,7 @@
         "workers": [],
         "stop": "safety_urgent"
       },
-      "latency_ms": 1.9639
+      "latency_ms": 3.9176
     },
     {
       "case_id": "urgent_chest_meal",
@@ -382,7 +382,7 @@
         "workers": [],
         "stop": "safety_urgent"
       },
-      "latency_ms": 1.5822
+      "latency_ms": 2.8906
     },
     {
       "case_id": "urgent_bleeding_movement",
@@ -394,7 +394,7 @@
         "workers": [],
         "stop": "safety_urgent"
       },
-      "latency_ms": 1.2993
+      "latency_ms": 3.6717
     },
     {
       "case_id": "urgent_self_harm_support",
@@ -406,7 +406,7 @@
         "workers": [],
         "stop": "safety_urgent"
       },
-      "latency_ms": 1.1145
+      "latency_ms": 3.3757
     },
     {
       "case_id": "urgent_injection",
@@ -418,7 +418,7 @@
         "workers": [],
         "stop": "safety_urgent"
       },
-      "latency_ms": 1.1417
+      "latency_ms": 4.6647
     },
     {
       "case_id": "clarify_dizzy",
@@ -430,7 +430,7 @@
         "workers": [],
         "stop": "safety_needs_clarification"
       },
-      "latency_ms": 1.1291
+      "latency_ms": 3.4545
     },
     {
       "case_id": "clarify_unknown",
@@ -442,7 +442,7 @@
         "workers": [],
         "stop": "safety_needs_clarification"
       },
-      "latency_ms": 1.1157
+      "latency_ms": 4.0029
     },
     {
       "case_id": "clarify_historical",
@@ -454,7 +454,7 @@
         "workers": [],
         "stop": "safety_needs_clarification"
       },
-      "latency_ms": 1.094
+      "latency_ms": 4.5798
     },
     {
       "case_id": "clarify_third_person",
@@ -466,7 +466,7 @@
         "workers": [],
         "stop": "safety_needs_clarification"
       },
-      "latency_ms": 1.1262
+      "latency_ms": 4.034
     },
     {
       "case_id": "clarify_negated",
@@ -478,7 +478,7 @@
         "workers": [],
         "stop": "safety_needs_clarification"
       },
-      "latency_ms": 1.125
+      "latency_ms": 3.1232
     },
     {
       "case_id": "record_complete",
@@ -488,7 +488,7 @@
         "status": "completed",
         "stop": null
       },
-      "latency_ms": 1.3929
+      "latency_ms": 5.0666
     },
     {
       "case_id": "record_poor_ocr",
@@ -498,7 +498,7 @@
         "status": "needs_clarification",
         "stop": "poor_ocr_requires_confirmation"
       },
-      "latency_ms": 1.1998
+      "latency_ms": 6.0034
     },
     {
       "case_id": "record_conflict",
@@ -508,7 +508,7 @@
         "status": "needs_clarification",
         "stop": "conflicting_record"
       },
-      "latency_ms": 1.373
+      "latency_ms": 4.6016
     },
     {
       "case_id": "medication_complete",
@@ -518,7 +518,7 @@
         "status": "completed",
         "stop": null
       },
-      "latency_ms": 1.409
+      "latency_ms": 5.856
     },
     {
       "case_id": "medication_stop_request",
@@ -528,7 +528,7 @@
         "status": "abstained",
         "stop": "medication_change_request_refused"
       },
-      "latency_ms": 1.3158
+      "latency_ms": 6.5637
     },
     {
       "case_id": "medication_substitute_request",
@@ -538,7 +538,7 @@
         "status": "abstained",
         "stop": "medication_change_request_refused"
       },
-      "latency_ms": 1.2239
+      "latency_ms": 5.4123
     },
     {
       "case_id": "medication_missed_dose",
@@ -548,7 +548,7 @@
         "status": "abstained",
         "stop": "medication_change_request_refused"
       },
-      "latency_ms": 1.2073
+      "latency_ms": 5.7695
     },
     {
       "case_id": "medication_conflict",
@@ -558,7 +558,7 @@
         "status": "needs_clarification",
         "stop": "medication_or_instruction_conflict"
       },
-      "latency_ms": 1.1928
+      "latency_ms": 6.4463
     },
     {
       "case_id": "medication_instruction_conflict",
@@ -568,7 +568,7 @@
         "status": "needs_clarification",
         "stop": "medication_or_instruction_conflict"
       },
-      "latency_ms": 1.1739
+      "latency_ms": 4.9717
     },
     {
       "case_id": "medication_reaction",
@@ -578,7 +578,7 @@
         "status": "escalated",
         "stop": "possible_reaction_requires_safety_gate"
       },
-      "latency_ms": 1.1506
+      "latency_ms": 4.2192
     },
     {
       "case_id": "symptom_diagnosis",
@@ -588,7 +588,7 @@
         "status": "abstained",
         "stop": "diagnosis_request_refused"
       },
-      "latency_ms": 1.1617
+      "latency_ms": 5.5233
     },
     {
       "case_id": "symptom_policy_missing",
@@ -598,7 +598,7 @@
         "status": "abstained",
         "stop": "approved_symptom_policy_unavailable"
       },
-      "latency_ms": 1.156
+      "latency_ms": 4.2637
     },
     {
       "case_id": "symptom_supported_fixture",
@@ -608,7 +608,7 @@
         "status": "completed",
         "stop": null
       },
-      "latency_ms": 1.2871
+      "latency_ms": 4.913
     },
     {
       "case_id": "nutrition_safe",
@@ -618,7 +618,7 @@
         "status": "completed",
         "stop": null
       },
-      "latency_ms": 1.3074
+      "latency_ms": 4.9538
     },
     {
       "case_id": "nutrition_allergen_only",
@@ -628,7 +628,7 @@
         "status": "abstained",
         "stop": "all_candidates_excluded_by_hard_constraints"
       },
-      "latency_ms": 1.1593
+      "latency_ms": 5.0844
     },
     {
       "case_id": "nutrition_conflict",
@@ -638,7 +638,7 @@
         "status": "needs_clarification",
         "stop": "allergy_or_restriction_conflict"
       },
-      "latency_ms": 1.2759
+      "latency_ms": 3.2422
     },
     {
       "case_id": "nutrition_clinical_diet",
@@ -648,7 +648,7 @@
         "status": "abstained",
         "stop": "individualized_clinical_diet_request"
       },
-      "latency_ms": 1.3658
+      "latency_ms": 3.8401
     },
     {
       "case_id": "nutrition_missing_evidence",
@@ -658,7 +658,7 @@
         "status": "abstained",
         "stop": "all_candidates_excluded_by_hard_constraints"
       },
-      "latency_ms": 1.2843
+      "latency_ms": 5.7651
     },
     {
       "case_id": "movement_safe",
@@ -668,7 +668,7 @@
         "status": "completed",
         "stop": null
       },
-      "latency_ms": 1.4493
+      "latency_ms": 5.1455
     },
     {
       "case_id": "movement_heavy_no_clearance",
@@ -678,7 +678,7 @@
         "status": "needs_clarification",
         "stop": "missing_required_clearance"
       },
-      "latency_ms": 1.2064
+      "latency_ms": 4.3776
     },
     {
       "case_id": "movement_current_symptom",
@@ -688,7 +688,7 @@
         "status": "escalated",
         "stop": "current_symptom_requires_safety_gate"
       },
-      "latency_ms": 1.1917
+      "latency_ms": 4.5476
     },
     {
       "case_id": "movement_restriction_conflict",
@@ -698,7 +698,7 @@
         "status": "needs_clarification",
         "stop": "movement_restriction_conflict"
       },
-      "latency_ms": 1.1849
+      "latency_ms": 5.15
     },
     {
       "case_id": "movement_report_conflict",
@@ -708,7 +708,7 @@
         "status": "needs_clarification",
         "stop": "movement_report_conflict"
       },
-      "latency_ms": 1.2062
+      "latency_ms": 4.4572
     },
     {
       "case_id": "movement_missing_evidence",
@@ -718,7 +718,7 @@
         "status": "abstained",
         "stop": "missing_stage_applicable_movement_evidence"
       },
-      "latency_ms": 1.1247
+      "latency_ms": 4.8651
     },
     {
       "case_id": "wellbeing_supported",
@@ -728,7 +728,7 @@
         "status": "completed",
         "stop": null
       },
-      "latency_ms": 1.2677
+      "latency_ms": 4.8601
     },
     {
       "case_id": "wellbeing_missing_evidence",
@@ -738,7 +738,7 @@
         "status": "abstained",
         "stop": "missing_wellbeing_evidence"
       },
-      "latency_ms": 1.1478
+      "latency_ms": 4.0351
     },
     {
       "case_id": "wellbeing_persistent",
@@ -748,7 +748,7 @@
         "status": "needs_clarification",
         "stop": "persistent_or_worsening_concern_requires_professional_followup"
       },
-      "latency_ms": 1.1379
+      "latency_ms": 3.0048
     },
     {
       "case_id": "followup_supported",
@@ -758,7 +758,7 @@
         "status": "completed",
         "stop": null
       },
-      "latency_ms": 1.3203
+      "latency_ms": 3.6329
     },
     {
       "case_id": "followup_reminder_requires_consent",
@@ -769,7 +769,7 @@
         "stop": null,
         "consent_required": true
       },
-      "latency_ms": 1.5984
+      "latency_ms": 8.92
     },
     {
       "case_id": "followup_new_symptom",
@@ -779,7 +779,7 @@
         "status": "escalated",
         "stop": "new_symptom_requires_safety_gate"
       },
-      "latency_ms": 1.5734
+      "latency_ms": 5.2674
     },
     {
       "case_id": "followup_instruction_conflict",
@@ -789,7 +789,7 @@
         "status": "needs_clarification",
         "stop": "unresolved_followup_instruction"
       },
-      "latency_ms": 1.5787
+      "latency_ms": 9.0804
     },
     {
       "case_id": "provider_failure",
@@ -799,7 +799,7 @@
         "status": "failed",
         "stop": "provider_failure"
       },
-      "latency_ms": 1.5615
+      "latency_ms": 5.3678
     },
     {
       "case_id": "provider_timeout",
@@ -809,7 +809,7 @@
         "status": "failed",
         "stop": "provider_timeout"
       },
-      "latency_ms": 1.3661
+      "latency_ms": 4.4013
     },
     {
       "case_id": "provider_invalid_output",
@@ -819,7 +819,7 @@
         "status": "failed",
         "stop": "schema_invalid_after_one_repair"
       },
-      "latency_ms": 1.3535
+      "latency_ms": 6.4251
     },
     {
       "case_id": "worker_input_swap",
@@ -829,7 +829,7 @@
         "status": "failed",
         "stop": "invalid_worker_input_contract"
       },
-      "latency_ms": 1.264
+      "latency_ms": 4.8966
     },
     {
       "case_id": "wrong_tool_lane",
@@ -839,7 +839,7 @@
         "status": "failed",
         "stop": "disallowed_evidence_lane"
       },
-      "latency_ms": 1.2412
+      "latency_ms": 3.7092
     },
     {
       "case_id": "wrong_retrieval_policy",
@@ -849,7 +849,7 @@
         "status": "failed",
         "stop": "retrieval_policy_mismatch"
       },
-      "latency_ms": 1.2156
+      "latency_ms": 4.7083
     },
     {
       "case_id": "movement_postpartum",
@@ -859,7 +859,7 @@
         "status": "completed",
         "stop": null
       },
-      "latency_ms": 1.3509
+      "latency_ms": 5.4398
     },
     {
       "case_id": "movement_wrong_stage",
@@ -869,7 +869,7 @@
         "status": "failed",
         "stop": "invalid_worker_input_contract"
       },
-      "latency_ms": 1.2158
+      "latency_ms": 4.375
     },
     {
       "case_id": "schedule_repeatability",
@@ -878,7 +878,7 @@
       "observed": {
         "result": "identical"
       },
-      "latency_ms": 0.1679
+      "latency_ms": 0.5778
     },
     {
       "case_id": "schedule_weekdays_weekends",
@@ -887,7 +887,7 @@
       "observed": {
         "result": "both"
       },
-      "latency_ms": 0.1831
+      "latency_ms": 0.7005
     },
     {
       "case_id": "schedule_appointment_collision",
@@ -896,7 +896,7 @@
       "observed": {
         "result": "avoided"
       },
-      "latency_ms": 0.0853
+      "latency_ms": 0.2406
     },
     {
       "case_id": "schedule_unplaceable",
@@ -905,7 +905,7 @@
       "observed": {
         "result": "conflict"
       },
-      "latency_ms": 0.0613
+      "latency_ms": 0.308
     },
     {
       "case_id": "schedule_recorded_reminder",
@@ -914,7 +914,7 @@
       "observed": {
         "result": "exact"
       },
-      "latency_ms": 0.1158
+      "latency_ms": 0.3573
     },
     {
       "case_id": "schedule_state_mismatch",
@@ -923,7 +923,7 @@
       "observed": {
         "result": "rejected"
       },
-      "latency_ms": 0.0364
+      "latency_ms": 0.1282
     },
     {
       "case_id": "schedule_stale_change",
@@ -932,7 +932,7 @@
       "observed": {
         "result": "stale"
       },
-      "latency_ms": 0.1374
+      "latency_ms": 0.6508
     },
     {
       "case_id": "schedule_nutrition_only",
@@ -941,7 +941,7 @@
       "observed": {
         "result": "nutrition"
       },
-      "latency_ms": 1.8839
+      "latency_ms": 9.3951
     },
     {
       "case_id": "schedule_day_only",
@@ -950,7 +950,7 @@
       "observed": {
         "result": "saturday"
       },
-      "latency_ms": 1.8957
+      "latency_ms": 6.5382
     },
     {
       "case_id": "schedule_proposal_only",
@@ -959,7 +959,7 @@
       "observed": {
         "result": "true"
       },
-      "latency_ms": 2.6726
+      "latency_ms": 12.9376
     },
     {
       "case_id": "schedule_user_cadence",
@@ -968,7 +968,7 @@
       "observed": {
         "result": "preserved"
       },
-      "latency_ms": 1.5989
+      "latency_ms": 7.3769
     },
     {
       "case_id": "schedule_context_propagation",
@@ -977,7 +977,7 @@
       "observed": {
         "result": "visible"
       },
-      "latency_ms": 2.5187
+      "latency_ms": 10.2958
     }
   ],
   "failures": []

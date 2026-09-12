@@ -1,0 +1,26 @@
+{
+  "schema_version": "stage7-8-provider-benchmark-v1",
+  "status": "blocked_not_authorized",
+  "dataset_version": "stage7-8-live-provider-candidate-set-pending",
+  "provider_id": null,
+  "model_id": null,
+  "total_cases": 0,
+  "completed_cases": 0,
+  "stage8_passed_cases": 0,
+  "citation_support_passed_cases": 0,
+  "constraint_boundary_violations": 0,
+  "timeouts": 0,
+  "retries": 0,
+  "latency_median_ms": null,
+  "latency_p95_ms": null,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "estimated_cost_usd": 0,
+  "manual_tone_reviews_pending": 0,
+  "paid_calls_made": false,
+  "authorization_reference": null,
+  "limitations": [
+    "No provider/model is selected and no paid call was authorized or made.",
+    "Deterministic fixtures do not establish live-provider answer quality."
+  ]
+}

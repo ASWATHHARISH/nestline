@@ -84,6 +84,18 @@ class FactState(StrEnum):
     STALE = "stale"
 
 
+class RuntimeMode(StrEnum):
+    """Explicit product mode; fixture data is never implicit personal state."""
+
+    DEMO = "demo"
+    PERSONAL = "personal"
+    EVALUATION = "evaluation"
+
+
+class ContextOrigin(StrEnum):
+    AUTHENTICATED_STORE = "authenticated_store"
+    FICTIONAL_FIXTURE = "fictional_fixture"
+
 class MedicationLifecycle(StrEnum):
     CURRENT = "current"
     HISTORICAL = "historical"
@@ -210,6 +222,8 @@ class AuthenticatedContextSnapshot(Contract):
     journey: JourneyPosition
     items: list[ContextItem] = Field(default_factory=list)
     trusted_server_created: Literal[True] = True
+    context_origin: ContextOrigin = ContextOrigin.FICTIONAL_FIXTURE
+    onboarding_confirmed: bool = True
 
     @model_validator(mode="after")
     def authenticated_owner_scope(self) -> Self:
@@ -314,6 +328,8 @@ class OrchestrationRequest(Contract):
     context: AuthenticatedContextSnapshot
     safety_result: SafetyGateResult
     execution_mode: Literal["evaluation_only", "public_runtime"]
+    runtime_mode: RuntimeMode = RuntimeMode.EVALUATION
+    explicit_user_action: bool = True
     requested_horizon: Literal["none", "day", "week"] = "none"
     selected_day: Weekday | None = None
     evidence_by_agent: dict[AgentName, WorkerEvidence] = Field(default_factory=dict)
@@ -334,6 +350,22 @@ class OrchestrationRequest(Contract):
             self.safety_result.evaluation_only or not self.safety_result.public_routing_eligible
         ):
             raise ValueError("public Stage 7 execution requires a public-eligible Safety Gate result")
+        if self.runtime_mode == RuntimeMode.PERSONAL:
+            if self.context.context_origin != ContextOrigin.AUTHENTICATED_STORE:
+                raise ValueError("Personal Mode cannot use fictional fixture context")
+            if not self.context.onboarding_confirmed:
+                raise ValueError("Personal Mode requires confirmed onboarding state")
+            if self.execution_mode != "public_runtime":
+                raise ValueError("Personal Mode cannot run through an evaluation-only path")
+        elif self.execution_mode != "evaluation_only":
+            raise ValueError("Demo/evaluation modes must remain evaluation-only")
+        if (
+            self.context.context_origin == ContextOrigin.FICTIONAL_FIXTURE
+            and self.execution_mode != "evaluation_only"
+        ):
+            raise ValueError("fictional fixture context cannot enter a public runtime")
+        if self.requested_horizon != "none" and not self.explicit_user_action:
+            raise ValueError("plan generation requires an explicit user action")
         if self.requested_horizon == "day" and self.selected_day is None:
             raise ValueError("a one-day plan requires selected_day")
         if self.requested_horizon != "day" and self.selected_day is not None:

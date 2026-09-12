@@ -98,6 +98,36 @@ def run(*, write_report: bool = False) -> dict:
                 match.mention_context == expected_context for match in result.matched_rules
             ):
                 problems.append(f"missing mention context {expected_context}")
+            expected_reason = row.get("expected_stop_reason")
+            if expected_reason and result.trace.stop_reason != expected_reason:
+                problems.append(
+                    f"stop_reason={result.trace.stop_reason}, expected={expected_reason}"
+                )
+            expected_reason_codes = row.get("expected_reason_codes")
+            if (
+                expected_reason_codes is not None
+                and result.reasons != expected_reason_codes
+            ):
+                problems.append(
+                    f"reasons={result.reasons}, expected={expected_reason_codes}"
+                )
+            expected_attribution = row.get("expected_attributed_to_user")
+            if expected_attribution is not None and not any(
+                match.mention_context == expected_context
+                and match.attributed_to_user is expected_attribution
+                for match in result.matched_rules
+            ):
+                problems.append(
+                    "matching mention attribution differed from expected "
+                    f"{expected_attribution}"
+                )
+            review_status = row.get("qualified_safety_policy_review")
+            if review_status in {"pending", "open_specification_gap"}:
+                if spec.status != "draft" or result.public_routing_eligible:
+                    problems.append(
+                        "pending safety-policy review did not remain draft and "
+                        "public-ineligible"
+                    )
             if result.trace.generation_call_count != 0:
                 problems.append("gate trace recorded a generation call")
             if result.public_routing_eligible:

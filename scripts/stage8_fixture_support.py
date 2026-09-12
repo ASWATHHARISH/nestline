@@ -72,8 +72,15 @@ def evidence_link(span: EligibleEvidenceSpan) -> ClaimEvidenceLink:
 def base_validation_request(
     *, plan: bool = False, day_plan: bool = False,
     urgent: bool = False, clarification: bool = False,
+    raw_text: str | None = None,
 ) -> ValidationRequest:
-    if urgent:
+    if raw_text is not None:
+        stage7_request = make_stage7_request(
+            raw_text,
+            horizon=("day" if day_plan else "week" if plan else "none"),
+            day=(Weekday.SATURDAY if day_plan else None),
+        )
+    elif urgent:
         stage7_request = make_stage7_request(
             "I have heavy bleeding and also want a nutrition plan",
             horizon="week",

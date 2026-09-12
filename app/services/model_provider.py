@@ -10,7 +10,7 @@ from __future__ import annotations
 from collections import deque
 from dataclasses import dataclass
 from time import perf_counter
-from typing import Any, Protocol
+from typing import Any, Callable, Protocol
 
 from app.schemas.orchestration import AgentBudget, AgentName
 
@@ -113,3 +113,57 @@ class ScriptedTestProvider:
             estimated_cost_usd=0.0,
             latency_ms=self.latency_ms,
         )
+
+
+class ConfiguredStructuredProvider:
+    """Explicit provider adapter boundary; it never selects or calls a model itself.
+
+    The caller must provide the provider/model identities and an authorized bounded
+    transport.  With no transport the adapter fails closed.  This lets Personal
+    Mode distinguish configured capability from the offline fixture without making
+    a paid call during deterministic engineering or CI.
+    """
+
+    fixture_only = False
+
+    def __init__(
+        self,
+        *,
+        provider_id: str,
+        model_id: str,
+        transport: Callable[..., ProviderResponse] | None = None,
+    ) -> None:
+        if not provider_id.strip() or not model_id.strip():
+            raise ValueError("configured provider and model identities are required")
+        if provider_id in {"deterministic_fixture", "scripted_test_fixture"}:
+            raise ValueError("fixture identities cannot claim configured-provider status")
+        self.provider_id = provider_id
+        self.model_id = model_id
+        self._transport = transport
+
+    def complete(
+        self,
+        *,
+        agent: AgentName,
+        instructions: list[str],
+        draft: dict[str, Any],
+        budget: AgentBudget,
+    ) -> ProviderResponse:
+        if self._transport is None:
+            raise ProviderFailure("configured provider transport is unavailable")
+        response = self._transport(
+            agent=agent,
+            instructions=instructions,
+            draft=draft,
+            budget=budget,
+            provider_id=self.provider_id,
+            model_id=self.model_id,
+        )
+
+        if response.provider != self.provider_id or response.model != self.model_id:
+            raise ProviderFailure("provider response identity differs from configured identity")
+        if response.input_tokens + response.output_tokens > budget.max_tokens:
+            raise ProviderFailure("provider response exceeded the configured token budget")
+        if response.latency_ms > budget.timeout_ms:
+            raise TimeoutError("provider response exceeded the configured timeout")
+        return response

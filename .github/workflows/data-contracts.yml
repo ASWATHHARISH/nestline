@@ -31,12 +31,14 @@ jobs:
       - run: python -m scripts.check_stage4_ui
       - run: python -m scripts.check_stage4
       - run: python -m scripts.check_stage5
+      - run: python -m scripts.run_stage5_paraphrase_evals
       - run: python -m scripts.run_stage6_safety_evals
       - run: python -m scripts.check_stage6
       - run: python -m scripts.run_stage7_evals
       - run: python -m scripts.check_stage7
       - run: python -m scripts.run_stage8_evals
       - run: python -m scripts.check_stage8
+      - run: python -m scripts.check_stages5_8_rectification
       # Release readiness is intentionally a separate gate: draft shells must
       # remain legal during authoring. Unit tests verify release fails closed.
 
