@@ -95,6 +95,8 @@
     "stage8_validation": "69/69",
     "git_diff_check": "passed",
     "controlled_engineering": "GO",
-    "public_clinical_release": "NO-GO"
+    "public_clinical_release": "NO-GO",
+    "github_validate": "success",
+    "github_supabase_integration": "success"
   }
 }
