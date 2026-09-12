@@ -1,0 +1,195 @@
+{
+  "controlled_engineering_stage9_ready": true,
+  "database_migration_required": false,
+  "deterministic_critical_gates": true,
+  "errors": [],
+  "limitations": [
+    "The deterministic lexical fixture evaluator is not a production entailment benchmark.",
+    "The visible synthetic set does not establish clinical validity or public-release readiness.",
+    "No paid-provider or sealed-holdout result is claimed."
+  ],
+  "paid_model_required": false,
+  "public_or_clinical_release_ready": false,
+  "schema_version": "8.0.0",
+  "stage": 8,
+  "valid": true,
+  "verified": {
+    "bounded_attempts": {
+      "composition_calls_on_failed_validation": 0,
+      "maximum_repairs_observed": 1,
+      "maximum_retrieval_retries_observed": 1,
+      "urgent_ordinary_composition_calls": 0
+    },
+    "critical_cases": {
+      "passed": 50,
+      "total": 50
+    },
+    "development_cases": {
+      "passed": 62,
+      "total": 62
+    },
+    "observed_rejection_codes": [
+      "allergy_violation",
+      "citation_irrelevant",
+      "citation_not_in_packet",
+      "citation_partial_support",
+      "citation_source_mismatch",
+      "citation_weaker_support",
+      "condition_context_dropped",
+      "confirmed_instruction_violation",
+      "diagnosis",
+      "evidence_retired",
+      "evidence_unapproved",
+      "evidence_wrong_workspace",
+      "fabricated_citation",
+      "fake_professional_review",
+      "inferred_clearance",
+      "journey_mismatch",
+      "material_claim_without_evidence",
+      "partial_evidence_packet",
+      "plan_combined_constraint_failure",
+      "plan_evidence_mismatch",
+      "plan_item_unvalidated",
+      "prescribing_or_medication_change",
+      "provenance_label_invalid",
+      "provenance_label_missing",
+      "public_overrides_personal",
+      "relevant_conflict",
+      "repair_failed",
+      "required_constraint_dropped",
+      "required_information_missing",
+      "restriction_violation",
+      "schema_invalid",
+      "semantic_evaluator_timeout",
+      "semantic_evaluator_unavailable",
+      "semantic_support_uncertain",
+      "span_hash_mismatch",
+      "span_text_mismatch",
+      "stale_state_version",
+      "unauthorized_action",
+      "unsafe_reassurance",
+      "unsupported_evidence_packet",
+      "urgent_composition_blocked",
+      "wrong_jurisdiction",
+      "wrong_week"
+    ],
+    "required_rejection_codes": [
+      "allergy_violation",
+      "citation_irrelevant",
+      "fabricated_citation",
+      "material_claim_without_evidence",
+      "prescribing_or_medication_change",
+      "restriction_violation",
+      "wrong_week"
+    ],
+    "scenario_groups": {
+      "answerability": {
+        "passed": 4,
+        "total": 4
+      },
+      "applicability": {
+        "passed": 2,
+        "total": 2
+      },
+      "boundary": {
+        "passed": 7,
+        "total": 7
+      },
+      "citation": {
+        "passed": 7,
+        "total": 7
+      },
+      "consistency": {
+        "passed": 1,
+        "total": 1
+      },
+      "constraint": {
+        "passed": 5,
+        "total": 5
+      },
+      "evidence": {
+        "passed": 1,
+        "total": 1
+      },
+      "happy_path": {
+        "passed": 1,
+        "total": 1
+      },
+      "journey": {
+        "passed": 5,
+        "total": 5
+      },
+      "permission": {
+        "passed": 2,
+        "total": 2
+      },
+      "plan": {
+        "passed": 10,
+        "total": 10
+      },
+      "provenance": {
+        "passed": 1,
+        "total": 1
+      },
+      "repair": {
+        "passed": 4,
+        "total": 4
+      },
+      "retry": {
+        "passed": 2,
+        "total": 2
+      },
+      "safety": {
+        "passed": 1,
+        "total": 1
+      },
+      "schema": {
+        "passed": 2,
+        "total": 2
+      },
+      "semantic": {
+        "passed": 6,
+        "total": 6
+      },
+      "trace": {
+        "passed": 1,
+        "total": 1
+      }
+    },
+    "validator_coverage": {
+      "boundary_validator": {
+        "negative": 9,
+        "positive": 51
+      },
+      "citation_validator": {
+        "negative": 16,
+        "positive": 43
+      },
+      "consistency_validator": {
+        "negative": 12,
+        "positive": 47
+      },
+      "evidence_verifier": {
+        "negative": 6,
+        "positive": 53
+      },
+      "personal_constraint_validator": {
+        "negative": 5,
+        "positive": 54
+      },
+      "schema_validator": {
+        "negative": 1,
+        "positive": 59
+      },
+      "state_journey_validator": {
+        "negative": 5,
+        "positive": 54
+      }
+    },
+    "validators": 7,
+    "zero_persistent_writes": {
+      "passed": 60,
+      "total": 60
+    }
+  }
+}

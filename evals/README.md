@@ -54,3 +54,21 @@ does not call a paid provider, does not access the sealed final holdout, and doe
 not establish clinical, production retrieval or public-release quality. Routine
 symptom navigation remains disabled until a reviewed non-urgent symptom policy
 exists; urgent and unresolved cases stay at the Stage 6 boundary.
+
+## Stage 8 validation and composition development set
+
+`stage8_validation_development.jsonl` is a generated, visible set of 62
+synthetic cases for the seven-validator display gate, exact-span citations, bounded
+semantic assessment, answerability, provenance, repair/retry limits and reusable
+daily/weekly plan validation. Regenerate it with
+
+```text
+python -m scripts.build_stage8_evals
+python -m scripts.run_stage8_evals --write-report
+python -m scripts.check_stage8 --write-report
+```
+
+The set uses controlled fixtures and deterministic evaluator outcomes. It does not
+call a paid provider, access the sealed final holdout, establish clinical validity,
+or prove public-release quality. An unavailable or uncertain semantic evaluator
+remains blocking, and the draft safety specification keeps public runtime closed.

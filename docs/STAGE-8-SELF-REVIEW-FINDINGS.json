@@ -1,0 +1,93 @@
+{
+  "stage": 8,
+  "review_kind": "one_consolidated_self_review_and_rectification",
+  "base_commit": "9525acb332b90f258bf9a7b08ad19415286fe9fc",
+  "first_generated_evaluation": {
+    "passed": 55,
+    "total": 62,
+    "critical_passed": 43,
+    "critical_total": 50,
+    "interpretation": "All unsafe drafts were blocked, but seven fixtures exposed redundant downstream findings or insufficiently isolated expected controls. Expectations were not weakened. The pipeline stopped semantic assessment after deterministic constraint/boundary failures, exact-span text mismatch became the primary checksum finding, and fixtures were corrected to isolate their named controls."
+  },
+  "validator_matrix": [
+    {
+      "validator": "schema_validator",
+      "positive_case": "valid_supported_answer",
+      "negative_case": "schema_extra_field",
+      "first_review": "PASS"
+    },
+    {
+      "validator": "state_journey_validator",
+      "positive_case": "valid_supported_answer",
+      "negative_case": "stale_state",
+      "first_review": "FAIL",
+      "finding": "Stage 7 worker state versions were not rebound to the authenticated Stage 8 state.",
+      "rectification": "Validate every worker journey_state_version and bind the identical Safety Gate result and execution/public mode across Stage 6-8."
+    },
+    {
+      "validator": "personal_constraint_validator",
+      "positive_case": "valid_supported_answer",
+      "negative_case": "allergy_hidden_tag",
+      "first_review": "PASS"
+    },
+    {
+      "validator": "evidence_verifier",
+      "positive_case": "valid_supported_answer",
+      "negative_case": "unsupported_packet",
+      "first_review": "FAIL",
+      "finding": "The packet carried allowed_claim_types but the validator did not enforce them.",
+      "rectification": "Map claim origin/kind to canonical Stage 5 allowed claim types and reject disallowed material claims."
+    },
+    {
+      "validator": "citation_validator",
+      "positive_case": "valid_supported_answer",
+      "negative_case": "plausible_irrelevant",
+      "first_review": "FAIL",
+      "finding": "Evidence IDs were unique at packet level, so two exact spans from one evidence item could not be represented independently.",
+      "rectification": "Add stable span_id to trusted spans, claim links, traces, composed citations and plan links; preserve evidence IDs as source-level identity."
+    },
+    {
+      "validator": "boundary_validator",
+      "positive_case": "valid_supported_answer",
+      "negative_case": "medication_change",
+      "first_review": "FAIL",
+      "finding": "Stage 6 needs_clarification relied on Stage 7 having no workers instead of an explicit Stage 8 stop.",
+      "rectification": "Add a direct clarification stop with zero composition, while preserving the fixed urgent-message bypass."
+    },
+    {
+      "validator": "consistency_validator",
+      "positive_case": "valid_user_edited_plan",
+      "negative_case": "plan_item_evidence_mismatch",
+      "first_review": "FAIL",
+      "finding": "Plan links did not bind exact span IDs and a changed schedule item was not compared with its typed claim text.",
+      "rectification": "Bind every item to claim text, evidence IDs, exact span IDs and constraints; schedule changes require explicit user-edit markers."
+    }
+  ],
+  "additional_findings": [
+    {
+      "finding": "Semantic assessment still ran after a deterministic allergy/restriction/boundary rejection.",
+      "rectification": "Skip semantic assessment once a deterministic constraint or boundary failure exists; deterministic citation eligibility checks still run."
+    },
+    {
+      "finding": "An exact-span text mismatch also emitted the derived hash mismatch.",
+      "rectification": "Report the primary text mismatch; validate the hash separately only when the exact text agrees."
+    }
+  ],
+  "post_rectification": {
+    "focused_tests_passed": 71,
+    "focused_tests_total": 71,
+    "development_cases_passed": 62,
+    "development_cases_total": 62,
+    "critical_cases_passed": 50,
+    "critical_cases_total": 50,
+    "failed_validation_composition_calls": 0,
+    "urgent_ordinary_composition_calls": 0,
+    "maximum_retrieval_retries": 1,
+    "maximum_mechanical_repairs": 1,
+    "persistent_write_cases_passed": 60,
+    "persistent_write_cases_total": 60
+  },
+  "remaining_required_failures": [],
+  "sealed_holdout_accessed": false,
+  "paid_provider_used": false
+}
